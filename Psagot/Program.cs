@@ -1,3 +1,7 @@
+using BL;
+using DL;
+using Entities.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
 {
@@ -7,10 +11,14 @@ namespace Psagot
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddDbContext<PsagotDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
+
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
+            builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
+            builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

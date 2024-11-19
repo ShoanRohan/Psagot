@@ -1,2 +1,2 @@
 #COMMAND UPDATE MODELS OF PSAGOT DB:
-Scaffold-DbContext "Data Source=psagot.crc0ou6s0ptx.us-east-1.rds.amazonaws.com;Initial Catalog=psagot;User ID=admin;Password=[MyPassword];Trust Server Certificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Contexts -Context PsagotDbContext --Force
+Scaffold-DbContext "Data Source=psagot.crc0ou6s0ptx.us-east-1.rds.amazonaws.com;Initial Catalog=psagot;User ID=admin;Password=[MyPassword];Trust Server Certificate=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -ContextDir Contexts -Context PsagotDbContext --NoOnConfiguring --Force

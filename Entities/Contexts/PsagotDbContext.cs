@@ -20,9 +20,6 @@ public partial class PsagotDbContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Data Source=psagot.crc0ou6s0ptx.us-east-1.rds.amazonaws.com;Initial Catalog=psagot;User ID=admin;Password=admin2025;Trust Server Certificate=True;");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Lecture>(entity =>
