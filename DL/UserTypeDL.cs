@@ -16,31 +16,31 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddUserType(UserType userType)
+        public async Task<(UserType UserType, string ErrorMessage)> AddUserType(UserType userType)
         {
             try
             {
-                await _context.Set<UserType>().AddAsync(userType);
+                var addedUserType = await _context.Set<UserType>().AddAsync(userType);
                 await _context.SaveChangesAsync();
-                return (true, null);
+                return (addedUserType.Entity, null);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (null, ex.Message);
             }
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateUserType(UserType userType)
+        public async Task<(UserType UserType, string ErrorMessage)> UpdateUserType(UserType userType)
         {
             try
             {
                 _context.Set<UserType>().Update(userType);
                 await _context.SaveChangesAsync();
-                return (true, null);
+                return (userType, null);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
+                return (null, ex.Message);
             }
         }
 

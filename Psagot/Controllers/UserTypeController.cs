@@ -1,7 +1,6 @@
 ﻿using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -17,26 +16,26 @@ namespace API.Controllers
             _userTypeBL = userTypeBL;
         }
 
-        [HttpPost]
+        [HttpPost("AddUserType")]
         public async Task<IActionResult> AddUserType([FromBody] UserTypeDTO userTypeDTO)
         {
-            var (isSuccess, errorMessage) = await _userTypeBL.AddUserType(userTypeDTO);
-            if (!isSuccess) return BadRequest(errorMessage);
+            var (addedUserType, errorMessage) = await _userTypeBL.AddUserType(userTypeDTO);
+            if (addedUserType == null) return BadRequest(errorMessage);
 
-            return Ok("UserType added successfully.");
+            return Ok(addedUserType);
         }
 
-        [HttpPut]
+        [HttpPut("UpdateUserType")]
         public async Task<IActionResult> UpdateUserType([FromBody] UserTypeDTO userTypeDTO)
         {
-            var (isSuccess, errorMessage) = await _userTypeBL.UpdateUserType(userTypeDTO);
-            if (!isSuccess) return BadRequest(errorMessage);
+            var (updatedUserType, errorMessage) = await _userTypeBL.UpdateUserType(userTypeDTO);
+            if (updatedUserType == null) return BadRequest(errorMessage);
 
-            return Ok("UserType updated successfully.");
+            return Ok(updatedUserType);
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserTypeById(int id)
+        [HttpGet("GetUserTypeById/{id}")]
+        public async Task<IActionResult> GetUserTypeById([FromRoute] int id)
         {
             var (userType, errorMessage) = await _userTypeBL.GetUserTypeById(id);
             if (userType == null) return NotFound(errorMessage);
@@ -44,7 +43,7 @@ namespace API.Controllers
             return Ok(userType);
         }
 
-        [HttpGet]
+        [HttpGet("GetAllUserTypes")]
         public async Task<IActionResult> GetAllUserTypes()
         {
             var (userTypes, errorMessage) = await _userTypeBL.GetAllUserTypes();

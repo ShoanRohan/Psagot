@@ -3,7 +3,6 @@ using DL;
 using Entities.DTO;
 using Entities.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BL
@@ -19,23 +18,30 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> AddUserType(UserTypeDTO userTypeDTO)
+        public async Task<(UserTypeDTO UserType, string ErrorMessage)> AddUserType(UserTypeDTO userTypeDTO)
         {
             var userType = _mapper.Map<UserType>(userTypeDTO);
-            return await _userTypeDL.AddUserType(userType);
+            var (addedUserType, errorMessage) = await _userTypeDL.AddUserType(userType);
+
+            if (addedUserType == null) return (null, errorMessage);
+
+            return (_mapper.Map<UserTypeDTO>(addedUserType), null);
         }
 
-        public async Task<(bool IsSuccess, string ErrorMessage)> UpdateUserType(UserTypeDTO userTypeDTO)
+        public async Task<(UserTypeDTO UserType, string ErrorMessage)> UpdateUserType(UserTypeDTO userTypeDTO)
         {
             var userType = _mapper.Map<UserType>(userTypeDTO);
-            return await _userTypeDL.UpdateUserType(userType);
+            var (updatedUserType, errorMessage) = await _userTypeDL.UpdateUserType(userType);
+
+            if (updatedUserType == null) return (null, errorMessage);
+
+            return (_mapper.Map<UserTypeDTO>(updatedUserType), null);
         }
 
         public async Task<(UserTypeDTO UserType, string ErrorMessage)> GetUserTypeById(int id)
         {
             var (userType, errorMessage) = await _userTypeDL.GetUserTypeById(id);
-            if (userType == null)
-                return (null, errorMessage);
+            if (userType == null) return (null, errorMessage);
 
             return (_mapper.Map<UserTypeDTO>(userType), null);
         }
@@ -43,8 +49,7 @@ namespace BL
         public async Task<(IEnumerable<UserTypeDTO> UserTypes, string ErrorMessage)> GetAllUserTypes()
         {
             var (userTypes, errorMessage) = await _userTypeDL.GetAllUserTypes();
-            if (userTypes == null)
-                return (null, errorMessage);
+            if (userTypes == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<UserTypeDTO>>(userTypes), null);
         }
