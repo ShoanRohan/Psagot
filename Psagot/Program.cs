@@ -19,10 +19,12 @@ namespace Psagot
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
 
             builder.Services.AddControllers();
+            builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            app.UseCors((service) => service.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
