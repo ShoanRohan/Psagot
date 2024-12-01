@@ -7,7 +7,7 @@ public partial class Meeting
 {
     public int MeetingId { get; set; }
 
-    public int ScheduleForTopicId { get; set; }
+    public int? ScheduleForTopicId { get; set; }
 
     public int MeetingNumberForTopic { get; set; }
 
@@ -27,5 +27,5 @@ public partial class Meeting
 
     public virtual Room Room { get; set; } = null!;
 
-    public virtual ScheduleForTopic ScheduleForTopic { get; set; } = null!;
+    public virtual ScheduleForTopic? ScheduleForTopic { get; set; }
 }
