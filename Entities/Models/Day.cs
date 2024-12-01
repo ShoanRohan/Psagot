@@ -9,6 +9,7 @@ public partial class Day
 
     public string Name { get; set; } = null!;
 
+    public string Descr { get; set; } = null!;
 
     public virtual ICollection<DaysForCourse> DaysForCourses { get; set; } = new List<DaysForCourse>();
 
