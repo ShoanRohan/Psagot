@@ -12,12 +12,13 @@ namespace Psagot
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<PsagotDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotLocal")));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
-
+            builder.Services.AddScoped<IUserDL, UserDL>();
+            builder.Services.AddScoped<IUserBL, UserBL>();
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
