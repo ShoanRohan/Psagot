@@ -18,6 +18,10 @@ namespace Psagot
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
 
+            builder.Services.AddScoped<IRoomDL, RoomDL>();
+            builder.Services.AddScoped<IRoomBL, RoomBL>();
+
+
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
