@@ -1,6 +1,8 @@
 using BL;
 using DL;
+
 using Entities.Contexts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
@@ -11,12 +13,15 @@ namespace Psagot
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<PsagotDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
+            builder.Services.AddDbContext<PsagotContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotContext")));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+
+            builder.Services.AddScoped<ICourseDL, CourseDL>();
+            builder.Services.AddScoped<ICourseBL, CourseBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
