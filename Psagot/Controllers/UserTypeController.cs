@@ -10,6 +10,7 @@ namespace API.Controllers
     public class UserTypeController : ControllerBase
     {
         private readonly IUserTypeBL _userTypeBL;
+        private readonly IUserTypeBL onlyToTry;
 
         public UserTypeController(IUserTypeBL userTypeBL)
         {
