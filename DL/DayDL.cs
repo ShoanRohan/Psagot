@@ -43,6 +43,33 @@ namespace DL
             }
         }
 
+        public async Task<(Day Day, string ErrorMessage)> AddDay(Day day)
+        {
+            try
+            {
+                var addedDay = await _context.Set<Day>().AddAsync(day);
+                await _context.SaveChangesAsync();
+                return (addedDay.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(Day Day, string ErrorMessage)> UpdateDay(Day day)
+        {
+            try
+            {
+                _context.Set<Day>().Update(day);
+                await _context.SaveChangesAsync();
+                return (day, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
 
 
     }

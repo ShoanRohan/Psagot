@@ -1,4 +1,5 @@
 ﻿using BL;
+using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,25 @@ namespace Psagot.Controllers
 
             return Ok(days);
         }
+
+        [HttpPost("AddDay")]
+        public async Task<IActionResult> AddDay([FromBody] DayDTO dayDTO)
+        {
+            var (addedDay, errorMessage) = await _dayBL.AddDay(dayDTO);
+            if (addedDay == null) return BadRequest(errorMessage);
+
+            return Ok(addedDay);
+        }
+
+        [HttpPut("UpdateDay")]
+        public async Task<IActionResult> UpdateDay([FromBody] DayDTO dayDTO)
+        {
+            var (updatedDay, errorMessage) = await _dayBL.UpdateDay(dayDTO);
+            if (updatedDay == null) return BadRequest(errorMessage);
+
+            return Ok(updatedDay);
+        }
+
     }
 }
 

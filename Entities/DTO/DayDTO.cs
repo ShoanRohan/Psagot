@@ -9,7 +9,6 @@ namespace Entities.DTO
     public class DayDTO
     {
         public int DayId { get; set; }
-
         public string Name { get; set; } = null!;
 
         public string? Descr { get; set; }
