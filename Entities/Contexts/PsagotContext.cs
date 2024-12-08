@@ -7,7 +7,9 @@ namespace Entities.Contexts;
 
 public partial class PsagotContext : DbContext
 {
-  
+    public PsagotContext()
+    {
+    }
 
     public PsagotContext(DbContextOptions<PsagotContext> options)
         : base(options)
@@ -32,7 +34,10 @@ public partial class PsagotContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
-    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=PC-77114\\MSSQLSERVER01;Database=psagot;Trusted_Connection=True;TrustServerCertificate=True");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Course>(entity =>
@@ -147,14 +152,10 @@ public partial class PsagotContext : DbContext
 
         modelBuilder.Entity<UserType>(entity =>
         {
-            entity.HasKey(e => e.UserTypeId).HasName("PK__UserType__3214EC07D681191F");
+            entity.HasKey(e => e.UserTypeId).HasName("PK__UserType__40D2D816CED5660F");
 
-            entity.ToTable("UserType");
-
-            entity.Property(e => e.Name).HasMaxLength(20);
+            entity.Property(e => e.Name).HasMaxLength(50);
         });
-
-    
 
         OnModelCreatingPartial(modelBuilder);
     }
