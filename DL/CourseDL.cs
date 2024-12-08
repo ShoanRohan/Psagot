@@ -1,10 +1,7 @@
-<<<<<<< HEAD
-﻿using System;
-=======
+
 ﻿using Entities.Contexts;
 using Entities.Models;
 using System;
->>>>>>> ee8701327183736feeee9d3447c1bd34682ec980
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,10 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-<<<<<<< HEAD
-    public class CourseDL
-    {
-=======
+
     public class CourseDL : ICourseDL
     {
         private readonly PsagotDbContext _context;
@@ -40,9 +34,8 @@ namespace DL
             }
         }
 
-        
-            
-        
->>>>>>> ee8701327183736feeee9d3447c1bd34682ec980
+
+
+
     }
 }
