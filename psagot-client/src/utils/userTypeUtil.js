@@ -2,6 +2,7 @@ import api from "./api";
 
 // CRUD functions
 const getAllUserTypes = async () => {
+    
     const response = await api.get('/UserType/GetAllUserTypes');
     return response.data;
 };
