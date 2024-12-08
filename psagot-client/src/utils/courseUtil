@@ -1,0 +1,11 @@
+ import api from "./api";
+
+
+ const deleteUserType = async (id) => {
+    const response = await api.delete(`/UserType/DeleteUserType/${id}`);
+    return response.data;
+};
+
+export {  deleteUserType };
+
+
