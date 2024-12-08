@@ -1,6 +1,7 @@
 using BL;
 using DL;
 using Entities.Contexts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
@@ -10,8 +11,7 @@ namespace Psagot
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            //הגדרת הזרקה עבור הממשק IScheduleForTopicBL והמחלקה ScheduleForTopicBL:
-            builder.Services.AddScoped<IScheduleForTopicBL, ScheduleForTopicBL>();
+ 
 
 
             builder.Services.AddDbContext<PsagotDbContext>(options =>
@@ -20,6 +20,8 @@ namespace Psagot
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+            //הגדרת הזרקה עבור הממשק IScheduleForTopicBL והמחלקה ScheduleForTopicBL:
+            builder.Services.AddScoped<IScheduleForTopicBL, ScheduleForTopicBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
