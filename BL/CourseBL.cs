@@ -14,7 +14,10 @@ public class CourseBL: ICourseBL
     {
         private readonly ICourseDL _courseDL;
         private readonly IMapper _mapper;
-        public async Task<(CourseDTO Course, string ErrorMessage)> GetCoursebById(int id)
+
+      
+
+        public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
         {
             var (Course, errorMessage) = await _courseDL.GetCourseById(id);
             if (Course == null) return (null, errorMessage);
@@ -22,14 +25,7 @@ public class CourseBL: ICourseBL
             return (_mapper.Map<CourseDTO>(Course), null);
         }
 
-        public Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<(Course Course, string errorMessage)> ICourseBL.GetCourseById(int id)
-        {
-            throw new NotImplementedException();
-        }
+  
+       
     }
 }

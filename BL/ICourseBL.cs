@@ -11,8 +11,8 @@ namespace BL
     public interface ICourseBL
     {
 
-        Task<(CourseDTO Course, string ErrorMessage)> GetCoursebById(int id);
-       Task<(Course Course, string errorMessage)> GetCourseById(int id);
+        Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
+     
 
     }
 }
