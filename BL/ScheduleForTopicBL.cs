@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-    // מייבאים את המודלים הנדרשים לשכבת ה-BL
-    using DL;
-    using Entities.Models;
+using DL;
+using Entities.Models;
 
     namespace BL
-    {
+{ 
         // הגדרת המחלקה ScheduleForTopicBL
         // מחלקה זו אחראית ללוגיקה העסקית עבור ה-ScheduleForTopic
         public class ScheduleForTopicBL : IScheduleForTopicBL
