@@ -10,6 +10,9 @@ namespace Psagot
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            //הגדרת הזרקה עבור הממשק IScheduleForTopicBL והמחלקה ScheduleForTopicBL:
+            builder.Services.AddScoped<IScheduleForTopicBL, ScheduleForTopicBL>();
+
 
             builder.Services.AddDbContext<PsagotDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));

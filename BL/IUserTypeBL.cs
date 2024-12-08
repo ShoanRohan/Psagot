@@ -1,12 +1,12 @@
-﻿using Entities.DTO;
+﻿// ייבוא של המודלים וה-DTOs הנדרשים לשכבה הזו
+using Entities.DTO;
 
 namespace BL
 {
+    // הגדרת הממשק IUserTypeBL
+    // הממשק מגדיר את הפעולות שיכולות להתבצע על ישות ה-UserType בשכבת הלוגיקה העסקית
     public interface IUserTypeBL
     {
-        Task<(UserTypeDTO UserType, string ErrorMessage)> AddUserType(UserTypeDTO userTypeDTO);
-        Task<(IEnumerable<UserTypeDTO> UserTypes, string ErrorMessage)> GetAllUserTypes();
-        Task<(UserTypeDTO UserType, string ErrorMessage)> GetUserTypeById(int id);
-        Task<(UserTypeDTO UserType, string ErrorMessage)> UpdateUserType(UserTypeDTO userTypeDTO);
+        // כאן יוספו הפונקציות  
     }
 }
