@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Entities.Models;
-
 public partial class Day
 {
     public int DayId { get; set; }

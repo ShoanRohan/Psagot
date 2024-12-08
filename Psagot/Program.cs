@@ -2,7 +2,6 @@ using BL;
 using DL;
 
 using Entities.Contexts;
-using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
