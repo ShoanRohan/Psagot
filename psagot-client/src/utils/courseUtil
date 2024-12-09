@@ -2,7 +2,7 @@
 
 
  const deleteCourse = async (id) => {
-    const response = await api.delete(`/UserType/DeleteUserType/${id}`);
+    const response = await api.delete(`/UserType/DeleteCourse/${id}`);
     return response.data;
 };
 
