@@ -17,24 +17,6 @@ namespace DL
             _context = context;
         }
 
-        Task<(Topic Topic, string ErrorMessage)> ITopicDL.AddTopic(Topic topic)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> ITopicDL.GetAllTopic()
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<(Topic Topic, string ErrorMessage)> ITopicDL.GetTopicById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<(Topic Topic, string ErrorMessage)> ITopicDL.UpdateTopic(Topic topic)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
