@@ -1,6 +1,8 @@
 using BL;
 using DL;
 using Entities.Contexts;
+using Entities.DTO;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
@@ -18,6 +20,9 @@ namespace Psagot
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
             builder.Services.AddScoped<ITopicBL, TopicBL>();
+            builder.Services.AddScoped<IScheduleForTopicDL,ScheduleForTopicDL >();
+            builder.Services.AddScoped<ITopicDL, TopicDL>();
+
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
