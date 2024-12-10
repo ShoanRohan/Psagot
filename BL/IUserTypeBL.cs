@@ -12,7 +12,5 @@ namespace BL
         Task<(UserTypeDTO UserType, string ErrorMessage)> GetUserTypeById(int id);
         Task<(IEnumerable<UserTypeDTO> UserTypes, string ErrorMessage)> GetAllUserTypes();
 
-
-
     }
 }
