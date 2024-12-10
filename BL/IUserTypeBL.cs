@@ -4,9 +4,15 @@ using Entities.DTO;
 namespace BL
 {
     // הגדרת הממשק IUserTypeBL
-    // הממשק מגדיר את הפעולות שיכולות להתבצע על ישות ה-UserType בשכבת הלוגיקה העסקית
+  
     public interface IUserTypeBL
     {
-        // כאן יוספו הפונקציות  
+        Task<(UserTypeDTO UserType, string ErrorMessage)> AddUserType(UserTypeDTO userTypeDTO);
+        Task<(UserTypeDTO UserType, string ErrorMessage)> UpdateUserType(UserTypeDTO userTypeDTO);
+        Task<(UserTypeDTO UserType, string ErrorMessage)> GetUserTypeById(int id);
+        Task<(IEnumerable<UserTypeDTO> UserTypes, string ErrorMessage)> GetAllUserTypes();
+
+
+
     }
 }
