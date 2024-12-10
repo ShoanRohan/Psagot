@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using BL;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddRoom([FromBody] Room room)
+        public async Task<IActionResult> AddRoom([FromBody] RoomDTO roomDTO)
         {
-            var result = await _roomBL.AddRoom(room);
+            var result = await _roomBL.AddRoom(roomDTO);
             if (result.Room == null) return BadRequest(result.ErrorMessage);
             return Ok(result.Room);
         }
@@ -29,9 +30,9 @@ namespace API.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateRoom([FromBody] Room room)
+        public async Task<IActionResult> UpdateRoom([FromBody] RoomDTO roomDTO)
         {
-            var result = await _roomBL.UpdateRoom(room);
+            var result = await _roomBL.UpdateRoom(roomDTO);
             if (result.Room == null) return BadRequest(result.ErrorMessage);
             return Ok(result.Room);
         }

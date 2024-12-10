@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using DL;
+using Entities.DTO;
 using Entities.Models;
 
 namespace BL
@@ -8,20 +10,27 @@ namespace BL
     public class RoomBL : IRoomBL
     {
         private readonly IRoomDL _roomDL;
-
-        public RoomBL(IRoomDL roomDL)
+        private readonly IMapper _mapper;
+        public RoomBL(IRoomDL roomDL , IMapper mapper)
         {
             _roomDL = roomDL;
+            _mapper = mapper;
         }
 
-        public async Task<(Room Room, string ErrorMessage)> AddRoom(Room room)
+        public async Task<(RoomDTO Room, string ErrorMessage)> AddRoom(RoomDTO roomDTO)
         {
-            return await _roomDL.AddRoom(room);
+            var room = _mapper.Map<Room>(roomDTO);
+            var (addedRoom, errorMessage) = await _roomDL.AddRoom(room);
+            if (addedRoom == null) return (null, errorMessage);
+            return (_mapper.Map<RoomDTO>(addedRoom), null);
         }
 
-        public async Task<(Room Room, string ErrorMessage)> UpdateRoom(Room room)
+        public async Task<(RoomDTO Room, string ErrorMessage)> UpdateRoom(RoomDTO roomDTO)
         {
-            return await _roomDL.UpdateRoom(room);
+            var room = _mapper.Map<Room>(roomDTO);
+            var (updatRoom, errorMessage) = await _roomDL.UpdateRoom(room);
+            if (updatRoom == null) return (null, errorMessage);
+            return (_mapper.Map<RoomDTO>(updatRoom), null);
         }
 
     }
