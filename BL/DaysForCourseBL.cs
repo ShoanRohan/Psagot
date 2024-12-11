@@ -19,6 +19,7 @@ namespace BL
             _daysForCourseDL = daysForCourseDL;
             _mapper = mapper;
         }
+
         public async Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse()
         {
             var (daysForCourse, errorMessage) = await _daysForCourseDL.GetAllDaysForCourse();
