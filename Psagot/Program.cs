@@ -17,6 +17,8 @@ namespace Psagot
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+            builder.Services.AddScoped<IScheduleForTopicBL, ScheduleForTopicBL>();
+            builder.Services.AddScoped<IScheduleForTopicDL, ScheduleForTopicDL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
