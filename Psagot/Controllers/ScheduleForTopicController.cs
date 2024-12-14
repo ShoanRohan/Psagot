@@ -13,5 +13,14 @@ namespace Psagot.Controllers
         {
             _ScheduleForTopicBL = scheduleForTopicBL;
         }
+
+        [HttpGet("GetAllScheduleForTopicByTopicId/{id}")]
+        public async Task<IActionResult> GetAllScheduleForTopicByTopicId([FromRoute] int id)
+        {
+            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopicByTopicId(id);
+            if (scheduleForTopic == null) return NotFound(errorMessage);
+
+            return Ok(scheduleForTopic);
+        }
     }
 }
