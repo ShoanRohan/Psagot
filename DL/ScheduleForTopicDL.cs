@@ -1,4 +1,6 @@
 ﻿using Entities.Contexts;
+using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,19 @@ namespace DL
         public ScheduleForTopicDL(PsagotDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<(IEnumerable<ScheduleForTopic> scheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int id)
+        {
+            try
+            {
+                var scheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == id).ToListAsync();
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
         }
 
     }
