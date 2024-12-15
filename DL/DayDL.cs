@@ -30,7 +30,7 @@ namespace DL
             }
         }
 
-        public async Task<(IEnumerable<Day> Day, string ErrorMessage)> GetAllDays()
+        public async Task<(IEnumerable<Day> Days, string ErrorMessage)> GetAllDays()
         {
             try
             {
