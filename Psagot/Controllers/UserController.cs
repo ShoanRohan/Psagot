@@ -33,5 +33,25 @@ namespace Psagot.Controllers
 
             return Ok(updatedUser);
         }
+
+        [HttpGet("GetUserById/{id}")]
+        public async Task<IActionResult> GetUserById([FromRoute] int id)
+        {
+            var (user, errorMessage) = await _userBL.GetUserById(id);
+            if (user == null) return NotFound(errorMessage);
+
+            return Ok(user);
+        }
+
+        [HttpGet("GetAllUsers")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var (users, errorMessage) = await _userBL.GetAllUsers();
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok(users);
+        }
+
+
     }
 }

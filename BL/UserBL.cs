@@ -38,6 +38,21 @@ namespace BL
             return (_mapper.Map<UserDTO>(updatedUser), null);
         }
 
+        public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
+        {
+            var (user, errorMessage) = await _userDL.GetUserById(id);
+            if (user == null) return (null, errorMessage);
+
+            return (_mapper.Map<UserDTO>(user), null);
+        }
+
+        public async Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers()
+        {
+            var (users, errorMessage) = await _userDL.GetAllUsers();
+            if (users == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+        }
 
     }
 }

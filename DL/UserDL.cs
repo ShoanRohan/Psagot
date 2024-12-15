@@ -42,5 +42,31 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(User User, string ErrorMessage)> GetUserById(int id)
+        {
+            try
+            {
+                var user = await _context.Set<User>().FindAsync(id);
+                return (user, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers()
+        {
+            try
+            {
+                var user = await _context.Set<User>().ToListAsync();
+                return (user, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }
