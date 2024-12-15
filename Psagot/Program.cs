@@ -23,6 +23,10 @@ namespace Psagot
             builder.Services.AddScoped<IDayBL, DayBL>();
 
 
+            builder.Services.AddScoped<IRoomDL, RoomDL>();
+            builder.Services.AddScoped<IRoomBL, RoomBL>();
+
+
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
