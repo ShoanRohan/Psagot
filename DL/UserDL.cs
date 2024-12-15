@@ -56,7 +56,7 @@ namespace DL
             }
         }
 
-        public async Task<(IEnumerable<User> UserTypes, string ErrorMessage)> GetAllUsers()
+        public async Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers()
         {
             try
             {
