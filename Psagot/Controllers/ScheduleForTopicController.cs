@@ -13,7 +13,7 @@ namespace Psagot.Controllers
 
         public ScheduleForTopicController(IScheduleForTopicBL scheduleForTopicBL)
         {
-            _scheduleForTopicBL = scheduleForTopicBL;
+            _scheduleForTopicBL = scheduleForTopicBL; 
         }
 
         
