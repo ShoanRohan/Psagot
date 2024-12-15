@@ -26,4 +26,4 @@ const deleteUserType = async (id) => {
     return response.data;
 };
 
-export { getAllUserTypes, getUserTypeById, addUserType, updateUserType, deleteUserType};
+export { getAllUserTypes, getUserTypeById, addUserType, updateUserType, deleteUserType };
