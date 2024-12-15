@@ -18,7 +18,7 @@ namespace API.Controllers
             _roomBL = roomBL;
         }
 
-        [HttpPost]
+        [HttpPost("AddRoom")]
         public async Task<IActionResult> AddRoom([FromBody] RoomDTO roomDTO)
         {
             var result = await _roomBL.AddRoom(roomDTO);
@@ -29,7 +29,7 @@ namespace API.Controllers
 
 
 
-        [HttpPut]
+        [HttpPut("UpdatrRoom")]
         public async Task<IActionResult> UpdateRoom([FromBody] RoomDTO roomDTO)
         {
             var result = await _roomBL.UpdateRoom(roomDTO);
