@@ -17,18 +17,14 @@ namespace Psagot.Controllers
                 _roomBL = roomBL;
             }
 
-            // פונקציה להחזרת כל החדרים
             [HttpGet("GetAllRooms")]
             public async Task<IActionResult> GetAllRooms()
             {
-                // קריאה לשכבת BL
                 var (rooms, errorMessage) = await _roomBL.GetAllRooms();
 
-                // בדיקת תוצאה
                 if (rooms == null)
                     return BadRequest(errorMessage);
 
-                // החזרת רשימת החדרים
                 return Ok(rooms);
             }
 
