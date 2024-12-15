@@ -26,14 +26,4 @@ const deleteUserType = async (id) => {
     return response.data;
 };
 
-const addUser = async (userDTO) => {
-    const response = await api.post('/User/AddUser', userDTO);
-    return response.data;
-};
-
-const updateUser = async (userDTO) => {
-    const response = await api.put('/User/UpdateUser', userDTO);
-    return response.data;
-};
-
-export { getAllUserTypes, getUserTypeById, addUserType, updateUserType, deleteUserType,addUser,updateUser };
+export { getAllUserTypes, getUserTypeById, addUserType, updateUserType, deleteUserType};
