@@ -10,6 +10,6 @@ namespace BL
     // הממשק מגדיר את הפעולות שצריך לממש לשכבת ה-BL עבור ה-ScheduleForTopic
     public interface IScheduleForTopicBL
     {
-
+      
     }
 }
