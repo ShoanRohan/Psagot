@@ -10,13 +10,13 @@ namespace BL
 {
     public class TopicBL:ITopicBL
     {
-        //private readonly ITopicDL _topicDL;
-        //private readonly IMapper _mapper;
+        private readonly ITopicDL _topicDL;
+        
 
-       //  public TopicBL(ITopicDL topicDL, IMapper mapper)
-        //{
-        //    _topicDL = topicDL;
-        //    _mapper = mapper;
-        //}
+        public TopicBL(ITopicDL topicDL)
+        {
+            _topicDL = topicDL;
+
+        }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public interface ITopicBL
+   public interface ITopicBL
     {
 
     }
