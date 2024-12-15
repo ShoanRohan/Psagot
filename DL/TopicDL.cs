@@ -1,5 +1,6 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,21 @@ namespace DL
             _context = context;
         }
 
-        
+        ////פונקציות
+        public async Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        {
+            try
+            {
+                var topics = await _context.Set<Topic>()
+                                           .Where(topic => topic.CourseId == id)
+                                           .ToListAsync();
+                return (topics, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
