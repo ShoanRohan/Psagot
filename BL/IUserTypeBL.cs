@@ -1,9 +1,7 @@
-﻿// ייבוא של המודלים וה-DTOs הנדרשים לשכבה הזו
-using Entities.DTO;
+﻿using Entities.DTO;
 
 namespace BL
 {
-    // הגדרת הממשק IUserTypeBL
   
     public interface IUserTypeBL
     {
