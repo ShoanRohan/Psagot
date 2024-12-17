@@ -9,6 +9,9 @@ namespace DL
 {
     public interface ITopicDL
     {
-        
+
+        Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic);
+
+
     }
 }
