@@ -17,6 +17,20 @@ namespace DL
             _context = context;
         }
 
-        ////פונקציות
+        public async Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic)
+        {
+            try
+            {
+                var addTopic = await _context.Set<Topic>().AddAsync(topic);
+                await _context.SaveChangesAsync();
+                return (addTopic.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
     }
 }
