@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.DTO
+namespace BL
 {
-    public class TopicDTO
+   public interface ITopicBL
     {
 
     }
