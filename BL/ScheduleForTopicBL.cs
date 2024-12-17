@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DL;
 using Entities.Models;
+using Entities.DTO;
 
 namespace BL
 {
@@ -24,6 +25,15 @@ namespace BL
         {
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
+        }
+
+        //R.T 
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+        {
+            var (scheduleForTopics, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopics();
+            if (scheduleForTopics == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopics), null);
         }
     }
 }
