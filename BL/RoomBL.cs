@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using DL;
 using Entities.DTO;
 using Entities.Models;
@@ -17,35 +19,26 @@ namespace BL
 
         private readonly IRoomDL _roomDL;
         private readonly IMapper _mapper;
-
-
-        public RoomBL(IRoomDL roomDL, IMapper mapper)
+        public RoomBL(IRoomDL roomDL , IMapper mapper)
         {
             _roomDL = roomDL;
             _mapper = mapper;
         }
 
-
-
-
-
-      
-        public async Task<(IEnumerable<RoomDTO> Rooms, string ErrorMessage)> GetAllRooms()
+        public async Task<(RoomDTO Room, string ErrorMessage)> AddRoom(RoomDTO roomDTO)
         {
-            var (rooms, errorMessage) = await _roomDL.GetAllRooms();
-
-            if (rooms == null) return (null, errorMessage);
-
-            return (_mapper.Map<IEnumerable<RoomDTO>>(rooms), null);
+            var room = _mapper.Map<Room>(roomDTO);
+            var (addedRoom, errorMessage) = await _roomDL.AddRoom(room);
+            if (addedRoom == null) return (null, errorMessage);
+            return (_mapper.Map<RoomDTO>(addedRoom), null);
         }
 
-        public async Task<(RoomDTO Room, string ErrorMessage)> GetRoomById(int id)
+        public async Task<(RoomDTO Room, string ErrorMessage)> UpdateRoom(RoomDTO roomDTO)
         {
-            var (room, errorMessage) = await _roomDL.GetRoomById(id);
-
-            if (room == null) return (null, errorMessage);
-
-            return (_mapper.Map<RoomDTO>(room), null);
+            var room = _mapper.Map<Room>(roomDTO);
+            var (updatRoom, errorMessage) = await _roomDL.UpdateRoom(room);
+            if (updatRoom == null) return (null, errorMessage);
+            return (_mapper.Map<RoomDTO>(updatRoom), null);
         }
 
         
