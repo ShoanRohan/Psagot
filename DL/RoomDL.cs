@@ -12,22 +12,23 @@ namespace DL
 {
     public class RoomDL:IRoomDL
     {
-        private readonly DbContext _contextRoom;
+        private readonly PsagotDbContext _context;
 
-        public RoomDL(IRoomDL roomDL, IMapper mapper)
+
+        //private readonly DbContext _contextRoom;
+
+        public RoomDL(PsagotDbContext context)
         {
-            mapper = mapper;
+            _context = context;
         }
 
-        public RoomDL(IRoomDL roomDL)
-        {
-         
-        }
+
+     
         public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
         {
             try
             {
-                var rooms = await _contextRoom.Set<Room>().ToListAsync();
+                var rooms = await _context.Set<Room>().ToListAsync();
                 return (rooms, null);
             }
             catch (Exception ex)
@@ -40,7 +41,7 @@ namespace DL
         {
             try
             {
-                var room = await _contextRoom.Set<Room>().FindAsync(id);
+                var room = await _context.Set<Room>().FindAsync(id);
                 return (room, null);
             }
             catch (Exception ex)

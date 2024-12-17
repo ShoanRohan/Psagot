@@ -1,6 +1,6 @@
 using BL;
 using DL;
-using DL.Entities;
+using Entities;
 using Entities.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -15,7 +15,7 @@ namespace Psagot
 
 
             builder.Services.AddDbContext<PsagotDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbConttext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
@@ -23,7 +23,7 @@ namespace Psagot
             builder.Services.AddScoped<IRoomBL, RoomBL>();
 
             builder.Services.AddScoped<IRoomDL, RoomDL>();
-            builder.Services.AddAutoMapper(typeof(Program));
+           
 
 
             builder.Services.AddControllers();
@@ -34,7 +34,6 @@ namespace Psagot
             var app = builder.Build();
             app.UseCors((service) => service.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
