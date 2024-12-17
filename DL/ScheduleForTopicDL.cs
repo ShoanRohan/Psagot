@@ -16,13 +16,13 @@ namespace DL
         {
             _context = context;
         }
-        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic ScheduleForTopic)
+        public async Task<(ScheduleForTopic scheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {
             try
             {
-                _context.Set<ScheduleForTopic>().Update(ScheduleForTopic);
+                _context.Set<ScheduleForTopic>().Update(scheduleForTopic);
                 await _context.SaveChangesAsync();
-                return (ScheduleForTopic, null);
+                return (scheduleForTopic, null);
             }
             catch (Exception ex)
             {
