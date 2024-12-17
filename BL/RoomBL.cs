@@ -15,7 +15,7 @@ namespace BL
         {
             _roomDL = roomDL;
             _mapper = mapper;
-        }
+        } 
         public async Task<(RoomDTO Room, string ErrorMessage)> AddRoom(RoomDTO roomDTO)
         {
             var room = _mapper.Map<Room>(roomDTO);
@@ -30,7 +30,21 @@ namespace BL
             if (updatRoom == null) return (null, errorMessage);
             return (_mapper.Map<RoomDTO>(updatRoom), null);
         }
+        public async Task<(RoomDTO Room, string ErrorMessage)> GetRoomById(int id)
+        {
+            var (room, errorMessage) = await _roomDL.GetRoomById(id);
+            if (room == null) return (null, errorMessage);
 
-        
+            return (_mapper.Map<RoomDTO>(room), null);
+        }
+
+        public async Task<(IEnumerable<RoomDTO> Rooms, string ErrorMessage)> GetAllRooms()
+        {
+            var (rooms, errorMessage) = await _roomDL.GetAllRooms();
+            if (rooms == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<RoomDTO>>(rooms), null);
+        }
+
     }
 }
