@@ -9,8 +9,6 @@ namespace BL
 {
     public interface IUserBL
     {
- 
-
         Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO);
         Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO);
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
