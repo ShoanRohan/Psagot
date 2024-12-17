@@ -11,7 +11,7 @@ namespace DL
     {
         
         Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms();
-        Task<(Room Rooms, string ErrorMessage)> GetRoomById(int id);
+        Task<(Room Room, string ErrorMessage)> GetRoomById(int id);
          
 
         

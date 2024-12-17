@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-  
-        public class RoomDTO
-        {
-            public int RoomId { get; set; }
-            public string Name { get; set; } = null!;
+
+    public class RoomDTO
+    {
+        public int RoomId { get; set; }
+        public string Name { get; set; } = null!;
 
         public bool Projector { get; set; }
 
@@ -20,5 +20,5 @@ namespace Entities.DTO
 
         public int Capacity { get; set; }
     }
-    }
+}
 

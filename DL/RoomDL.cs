@@ -14,9 +14,6 @@ namespace DL
     {
         private readonly PsagotDbContext _context;
 
-
-        //private readonly DbContext _contextRoom;
-
         public RoomDL(PsagotDbContext context)
         {
             _context = context;
@@ -37,7 +34,7 @@ namespace DL
             }
         }
 
-        public async Task<(Room Rooms, string ErrorMessage)> GetRoomById(int id)
+        public async Task<(Room Room, string ErrorMessage)> GetRoomById(int id)
         {
             try
             {
