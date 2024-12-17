@@ -1,19 +1,11 @@
-﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿
 using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DL
 {
-    public class RoomDL:IRoomDL
     public class RoomDL : IRoomDL
     {
         private readonly PsagotDbContext _context;
@@ -23,8 +15,6 @@ namespace DL
             _context = context;
         }
 
-
-     
         public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
         {
             try {
