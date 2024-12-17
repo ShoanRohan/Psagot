@@ -1,36 +1,18 @@
-﻿using DL;
-using Entities.Models;
+﻿using Entities.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BL
 {
-    // הגדרת הממשק IScheduleForTopicBL
-    // הממשק מגדיר את הפעולות שצריך לממש לשכבת ה-BL עבור ה-ScheduleForTopic
+    // ממשק שמגדיר את הפעולות עבור ScheduleForTopic
     public interface IScheduleForTopicBL
     {
-        public class ScheduleForTopicBL : IScheduleForTopicBL
-        {
-            private readonly IScheduleForTopicDL _scheduleForTopicDL;
+       // הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
+        Task<IEnumerable<ScheduleForTopic>> GetScheduleForTopicById(int topicId);
 
-            public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL)
-            {
-                _scheduleForTopicDL = scheduleForTopicDL;
-            }
+         //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
 
-            public async Task<IEnumerable<ScheduleForTopic>> GetScheduleForTopicById(int topicId)
-            {
-                try
-                {
-                    return await _scheduleForTopicDL.GetScheduleForTopicById(topicId);
-                }
-                catch (Exception ex)
-                {
-                    // ניהול שגיאות (אפשר להחזיר הודעה מפורטת יותר או לזרוק את השגיאה הלאה)
-                    throw new Exception($"Error in BL while fetching schedule for topic ID {topicId}: {ex.Message}", ex);
-                }
-            }
-        }
+        Task<IEnumerable<Topic>> GetTopicById(int courseId);
 
     }
 }

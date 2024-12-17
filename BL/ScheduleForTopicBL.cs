@@ -11,7 +11,7 @@ using Entities.Models;
 namespace BL
 {
     // הגדרת המחלקה ScheduleForTopicBL
-    // מחלקה זו אחראית ללוגיקה העסקית עבור ה-ScheduleForTopic
+
     public class ScheduleForTopicBL : IScheduleForTopicBL
     {
         // משתנה מסוג IScheduleForTopicDL שנחבר אליו את המימוש של שכבת ה-DL
@@ -24,6 +24,29 @@ namespace BL
         {
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
+        }
+        public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL)
+        {
+            _scheduleForTopicDL = scheduleForTopicDL;
+        }//הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
+        public async Task<IEnumerable<ScheduleForTopic>> GetScheduleForTopicById(int topicId)
+        {
+            try
+            {
+                return await _scheduleForTopicDL.GetScheduleForTopicById(topicId);
+            }
+            catch (Exception ex)
+            {
+                // ניהול שגיאות (אפשר להחזיר הודעה מפורטת יותר או לזרוק את השגיאה הלאה)
+                throw new Exception($"Error in BL while fetching schedule for topic ID {topicId}: {ex.Message}", ex);
+            }
+        }
+
+       
+        //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
+        public async Task<IEnumerable<Topic>> GetTopicById(int courseId)
+        {
+            return await _scheduleForTopicDL.GetTopicById(courseId);
         }
     }
 }

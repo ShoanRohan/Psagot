@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class ScheduleForTopicDL: IScheduleForTopicDL
+    public class ScheduleForTopicDL : IScheduleForTopicDL
     {
         private readonly PsagotDbContext _context;
 
@@ -19,6 +19,7 @@ namespace DL
         }
 
         // מימוש הפונקציה GetScheduleForTopicById
+        //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
         public async Task<IEnumerable<ScheduleForTopic>> GetScheduleForTopicById(int topicId)
         {
             try
@@ -32,6 +33,23 @@ namespace DL
             {
                 // טיפול בשגיאה והחזרת מידע
                 throw new Exception($"Error fetching schedule for topic ID {topicId}: {ex.Message}", ex);
+            }
+
+        }
+        //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
+
+        public async Task<IEnumerable<Topic>> GetTopicById(int courseId)
+        {
+            try
+            {
+                return await _context.Topics
+                    .Where(topic => topic.CourseId == courseId)
+                    .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // ניתן להוסיף לוג כאן
+                throw new Exception("Error retrieving topics for course", ex);
             }
         }
     }
