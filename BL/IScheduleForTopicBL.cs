@@ -1,6 +1,8 @@
 ﻿using Entities.DTO;
 using Entities.Models;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BL
@@ -9,7 +11,6 @@ namespace BL
     // הממשק מגדיר את הפעולות שצריך לממש לשכבת ה-BL עבור ה-ScheduleForTopic
     public interface IScheduleForTopicBL
     {
-        //R.T
         Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 }
