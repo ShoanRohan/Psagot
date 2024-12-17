@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class ScheduleForTopicDL: IScheduleForTopicDL
+    public class ScheduleForTopicDL : IScheduleForTopicDL
     {
         private readonly PsagotDbContext _context;
 
@@ -16,18 +16,19 @@ namespace DL
         {
             _context = context;
         }
-
-        public async Task<(UserType UserType, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int id)
+        public async Task<(ScheduleForTopic scheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {
             try
             {
-                var userType = await _context.Set<UserType>().FindAsync(id);
-                return (userType, null);
+                _context.Set<ScheduleForTopic>().Update(scheduleForTopic);
+                await _context.SaveChangesAsync();
+                return (scheduleForTopic, null);
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
         }
+
     }
 }

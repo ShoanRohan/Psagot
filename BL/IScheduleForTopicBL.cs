@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTO;
+using Entities.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace BL
     // הממשק מגדיר את הפעולות שצריך לממש לשכבת ה-BL עבור ה-ScheduleForTopic
     public interface IScheduleForTopicBL
     {
+        Task<(ScheduleForTopicDTO scheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO);
 
     }
 }
