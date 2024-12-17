@@ -9,5 +9,7 @@ namespace DL
 {
     public interface IScheduleForTopicDL
     {
+
+        Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int TopicId);
     }
 }

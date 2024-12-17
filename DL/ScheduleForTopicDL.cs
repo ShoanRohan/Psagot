@@ -1,5 +1,6 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,12 +18,13 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(UserType UserType, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int id)
+        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int TopicId)
         {
             try
             {
-                var userType = await _context.Set<UserType>().FindAsync(id);
-                return (userType, null);
+                var ScheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == TopicId)
+                .ToListAsync(); ;
+                return (ScheduleForTopic, null);
             }
             catch (Exception ex)
             {
