@@ -28,9 +28,9 @@ namespace BL
         }
 
 
-        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int TopicId)
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
         {
-            var (ScheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(TopicId);
+            var (ScheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
             if (ScheduleForTopic == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(ScheduleForTopic), null);

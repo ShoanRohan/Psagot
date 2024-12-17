@@ -18,11 +18,11 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int TopicId)
+        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
         {
             try
             {
-                var ScheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == TopicId)
+                var ScheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId)
                 .ToListAsync(); ;
                 return (ScheduleForTopic, null);
             }
