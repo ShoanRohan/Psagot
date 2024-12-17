@@ -30,7 +30,7 @@ namespace BL
 
 
       
-        public async Task<(IEnumerable<RoomDTO> Room, string ErrorMessage)> GetAllRooms()
+        public async Task<(IEnumerable<RoomDTO> Rooms, string ErrorMessage)> GetAllRooms()
         {
             var (rooms, errorMessage) = await _roomDL.GetAllRooms();
 

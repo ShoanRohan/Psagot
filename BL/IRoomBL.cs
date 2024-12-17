@@ -11,7 +11,7 @@ namespace BL
 {
     public interface IRoomBL
     {
-        Task<(IEnumerable<RoomDTO> Room, string ErrorMessage)> GetAllRooms();
+        Task<(IEnumerable<RoomDTO> Rooms, string ErrorMessage)> GetAllRooms();
         Task<(RoomDTO Room, string ErrorMessage)> GetRoomById(int id);
     }
 }
