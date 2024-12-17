@@ -1,4 +1,5 @@
--- מחיקת טבלת UserType
+USE [psagot]
+GO -- מחיקת טבלת UserType
 DROP TABLE IF EXISTS UserType;
 
 -- יצירת טבלת Days
