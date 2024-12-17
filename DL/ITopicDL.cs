@@ -9,6 +9,7 @@ namespace DL
 {
     public interface ITopicDL
     {
-        
+        Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+
     }
 }
