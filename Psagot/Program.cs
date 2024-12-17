@@ -20,6 +20,10 @@ namespace Psagot
             builder.Services.AddScoped<IUserDL, UserDL>();
             builder.Services.AddScoped<IUserBL, UserBL>();
 
+            builder.Services.AddScoped<IDayDL, DayDL>();
+            builder.Services.AddScoped<IDayBL, DayBL>();
+
+
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();

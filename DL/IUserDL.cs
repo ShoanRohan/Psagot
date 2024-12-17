@@ -1,4 +1,9 @@
+
 ﻿using System;
+
+﻿using Entities.Models;
+using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +13,11 @@ namespace DL
 {
     public interface IUserDL
     {
+        Task<(User User, string ErrorMessage)> AddUser(User user);
+        Task<(User User, string ErrorMessage)> UpdateUser(User user);
+        Task<(IEnumerable<User> UserTypes, string ErrorMessage)> GetAllUsers();
+        Task<(User User, string ErrorMessage)> GetUserById(int id);
+
+
     }
 }
