@@ -1,5 +1,6 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +45,12 @@ namespace DL
             }
         }
 
-        public async Task<(IEnumerable<UserType> UserTypes, string ErrorMessage)> GetAllUserTypes()
+        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
         {
             try
             {
-                var userTypes = await _context.Set<UserType>().ToListAsync();
-                return (userTypes, null);
+                var meetings = await _context.Set<Meeting>().ToListAsync();
+                return (meetings, null);
             }
             catch (Exception ex)
             {
