@@ -43,5 +43,16 @@ namespace Psagot.Controllers
 
             return Ok(meeting);
         }
+
+
+        [HttpGet("GetAllMeetings")]
+        public async Task<IActionResult> GetAllMeetings()
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
+            if (meetings == null) return BadRequest(errorMessage);
+
+            return Ok(meetings);
+        }
+
     }
 }

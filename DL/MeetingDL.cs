@@ -1,5 +1,6 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,6 +38,19 @@ namespace DL
             {
                 var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
                 return (meeting, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
+        {
+            try
+            {
+                var meetings = await _context.Set<Meeting>().ToListAsync();
+                return (meetings, null);
             }
             catch (Exception ex)
             {

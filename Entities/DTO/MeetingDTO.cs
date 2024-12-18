@@ -1,5 +1,4 @@
-﻿using Entities.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,5 +25,6 @@ namespace Entities.DTO
         public TimeOnly? EndTime { get; set; }
 
         public bool IsPartOfSchedule { get; set; }
+
     }
 }
