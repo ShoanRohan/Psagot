@@ -15,8 +15,11 @@ namespace Psagot
     options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+            builder.Services.AddScoped<IMeetingDL, MeetingDL>();
+            builder.Services.AddScoped<IMeetingBL, MeetingBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
