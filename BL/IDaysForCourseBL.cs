@@ -9,6 +9,7 @@ namespace BL
 {
     public interface IDaysForCourseBL
     {
-        public Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse();
+        Task<(bool Success, string ErrorMessage)> AddDaysForCourse(int courseId, int daysToAdd);
+        Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse();
     }
 }
