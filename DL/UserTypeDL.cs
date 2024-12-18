@@ -69,5 +69,23 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<bool> AddDaysForCourse(int courseId, int daysToAdd)
+        {
+            try
+            {
+                var course = await _context.Set<Course>().FindAsync(courseId);
+                if (course == null)
+                    return false;
+
+                course.EndDate = course.EndDate.AddDays(daysToAdd);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

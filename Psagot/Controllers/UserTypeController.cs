@@ -51,5 +51,15 @@ namespace API.Controllers
 
             return Ok(userTypes);
         }
+
+        [HttpGet("AddDaysForCourse")]
+        public async Task<IActionResult> AddDaysForCourse([FromQuery] int courseId, [FromQuery] int daysToAdd) 
+        {
+            var (success, errorMessage) = await _userTypeBL.AddDaysForCourse(courseId, daysToAdd);
+
+            if (!success) return BadRequest(errorMessage);
+
+            return Ok("Days added successfully.");
+        }
     }
 }

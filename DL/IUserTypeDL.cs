@@ -8,5 +8,6 @@ namespace DL
         Task<(IEnumerable<UserType> UserTypes, string ErrorMessage)> GetAllUserTypes();
         Task<(UserType UserType, string ErrorMessage)> GetUserTypeById(int id);
         Task<(UserType UserType, string ErrorMessage)> UpdateUserType(UserType userType);
+        Task<bool> AddDaysForCourse(int courseId, int daysToAdd);
     }
 }

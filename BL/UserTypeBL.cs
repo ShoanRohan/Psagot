@@ -53,5 +53,21 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserTypeDTO>>(userTypes), null);
         }
+
+        public async Task<(bool Success, string ErrorMessage)> AddDaysForCourse(int courseId, int daysToAdd)
+        {
+            if (daysToAdd <= 0)
+
+                return (false, "Number of days to add must be greater than zero.");
+
+            var success = await _userTypeDL.AddDaysForCourse(courseId, daysToAdd);
+
+            if (!success)
+
+                return (false, "Course not found or could not update.");
+
+            return (true, null);
+        }
+       
     }
 }

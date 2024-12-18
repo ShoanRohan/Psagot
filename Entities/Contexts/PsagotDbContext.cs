@@ -20,6 +20,8 @@ public partial class PsagotDbContext : DbContext
 
     public virtual DbSet<UserType> UserTypes { get; set; }
 
+    public DbSet<Course> Courses { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Lecture>(entity =>
@@ -38,7 +40,9 @@ public partial class PsagotDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(20);
         });
 
-        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<Course>().Property(c => c.Name).IsRequired().HasMaxLength(100);
+
+       OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
