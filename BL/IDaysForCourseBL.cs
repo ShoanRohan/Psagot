@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace BL
 {
     public interface IDaysForCourseBL
     {
+        Task<(bool Success, string ErrorMessage)> AddDaysForCourse(int courseId, int daysToAdd);
+        Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse();
     }
 }

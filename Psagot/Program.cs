@@ -14,11 +14,11 @@ namespace Psagot
             builder.Services.AddDbContext<PsagotDbContext>(options =>
                    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
             
-
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
-            builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+            builder.Services.AddScoped<IDaysForCourseDL,DaysForCourseDL>();
+            builder.Services.AddScoped<IDaysForCourseBL, DaysForCourseBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
