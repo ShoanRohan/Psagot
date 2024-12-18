@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using DL;
+using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,17 @@ namespace BL
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
         }
+        public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO)
+        {
 
+            var scheduleForTopic = _mapper.Map<ScheduleForTopic>(scheduleForTopicDTO);
+            var (updatedScheduleForTopic, errorMessage) = await _scheduleForTopicDL.UpdateScheduleForTopic(scheduleForTopic);
+
+            if (updatedScheduleForTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<ScheduleForTopicDTO>(updatedScheduleForTopic), null);
+
+
+        }
     }
 }
