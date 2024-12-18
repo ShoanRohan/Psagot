@@ -12,12 +12,14 @@ namespace Psagot
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<PsagotDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
-
+            builder.Services.AddScoped<IMeetingDL, MeetingDL>(); // הוספת MeetingDL
+            builder.Services.AddScoped<IMeetingBL, MeetingBL>(); // הוספת MeetingBL
+            
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
@@ -34,7 +36,7 @@ namespace Psagot
             }
 
             app.UseHttpsRedirection();
-
+       
             app.UseAuthorization();
 
 
