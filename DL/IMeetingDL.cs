@@ -9,6 +9,7 @@ namespace DL
 {
     public interface IMeetingDL
     {
+        Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId);
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
     }
 }

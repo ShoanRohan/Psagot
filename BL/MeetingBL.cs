@@ -30,5 +30,13 @@ namespace BL
             return (_mapper.Map<MeetingDTO>(updatedMeeting), null);
 
         }
+
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
+        {
+            var (meeting, errorMessage) = await _meetingDL.GetMeetingById(meetingId);
+            if (meeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(meeting), null);
+        }
     }
 }

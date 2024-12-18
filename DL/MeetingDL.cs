@@ -30,5 +30,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
+        {
+            try
+            {
+                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                return (meeting, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }
