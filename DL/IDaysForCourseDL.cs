@@ -11,5 +11,6 @@ namespace DL
     {
         Task<bool> AddDaysForCourse(int courseId, int daysToAdd);
         Task<(IEnumerable<DaysForCourse> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse();
+        Task<(DaysForCourse DayForCourse, string ErrorMessage)> GetDaysForCourseById(int id);
     }
 }

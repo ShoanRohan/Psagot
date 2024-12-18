@@ -34,5 +34,14 @@ namespace Psagot.Controllers
 
             return Ok(daysForCourse);
         }
+
+        [HttpGet("GetDaysForCourseById/{id}")]
+        public async Task<IActionResult> GetDaysForCourseById([FromRoute] int id)
+        {
+            var (dayForCourse, errorMessage) = await _daysForCourseBL.GetDaysForCourseById(id);
+            if (dayForCourse == null) return NoContent();
+
+            return Ok(dayForCourse);
+        }
     }
 }
