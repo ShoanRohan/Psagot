@@ -52,5 +52,13 @@ namespace BL
 
             return (_mapper.Map<DaysForCourseDTO>(daysForCourse), null);
         }
+
+        public async Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetDaysForCourseByCourseId(int courseId)
+        {
+            var (DaysForCourse, errorMessage) = await _daysForCourseDL.GetDaysForCourseByCourseId(courseId);
+            if (DaysForCourse == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<DaysForCourseDTO>>(DaysForCourse), null);
+        }
     }
 }
