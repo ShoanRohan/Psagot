@@ -10,5 +10,6 @@ namespace BL
     public interface IMeetingBL
     {
         Task<(MeetingDTO Meeting, string ErrorMessage)> GetMeetingById(int meetingId);
+        Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO);
     }
 }

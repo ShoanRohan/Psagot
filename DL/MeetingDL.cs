@@ -10,23 +10,37 @@ namespace DL
 {
     public class MeetingDL : IMeetingDL
     {
-        private readonly PsagotDbContext _context; 
-      
+        private readonly PsagotDbContext _context;
+
         public MeetingDL(PsagotDbContext context)
         {
             _context = context;
         }
-       
+
+        public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
+        {
+            try
+            {
+                _context.Set<Meeting>().Update(meeting);
+                await _context.SaveChangesAsync();
+                return (meeting, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
         public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
         {
             try
             {
-                var meeting = await _context.Set<Meeting>().FindAsync(meetingId); 
-                return (meeting, null); 
+                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                return (meeting, null);
             }
             catch (Exception ex)
             {
-                return (null, ex.Message); 
+                return (null, ex.Message);
             }
         }
     }

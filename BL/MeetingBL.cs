@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,16 @@ namespace BL
         {
             _meetingDL = meetingDL;
             _mapper = mapper;
+        }
+        public async Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO)
+        {
+            var meetingEntity = _mapper.Map<Meeting>(meetingDTO);
+            var (updatedMeeting, errorMessage) = await _meetingDL.UpdateMeeting(meetingEntity);
+
+            if (updatedMeeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(updatedMeeting), null);
+
         }
 
         public async Task<(MeetingDTO Meeting, string ErrorMessage)> GetMeetingById(int meetingId)

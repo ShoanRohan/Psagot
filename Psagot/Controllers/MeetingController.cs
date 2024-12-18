@@ -1,4 +1,6 @@
 ﻿using BL;
+using Entities.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -15,7 +17,16 @@ namespace Psagot.Controllers
             _meetingBL = meetingBL;
         }
 
-        // Get a meeting by ID
+        [HttpPut("UpdateMeeting")]
+        public async Task<IActionResult> UpdateMeeting([FromBody] MeetingDTO meetingDTO)
+        {
+            var (updatedMeeting, errorMessage) = await _meetingBL.UpdateMeeting(meetingDTO);
+
+            if (updatedMeeting == null) return BadRequest(errorMessage);
+
+            return Ok(updatedMeeting);
+        }
+
         [HttpGet("GetMeetingById/{id}")]
         public async Task<IActionResult> GetMeetingById([FromRoute] int id)
         {
