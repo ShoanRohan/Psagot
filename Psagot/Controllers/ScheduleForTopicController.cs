@@ -16,7 +16,7 @@ namespace Psagot.Controllers
         [HttpGet("GetAllScheduleForTopic")]
         public async Task<IActionResult> GetAllScheduleForTopic()
         {
-            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopic();
+            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopics();
             if (scheduleForTopic == null) return BadRequest(errorMessage);
 
             return Ok(scheduleForTopic);

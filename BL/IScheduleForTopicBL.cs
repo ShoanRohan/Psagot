@@ -4,6 +4,6 @@ namespace BL
 {
     public interface IScheduleForTopicBL
     {
-        Task<(IEnumerable<ScheduleForTopicDTO> scheduleForTopic, string ErrorMessage)> GetAllScheduleForTopic();
+        Task<(IEnumerable<ScheduleForTopicDTO> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 }

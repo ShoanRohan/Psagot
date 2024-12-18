@@ -20,7 +20,7 @@ namespace DL
 
        
 
-        public async Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopic()
+        public async Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
             try
             {

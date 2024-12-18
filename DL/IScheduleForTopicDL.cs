@@ -5,6 +5,6 @@ namespace DL
 {
     public interface IScheduleForTopicDL
     {
-        Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopic();
+        Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 }
