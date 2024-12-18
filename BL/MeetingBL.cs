@@ -19,6 +19,24 @@ namespace BL
             _meetingDL = meetingDL;
             _mapper = mapper;
         }
+        public async Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO)
+        {
+            var meetingEntity = _mapper.Map<Meeting>(meetingDTO);
+            var (updatedMeeting, errorMessage) = await _meetingDL.UpdateMeeting(meetingEntity);
+
+            if (updatedMeeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(updatedMeeting), null);
+
+        }
+
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
+        {
+            var (meeting, errorMessage) = await _meetingDL.GetMeetingById(meetingId);
+            if (meeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(meeting), null);
+        }
 
         public async Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetAllMeetings()
         {
