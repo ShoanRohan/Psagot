@@ -9,6 +9,7 @@ namespace Entities.DTO
     public class UserDTO
     {
         public int UserId { get; set; }
+
         public string Name { get; set; } = null!;
 
         public string Email { get; set; } = null!;
@@ -20,5 +21,7 @@ namespace Entities.DTO
         public int UserTypeId { get; set; }
 
         public bool IsActive { get; set; }
+
+        public string? Role { get; set; }
     }
 }
