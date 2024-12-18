@@ -48,5 +48,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(DaysForCourse DayForCourse, string ErrorMessage)> GetDaysForCourseById(int id)
+        {
+            try
+            {
+                var dayForCourse = await _context.Set<DaysForCourse>().FindAsync(id);
+                return (dayForCourse, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }
