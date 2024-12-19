@@ -1,4 +1,5 @@
 ﻿using BL;
+using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,5 +15,14 @@ namespace Psagot.Controllers
         {
             _topicBL = topicBL;
         }
+        [HttpGet("GetAllTopics")]
+        public async Task<IActionResult> GetAllTopics()
+        {
+            var (topics, errorMessage) = await _topicBL.GetAllTopics();
+            if (topics == null) return BadRequest(errorMessage);
+
+            return Ok(topics);
+        }
     }
 }
+
