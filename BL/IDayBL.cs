@@ -12,5 +12,7 @@ namespace BL
     {
         Task<(IEnumerable<DayDTO> Days, string ErrorMessage)> GetAllDays();
         Task<(DayDTO Day, string ErrorMessage)> GetDayById(int id);
+        Task<(DayDTO Day, string ErrorMessage)> AddDay(DayDTO dayDTO);
+        Task<(DayDTO Day, string ErrorMessage)> UpdateDay(DayDTO dayDTO);
     }
 }
