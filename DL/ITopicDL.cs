@@ -9,6 +9,6 @@ namespace DL
 {
     public interface ITopicDL
     {
-        
+        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics();
     }
 }
