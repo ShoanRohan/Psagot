@@ -17,14 +17,11 @@ const addUser = async (newUser) => {
 
 const updatedUser = async (updateUser) => {
     const response = await api.put('/User/UpdateUser',updateUser);
-    return response.data;   
-};
-
-const deleteUser = async (id) =>{
-    const response = await api.delete(`/User/DeleteUser/${id}`)
     return response.data;
 };
 
-export{getAllUsers, getUserById, addUser, updatedUser, deleteUser};
+
+
+export{getAllUsers, getUserById, addUser, updatedUser};
 
 
