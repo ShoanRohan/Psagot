@@ -17,7 +17,7 @@ namespace DL
         {
             _context = context;
         }
-        public async Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
         {
             try
             {
@@ -63,6 +63,21 @@ namespace DL
                 return (false, ex.Message);
             }
         }
+
+        public async Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic)
+        {
+            try
+            {
+                var addTopic = await _context.Set<Topic>().AddAsync(topic);
+                await _context.SaveChangesAsync();
+                return (addTopic.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
 
     }
 }
