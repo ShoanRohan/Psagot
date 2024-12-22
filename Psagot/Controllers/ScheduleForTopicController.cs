@@ -16,6 +16,14 @@ namespace Psagot.Controllers
         {
             _scheduleForTopicBL = scheduleForTopicBL;
         }
+        [HttpPut("UpdateScheduleForTopic")]
+        public async Task<IActionResult> UpdateScheduleForTopic([FromBody] ScheduleForTopicDTO scheduleForTopicDTO)
+        {
+            var (updatedScheduleForTopic, errorMessage) = await _scheduleForTopicBL.UpdateScheduleForTopic(scheduleForTopicDTO);
+            if (updatedScheduleForTopic == null) return BadRequest(errorMessage);
+
+            return Ok(updatedScheduleForTopic);
+        }
 
 
         [HttpGet("GetAllScheduleForTopics")]
