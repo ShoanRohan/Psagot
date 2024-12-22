@@ -17,7 +17,7 @@ namespace DL
         {
             _context = context;
         }
-        public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        public async Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
         {
             try
             {
