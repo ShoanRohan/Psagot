@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class TopicBL:ITopicBL
+    public class TopicBL : ITopicBL
     {
         private readonly ITopicDL _topicDL;
         private readonly IMapper _mapper;
@@ -33,6 +33,13 @@ namespace BL
             if (addTopic == null) return (null, errorMessage);
 
             return (_mapper.Map<TopicDTO>(addTopic), null);
+        }
+        public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics()
+        {
+            var (topics, errorMessage) = await _topicDL.GetAllTopics();
+            if (topics == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
         
     }

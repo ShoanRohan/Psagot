@@ -11,7 +11,6 @@ namespace BL
     {
         Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
         Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
-
-
+        Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics();
     }
 }

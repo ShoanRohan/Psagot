@@ -15,5 +15,6 @@ namespace DL
 
         Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
 
+        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics();
     }
 }
