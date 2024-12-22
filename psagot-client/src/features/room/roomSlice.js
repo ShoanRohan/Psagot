@@ -3,17 +3,17 @@ import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from '.
 
 const initialState = {
     rooms: [],
-    selectedUser: null,
+    selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
 
-const userSlice = createSlice({
+const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
         
-        setUser: (state, action) => {
+        setRoom: (state, action) => {
             
         }
     },
