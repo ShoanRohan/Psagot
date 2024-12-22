@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class ScheduleForTopicDL: IScheduleForTopicDL
+    public class ScheduleForTopicDL : IScheduleForTopicDL
     {
         private readonly PsagotDbContext _context;
 
@@ -17,11 +17,40 @@ namespace DL
         {
             _context = context;
         }
-
-        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {
             try
             {
+                _context.Set<ScheduleForTopic>().Update(scheduleForTopic);
+                await _context.SaveChangesAsync();
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
+        
+        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+        {
+            try
+            {
+                var scheduleForTopic = await _context.Set<ScheduleForTopic>().ToListAsync();
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        
+    }
+    public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+        {
+            try
+            {
+             
                 var ScheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId)
                 .ToListAsync(); ;
                 return (ScheduleForTopic, null);
