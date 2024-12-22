@@ -10,6 +10,9 @@ namespace DL
     public interface ITopicDL
     {
         Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+        Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic);
+        Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId);
+
 
     }
 }

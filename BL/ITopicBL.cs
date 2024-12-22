@@ -10,6 +10,8 @@ namespace BL
    public interface ITopicBL
     {
         Task<(List<TopicDTO> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+        Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO);
+        Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId);
 
 
     }
