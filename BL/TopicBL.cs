@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +23,17 @@ namespace BL
         {
             var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(id);
             if (topics == null || !topics.Any()) return (null, errorMessage);
-
             return (topics.Select(t => _mapper.Map<TopicDTO>(t)).ToList(), null);
         }
+        public async Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO)
+        {
+            var topic = _mapper.Map<Topic>(topicDTO);
+            var (addTopic, errorMessage) = await _topicDL.AddTopic(topic);
+
+            if (addTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<TopicDTO>(addTopic), null);
+        }
+        
     }
 }
