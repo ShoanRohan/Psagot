@@ -13,5 +13,6 @@ namespace BL
     {
         Task<(ScheduleForTopicDTO scheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO);
 
+        Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 }
