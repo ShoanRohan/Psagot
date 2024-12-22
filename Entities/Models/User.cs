@@ -22,4 +22,6 @@ public partial class User
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
     public virtual UserType UserType { get; set; } = null!;
+
+    
 }

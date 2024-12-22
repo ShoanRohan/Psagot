@@ -4,7 +4,6 @@ using Entities.DTO;
 using Entities.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 namespace BL
 {
     public class UserBL : IUserBL
@@ -27,7 +26,16 @@ namespace BL
 
             return (_mapper.Map<UserDTO>(addedUser), null);
         }
+        public async Task<UserDTO> CreateUserAsync(UserDTO user)
+        {
+            var userEntity = _mapper.Map<User>(user);
+            userEntity.UserId = user.UserId;
 
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+
+            var createdUser = await _userDL.CreateUserAsync(userEntity);
+            return _mapper.Map<UserDTO>(createdUser);
+        }
         public async Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO)
         {
             var user = _mapper.Map<User>(userDTO);
@@ -37,7 +45,17 @@ namespace BL
 
             return (_mapper.Map<UserDTO>(updatedUser), null);
         }
+        public async Task<UserDTO> UserLoginAsync(string email, string password)
+        {
+            var user = await _userDL.UserLoginAsync(email, password);
 
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+
+            return null;
+        }
         public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
         {
             var (user, errorMessage) = await _userDL.GetUserById(id);
@@ -52,6 +70,8 @@ namespace BL
             if (users == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+
+
         }
 
     }
