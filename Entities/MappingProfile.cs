@@ -10,6 +10,5 @@ public class MappingProfile : Profile
         CreateMap<UserType, UserTypeDTO>().ReverseMap();
         CreateMap<User, UserDTO>().ReverseMap();
         CreateMap<Room, RoomDTO>().ReverseMap();
-        CreateMap<Day, DayDTO>().ReverseMap();
     }
 }
