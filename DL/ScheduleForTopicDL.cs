@@ -51,9 +51,9 @@ namespace DL
             try
             {
              
-                var ScheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId)
+                var scheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId)
                 .ToListAsync(); ;
-                return (ScheduleForTopic, null);
+                return (scheduleForTopic, null);
             }
             catch (Exception ex)
             {

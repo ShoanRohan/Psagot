@@ -49,10 +49,10 @@ namespace BL
 
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
         {
-            var (ScheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
-            if (ScheduleForTopic == null) return (null, errorMessage);
+            var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
+            if (scheduleForTopic == null) return (null, errorMessage);
 
-            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(ScheduleForTopic), null);
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
         }
     }
 }
