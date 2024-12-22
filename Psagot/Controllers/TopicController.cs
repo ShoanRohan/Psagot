@@ -15,6 +15,25 @@ namespace Psagot.Controllers
         {
             _topicBL = topicBL;
         }
+
+        [HttpPost("AddTopic")]
+        public async Task<IActionResult> AddTopic([FromBody] TopicDTO topicDTO)
+        {
+            var (addTopic, errorMessage) = await _topicBL.AddTopic(topicDTO);
+            if (addTopic == null) return BadRequest(errorMessage);
+
+            return Ok(addTopic);
+        }
+
+        [HttpGet("GetAllTopicsForCourseByCourseId/{id}")]
+        public async Task<IActionResult> GetAllTopicsForCourseByCourseId([FromRoute] int id)
+        {
+            var (topics, errorMessage) = await _topicBL.GetAllTopicsForCourseByCourseId(id);
+            if (topics == null || !topics.Any()) return NotFound(errorMessage);
+
+            return Ok(topics);
+        }
+
         [HttpGet("GetAllTopics")]
         public async Task<IActionResult> GetAllTopics()
         {
