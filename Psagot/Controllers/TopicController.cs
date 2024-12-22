@@ -24,5 +24,15 @@ namespace Psagot.Controllers
 
             return Ok(addTopic);
         }
+
+        [HttpGet("GetAllTopicsForCourseByCourseId/{id}")]
+        public async Task<IActionResult> GetAllTopicsForCourseByCourseId([FromRoute] int id)
+        {
+            var (topics, errorMessage) = await _topicBL.GetAllTopicsForCourseByCourseId(id);
+            if (topics == null || !topics.Any()) return NotFound(errorMessage);
+
+            return Ok(topics);
+        }
+
     }
 }
