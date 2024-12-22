@@ -1,47 +1,55 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Entities.Contexts;
-using Entities.Models;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace DL
 {
-
-
-    public class RoomDL : IRoomDL
-
+    public class DayDL : IDayDL
     {
         private readonly PsagotDbContext _context;
 
-        public RoomDL(PsagotDbContext context)
+        public DayDL(PsagotDbContext context)
         {
             _context = context;
         }
-
-        public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
+        public async Task<(Day Day, string ErrorMessage)> GetDayById(int id)
         {
-            try {
-                var rooms = await _context.Set<Room>().ToListAsync();
-                return (rooms, null);
+            try
+            {
+                var day = await _context.Set<Day>().FindAsync(id);
+                return (day, null);
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
         }
-        public async Task<(Room Room, string ErrorMessage)> AddRoom(Room room)
+
+        public async Task<(IEnumerable<Day> Days, string ErrorMessage)> GetAllDays()
         {
             try
             {
-                var addedRoom = await _context.Set<Room>().AddAsync(room);
+                var days = await _context.Set<Day>().ToListAsync();
+                return (days, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(Day Day, string ErrorMessage)> AddDay(Day day)
+        {
+            try
+            {
+                var addedDay = await _context.Set<Day>().AddAsync(day);
                 await _context.SaveChangesAsync();
-                return (addedRoom.Entity, null);
+                return (addedDay.Entity, null);
             }
             catch (Exception ex)
             {
@@ -49,31 +57,20 @@ namespace DL
             }
         }
 
-        public async Task<(Room Room, string ErrorMessage)> GetRoomById(int id)
+        public async Task<(Day Day, string ErrorMessage)> UpdateDay(Day day)
         {
             try
             {
-                var room = await _context.Set<Room>().FindAsync(id);
-                return (room, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
-
-        public async Task<(Room Room, string ErrorMessage)> UpdateRoom(Room room)
-        {
-            try
-            {
-                _context.Set<Room>().Update(room);
+                _context.Set<Day>().Update(day);
                 await _context.SaveChangesAsync();
-                return (room, null);
+                return (day, null);
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
         }
+
+
     }
 }

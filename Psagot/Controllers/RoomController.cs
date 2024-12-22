@@ -1,11 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BL;
+using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Psagot.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class RoomController : ControllerBase
+    namespace API.Controllers
     {
+        [Route("api/[controller]")]
+        [ApiController]
+        public class RoomController : ControllerBase
+        {
     }
-}
+    }
+
