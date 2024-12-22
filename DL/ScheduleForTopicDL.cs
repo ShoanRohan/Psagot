@@ -31,7 +31,7 @@ namespace DL
             }
         }
 
-        //R.T DL TRY & CATCH
+        
         public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
             try

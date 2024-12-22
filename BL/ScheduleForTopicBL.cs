@@ -27,7 +27,7 @@ namespace BL
             _mapper = mapper;
         }
 
-        //R.T 
+       
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
             var (scheduleForTopics, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopics();
