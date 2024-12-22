@@ -1,15 +1,27 @@
-import api from "./api";
+import api from "./api"
 
-// CRUD functions
-
-const addUser = async (userDTO) => {
-    const response = await api.post('/User/AddUser', userDTO);
+const getAllUsers = async ()=> {
+    const response = await api.get('/User/GetAllUsers');
     return response.data;
 };
 
-const updateUser = async (userDTO) => {
-    const response = await api.put('/User/UpdateUser', userDTO);
+const getUserById = async (id) => {
+    const response = await api.get(`/User/GetUserById/${id}`);
     return response.data;
 };
 
-export {addUser,updateUser };
+const addUser = async (newUser) => {
+    const response = await api.post('/User/AddUser', newUser);
+    return response.data;
+};
+
+const updatedUser = async (updateUser) => {
+    const response = await api.put('/User/UpdateUser',updateUser);
+    return response.data;
+};
+
+
+
+export{getAllUsers, getUserById, addUser, updatedUser};
+
+
