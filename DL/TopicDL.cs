@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class TopicDL:ITopicDL
+    public class TopicDL : ITopicDL
     {
         private readonly PsagotDbContext _context;
 
@@ -79,5 +79,17 @@ namespace DL
         }
 
 
+        public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics()
+        {
+            try
+            {
+                var topics = await _context.Set<Topic>().ToListAsync();
+                return (topics, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

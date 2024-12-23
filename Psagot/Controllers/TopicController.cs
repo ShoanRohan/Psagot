@@ -55,5 +55,14 @@ namespace Psagot.Controllers
         }
 
 
+        [HttpGet("GetAllTopics")]
+        public async Task<IActionResult> GetAllTopics()
+        {
+            var (topics, errorMessage) = await _topicBL.GetAllTopics();
+            if (topics == null) return BadRequest(errorMessage);
+
+            return Ok(topics);
+        }
     }
 }
+

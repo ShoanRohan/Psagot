@@ -15,5 +15,6 @@ namespace DL
         Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic);
 
 
+        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics();
     }
 }
