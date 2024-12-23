@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DL;
 using Entities.Models;
+using Entities.DTO;
 
 namespace BL
 {
@@ -28,26 +29,28 @@ namespace BL
         public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL)
         {
             _scheduleForTopicDL = scheduleForTopicDL;
-        }//הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
-        public async Task<IEnumerable<ScheduleForTopic>> GetScheduleForTopicById(int topicId)
+        }
+        //הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
+
+        public async Task<(IEnumerable<ScheduleForTopic>, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId)
         {
-            try
+            // קריאה ל-DL לקבלת מערכת עבור ה-Topic
+            var (schedules, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicByTopicId(topicId);
+
+            // אם לא נמצא מערכת  או שיש שגיאה
+            if (schedules == null || !schedules.Any())
             {
-                return await _scheduleForTopicDL.GetScheduleForTopicById(topicId);
+                return (null, errorMessage ?? "No schedules found for the specified topic ID.");
             }
-            catch (Exception ex)
-            {
-                // ניהול שגיאות (אפשר להחזיר הודעה מפורטת יותר או לזרוק את השגיאה הלאה)
-                throw new Exception($"Error in BL while fetching schedule for topic ID {topicId}: {ex.Message}", ex);
-            }
+
+            // אם המערכת נמצאה בהצלחה, מחזירים את הרשימה יחד עם null להודעת שגיאה
+            return (schedules, null);
         }
 
-       
-        //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
-        public async Task<IEnumerable<Topic>> GetTopicById(int courseId)
-        {
-            return await _scheduleForTopicDL.GetTopicById(courseId);
-        }
+
+
+
+
     }
 }
 
