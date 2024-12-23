@@ -13,8 +13,6 @@ namespace DL
         Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic);
         Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId);
         Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic);
-
-
         Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics();
     }
 }
