@@ -1,17 +1,12 @@
 ﻿using AutoMapper;
 using DL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DL;
-using Entities.Models;
 using Entities.DTO;
+using Entities.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BL
 {
-    // הגדרת המחלקה ScheduleForTopicBL
 
     public class ScheduleForTopicBL : IScheduleForTopicBL
     {
@@ -26,31 +21,22 @@ namespace BL
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
         }
-        public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL)
+       
+        
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId, object scheduleForTopicDTO)
         {
-            _scheduleForTopicDL = scheduleForTopicDL;
-        }
-        //הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
-
-        public async Task<(IEnumerable<ScheduleForTopic>, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId)
-        {
-            // קריאה ל-DL לקבלת מערכת עבור ה-Topic
+            var scheduleForTopic = _mapper.Map<UserType>(scheduleForTopicDTO);
             var (schedules, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicByTopicId(topicId);
 
-            // אם לא נמצא מערכת  או שיש שגיאה
-            if (schedules == null || !schedules.Any())
-            {
-                return (null, errorMessage ?? "No schedules found for the specified topic ID.");
-            }
-
-            // אם המערכת נמצאה בהצלחה, מחזירים את הרשימה יחד עם null להודעת שגיאה
-            return (schedules, null);
+            if (schedules == null)
+            
+                return (null, errorMessage);
+            
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(schedules), null);
         }
 
-
-
-
-
     }
+
+
 }
 

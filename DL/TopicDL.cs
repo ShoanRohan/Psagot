@@ -14,31 +14,23 @@ namespace DL
         public TopicDL(PsagotDbContext context)
         {
             _context = context;
-        }
-
-        public async Task<(IEnumerable<Topic>, string)> GetTopicById(int courseId)
+        
+}
+      public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetTopicById(int courseId)
         {
             try
             {
-                // שליפת כל הנושאים של הקורס מה-DB
                 var topics = await _context.Topics
                     .Where(t => t.CourseId == courseId)
                     .ToListAsync();
 
-                // אם לא נמצאו נושאים
-                if (topics == null || !topics.Any())
-                {
-                    return (null, "No topics found for the specified course ID.");
-                }
-
-                // החזרת הנושאים
                 return (topics, null);
             }
             catch (Exception ex)
             {
-                // טיפול בשגיאות
-                return (null, $"An error occurred: {ex.Message}");
+                return (null, ex.Message);
             }
         }
+
     }
 }

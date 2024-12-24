@@ -5,14 +5,8 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    // ממשק שמגדיר את הפעולות עבור ScheduleForTopic
     public interface IScheduleForTopicBL
     {
-       // הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
-        Task<(IEnumerable <ScheduleForTopic>,string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId);
-
-        
-
-
+        Task<(IEnumerable<ScheduleForTopicDTO> Schedules, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId);
     }
 }

@@ -1,30 +1,33 @@
-﻿using DL;
+﻿using BL;
+using DL;
 using Entities.Models;
+using Microsoft.AspNetCore.Mvc;
+using Entities.DTO;
 
-namespace Psagot.Controllers
+
+namespace API.Controllers
 {
-    public class TopicControllers
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TopicController : ControllerBase
     {
-        private readonly ITopicDL _topicDL;
+        private readonly ITopicBL _topicBL;
 
-        public TopicControllers(ITopicDL topicDL)
+        public TopicController(ITopicBL topicBL)
         {
-            _topicDL = topicDL;
+            _topicBL = topicBL;
         }
 
-        public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetTopicById(int courseId)
+        [HttpGet("GetAllTopicsByCourseId/{courseId}")]
+        public async Task<IActionResult> GetAllTopicsByCourseId([FromRoute] int courseId)
         {
-            // קריאה ל-DL לקבלת כל הנושאים של הקורס
-            (IEnumerable<Topic> topics, string errorMessage) = await _topicDL.GetTopicById(courseId);
-
-            // אם לא נמצאו נושאים או שיש שגיאה
+            var (topics, errorMessage) = await _topicBL.GetAllTopicsByCourseId(courseId);
             if (topics == null || !topics.Any())
             {
-                return (null, errorMessage ?? "No topics found for the specified course ID.");
+                return BadRequest(errorMessage);
             }
-
-            // אם הנושאים נמצאו בהצלחה, מחזירים את הרשימה יחד עם null להודעת שגיאה
-            return (topics, null);
+            return Ok(topics);
         }
+      
     }
 }

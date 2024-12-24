@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DL;
+using Entities.DTO;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,15 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetTopicById(int courseId)
+        public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId, object topicDTO)
         {
-            // קריאה ל-DL לקבלת כל הנושאים של הקורס
+            var topic = _mapper.Map<UserType>(topicDTO);
             var (topics, errorMessage) = await _topicDL.GetTopicById(courseId);
 
-            // אם לא נמצאו נושאים או שיש שגיאה
             if (topics == null || !topics.Any())
-            {
-                return (null, errorMessage ?? "No topics found for the specified course ID.");
-            }
+                return (null, errorMessage);
 
-            // אם הנושאים נמצאו בהצלחה, מחזירים את הרשימה יחד עם null להודעת שגיאה
-            return (topics, null);
+            return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
-
     }
 }

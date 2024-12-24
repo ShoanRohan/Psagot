@@ -1,34 +1,36 @@
-﻿using DL;
+﻿using BL;
 using Entities.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Psagot.Controllers
+using Entities.DTO;
+
+
+namespace API.Controllers
 {
-    public class ScheduleForTopicController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ScheduleForTopicController : ControllerBase
     {
-        private readonly IScheduleForTopicDL _scheduleForTopicDL;
+    
+        private readonly IScheduleForTopicBL _scheduleForTopicBL;
 
         // Constructor להזרקת תלות
-        public ScheduleForTopicController(IScheduleForTopicDL scheduleForTopicDL)
+        public ScheduleForTopicController(IScheduleForTopicBL scheduleForTopicBL)
         {
-            _scheduleForTopicDL = scheduleForTopicDL;
+            _scheduleForTopicBL = scheduleForTopicBL;
         }
-
-        public async Task<(IEnumerable<ScheduleForTopic>, string)> GetScheduleForTopicByTopicId(int topicId)
+        [HttpGet("GetScheduleForTopicByTopicId/{topicId}")]
+        public async Task<IActionResult> GetScheduleForTopicByTopicId([FromRoute] int topicId)
         {
-            // קריאה ל-DL לקבלת מערכת עבור ה-Topic
-            var (schedules, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicByTopicId(topicId);
-
-            // אם לא נמצא מערכת  או שיש שגיאה
+            var (schedules, errorMessage) = await _scheduleForTopicBL.GetScheduleForTopicByTopicId(topicId);
             if (schedules == null || !schedules.Any())
-            {
-                return (null, errorMessage ?? "No schedules found for the specified topic ID.");
-            }
-
-            // אם המערכת נמצאה בהצלחה, מחזירים את הרשימה יחד עם null להודעת שגיאה
-            return (schedules, null);
+                return BadRequest(errorMessage);
+            return Ok(schedules);
         }
+
+       
     }
 }

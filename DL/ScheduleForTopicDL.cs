@@ -16,29 +16,22 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(IEnumerable<ScheduleForTopic>, string)> GetScheduleForTopicByTopicId(int topicId)
+        public async Task<(IEnumerable<ScheduleForTopic> Schedules, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId)
         {
             try
             {
-                // שליפת לוחות זמנים עבור Topic ID מה-DB
                 var schedules = await _context.ScheduleForTopics
                     .Where(s => s.TopicId == topicId)
                     .ToListAsync();
-
-                // אם אין תוצאות
-                if (schedules == null || !schedules.Any())
-                {
-                    return (null, "No schedules found for the specified topic ID.");
-                }
-
-                // החזרת התוצאות
                 return (schedules, null);
+
             }
             catch (Exception ex)
             {
-                // טיפול בשגיאה
-                return (null, $"An error occurred: {ex.Message}");
+                return (null, ex.Message);
             }
         }
+       
     }
+}
 }
