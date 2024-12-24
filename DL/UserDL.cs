@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-   public class UserDL : IUserDL
+    public class UserDL : IUserDL
     {
         private readonly PsagotDbContext _context;
         public UserDL(PsagotDbContext context)
