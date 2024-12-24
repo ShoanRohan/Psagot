@@ -29,14 +29,6 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        public async Task<User> CreateUserAsync(User user)
-        {
-
-            user.UserId = user.UserId;
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
-            return user;
-        }
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
         {
             try
@@ -81,16 +73,7 @@ namespace DL
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == email);
 
-            if (user != null)
-            {
-                bool isPasswordValid = BCrypt.Net.BCrypt.Verify(password, user.Password);
-                if (isPasswordValid)
-                {
-                    return user;
-                }
-            }
-
-            return null;
+            return user;
         }
 
 

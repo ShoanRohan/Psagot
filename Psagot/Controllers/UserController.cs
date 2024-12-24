@@ -1,18 +1,7 @@
-﻿using AutoMapper;
-using BL;
-using DL;
-using Entities.Contexts;
+﻿using BL;
 using Entities.DTO;
-using Entities.Models;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Psagot.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -25,35 +14,32 @@ namespace Psagot.Controllers
     {
 
         private readonly IUserBL _userBL;
-        private readonly IMapper _mapper;
         private readonly string _jwtSecretKey;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserBL userBL, IMapper mapper, IConfiguration configuration, ILogger<UserController> logger)
+        public UserController(IUserBL userBL, IConfiguration configuration, ILogger<UserController> logger)
         {
             _userBL = userBL;
-            _mapper = mapper;
             _jwtSecretKey = configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [HttpPost("register")]
-        public async Task<ActionResult> Register([FromBody] CreateUserRequest createUserRequest)
+        [HttpPost("AddUser")]
+        public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
-            if (createUserRequest == null)
+            if (userDTO == null)
                 return BadRequest("Invalid user data");
-
             try
-            {
-                var UserDTO = _mapper.Map<UserDTO>(createUserRequest);
-                var createdUser = await _userBL.CreateUserAsync(UserDTO);
+            {              
+                var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
+                if (addedUser == null)
+                    return BadRequest(errorMessage);
 
-                var token = GenerateJwtToken(createdUser);
+                var token = GenerateJwtToken(addedUser);
 
-
-                return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId }, new
+                return CreatedAtAction(nameof(AddUser), new { id = addedUser.UserId }, new
                 {
-                    User = createdUser,
+                    User = addedUser,
                     Token = token
                 });
             }
@@ -63,16 +49,6 @@ namespace Psagot.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpPost("AddUser")]
-        public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
-        {
-            var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
-            if (addedUser == null) return BadRequest(errorMessage);
-
-            return Ok(addedUser);
-        }
-
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDTO)
         {
@@ -115,8 +91,7 @@ namespace Psagot.Controllers
                 return Ok(new
                 {
                     token = token,
-                    userName = user.Name,
-                    userId = user.UserId
+                    user = user,
                 });
             }
             catch (Exception ex)
@@ -152,16 +127,3 @@ namespace Psagot.Controllers
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

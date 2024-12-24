@@ -23,5 +23,4 @@ public partial class User
 
     public virtual UserType UserType { get; set; } = null!;
 
-    
 }

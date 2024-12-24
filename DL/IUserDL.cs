@@ -10,7 +10,6 @@ namespace DL
     public interface IUserDL
     {
         Task<(User User, string ErrorMessage)> AddUser(User user);
-        Task<User> CreateUserAsync(User user);
         Task<(User User, string ErrorMessage)> UpdateUser(User user);
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
