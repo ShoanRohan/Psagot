@@ -13,5 +13,6 @@ namespace DL
         Task<(User User, string ErrorMessage)> UpdateUser(User user);
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
+
     }
 }

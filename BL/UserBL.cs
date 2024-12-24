@@ -1,9 +1,4 @@
-
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using System;
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
@@ -59,5 +54,6 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
+
     }
 }
