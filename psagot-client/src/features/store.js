@@ -4,8 +4,8 @@ import dayReducer from '../features/day/daySlice';
 
 const store = configureStore({
   reducer: {
-    userType: userTypeReducer, //Slice of userType
-    day : dayReducer, //Slice of day
+    userType: userTypeReducer, 
+    day : dayReducer,
   },
 });
 
