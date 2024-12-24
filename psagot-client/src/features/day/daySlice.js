@@ -3,8 +3,8 @@ import { fetchAllDays, fetchDayById, addDayAction, updateDayAction } from './day
 
 const initialState = {
     days: [],
-    selectedDay: null,
-    status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+    selectedDay: [],
+    status: 'idle', 
     error: null,
 };
 
@@ -12,9 +12,8 @@ const daySlice = createSlice({
     name: 'day',
     initialState,
     reducers: {
-        // write functions here - to save data to redux
+  
         setDay: (state, action) => {
-            // state.day = action.payload;
         }
     },
     extraReducers: (builder) => {
