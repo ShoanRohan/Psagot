@@ -19,7 +19,6 @@ namespace Psagot
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
             builder.Services.AddScoped<IUserDL, UserDL>();
             builder.Services.AddScoped<IUserBL, UserBL>();
-
             builder.Services.AddScoped<IDayDL, DayDL>();
             builder.Services.AddScoped<IDayBL, DayBL>();
 

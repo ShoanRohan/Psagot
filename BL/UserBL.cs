@@ -9,7 +9,6 @@ using DL;
 using Entities.DTO;
 using Entities.Models;
 using System.Collections.Generic;
-
 using System.Threading.Tasks;
 
 namespace BL
@@ -60,7 +59,5 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
-
-
     }
 }

@@ -1,9 +1,5 @@
-
-﻿using System;
-
 ﻿using Entities.Models;
 using System;
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +13,5 @@ namespace DL
         Task<(User User, string ErrorMessage)> UpdateUser(User user);
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
-
-
     }
 }

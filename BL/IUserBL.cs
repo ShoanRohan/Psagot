@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 ﻿using Entities.DTO;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,5 @@ namespace BL
         Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO);
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
-
     }
 }
