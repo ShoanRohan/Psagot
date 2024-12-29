@@ -10,9 +10,7 @@ namespace BL
 {
     public interface ITopicBL
     {
-        //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
-        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId, UserTypeDTO userTypeDTO);
-
-
+        Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId);
     }
+
 }

@@ -21,19 +21,17 @@ namespace BL
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
         }
-       
-        
-        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId, object scheduleForTopicDTO)
+      
+        public async Task<(IEnumerable<ScheduleForTopicDTO> Schedules, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId)
         {
-            var scheduleForTopic = _mapper.Map<UserType>(scheduleForTopicDTO);
             var (schedules, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicByTopicId(topicId);
 
             if (schedules == null)
-            
                 return (null, errorMessage);
-            
+
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(schedules), null);
         }
+
 
     }
 

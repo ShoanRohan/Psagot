@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class TopicBL:ITopicBL
+    public class TopicBL : ITopicBL
     {
         private readonly ITopicDL _topicDL;
         private readonly IMapper _mapper;
@@ -21,15 +21,16 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId, object topicDTO)
+        public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId)
         {
-            var topic = _mapper.Map<UserType>(topicDTO);
-            var (topics, errorMessage) = await _topicDL.GetTopicById(courseId);
+            var (topics, errorMessage) = await _topicDL.GetAllTopicsByCourseId(courseId);
 
             if (topics == null || !topics.Any())
                 return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
+       
+
     }
 }
