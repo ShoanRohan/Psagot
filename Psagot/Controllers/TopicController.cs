@@ -15,6 +15,16 @@ namespace Psagot.Controllers
         {
             _topicBL = topicBL;
         }
+        [HttpGet("GetTopicById/{id}")]
+        public async Task<IActionResult> GetTopicById([FromRoute] int id)
+        {
+            var (topic, errorMessage) = await _topicBL.GetTopicById(id);
+            if (topic == null || !topic.Any())
+            {
+                return BadRequest(errorMessage);
+            }
+            return Ok(topic);
+        }
 
         [HttpPost("AddTopic")]
         public async Task<IActionResult> AddTopic([FromBody] TopicDTO topicDTO)

@@ -31,7 +31,7 @@ namespace BL
             if (schedule == null)
                 return (null, errorMessage);
 
-            return (_mapper.Map<ScheduleForTopicDTO>(schedule), null);
+            return (_mapper.Map<ScheduleForTopicDTO >(schedule), null);
         }
 
 
