@@ -13,5 +13,12 @@ namespace DL
         Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId);
 
        
+
+        Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic);
+
+
+        Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+
+        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics();
     }
 }
