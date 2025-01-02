@@ -10,7 +10,7 @@ namespace DL
     public interface IScheduleForTopicDL
     {
         // הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
-        Task<(IEnumerable<ScheduleForTopic>, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId);
+        Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id);
 
 
         Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic);

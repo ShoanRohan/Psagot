@@ -24,14 +24,14 @@ namespace BL
             _mapper = mapper;
         }
       
-        public async Task<(IEnumerable<ScheduleForTopicDTO> Schedules, string ErrorMessage)> GetScheduleForTopicByTopicId(int topicId)
+        public async Task<(ScheduleForTopicDTO Schedule, string ErrorMessage)> GetScheduleForTopicById(int id)
         {
-            var (schedules, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicByTopicId(topicId);
+            var (schedule, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicById(id);
 
-            if (schedules == null)
+            if (schedule == null)
                 return (null, errorMessage);
 
-            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(schedules), null);
+            return (_mapper.Map<ScheduleForTopicDTO>(schedule), null);
         }
 
 

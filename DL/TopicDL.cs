@@ -17,14 +17,12 @@ namespace DL
             _context = context;
         
 }
-      public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId)
+      public async Task<(Topic Topic, string ErrorMessage)> GetTopicById(int id)
         {
             try
             {
-                var topic = await _context.Topics
-                    .Where(t => t.CourseId == courseId)
-                    .ToListAsync();
-
+                var topic = await _context.Topics.FindAsync(id);
+                    
                 return (topic, null);
             }
             catch (Exception ex)
@@ -33,7 +31,7 @@ namespace DL
             }
         }
        
-        }
+        
         public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
         {
             try

@@ -44,14 +44,14 @@ namespace BL
         
   
 
-        public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId)
+        public async Task<(TopicDTO Topics, string ErrorMessage)> GetTopicById(int id)
         {
-            var (topics, errorMessage) = await _topicDL.GetAllTopicsByCourseId(courseId);
+            var (topics, errorMessage) = await _topicDL.GetTopicById(id);
 
             if (topics == null || !topics.Any())
                 return (null, errorMessage);
 
-            return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
+            return (_mapper.Map<TopicDTO>(topics), null);
         }
        
 

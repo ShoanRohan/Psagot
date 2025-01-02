@@ -10,7 +10,7 @@ namespace DL
     public interface ITopicDL
     {
         //הפונקציה מקבלת ID של COURSE ומחזירה את כל הנושאים של הקורס הספציפי הזה
-        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopicsByCourseId(int courseId);
+        Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetTopicById(int id);
 
        
 
