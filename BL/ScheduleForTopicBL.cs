@@ -12,12 +12,8 @@ namespace BL
 
     public class ScheduleForTopicBL : IScheduleForTopicBL
     {
-        // משתנה מסוג IScheduleForTopicDL שנחבר אליו את המימוש של שכבת ה-DL
         private readonly IScheduleForTopicDL _scheduleForTopicDL;
         private readonly IMapper _mapper;
-
-        // בנאי של המחלקה ScheduleForTopicBL
-        // הבנאי מקבל את הממשק IScheduleForTopicDL ומשתמש בו לשמירת המידע בשכבת ה-DL
         public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL, IMapper mapper)
         {
             _scheduleForTopicDL = scheduleForTopicDL;
