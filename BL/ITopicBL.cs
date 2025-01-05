@@ -11,7 +11,7 @@ namespace BL
 {
    public interface ITopicBL
     {
-        Task<(TopicDTO Topics, string ErrorMessage)> GetTopicById(int id);
+        Task<(TopicDTO Topic, string ErrorMessage)> GetTopicById(int id);
          Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
         Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
         Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics();

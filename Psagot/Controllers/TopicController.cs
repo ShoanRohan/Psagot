@@ -21,7 +21,7 @@ namespace Psagot.Controllers
             var (topic, errorMessage) = await _topicBL.GetTopicById(id);
             if (topic == null)
             {
-                return BadRequest(errorMessage);
+                return NotFound(errorMessage);
             }
             return Ok(topic);
         }

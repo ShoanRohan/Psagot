@@ -9,7 +9,6 @@ namespace DL
 { 
     public interface IScheduleForTopicDL
     {
-        // הפונקציה מקבלת ID של TOPIC ושולפת את כל המערכת עבורו
         Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id);
 
 
