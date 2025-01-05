@@ -19,7 +19,7 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetTopicById([FromRoute] int id)
         {
             var (topic, errorMessage) = await _topicBL.GetTopicById(id);
-            if (topic == null || !topic.Any())
+            if (topic == null)
             {
                 return BadRequest(errorMessage);
             }
