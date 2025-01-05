@@ -2,6 +2,9 @@
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Psagot.Controllers
 {
@@ -12,9 +15,18 @@ namespace Psagot.Controllers
 
         private readonly IScheduleForTopicBL _scheduleForTopicBL;
 
+       
         public ScheduleForTopicController(IScheduleForTopicBL scheduleForTopicBL)
         {
             _scheduleForTopicBL = scheduleForTopicBL;
+        }
+        [HttpGet("GetScheduleForTopicById/{id}")]
+        public async Task<IActionResult> GetScheduleForTopicById([FromRoute] int id)
+        {
+            var (schedule, errorMessage) = await _scheduleForTopicBL.GetScheduleForTopicById(id);
+            if (schedule == null)
+                return NotFound(errorMessage);
+            return Ok(schedule);
         }
         [HttpPut("UpdateScheduleForTopic")]
         public async Task<IActionResult> UpdateScheduleForTopic([FromBody] ScheduleForTopicDTO scheduleForTopicDTO)
@@ -33,6 +45,7 @@ namespace Psagot.Controllers
             if (scheduleForTopics == null) return BadRequest(errorMessage);
             return Ok(scheduleForTopics);
 
+            
         }
 
 

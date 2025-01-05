@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DL
@@ -16,6 +15,19 @@ namespace DL
         public ScheduleForTopicDL(PsagotDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id)
+        {
+            try
+            {
+                var schedule = await _context.Set<ScheduleForTopic>().FindAsync(id);
+                return (schedule, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
         }
         public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {

@@ -42,5 +42,39 @@ namespace BL
             return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
         
+        public async Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO)
+        {
+            var topic = _mapper.Map<Topic>(topicDTO);
+            var (updatedTopic, errorMessage) = await _topicDL.UpdateTopic(topic);
+
+            if (updatedTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<TopicDTO>(updatedTopic), null);
+        }
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId)
+        {
+            var (isDeleted, errorMessage) = await _topicDL.DeleteTopic(topicId);
+
+            if (!isDeleted)
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
+
+  
+
+        public async Task<(TopicDTO Topic, string ErrorMessage)> GetTopicById(int id)
+        {
+            var (topic, errorMessage) = await _topicDL.GetTopicById(id);
+
+            if (topic == null)
+                return (null, errorMessage);
+
+            return (_mapper.Map<TopicDTO>(topic), null);
+        }
+       
+
     }
 }
