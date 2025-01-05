@@ -41,8 +41,8 @@ namespace Psagot.Controllers
 
             return Ok(updatedTopic);
         }
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTopic(int id)
+        [HttpDelete("DeleteTopic/{id}")]
+        public async Task<IActionResult> DeleteTopic([FromRoute] int id)
         {
             var (isDeleted, errorMessage) = await _topicBL.DeleteTopic(id);
 
