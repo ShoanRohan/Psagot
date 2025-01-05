@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DL
@@ -16,8 +15,25 @@ namespace DL
         public TopicDL(PsagotDbContext context)
         {
             _context = context;
+        
+}
+      public async Task<(Topic Topic, string ErrorMessage)> GetTopicById(int id)
+        {
+            try
+            {
+                var topic = await _context.Set<Topic>().FindAsync(id);
+                    
+                return (topic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
         }
-        public async Task<(List<Topic> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+       
+        
+        
+        public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
         {
             try
             {
