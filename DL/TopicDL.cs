@@ -21,7 +21,7 @@ namespace DL
         {
             try
             {
-                var topic = await _context.Topics.FindAsync(id);
+                var topic = await _context.Set<Topic>().FindAsync(id);
                     
                 return (topic, null);
             }

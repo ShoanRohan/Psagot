@@ -21,7 +21,7 @@ namespace DL
         {
             try
             {
-                var schedule = await _context.ScheduleForTopics.FindAsync(id);
+                var schedule = await _context.Set<ScheduleForTopic>().FindAsync(id);
                 return (schedule, null);
             }
             catch (Exception ex)
