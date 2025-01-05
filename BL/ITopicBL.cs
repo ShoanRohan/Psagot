@@ -12,8 +12,12 @@ namespace BL
    public interface ITopicBL
     {
         Task<(TopicDTO Topic, string ErrorMessage)> GetTopicById(int id);
-         Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
-        Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+        Task<(List<TopicDTO> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+        Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO);
+        Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId);
+        Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
         Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics();
+
+
     }
 }
