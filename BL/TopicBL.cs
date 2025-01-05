@@ -19,7 +19,7 @@ namespace BL
             _topicDL = topicDL;
             _mapper = mapper;
         }
-        public async Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        public async Task<(List<TopicDTO> topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
         {
             var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(id);
             if (topics == null || !topics.Any()) return (null, errorMessage);
@@ -42,5 +42,26 @@ namespace BL
             return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
         
+        public async Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO)
+        {
+            var topic = _mapper.Map<Topic>(topicDTO);
+            var (updatedTopic, errorMessage) = await _topicDL.UpdateTopic(topic);
+
+            if (updatedTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<TopicDTO>(updatedTopic), null);
+        }
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId)
+        {
+            var (isDeleted, errorMessage) = await _topicDL.DeleteTopic(topicId);
+
+            if (!isDeleted)
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
+
     }
 }

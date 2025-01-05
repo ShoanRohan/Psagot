@@ -33,6 +33,27 @@ namespace Psagot.Controllers
 
             return Ok(topics);
         }
+        [HttpPut("UpdateTopic")]
+        public async Task<IActionResult> UpdateTopic([FromBody] TopicDTO topicDTO)
+        {
+            var (updatedTopic, errorMessage) = await _topicBL.UpdateTopic(topicDTO);
+            if (updatedTopic == null) return BadRequest(errorMessage);
+
+            return Ok(updatedTopic);
+        }
+        [HttpDelete("DeleteTopic/{id}")]
+        public async Task<IActionResult> DeleteTopic([FromRoute] int id)
+        {
+            var (isDeleted, errorMessage) = await _topicBL.DeleteTopic(id);
+
+            if (!isDeleted)
+            {
+                return NotFound(new { Message = errorMessage });
+            }
+
+            return NoContent();
+        }
+
 
         [HttpGet("GetAllTopics")]
         public async Task<IActionResult> GetAllTopics()
