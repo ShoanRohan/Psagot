@@ -14,13 +14,11 @@ namespace Psagot.Controllers
     {
 
         private readonly IUserBL _userBL;
-        private readonly string _jwtSecretKey;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserBL userBL, IConfiguration configuration, ILogger<UserController> logger)
+        public UserController(IUserBL userBL, ILogger<UserController> logger)
         {
             _userBL = userBL;
-            _jwtSecretKey = configuration["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -35,12 +33,9 @@ namespace Psagot.Controllers
                 if (addedUser == null)
                     return BadRequest(errorMessage);
 
-                var token = GenerateJwtToken(addedUser);
-
                 return CreatedAtAction(nameof(AddUser), new { id = addedUser.UserId }, new
                 {
-                    User = addedUser,
-                    Token = token
+                    User = addedUser
                 });
             }
             catch (Exception ex)
@@ -86,11 +81,8 @@ namespace Psagot.Controllers
 
                 if (user == null)
                     return Unauthorized("Invalid email or password");
-
-                var token = GenerateJwtToken(user);
                 return Ok(new
                 {
-                    token = token,
                     user = user,
                 });
             }
@@ -99,31 +91,6 @@ namespace Psagot.Controllers
                 _logger.LogError(ex, "Error occurred while logging in.");
                 return StatusCode(500, "Internal server error");
             }
-        }
-
-        private string GenerateJwtToken(UserDTO user)
-        {
-            if (user.Name == null)
-                throw new ArgumentNullException(nameof(user.Name));
-
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Name),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-            };
-
-            if (!string.IsNullOrEmpty(user.Role))
-                claims.Add(new Claim(ClaimTypes.Role, user.Role));
-
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSecretKey));
-            var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
