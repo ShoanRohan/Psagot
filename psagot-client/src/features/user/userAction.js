@@ -7,7 +7,7 @@ export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => 
 });
 
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) =>{
-    const data = await getUserById();
+    const data = await getUserById(id);
     return data;
 });
 
@@ -15,7 +15,7 @@ export const addUserAction = createAsyncThunk('user/addUserAction' , async(newUs
     const data = await addUser(newUser);
     return data;
 }) ;
-export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updaUser)=>{
-    const data = await updatedUser(updatUser);
+export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
+    const data = await updatedUser(updateUser);
     return data;
 });
