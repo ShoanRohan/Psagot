@@ -22,7 +22,6 @@ namespace Psagot.Controllers
         {
             var (scheduleForTopics, errorMessage) = await _ScheduleForTopicBL.GetScheduleForTopicById(id);
             if (scheduleForTopics == null) return NotFound(errorMessage);
-
             return Ok(scheduleForTopics);
         }
     }

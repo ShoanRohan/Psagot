@@ -25,7 +25,6 @@ namespace BL
         {
             var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicById(id);
             if (scheduleForTopic == null) return (null, errorMessage);
-
             return (_mapper.Map<ScheduleForTopicDTO>(scheduleForTopic), null);
         }
     }
