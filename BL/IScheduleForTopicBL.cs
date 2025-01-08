@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BL
 {
     public interface IScheduleForTopicBL
@@ -13,5 +14,6 @@ namespace BL
         Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> DeleteScheduleForTopic(int TopicId);
 
 
+        Task<(IEnumerable<ScheduleForTopicDTO> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 }

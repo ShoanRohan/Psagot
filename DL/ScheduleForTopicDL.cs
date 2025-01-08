@@ -1,5 +1,6 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,5 +40,21 @@ namespace DL
             }
         }
 
+    }
+}
+       
+
+        public async Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+        {
+            try
+            {
+                var scheduleForTopics = await _context.Set<ScheduleForTopic>().ToListAsync();
+                return (scheduleForTopics, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

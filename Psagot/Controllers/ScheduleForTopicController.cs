@@ -15,21 +15,13 @@ namespace Psagot.Controllers
         {
             _ScheduleForTopicBL = scheduleForTopicBL;
         }
-
-
-        [HttpDelete("DeleteScheduleForTopic/{id}")]
-        public async Task<IActionResult> DeleteScheduleForTopic([FromRoute] int id)
+        [HttpGet("GetAllScheduleForTopic")]
+        public async Task<IActionResult> GetAllScheduleForTopic()
         {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid ID. ID must be greater than zero.");
-            }
+            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopics();
+            if (scheduleForTopic == null) return BadRequest(errorMessage);
 
-            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.DeleteScheduleForTopic(id);
-
-
-            return NoContent();
+            return Ok(scheduleForTopic);
         }
-
     }
 }

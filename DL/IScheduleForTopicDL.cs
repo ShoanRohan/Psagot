@@ -13,5 +13,6 @@ namespace DL
         Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> DeleteScheduleForTopic( int TopicId);
 
 
+        Task<(IEnumerable<ScheduleForTopic> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics();
     }
 } 
