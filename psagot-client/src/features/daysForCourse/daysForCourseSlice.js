@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllDaysForCourse } from './daysForCourseActions';
 
-
 const initialState = {
+    daysForCourses: [],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
@@ -19,7 +19,7 @@ const daysForCourseSlice = createSlice({
             })
             .addCase(fetchAllDaysForCourse.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.userTypes = action.payload;
+                state.daysForCourses = action.payload;
             })
             .addCase(fetchAllDaysForCourse.rejected, (state, action) => {
                 state.status = 'failed';

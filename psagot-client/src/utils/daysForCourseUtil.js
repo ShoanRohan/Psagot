@@ -5,4 +5,5 @@ const gelAllDaysForCourse = async () => {
     const response = await api.get('/DaysForCourse/GetAllDaysForCourse');
     return response.data;
 };
-export {gelAllDaysForCourse}
+
+export { gelAllDaysForCourse }
