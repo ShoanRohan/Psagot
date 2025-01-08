@@ -45,5 +45,18 @@ namespace DL
             }
         }
 
+        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id)
+        {
+            try
+            {
+                var scheduleForTopic = await _context.Set<ScheduleForTopic>().FindAsync(id);
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
