@@ -28,5 +28,13 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
         }
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+        {
+            var (scheduleForTopics, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
+            if (scheduleForTopics == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopics), null);
+        }
+
     }
 }

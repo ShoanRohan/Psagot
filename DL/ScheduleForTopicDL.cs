@@ -32,5 +32,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+        {
+            try
+            {
+                var scheduleForTopics = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId).ToListAsync();
+                return (scheduleForTopics, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
