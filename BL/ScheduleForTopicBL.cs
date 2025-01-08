@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DL;
+using Entities.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,13 @@ namespace BL
             _mapper = mapper;
         }
 
+        public async Task<(IEnumerable<ScheduleForTopicDTO> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+        {
+            
+            var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopics();
+            if (scheduleForTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
+        }
     }
 }
