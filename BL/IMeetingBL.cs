@@ -12,6 +12,6 @@ namespace BL
         Task<(MeetingDTO Meeting, string ErrorMessage)> GetMeetingById(int meetingId);
         Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO);
         Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetAllMeetings();
-        public Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO);
+        Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO);
     }
 }
