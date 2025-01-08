@@ -46,5 +46,16 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), null);
         }
+
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO)
+        {
+
+            var meeting = _mapper.Map<Meeting>(meetingDTO);
+            var (addedMeeting, errorMessage) = await _meetingDL.AddMeeting(meeting);
+
+            if (addedMeeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(addedMeeting), null);
+        }
     }
 }
