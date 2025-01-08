@@ -12,7 +12,6 @@ namespace BL
 {
     public class MeetingBL : IMeetingBL
     {
-
         private readonly IMeetingDL _meetingDL;
         private readonly IMapper _mapper;
 
@@ -21,32 +20,16 @@ namespace BL
             _meetingDL = meetingDL;
             _mapper = mapper;
         }
-
         
-        public async Task<(MeetingDTO Meeting, string ErrorMessage)> AddNewMeeting(MeetingDTO meetingDTO)
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO)
         {
            
             var meeting = _mapper.Map<Meeting>(meetingDTO);
-            var (addedMeeting, errorMessage) = await _meetingDL.AddNewMeeting(meeting);
+            var (addedMeeting, errorMessage) = await _meetingDL.AddMeeting(meeting);
 
             if (addedMeeting == null) return (null, errorMessage);
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
-
-
         }
-
-        public async Task<(IEnumerable<MeetingDTO> meetings, string ErrorMessage)> GetAllMeetings()
-        {
-            var (meetings, errorMessage) = await _meetingDL.GetAllMeetings();
-            if (meetings == null) return (null, errorMessage);
-
-            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), null);
-        }
-
-
-
-
-
     }
 }

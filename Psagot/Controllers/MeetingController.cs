@@ -15,27 +15,15 @@ namespace Psagot.Controllers
         public MeetingController(IMeetingBL meetingBL)
         {
             _meetingBL = meetingBL;
-
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNewMeeting([FromBody] MeetingDTO meetingDTO)
+        public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
         {
-            var (addedMeeting, errorMessage) = await _meetingBL.AddNewMeeting(meetingDTO);
+            var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
             if (addedMeeting == null) return BadRequest(errorMessage);
 
             return Ok(addedMeeting);
-
-          
-        }
-
-        [HttpGet("GetAllMeetings")]
-        public async Task<IActionResult> GetAllMeetings()
-        {
-            var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
-            if (meetings == null) return BadRequest(errorMessage);
-
-            return Ok(meetings);
         }
     }
 }

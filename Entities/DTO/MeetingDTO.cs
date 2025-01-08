@@ -26,11 +26,5 @@ namespace Entities.DTO
 
         public bool IsPartOfSchedule { get; set; }
 
-        /* public virtual Day? Day { get; set; }
-
-         public virtual Room Room { get; set; } = null!;
-
-         public virtual ScheduleForTopic? ScheduleForTopic { get; set; }*/
-
     }
 }

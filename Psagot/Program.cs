@@ -20,8 +20,6 @@ namespace Psagot
             builder.Services.AddScoped<IMeetingBL, MeetingBL>();
             builder.Services.AddScoped<IMeetingDL, MeetingDL>();
 
-
-
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();

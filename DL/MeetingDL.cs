@@ -18,37 +18,18 @@ namespace DL
             _context = context;
         }
 
-
-        public async Task<(Meeting Meeting, string ErrorMessage)> AddNewMeeting(Meeting meeting)
+        public async Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting)
         {
             try
             {
                 var addedMeeting = await _context.Set<Meeting>().AddAsync(meeting);
                 await _context.SaveChangesAsync();
                 return (addedMeeting.Entity, null);
-
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
-
         }
-
-        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
-        {
-            try
-            {
-                var meeting = await _context.Set<Meeting>().ToListAsync();
-                return (meeting, null);
-            }
-            catch (Exception ex)
-            {
-
-                return (null, ex.Message);
-            }
-        }
-
-
     }
 }

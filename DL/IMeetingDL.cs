@@ -9,10 +9,6 @@ namespace DL
 {
     public interface IMeetingDL
     {
-        //public Task AddNewMeeting(Meeting meeting);
-
-        public Task<(Meeting Meeting, string ErrorMessage)> AddNewMeeting(Meeting meeting);
-
-        Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
+        public Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
     }
 }
