@@ -20,6 +20,7 @@ namespace BL
             _meetingDL = meetingDL;
             _mapper = mapper;
         }
+
         public async Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO)
         {
             var meetingEntity = _mapper.Map<Meeting>(meetingDTO);

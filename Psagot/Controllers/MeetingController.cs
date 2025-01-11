@@ -54,7 +54,7 @@ namespace Psagot.Controllers
             return Ok(meetings);
         }
 
-        [HttpPost]
+        [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
         {
             var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
@@ -63,5 +63,4 @@ namespace Psagot.Controllers
             return Ok(addedMeeting);
         }
     }
-}
 }
