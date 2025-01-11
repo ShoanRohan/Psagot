@@ -44,7 +44,6 @@ namespace Psagot.Controllers
             return Ok(meeting);
         }
 
-
         [HttpGet("GetAllMeetings")]
         public async Task<IActionResult> GetAllMeetings()
         {
