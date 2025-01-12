@@ -28,6 +28,9 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<CourseDTO>(addedCourse), null);
+
+
+            /////////////////////
         }
 
     }
