@@ -14,12 +14,11 @@ namespace Psagot.Controllers
     {
 
         private readonly IUserBL _userBL;
-        private readonly ILogger<UserController> _logger;
 
         public UserController(IUserBL userBL, ILogger<UserController> logger)
         {
             _userBL = userBL;
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+          
         }
 
         [HttpPost("AddUser")]
@@ -40,7 +39,7 @@ namespace Psagot.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while registering user.");
+               
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -88,7 +87,7 @@ namespace Psagot.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while logging in.");
+               
                 return StatusCode(500, "Internal server error");
             }
         }
