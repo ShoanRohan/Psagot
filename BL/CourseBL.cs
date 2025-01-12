@@ -14,10 +14,6 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-<<<<<<< HEAD
-  public class CourseBL :ICourseBL
-    {
-=======
     public class CourseBL : ICourseBL
     {
         private readonly ICourseDL _courseDL;
@@ -39,6 +35,5 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
->>>>>>> ee8701327183736feeee9d3447c1bd34682ec980
     }
 }
