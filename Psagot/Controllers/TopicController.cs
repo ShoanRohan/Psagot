@@ -61,7 +61,7 @@ namespace Psagot.Controllers
                 return NotFound(new { Message = errorMessage });
             }
 
-            return NoContent();
+            return Ok(new { Id = id });
         }
 
 
