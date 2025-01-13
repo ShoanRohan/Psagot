@@ -21,11 +21,12 @@ namespace Psagot
             builder.Services.AddScoped<IUserBL, UserBL>();
             builder.Services.AddScoped<IDayDL, DayDL>();
             builder.Services.AddScoped<IDayBL, DayBL>();
-
-
             builder.Services.AddScoped<IRoomDL, RoomDL>();
             builder.Services.AddScoped<IRoomBL, RoomBL>();
-
+            builder.Services.AddScoped<IMeetingDL, MeetingDL>();
+            builder.Services.AddScoped<IMeetingBL, MeetingBL>();
+            builder.Services.AddScoped<IDaysForCourseDL,DaysForCourseDL>();
+            builder.Services.AddScoped<IDaysForCourseBL, DaysForCourseBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
