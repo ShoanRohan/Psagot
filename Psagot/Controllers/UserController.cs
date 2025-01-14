@@ -1,7 +1,10 @@
 ﻿using BL;
 using Entities.DTO;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Psagot.Controllers
 {
@@ -9,22 +12,37 @@ namespace Psagot.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+
         private readonly IUserBL _userBL;
 
-        public UserController(IUserBL userBL)
+        public UserController(IUserBL userBL, ILogger<UserController> logger)
         {
             _userBL = userBL;
+          
         }
 
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
-            var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
-            if (addedUser == null) return BadRequest(errorMessage);
+            if (userDTO == null)
+                return BadRequest("Invalid user data");
+            try
+            {              
+                var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
+                if (addedUser == null)
+                    return BadRequest(errorMessage);
 
-            return Ok(addedUser);
+                return CreatedAtAction(nameof(AddUser), new { id = addedUser.UserId }, new
+                {
+                    User = addedUser
+                });
+            }
+            catch (Exception ex)
+            {
+               
+                return StatusCode(500, "Internal server error");
+            }
         }
-
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDTO)
         {
@@ -33,7 +51,6 @@ namespace Psagot.Controllers
 
             return Ok(updatedUser);
         }
-
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
@@ -51,7 +68,28 @@ namespace Psagot.Controllers
 
             return Ok(users);
         }
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginDTO login)
+        {
+            if (login == null)
+                return BadRequest("Invalid login request");
 
+            try
+            {
+                var user = await _userBL.UserLoginAsync(login.Email, login.Password);
 
+                if (user == null)
+                    return Unauthorized("Invalid email or password");
+                return Ok(new
+                {
+                    user = user,
+                });
+            }
+            catch (Exception ex)
+            {
+               
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
