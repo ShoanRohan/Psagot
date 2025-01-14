@@ -1,5 +1,6 @@
 using BL;
 using DL;
+
 using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
@@ -33,6 +34,9 @@ namespace Psagot
             builder.Services.AddScoped<IScheduleForTopicDL,ScheduleForTopicDL >();
             builder.Services.AddScoped<ITopicDL, TopicDL>();
 
+
+            builder.Services.AddScoped<ICourseDL, CourseDL>();
+            builder.Services.AddScoped<ICourseBL, CourseBL>();
 
             builder.Services.AddControllers();
             builder.Services.AddCors();
