@@ -10,5 +10,8 @@ namespace Entities.DTO
     {
         public int UserTypeId { get; set; }
         public string Name { get; set; }
+        public TimeOnly StartTime { get; set; }
+
+        public TimeOnly EndTime { get; set; }
     }
 }
