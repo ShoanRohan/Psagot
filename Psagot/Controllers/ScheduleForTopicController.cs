@@ -1,9 +1,11 @@
 ﻿using BL;
-using DL;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Entities.DTO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Psagot.Controllers
 {
@@ -11,38 +13,51 @@ namespace Psagot.Controllers
     [ApiController]
     public class ScheduleForTopicController : ControllerBase
     {
-        private readonly IScheduleForTopicBL _ScheduleForTopicBL;
+
+        private readonly IScheduleForTopicBL _scheduleForTopicBL;
+
+       
         public ScheduleForTopicController(IScheduleForTopicBL scheduleForTopicBL)
         {
-            _ScheduleForTopicBL = scheduleForTopicBL;
+            _scheduleForTopicBL = scheduleForTopicBL;
         }
-        [HttpGet("GetAllScheduleForTopic")]
-        public async Task<IActionResult> GetAllScheduleForTopic()
+        [HttpGet("GetScheduleForTopicById/{id}")]
+        public async Task<IActionResult> GetScheduleForTopicById([FromRoute] int id)
         {
-            var (scheduleForTopic, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopics();
-            if (scheduleForTopic == null) return BadRequest(errorMessage);
-
-            return Ok(scheduleForTopic);
+            var (schedule, errorMessage) = await _scheduleForTopicBL.GetScheduleForTopicById(id);
+            if (schedule == null)
+                return NotFound(errorMessage);
+            return Ok(schedule);
         }
+        [HttpPut("UpdateScheduleForTopic")]
+        public async Task<IActionResult> UpdateScheduleForTopic([FromBody] ScheduleForTopicDTO scheduleForTopicDTO)
+        {
+            var (updatedScheduleForTopic, errorMessage) = await _scheduleForTopicBL.UpdateScheduleForTopic(scheduleForTopicDTO);
+            if (updatedScheduleForTopic == null) return BadRequest(errorMessage);
+
+            return Ok(updatedScheduleForTopic);
+        }
+
+
+        [HttpGet("GetAllScheduleForTopics")]
+        public async Task<IActionResult> GetAllScheduleForTopics()
+        {
+            var (scheduleForTopics, errorMessage) = await _scheduleForTopicBL.GetAllScheduleForTopics();
+            if (scheduleForTopics == null) return BadRequest(errorMessage);
+            return Ok(scheduleForTopics);
+
+            
+        }
+
 
         [HttpGet("GetAllScheduleForTopicByTopicId/{topicId}")]
         public async Task<IActionResult> GetAllScheduleForTopicByTopicId([FromRoute] int topicId)
         {
-            var (scheduleForTopics, errorMessage) = await _ScheduleForTopicBL.GetAllScheduleForTopicByTopicId(topicId);
-            if (scheduleForTopics == null) return NotFound(errorMessage);
+            var (scheduleForTopic, errorMessage) = await _scheduleForTopicBL.GetAllScheduleForTopicByTopicId(topicId);
+            if (scheduleForTopic == null) return NotFound(errorMessage);
 
-            return Ok(scheduleForTopics);
+            return Ok(scheduleForTopic);
         }
 
-
-        [HttpGet("GetScheduleForTopicById/{id}")]
-        public async Task<IActionResult> GetScheduleForTopicById([FromRoute] int id)
-        {
-            var (scheduleForTopics, errorMessage) = await _ScheduleForTopicBL.GetScheduleForTopicById(id);
-            if (scheduleForTopics == null) return NotFound(errorMessage);
-            return Ok(scheduleForTopics);
-        }
     }
-
-  
 }
