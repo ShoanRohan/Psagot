@@ -22,14 +22,16 @@ namespace BL
         }
 
 
-        public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
         {
-            var (ScheduleForTopic, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
-            if (ScheduleForTopic == null) return (null, errorMessage);
-
-            return (_mapper.Map<ScheduleForTopicDTO>(ScheduleForTopic), null);
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
+            
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+            
+            return (true, null);
         }
-
-
     }
 }

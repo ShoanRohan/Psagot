@@ -10,8 +10,6 @@ namespace BL
 {
     public interface IScheduleForTopicBL
     {
-        Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> DeleteScheduleForTopic(int TopicId);
-
-
+        Task<(bool IsDeleted , string ErrorMessage)> DeleteScheduleForTopic(int TopicId);
     }
 }
