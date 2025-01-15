@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,19 +21,10 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(bool Success, string ErrorMessage)> AddDaysForCourse(int courseId, int daysToAdd)
+        public async Task<(bool Success, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
         {
-            if (daysToAdd <= 0)
-
-                return (false, "Number of days to add must be greater than zero.");
-
-            var success = await _daysForCourseDL.AddDaysForCourse(courseId, daysToAdd);
-
-            if (!success)
-
-                return (false, "Course not found or could not update.");
-
-            return (true, null);
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourseDTO, DaysForCourse>(daysForCourseDTO);
+            return await _daysForCourseDL.AddDaysForCourse(daysForCourse);
         }
 
 

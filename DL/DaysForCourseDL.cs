@@ -1,4 +1,5 @@
-﻿using Entities.Contexts;
+﻿using AutoMapper;
+using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,27 +13,26 @@ namespace DL
     public class DaysForCourseDL: IDaysForCourseDL
     {
         private readonly PsagotDbContext _context;
+        IMapper _mapper;
 
-        public DaysForCourseDL(PsagotDbContext context)
+        public DaysForCourseDL(PsagotDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<bool> AddDaysForCourse(int courseId, int daysToAdd)
+        public async Task<(bool, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(courseId);
-                if (course == null)
-                    return false;
-
-                course.EndDate = course.EndDate?.AddDays(daysToAdd);
+                await _context.DaysForCourses.AddAsync(daysForCourse);
                 await _context.SaveChangesAsync();
-                return true;
+                return (true, null);
             }
             catch (Exception ex)
             {
-                return false;
+                return (false, ex.Message);
+
             }
         }
 

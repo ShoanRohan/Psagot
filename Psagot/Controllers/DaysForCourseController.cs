@@ -19,9 +19,9 @@ namespace Psagot.Controllers
 
 
         [HttpGet("AddDaysForCourse")]
-        public async Task<IActionResult> AddDaysForCourse([FromQuery] int courseId, [FromQuery] int daysToAdd)
+        public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
         {
-            var (success, errorMessage) = await _daysForCourseBL.AddDaysForCourse(courseId, daysToAdd);
+            var (success, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
 
             if (!success) return BadRequest(errorMessage);
 
