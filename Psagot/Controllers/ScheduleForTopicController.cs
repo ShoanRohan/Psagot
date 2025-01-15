@@ -40,12 +40,17 @@ namespace Psagot.Controllers
             return Ok(updatedScheduleForTopic);
         }
 
-        [HttpGet("GetAllScheduleForTopics")]
-        public async Task<IActionResult> GetAllScheduleForTopics()
+
+        [HttpDelete("DeleteScheduleForTopic/{id}")]
+        public async Task<IActionResult> DeleteScheduleForTopic([FromRoute] int id)
         {
-            var (scheduleForTopics, errorMessage) = await _scheduleForTopicBL.GetAllScheduleForTopics();
-            if (scheduleForTopics == null) return BadRequest(errorMessage);
-            return Ok(scheduleForTopics);
+            var (isDeleted, errorMessage) = await _ScheduleForTopicBL.DeleteScheduleForTopic(id)
+            if(!isDeleted)
+            {
+                return NotFound (new { Message = errorMessage });
+            }
+        
+            return Ok(new { Id = id });
         }
 
         [HttpGet("GetAllScheduleForTopicByTopicId/{topicId}")]
