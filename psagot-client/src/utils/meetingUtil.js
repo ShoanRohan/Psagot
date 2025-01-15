@@ -10,4 +10,9 @@ const updateMeeting = async (updateMeeting) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting };
+const addMeeting = async (addNewMeeting) => {
+    const response = await api.post("/Meeting/AddMeeting", addNewMeeting);
+    return response.data;
+};
+
+export { getAllMeetings, updateMeeting ,addMeeting};
