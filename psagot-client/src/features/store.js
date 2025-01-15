@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userTypeReducer from '../features/userType/userTypeSlice';
+import scheduleForTopicReducer from '../features/scheduleForTopic/scheduleForTopicSlice';
 import meetingReducer from '../features/meeting/meetingSlice';
 import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
 
 const store = configureStore({
   reducer: {
     userType: userTypeReducer, //Slice of userType
+    scheduleForTopic: scheduleForTopicReducer, //Slice of scheduleForTopic
     meeting: meetingReducer, //Slice of meeting
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
   },
