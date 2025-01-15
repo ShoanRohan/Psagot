@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,21 +21,15 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(bool Success, string ErrorMessage)> AddDaysForCourse(int courseId, int daysToAdd)
+        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
         {
-            if (daysToAdd <= 0)
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(daysForCourseDTO);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseDL.AddDaysForCourse(daysForCourse);
 
-                return (false, "Number of days to add must be greater than zero.");
+            if (addedDaysForCourse == null) return (null, errorMessage);
 
-            var success = await _daysForCourseDL.AddDaysForCourse(courseId, daysToAdd);
-
-            if (!success)
-
-                return (false, "Course not found or could not update.");
-
-            return (true, null);
+            return (_mapper.Map<DaysForCourseDTO>(addedDaysForCourse), null);
         }
-
 
         public async Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse()
         {
@@ -47,7 +42,6 @@ namespace BL
         public async Task<(DaysForCourseDTO DayForCourse, string ErrorMessage)> GetDaysForCourseById(int id)
         {
             var (daysForCourse, errorMessage) = await _daysForCourseDL.GetDaysForCourseById(id);
-
             if (daysForCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<DaysForCourseDTO>(daysForCourse), null);
