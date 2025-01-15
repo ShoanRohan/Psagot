@@ -1,4 +1,5 @@
-﻿using Entities.Contexts;
+﻿using AutoMapper;
+using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -16,6 +17,20 @@ namespace DL
         public DaysForCourseDL(PsagotDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
+        {
+            try
+            {
+                var addedDaysForCourse = await _context.Set<DaysForCourse>().AddAsync(daysForCourse);
+                await _context.SaveChangesAsync();
+                return (addedDaysForCourse.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
         }
 
         public async Task<(IEnumerable<DaysForCourse> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse()

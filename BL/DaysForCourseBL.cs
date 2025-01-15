@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,16 @@ namespace BL
         {
             _daysForCourseDL = daysForCourseDL;
             _mapper = mapper;
+        }
+
+        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
+        {
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(daysForCourseDTO);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseDL.AddDaysForCourse(daysForCourse);
+
+            if (addedDaysForCourse == null) return (null, errorMessage);
+
+            return (_mapper.Map<DaysForCourseDTO>(addedDaysForCourse), null);
         }
 
         public async Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse()
