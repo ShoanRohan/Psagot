@@ -41,7 +41,7 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetDaysForCourseById([FromRoute] int id)
         {
             var (dayForCourse, errorMessage) = await _daysForCourseBL.GetDaysForCourseById(id);
-            if (dayForCourse == null) return NoContent();
+            if (dayForCourse == null) return NotFound(errorMessage);
 
             return Ok(dayForCourse);
         }
