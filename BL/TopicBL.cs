@@ -19,9 +19,9 @@ namespace BL
             _topicDL = topicDL;
             _mapper = mapper;
         }
-        public async Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        public async Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId)
         {
-            var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(id);
+            var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(courseId);
             if (topics == null || !topics.Any()) return (null, errorMessage);
             return (topics.Select(t => _mapper.Map<TopicDTO>(t)).ToList(), null);
         }
