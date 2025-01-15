@@ -5,4 +5,9 @@ const getAllMeetings = async() => {
     return response.data;
 };
 
-export { getAllMeetings };
+const updateMeeting = async (updateMeeting) => {
+    const response = await api.put("/Meeting/UpdateMeeting", updateMeeting);
+    return response.data;
+};
+
+export { getAllMeetings, updateMeeting };
