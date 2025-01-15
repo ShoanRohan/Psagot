@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using DL;
-using Entities.Models;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using DL;
+using Entities.Models;
 
 namespace BL
 {
@@ -44,19 +46,6 @@ namespace BL
         }
 
 
-
-        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
-        {
-            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
-            
-            if (!isDeleted) 
-            {
-                return (false, errorMessage);
-            }
-            
-            return (true, null);
-        }
-
        
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
@@ -75,6 +64,7 @@ namespace BL
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
         }
     }
+
 
 }
 

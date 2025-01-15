@@ -18,27 +18,6 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
-        {
-            try
-            {
-                var scheduleForTopic = await _context.Set<ScheduleForTopic>().FindAsync(TopicId);
-                if (scheduleForTopic == null)
-                {
-                    return (false, "Schedule for topic not found.");
-                }
-
-                _context.Set<ScheduleForTopic>().Remove(scheduleForTopic);
-                await _context.SaveChangesAsync();
-
-                return (true, null);
-            }
-            catch (Exception ex)
-            {
-                return (false, ex.Message);
-            }
-        }
-
         public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id)
         {
             try
@@ -72,6 +51,21 @@ namespace DL
             try
             {
                 var scheduleForTopic = await _context.Set<ScheduleForTopic>().ToListAsync();
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        
+    }
+    public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+        {
+            try
+            {
+             
+                var scheduleForTopic = await _context.Set<ScheduleForTopic>().Where(s => s.TopicId == topicId)
+                .ToListAsync(); ;
                 return (scheduleForTopic, null);
             }
             catch (Exception ex)
