@@ -11,6 +11,9 @@ const scheduleForTopicSlice = createSlice({
     name: 'scheduleForTopic',
     initialState,
     reducers: {
+        setScheduleForTopic: (state, action) => {
+
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -74,7 +77,7 @@ const scheduleForTopicSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(deleteScheduleForTopicAction.fulfilled, (state, action) => {
-                state.scheduleForTopics.filter((scheduleForTopic) => scheduleForTopic.id !== action.payload)
+                state.scheduleForTopics.filter((scheduleForTopic) => scheduleForTopic.id !== action.payload.id)
             })
             .addCase(deleteScheduleForTopicAction.fulfilled, (state, action) => {
                 state.status = 'failed';
