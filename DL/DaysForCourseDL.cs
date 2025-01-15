@@ -13,12 +13,10 @@ namespace DL
     public class DaysForCourseDL: IDaysForCourseDL
     {
         private readonly PsagotDbContext _context;
-        IMapper _mapper;
 
-        public DaysForCourseDL(PsagotDbContext context, IMapper mapper)
+        public DaysForCourseDL(PsagotDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
