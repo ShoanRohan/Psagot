@@ -9,5 +9,6 @@ public class MappingProfile : Profile
     {
         CreateMap<UserType, UserTypeDTO>().ReverseMap();
         CreateMap<Meeting, MeetingDTO>().ReverseMap();
+        CreateMap<DaysForCourse, DaysForCourseDTO>().ReverseMap();
     }
 }
