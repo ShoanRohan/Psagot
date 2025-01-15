@@ -21,18 +21,17 @@ namespace DL
             _mapper = mapper;
         }
 
-        public async Task<(bool, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
+        public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
         {
             try
             {
-                await _context.DaysForCourses.AddAsync(daysForCourse);
+                var addedDaysForCourse = await _context.Set<DaysForCourse>().AddAsync(daysForCourse);
                 await _context.SaveChangesAsync();
-                return (true, null);
+                return (addedDaysForCourse.Entity, null);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
-
+                return (null, ex.Message);
             }
         }
 

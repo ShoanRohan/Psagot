@@ -21,12 +21,15 @@ namespace BL
             _mapper = mapper;
         }
 
-        public async Task<(bool Success, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
+        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
         {
-            DaysForCourse daysForCourse = _mapper.Map<DaysForCourseDTO, DaysForCourse>(daysForCourseDTO);
-            return await _daysForCourseDL.AddDaysForCourse(daysForCourse);
-        }
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(daysForCourseDTO);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseDL.AddDaysForCourse(daysForCourse);
 
+            if (addedDaysForCourse == null) return (null, errorMessage);
+
+            return (_mapper.Map<DaysForCourseDTO>(addedDaysForCourse), null);
+        }
 
         public async Task<(IEnumerable<DaysForCourseDTO> DaysForCourse, string ErrorMessage)> GetAllDaysForCourse()
         {

@@ -17,15 +17,13 @@ namespace Psagot.Controllers
             _daysForCourseBL = daysForCourseBL;
         }
 
-
         [HttpGet("AddDaysForCourse")]
         public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
         {
-            var (success, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
+            if (addedDaysForCourse == null) return BadRequest(errorMessage);
 
-            if (!success) return BadRequest(errorMessage);
-
-            return Ok("Days added successfully.");
+            return Ok(addedDaysForCourse);
         }
 
         [HttpGet("GetAllDaysForCourse")]
