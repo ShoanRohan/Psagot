@@ -33,14 +33,13 @@ namespace Psagot.Controllers
 
             return Ok(updatedUser);
         }
-
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
             var (user, errorMessage) = await _userBL.GetUserById(id);
             if (user == null) return NotFound(errorMessage);
 
-            return Ok(user);
+            return Ok(user); // המידע כולל כעת את ה-UserTypeName
         }
 
         [HttpGet("GetAllUsers")]
@@ -49,7 +48,7 @@ namespace Psagot.Controllers
             var (users, errorMessage) = await _userBL.GetAllUsers();
             if (users == null) return BadRequest(errorMessage);
 
-            return Ok(users);
+            return Ok(users); // המידע כולל כעת את ה-UserTypeName
         }
 
 

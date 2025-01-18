@@ -1,21 +1,21 @@
-﻿using Entities.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
 using Entities.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Entities.Contexts;
 
 namespace DL
 {
-   public class UserDL : IUserDL
+    public class UserDL : IUserDL
     {
         private readonly PsagotDbContext _context;
+
         public UserDL(PsagotDbContext context)
         {
             _context = context;
         }
+
         public async Task<(User User, string ErrorMessage)> AddUser(User user)
         {
             try
@@ -29,6 +29,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
         {
             try
@@ -47,7 +48,14 @@ namespace DL
         {
             try
             {
-                var user = await _context.Set<User>().FindAsync(id);
+                // הוספנו את ה-`Include` כדי לכלול את ה-UserType בשאילתא
+                var user = await _context.Set<User>()
+                    .Include(u => u.UserType)  // כאן עושים את ה-include
+                    .FirstOrDefaultAsync(u => u.UserId == id);
+
+                if (user == null)
+                    return (null, "User not found");
+
                 return (user, null);
             }
             catch (Exception ex)
@@ -60,8 +68,12 @@ namespace DL
         {
             try
             {
-                var user = await _context.Set<User>().ToListAsync();
-                return (user, null);
+                // הוספנו את ה-`Include` כדי לכלול את ה-UserType בשאילתא
+                var users = await _context.Set<User>()
+                    .Include(u => u.UserType)  // כאן עושים את ה-include
+                    .ToListAsync();
+
+                return (users, null);
             }
             catch (Exception ex)
             {

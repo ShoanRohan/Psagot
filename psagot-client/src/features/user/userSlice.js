@@ -1,57 +1,74 @@
-import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import { createSlice } from '@reduxjs/toolkit';
+import { fetchAllUsers, fetchUserById, addUserAction, updateUserAction } from './userAction';
 
 const initialState = {
-    user: [],
-    selectedUser: null,
-    status: 'idle',
-    error: null,
+  users: [],
+  user: null,
+  status: 'idle', // יכול להיות: 'idle', 'loading', 'succeeded', 'failed'
+  error: null,
 };
 
 const userSlice = createSlice({
-    name: 'user',
-    initialState,
-    reducers:{
-        setUser: (state, action) =>{
+  name: 'user',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      // פעולה fetchAllUsers
+      .addCase(fetchAllUsers.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.users = action.payload; // עדכון רשימת המשתמשים
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message; // טיפול בשגיאה
+      })
 
+      // פעולה fetchUserById
+      .addCase(fetchUserById.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.user = action.payload; // עדכון המשתמש שנמצא
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+
+      // פעולה addUserAction
+      .addCase(addUserAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(addUserAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.users.push(action.payload); // הוספת המשתמש החדש
+      })
+      .addCase(addUserAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
+
+      // פעולה updateUserAction
+      .addCase(updateUserAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateUserAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const index = state.users.findIndex((user) => user.id === action.payload.id);
+        if (index !== -1) {
+          state.users[index] = action.payload; // עדכון המשתמש הקיים
         }
-    },
-    extraReducers: (builder) =>{
-        builder.addCase(fetchAllUsers.pending, (state) =>{
-            state.status = 'loading';
-        })
-        .addCase(fetchAllUsers.fulfilled, (state, action) =>{
-            state.status ='succeeded';
-            state.user =action.payload;
-        })
-        .addCase(fetchAllUsers.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        .addCase(fetchUserById.pending, (state) =>{
-            state.status ='loading';
-
-        })
-        .addCase(fetchUserById. fulfilled, (state, action)=>{
-            state.status ='succeeded';
-            state.selectedUser =action.payload;
-        })
-        .addCase(fetchUserById.rejected, (state, action) => {
-            state.status =' failed';
-            state.error =action.error.message;
-        })
-        .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.puse(action.payload);
-        })
-        .addCase(updateUserAction.fulfilled, (state, action)=> {
-            const index = state.user.findIndex((user)=> user.id===action.payload.id);
-            if (index !== -1) {
-                state.user[index]=action.payload;
-            }
-        });
-
-    },
+      })
+      .addCase(updateUserAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      });
+  },
 });
 
-export const { setUser } = userSlice.actions;
 export default userSlice.reducer;
