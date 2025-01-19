@@ -19,10 +19,10 @@ public class CourseBL: ICourseBL
 
         public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
         {
-            var (Course, errorMessage) = await _courseDL.GetCourseById(id);
-            if (Course == null) return (null, errorMessage);
+            var (course, errorMessage) = await _courseDL.GetCourseById(id);
+            if (course == null) return (null, errorMessage);
 
-            return (_mapper.Map<CourseDTO>(Course), null);
+            return (_mapper.Map<CourseDTO>(course), null);
         }
 
   
