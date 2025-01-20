@@ -1,19 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById ,addRoomAction, updateRoomAction} from'./roomActions';
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
 
 const initialState = {
     rooms: [],
     selectedRoom: null,
-    status: 'idle', 
+    status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
 
 const roomSlice = createSlice({
-    name: 'rooms',
+    name: 'room',
     initialState,
     reducers: {
+        
         setRoom: (state, action) => {
-           
+            
         }
     },
     extraReducers: (builder) => {
@@ -34,7 +35,7 @@ const roomSlice = createSlice({
             })
             .addCase(fetchRoomById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedRoom = action.payload;
+                state.selectedUser = action.payload;
             })
             .addCase(fetchRoomById.rejected, (state, action) => {
                 state.status = 'failed';

@@ -1,6 +1,7 @@
-﻿using Entities.DTO;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Entities.DTO;
+using Entities.Models;
 
 namespace BL
 {
@@ -11,7 +12,4 @@ namespace BL
         Task<(IEnumerable<RoomDTO> Rooms, string ErrorMessage)> GetAllRooms();
         Task<(RoomDTO Room, string ErrorMessage)> GetRoomById(int id);  
     }
-}
-
-    
-    
+}   

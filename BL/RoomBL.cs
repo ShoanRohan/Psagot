@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using DL;
 using Entities.DTO;
 using Entities.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace BL
 {
@@ -16,7 +16,7 @@ namespace BL
         {
             _roomDL = roomDL;
             _mapper = mapper;
-        } 
+        }
 
         public async Task<(RoomDTO Room, string ErrorMessage)> AddRoom(RoomDTO roomDTO)
         {
