@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllRooms, getRoomById ,addRoom,updateRoom} from '../../utils/roomUtil';
+import { getAllRooms, getRoomById } from '../../utils/roomUtil';
 
 export const fetchAllRooms = createAsyncThunk('rooms/fetchAllRoom', async () => {
     const data = await getAllRooms();
@@ -12,13 +12,13 @@ export const fetchAllRooms = createAsyncThunk('rooms/fetchAllRoom', async () => 
     return data;
   });
 
-  export const addRoomAction = createAsyncThunk('room/addRoomAction', async (newRoom) => {
+  export const addRoomAction = createAsyncThunk('room/addRoom', async (newRoom) => {
     const data = await addRoom(newRoom);
     return data;
   });
   
   
-  export const updateRoomAction = createAsyncThunk('room/updateRoomAction', async (updatedRoom) => {
+  export const updateRoomAction = createAsyncThunk('room/updateRoom', async (updatedRoom) => {
     const data = await updateRoom(updatedRoom);
     return data;
   });
