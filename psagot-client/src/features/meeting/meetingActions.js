@@ -19,9 +19,8 @@ export const updateMeetingAction = createAsyncThunk(
     }
 );
 
-
 export const addMeetingAction = createAsyncThunk(
-    "Meeting/addMeetingAction",
+    "meeting/addMeetingAction",
     async (addNewMeeting) => {
         const data = await addMeeting(addNewMeeting);
         return data;
