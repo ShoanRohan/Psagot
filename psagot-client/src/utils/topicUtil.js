@@ -26,8 +26,8 @@ const deleteTopic = async (id) => {
     return response.data;
 };
 
-const getAllTopicsForCourseByCourseId = async (id) => {
-    const response = await api.get(`/Topic/GetAllTopicsForCourseByCourseId/${id}`);
+const getAllTopicsForCourseByCourseId = async (CourseId) => {
+    const response = await api.get(`/Topic/GetAllTopicsForCourseByCourseId/${CourseId}`);
     return response.data;
 };
 
