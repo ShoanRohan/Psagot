@@ -21,6 +21,8 @@ namespace Psagot
             builder.Services.AddScoped<IUserBL, UserBL>();
             builder.Services.AddScoped<IDayDL, DayDL>();
             builder.Services.AddScoped<IDayBL, DayBL>();
+            builder.Services.AddScoped<ICourseDL, CourseDL>();
+            builder.Services.AddScoped<ICourseBL, CourseBL>();
 
 
             builder.Services.AddScoped<IRoomDL, RoomDL>();
