@@ -15,4 +15,4 @@ const addMeeting = async (addNewMeeting) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting ,addMeeting};
+export { getAllMeetings, updateMeeting , addMeeting};
