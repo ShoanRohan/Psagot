@@ -57,5 +57,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
+        {
+            try
+            {
+                _context.Set<Course>().Update(course);
+                await _context.SaveChangesAsync();
+                return (course, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }
