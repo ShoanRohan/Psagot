@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction } from '../meeting/meetingActions';
 
 const initialState = {
     meetings:[],
@@ -38,7 +38,17 @@ const meetingSlice = createSlice({
                 if (index !== -1) {
                     state.meetings[index] = action.payload;
                 }
-            });
+            })
+            .addCase(addMeetingAction.pending, (state) => {
+                state.status = "loading";
+              })
+             .addCase(addMeetingAction.fulfilled, (state, action) => {
+                state.meetings.push(action.payload)
+              })
+              .addCase(addMeetingAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+              });
     },
 });
 
