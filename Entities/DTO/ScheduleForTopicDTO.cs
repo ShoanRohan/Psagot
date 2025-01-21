@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserTypeDTO
+    public class ScheduleForTopicDTO
     {
-        public int UserTypeId { get; set; }
-        public string Name { get; set; }
+        public int ScheduleForTopicId { get; set; }
+
+        public int TopicId { get; set; }
+
+        public int DayId { get; set; }
+
         public TimeOnly StartTime { get; set; }
 
         public TimeOnly EndTime { get; set; }
