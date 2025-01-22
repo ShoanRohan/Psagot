@@ -60,11 +60,18 @@ const daysForCourseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.payload;
             })
+            .addCase(fetchUpdateDaysForCourseAction.pending, (state) => {
+                state.status = 'loading';
+            })
             .addCase(fetchUpdateDaysForCourseAction.fulfilled, (state, action) => {
-                const index = state.daysForCourses.findIndex((daysForCourses) => daysForCourses.id === action.payload.id);
+                const index = state.daysForCourses.findIndex((daysForCourse) => daysForCourse.id === action.payload.id);
                 if (index !== -1) {
                     state.daysForCourses[index] = action.payload;
                 }
+            })
+            .addCase(fetchUpdateDaysForCourseAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             });
     },
 });

@@ -21,7 +21,7 @@ const getDaysForCourseById = async (id) => {
 };
 
 const updateDaysForCourse = async (updateDaysForCourse) => {
-    const response = await api.put(`/DaysForCourse/UpdateDaysForCourse/${updateDaysForCourse.courseId}`, updateDaysForCourse);
+    const response = await api.put('/DaysForCourse/UpdateDaysForCourse', updateDaysForCourse);
     return response.data;
 };
 
