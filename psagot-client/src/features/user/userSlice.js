@@ -26,6 +26,9 @@ const userSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message; // טיפול בשגיאה
       })
+      .addCase(deleteUserAction.fulfilled, (state, action) => {
+        state.users = state.users.filter((user) => user.id !== action.payload);
+      })
 
       // פעולה fetchUserById
       .addCase(fetchUserById.pending, (state) => {

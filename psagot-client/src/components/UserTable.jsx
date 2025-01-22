@@ -14,7 +14,7 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllUsers } from '../features/user/userAction';
+import { fetchAllUsers, updateUserAction } from '../features/user/userAction';
 import { useEffect } from 'react';
 
 const roles = ['Market', 'Finance', 'Development'];
@@ -25,19 +25,20 @@ const initialRows = [
 ];
 
 function EditToolbar(props) {
+ 
   const { setRows, setRowModesModel } = props;
 
-  const handleClick = () => {
-    const id = Date.now(); // משתמש ב-ID ייחודי
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: '', age: '', role: '', isNew: true },
-    ]);
+  const handleClick = async () => {
+  const id = Date.now();
+  const newRow = { id, name: '', age: '', role: '', isNew: true };
+  const addedUser = await dispatch(addUserAction(newRow)); // קריאה ל-Redux
+  setRows((oldRows) => [...oldRows, addedUser.payload]); // עדכון ה-state
+};
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
-  };
+  
 
   return (
     <GridToolbarContainer>
@@ -51,7 +52,7 @@ function EditToolbar(props) {
 export default function UserTable() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({}); // הגדרת rowModesModel ו- setRowModesModel
 
   useEffect(() => {
@@ -75,11 +76,14 @@ export default function UserTable() {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
-  const handleSaveClick = (id) => () => {
+  const handleSaveClick = (id) => async () => {
+    const rowToSave = row.find((row) =>row.id === id);
+    await dispatch(updateUserAction(rowToSave));
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
+  const handleDeleteClick = (id) => async() => {
+    await dispatch(deleteUserAction(id));
     setRows(rows.filter((row) => row.id !== id));
   };
 

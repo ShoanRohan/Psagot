@@ -19,6 +19,11 @@ export const addUserAction = createAsyncThunk('user/addUserAction', async (newUs
     return data;
 });
 
+export const deleteUserAction = createAsyncThunk('user/deleteUserAction', async (id) => {
+    await api.delete(`/User/DeleteUser/${id}`);
+    return id;
+  });
+
 // פעולה לעדכון משתמש קיים
 export const updateUserAction = createAsyncThunk('user/updateUserAction', async (updateUser) => {
     const data = await updatedUser(updateUser);
