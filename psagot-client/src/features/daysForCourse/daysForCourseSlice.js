@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse } from './daysForCourseActions';
-
+import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse, fetchDaysForCourseById } from './daysForCourseActions';
 
 const initialState = {
     daysForCourses: [],
     daysForCourseByCourseId: [],
+    dayForCourse: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
@@ -49,6 +49,17 @@ const daysForCourseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(fetchDaysForCourseById.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchDaysForCourseById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.dayForCourse = action.payload;
+            })
+            .addCase(fetchDaysForCourseById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            });
     },
 });
 
