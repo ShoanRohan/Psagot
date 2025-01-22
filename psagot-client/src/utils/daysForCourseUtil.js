@@ -16,12 +16,8 @@ const gelAllDaysForCourse = async () => {
 };
 
 const getDaysForCourseById = async (id) => {
-    try {
-        const response = await api.get(`/daysForCourse/GetDaysForCourseById/${id}`);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+    const response = await api.get(`/DaysForCourse/GetDaysForCourseById/${id}`);
+    return response.data;
 };
 
 export { addDaysForCourse, GetDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById };

@@ -16,7 +16,7 @@ export const fetchAllDaysForCourse = createAsyncThunk('/DaysForCourse/fetchAllDa
     return data;
 });
 
-export const fetchDaysForCourseById = createAsyncThunk('daysForCourse/fetchDaysForCourseById', async (id) => {
+export const fetchDaysForCourseById = createAsyncThunk('DaysForCourse/fetchDaysForCourseById', async (id) => {
     const data = await getDaysForCourseById(id);
     return data;
 });

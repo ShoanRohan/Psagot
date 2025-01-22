@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse, fetchDaysForCourseById } from './daysForCourseActions';
 
-
 const initialState = {
     daysForCourses: [],
     daysForCourseByCourseId: [],
