@@ -38,21 +38,39 @@ namespace BL
             return (_mapper.Map<UserDTO>(updatedUser), null);
         }
 
-        public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
-        {
-            var (user, errorMessage) = await _userDL.GetUserById(id);
-            if (user == null) return (null, errorMessage);
-
-            return (_mapper.Map<UserDTO>(user), null);
-        }
-
         public async Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers()
         {
             var (users, errorMessage) = await _userDL.GetAllUsers();
             if (users == null) return (null, errorMessage);
 
-            return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+            var userDTOs = _mapper.Map<IEnumerable<UserDTO>>(users);
+
+            // הוספת שם סוג משתמש לכל משתמש
+            foreach (var userDTO in userDTOs)
+            {
+               
+                userDTO.UserTypeName = userDTO.UserTypeName;  // רק מתעדכן אם יש בעיה
+            }
+
+            return (userDTOs, null);
         }
+
+        public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
+        {
+            var (user, errorMessage) = await _userDL.GetUserById(id);
+            if (user == null) return (null, errorMessage);
+
+            var userDTO = _mapper.Map<UserDTO>(user);
+
+          
+            userDTO.UserTypeName = user.UserType?.Name;  // הוספת שם סוג משתמש אם קיים
+
+            return (userDTO, null);
+        }
+
+
+
+
 
     }
 }

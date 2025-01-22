@@ -20,6 +20,8 @@ import {
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllUsers, updateUserAction } from '../features/user/userAction';
+import { useEffect } from 'react';
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
@@ -65,6 +67,7 @@ const initialRows = [
 ];
 
 function EditToolbar(props) {
+ 
   const { setRows, setRowModesModel } = props;
 
   const handleClick = () => {
@@ -78,6 +81,7 @@ function EditToolbar(props) {
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
+  
 
   return (
     <GridToolbarContainer>
@@ -97,6 +101,13 @@ export default function UserTable() {
   useEffect(() => {
     dispatch(fetchAllUsers());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (users && users.length > 0) {
+      setRows(users); // עדכון ה-rows עם הנתונים שהתקבלו מ-Redux
+      console.log(users); // הדפסה לקונסול
+    }
+  }, [users]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
