@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse } from './daysForCourseActions';
+import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse,fetchUpdateDaysForCourseAction } from './daysForCourseActions';
 
 
 const initialState = {
@@ -49,6 +49,12 @@ const daysForCourseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(fetchUpdateDaysForCourseAction.fulfilled, (state, action) => {
+                const index = state.daysForCourses.findIndex((daysForCourses) => daysForCourses.id === action.payload.id);
+                if (index !== -1) {
+                    state.daysForCourses[index] = action.payload;
+                }
+            });
     },
 });
 
