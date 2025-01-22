@@ -15,4 +15,9 @@ const addMeeting = async (addNewMeeting) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting , addMeeting};
+const getMeetingeById = async (id) => {
+    const response = await api.get(`/Meeting/GetMeetingById/${id}`);
+    return response.data;
+};
+
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
