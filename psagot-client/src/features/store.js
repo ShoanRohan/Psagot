@@ -4,6 +4,7 @@ import roomReducer from '../features/room/roomSlice';
 import userReduser from './user/userSlice';
 import meetingReducer from '../features/meeting/meetingSlice';
 import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
+import topicReducer from '../features/topic/topicSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     user: userReduser, 
     meeting: meetingReducer, //Slice of meeting
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
+    topic:topicReducer,
   },
   
 });
