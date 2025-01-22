@@ -57,5 +57,19 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting)
+        {
+            try
+            {
+                var addedMeeting = await _context.Set<Meeting>().AddAsync(meeting);
+                await _context.SaveChangesAsync();
+                return (addedMeeting.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

@@ -44,7 +44,6 @@ namespace Psagot.Controllers
             return Ok(meeting);
         }
 
-
         [HttpGet("GetAllMeetings")]
         public async Task<IActionResult> GetAllMeetings()
         {
@@ -54,5 +53,13 @@ namespace Psagot.Controllers
             return Ok(meetings);
         }
 
+        [HttpPost("AddMeeting")]
+        public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
+        {
+            var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
+            if (addedMeeting == null) return BadRequest(errorMessage);
+
+            return Ok(addedMeeting);
+        }
     }
 }
