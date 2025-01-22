@@ -20,4 +20,9 @@ const getDaysForCourseById = async (id) => {
     return response.data;
 };
 
-export { addDaysForCourse, GetDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById };
+const updateDaysForCourse = async (updateDaysForCourse) => {
+    const response = await api.put('/DaysForCourse/UpdateDaysForCourse', updateDaysForCourse);
+    return response.data;
+};
+
+export { addDaysForCourse, GetDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse };

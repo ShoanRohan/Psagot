@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addDaysForCourse, GetDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById } from '../../utils/daysForCourseUtil';
+import { addDaysForCourse, GetDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse } from '../../utils/daysForCourseUtil';
 
 export const addDaysForCourseAction = createAsyncThunk('DaysForCourse/addDaysForCourseAction', async (newDayForCourse) => {
   const data = await addDaysForCourse(newDayForCourse);
@@ -18,5 +18,10 @@ export const fetchAllDaysForCourse = createAsyncThunk('/DaysForCourse/fetchAllDa
 
 export const fetchDaysForCourseById = createAsyncThunk('DaysForCourse/fetchDaysForCourseById', async (id) => {
     const data = await getDaysForCourseById(id);
+    return data;
+});
+
+export const fetchUpdateDaysForCourseAction = createAsyncThunk('DaysForCourse/updateDaysForCourseAction', async (updateDaysForCourse) => {
+    const data = await updateDaysForCourse(updateDaysForCourse);
     return data;
 });
