@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { updateMeetingAction } from "./meetingActions";
+import {fetchMeetingById} from './meetingActions'
 
 const initialState = {
   meetings: [],
@@ -10,24 +10,19 @@ const initialState = {
 const meetingSlice = createSlice({
   name: 'meeting',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(updateMeetingAction.pending, (state) => {
-        state.status = "loading";
-        state.error = null;
+      .addCase(fetchMeetingById.pending, (state) => {
+        state.status = 'loading';
       })
-      .addCase(updateMeetingAction.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        const index = state.meetings.findIndex((meeting) => meeting.id === action.payload.id);
-        if (index !== -1) {
-          state.meetings[index] = action.payload;
-        }
+      .addCase(fetchMeetingById.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.selectedUser = action.payload;
       })
-      .addCase(updateMeetingAction.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error?.message || "Failed to update meeting.";
+      .addCase(fetchMeetingById.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       });
   },
 });

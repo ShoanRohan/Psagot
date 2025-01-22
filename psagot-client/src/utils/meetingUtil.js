@@ -1,8 +1,8 @@
 import api from "./api";
 
-const updateMeeting = async(updateMeeting) => {
-    const response = await api.put(`/MeetingType/UpdateMeeting/${updateMeeting.id}`, updateMeeting);
+const getMeetingeById = async (id) => {
+    const response = await api.get(`/Meeting/GetMeetingById/${id}`);
     return response.data;
 };
 
-export { updateMeeting }
+export { getMeetingeById }
