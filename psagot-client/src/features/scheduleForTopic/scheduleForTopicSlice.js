@@ -77,9 +77,9 @@ const scheduleForTopicSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(deleteScheduleForTopicAction.fulfilled, (state, action) => {
-                state.scheduleForTopics.filter((scheduleForTopic) => scheduleForTopic.id !== action.payload.id)
+                state.scheduleForTopics = state.scheduleForTopics.filter((scheduleForTopic) => scheduleForTopic.id !== action.payload.id);
             })
-            .addCase(deleteScheduleForTopicAction.fulfilled, (state, action) => {
+            .addCase(deleteScheduleForTopicAction.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
