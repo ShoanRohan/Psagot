@@ -3,6 +3,7 @@ import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingBy
 
 const initialState = {
   meetings: [],
+  meeting: null,
   status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
   error: null,
 };
@@ -54,7 +55,7 @@ const meetingSlice = createSlice({
             })
             .addCase(fetchMeetingById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.meeting = action.payload;
             })
             .addCase(fetchMeetingById.rejected, (state, action) => {
                 state.status = 'failed';
