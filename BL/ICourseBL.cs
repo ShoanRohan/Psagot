@@ -10,5 +10,6 @@ namespace BL
     public interface ICourseBL
     {
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
+        Task<bool> DeleteCourse(int id);
     }
 }

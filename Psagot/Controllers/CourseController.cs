@@ -22,6 +22,17 @@ namespace Psagot.Controllers
 
             return Ok(addedCourse);
         }
+        // DELETE api/<CourseController>/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteCourse( int id)
+        {
+            try
+            {
+                bool isDelete = await _courseBL.DeleteCourse(id);
+                return isDelete;
+            }
+            catch (Exception ex) { return StatusCode(500, ex.Message); }
+        }
 
     }
 }
