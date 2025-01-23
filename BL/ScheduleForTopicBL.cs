@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DL;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BL
 {
@@ -62,6 +63,18 @@ namespace BL
             if (scheduleForTopic == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
+        }
+
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
+
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
         }
     }
 
