@@ -57,5 +57,13 @@ namespace Psagot.Controllers
             return Ok(scheduleForTopic);
         }
 
+        [HttpDelete("DeleteScheduleForTopic/{id}")]
+        public async Task<IActionResult> DeleteScheduleForTopic([FromRoute] int id)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicBL.DeleteScheduleForTopic(id);
+            if(!isDeleted) return NotFound (new { Message = errorMessage });
+            return Ok(new { Id = id });
+        }
+
     }
 }
