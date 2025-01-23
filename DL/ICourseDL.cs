@@ -10,5 +10,6 @@ namespace DL
     public interface ICourseDL
     {
         Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
+        Task<bool> DeleteCourse(int id);
     }
 }
