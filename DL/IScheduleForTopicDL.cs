@@ -11,6 +11,7 @@ namespace DL
     {
         Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id);
 
+        Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic( int TopicId);
 
         Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic);
 

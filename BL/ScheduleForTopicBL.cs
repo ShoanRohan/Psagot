@@ -2,7 +2,10 @@
 using DL;
 using Entities.DTO;
 using Entities.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using DL;
 using Entities.Models;
@@ -14,6 +17,7 @@ namespace BL
     {
         private readonly IScheduleForTopicDL _scheduleForTopicDL;
         private readonly IMapper _mapper;
+
         public ScheduleForTopicBL(IScheduleForTopicDL scheduleForTopicDL, IMapper mapper)
         {
             _scheduleForTopicDL = scheduleForTopicDL;
@@ -41,7 +45,17 @@ namespace BL
             return (_mapper.Map<ScheduleForTopicDTO>(updatedScheduleForTopic), null);
         }
 
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
 
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
        
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
