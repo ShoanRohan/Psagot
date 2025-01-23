@@ -64,6 +64,5 @@ namespace Psagot.Controllers
             if(!isDeleted) return NotFound (new { Message = errorMessage });
             return Ok(new { Id = id });
         }
-
     }
 }
