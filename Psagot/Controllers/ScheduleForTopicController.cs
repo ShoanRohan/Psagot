@@ -33,8 +33,8 @@ namespace Psagot.Controllers
 
             return Ok(scheduleForTopics);
         }
-    }
-}
+    
+
 
         [HttpGet("GetScheduleForTopicById/{id}")]
         public async Task<IActionResult> GetScheduleForTopicById([FromRoute] int id)
