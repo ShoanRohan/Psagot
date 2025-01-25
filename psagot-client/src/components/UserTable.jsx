@@ -20,67 +20,27 @@ import {
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllUsers, updateUserAction } from '../features/user/userAction';
-import { useEffect } from 'react';
+import { fetchAllUsers, updateUserAction, deleteUserAction, addUserAction } from '../features/user/userAction';
+import { useEffect, useState } from 'react';
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
 
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
+const initialRows = [ ];
 
 function EditToolbar(props) {
- 
-  const { setRows, setRowModesModel } = props;
+  
+  const dispatch = useDispatch();
 
   const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: '', age: '', role: '', isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
+    const newUser = { name: '', Permissiongroup: '', NameUsed: ''};
+    dispatch(addUserAction(newUser)).then(() => {
+      dispatch(fetchAllUsers()); // רענון הנתונים לאחר ההוספה
+    });
   };
+  
   
 
   return (
@@ -124,8 +84,11 @@ export default function UserTable() {
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+  dispatch(deleteUserAction(id)).then(() => {
+    dispatch(fetchAllUsers()); // רענון הנתונים לאחר מחיקה
+  });
+};
+
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -140,86 +103,35 @@ export default function UserTable() {
   };
 
   const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+    return dispatch(updateUserAction(newRow))
+      .unwrap()
+      .then(() => {
+        dispatch(fetchAllUsers()); // רענון הנתונים לאחר עדכון
+      })
+      .catch((error) => {
+        console.error(error);
+        return { ...newRow, isError: true }; // סימון שגיאה בשורה
+      });
   };
+  
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'name', headerName: 'שם', width: 180, editable: true },
     {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 80,
-      align: 'left',
-      headerAlign: 'left',
-      editable: true,
-    },
-    {
-      field: 'joinDate',
-      headerName: 'Join date',
-      type: 'date',
+      field: 'Permissiongroup',
+      headerName: 'קבוצת הרשאה',
       width: 180,
       editable: true,
     },
     {
-      field: 'role',
-      headerName: 'Department',
-      width: 220,
+      field: 'NameUsed',
+      headerName: 'שם משתמש',
+      width: 180,
       editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development'],
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      width: 100,
-      cellClassName: 'actions',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
-
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
     },
   ];
 
@@ -237,7 +149,7 @@ export default function UserTable() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={users}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
@@ -249,6 +161,7 @@ export default function UserTable() {
           toolbar: { setRows, setRowModesModel },
         }}
       />
+      console.log(users);
     </Box>
   );
 }

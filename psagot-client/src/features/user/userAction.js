@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUsers, getUserById, addUser, updatedUser } from '../../utils/userUtil';
+import { getAllUsers, getUserById, addUser, updatedUser, deletedUser } from '../../utils/userUtil';
 
 // פעולה להבאת כל המשתמשים
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
@@ -20,7 +20,7 @@ export const addUserAction = createAsyncThunk('user/addUserAction', async (newUs
 });
 
 export const deleteUserAction = createAsyncThunk('user/deleteUserAction', async (id) => {
-    await api.delete(`/User/DeleteUser/${id}`);
+    await deletedUser(`/User/DeleteUser/${id}`);
     return id;
   });
 

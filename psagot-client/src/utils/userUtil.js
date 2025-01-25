@@ -23,5 +23,9 @@ const updatedUser = async (updateUser) => {
     const response = await api.put('/User/UpdateUser', updateUser);
     return response.data;
 };
+// פונקציה למחיקת משתמש
+const deletedUser = async (deleteUser) => {
+    await api.delete('/User/DeleteUser', deleteUser);
+};
 
-export { getAllUsers, getUserById, addUser, updatedUser };
+export { getAllUsers, getUserById, addUser, updatedUser, deletedUser };

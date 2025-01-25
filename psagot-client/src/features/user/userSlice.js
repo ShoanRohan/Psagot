@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllUsers, fetchUserById, addUserAction, updateUserAction } from './userAction';
+import { fetchAllUsers, fetchUserById, addUserAction, updateUserAction, deleteUserAction } from './userAction';
 
 const initialState = {
   users: [],
