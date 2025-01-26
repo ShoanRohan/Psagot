@@ -5,6 +5,7 @@ import userReduser from './user/userSlice';
 import scheduleForTopicReducer from '../features/scheduleForTopic/scheduleForTopicSlice';
 import meetingReducer from '../features/meeting/meetingSlice';
 import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
+import topicReducer from '../features/topic/topicSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     scheduleForTopic: scheduleForTopicReducer, //Slice of scheduleForTopic
     meeting: meetingReducer, //Slice of meeting
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
+    topic:topicReducer,
   },
   
 });
