@@ -13,19 +13,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
     fontWeight: 'bold',
-    border: `1px solid ${theme.palette.divider}`, // הוספת גבול מסביב לכל תא בכותרת
+    border: `1px solid ${theme.palette.divider}`,
     
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
-    border: `1px solid ${theme.palette.divider}`, // הוספת גבול מסביב לכל תא בגוף
+    border: `1px solid ${theme.palette.divider}`,
   },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
   '& td, & th': {
-    border: `1px solid rgba(224, 224, 224, 1)`, // גבול מסביב לכל תא
-  },
+    border: `1px solid rgba(224, 224, 224, 1)`, 
+},
 }));
 
 function createData(a, b, c, d, e, f, g, h, i, j, k, l, m) {
@@ -33,11 +33,11 @@ function createData(a, b, c, d, e, f, g, h, i, j, k, l, m) {
 }
 
 const rows = [
-  createData('חדר 1', 'נושא 1 חשבות שכר', 'נושא 1 חשבות שכר', 'נושא 1 חשבות שכר'),
-  createData('חדר 2', '', '', '', '', '', '', '', '', 'בדיקות תוכנה', 'בדיקות תוכנה', 'בדיקות תוכנה', 'בדיקות תוכנה'),
-  createData('חדר 3', '', '', '', '', '', '', '', '', '', '', ''),
-  createData('חדר 4', '', '', '', '', '', '', '', '', '', '', ''),
-  createData('חדר 5', '', '', '', '', '', '', '', 'מטפלות עזרה ראשונה', 'מטפלות עזרה ראשונה', 'מטפלות', 'מטפלות'),
+  createData('חדר-1', 'נושא 1 חשבות שכר', 'נושא 1 חשבות שכר', 'נושא 1 חשבות שכר'),
+  createData('חדר-2', '', '', '', '', '', '', '', '', 'בדיקות תוכנה', 'בדיקות תוכנה', 'בדיקות תוכנה', 'בדיקות תוכנה'),
+  createData('חדר-3', '', '', '', '', '', '', '', '', '', '', ''),
+  createData('חדר-4', '', '', '', '', '', '', '', '', '', '', ''),
+  createData('חדר-5', '', '', '', '', '', '', '', '', 'מטפלות עזרה ראשונה', 'מטפלות עזרה ראשונה', 'מטפלות', 'מטפלות'),
 ];
 
 export default function CustomizedTables() {
