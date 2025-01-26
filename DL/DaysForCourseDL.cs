@@ -71,5 +71,19 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> UpdateDaysForCourse(DaysForCourse daysForCourse)
+        {
+            try
+            {
+                _context.Set<DaysForCourse>().Update(daysForCourse);
+                await _context.SaveChangesAsync();
+                return (daysForCourse, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

@@ -35,6 +35,15 @@ namespace Psagot.Controllers
             return Ok(daysForCourse);
         }
 
+        [HttpPut("UpdateDaysForCourse")]
+        public async Task<IActionResult> UpdateDaysForCourse([FromBody] DaysForCourseDTO daysForCourseDTO)
+        {
+            var (updateDaysForCourse, errorMessage) = await _daysForCourseBL.UpdateDaysForCourse(daysForCourseDTO);
+            if (updateDaysForCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updateDaysForCourse);
+        }
+
         [HttpGet("GetDaysForCourseById/{id}")]
         public async Task<IActionResult> GetDaysForCourseById([FromRoute] int id)
         {
