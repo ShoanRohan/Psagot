@@ -17,7 +17,9 @@ const UserTable = () => {
 
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
-  const [newUser, setNewUser] = React.useState({ name: '', age: '', role: '', email: '', phone: '' });
+  const [newUser, setNewUser] = React.useState({
+    name: '', email: '', phone: '', password: '', userTypeId: 0, role: '', userTypeName: '', isActive: true
+  });
 
   useEffect(() => {
     dispatch(fetchAllUsers());
@@ -25,7 +27,12 @@ const UserTable = () => {
 
   useEffect(() => {
     if (users && users.length > 0) {
-      setRows(users);
+      // הוספת id לכל שורה על פי userId
+      const usersWithIds = users.map((user) => ({
+        ...user,
+        id: user.userId,  // השתמש ב-userId כ-id עבור השורה
+      }));
+      setRows(usersWithIds);
     }
   }, [users]);
 
@@ -55,8 +62,9 @@ const UserTable = () => {
     const newRow = { ...newUser, id: newId, isNew: true };
 
     setRows([...rows, newRow]);
+    dispatch(addUserAction(newUser)); // שולח את הנתונים לשרת
     setRowModesModel({ ...rowModesModel, [newId]: { mode: GridRowModes.Edit } });
-    setNewUser({ name: '', age: '', role: '', email: '', phone: '' }); // מנקה את השדות אחרי הוספה
+    setNewUser({ name: '', email: '', phone: '', password: '', userTypeId: 0, role: '', userTypeName: '', isActive: true }); // מנקה את השדות אחרי הוספה
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -70,10 +78,10 @@ const UserTable = () => {
 
   const columns = [
     { field: 'name', headerName: 'Name', width: 180, editable: true },
-    { field: 'age', headerName: 'Age', width: 80, editable: true },
-    { field: 'role', headerName: 'Role', width: 220, editable: true },
-    { field: 'email', headerName: 'Email', width: 250, editable: true }, // Email
-    { field: 'phone', headerName: 'Phone', width: 150, editable: true }, // Phone
+    { field: 'email', headerName: 'Email', width: 250, editable: true },
+    { field: 'phone', headerName: 'Phone', width: 150, editable: true },
+    { field: 'role', headerName: 'Role', width: 150, editable: true },
+    { field: 'userTypeName', headerName: 'User Type', width: 180, editable: true },
     {
       field: 'actions',
       type: 'actions',
@@ -117,20 +125,6 @@ const UserTable = () => {
           placeholder="Name"
         />
         <input
-          type="number"
-          name="age"
-          value={newUser.age}
-          onChange={handleUserInputChange}
-          placeholder="Age"
-        />
-        <input
-          type="text"
-          name="role"
-          value={newUser.role}
-          onChange={handleUserInputChange}
-          placeholder="Role"
-        />
-        <input
           type="email"
           name="email"
           value={newUser.email}
@@ -143,6 +137,20 @@ const UserTable = () => {
           value={newUser.phone}
           onChange={handleUserInputChange}
           placeholder="Phone"
+        />
+        <input
+          type="text"
+          name="role"
+          value={newUser.role}
+          onChange={handleUserInputChange}
+          placeholder="Role"
+        />
+        <input
+          type="text"
+          name="userTypeName"
+          value={newUser.userTypeName}
+          onChange={handleUserInputChange}
+          placeholder="User Type"
         />
       </Box>
 

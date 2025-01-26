@@ -1,51 +1,53 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUsers, getUserById, addUser, updatedUser } from '../../utils/userUtil';
+import { getAllUsers, getUserById, addUser, updateUser, deleteUser } from '../../utils/userUtil';
 
 // פעולה להבאת כל המשתמשים
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
-    const response = await fetch('/api/users'); 
-    if (!response.ok) {
-        throw new Error('Failed to fetch users');
-    }
-    const data = await response.json();
-    return data.users;  
+  try {
+    const users = await getAllUsers();  // מבצע קריאה ל-API
+    return users;  // מחזיר את התוצאה
+  } catch (error) {
+    throw new Error('Failed to fetch users');
+  }
 });
 
 // פעולה להבאת משתמש לפי ID
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) => {
-    const data = await getUserById(id);
-    return data;
+  try {
+    const user = await getUserById(id);  // מבצע קריאה ל-API
+    return user;
+  } catch (error) {
+    throw new Error('Failed to fetch user by id');
+  }
 });
 
 // פעולה להוספת משתמש חדש
 export const addUserAction = createAsyncThunk('user/addUser', async (newUser) => {
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      body: JSON.stringify(newUser),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await response.json();
-    return data;
+  try {
+    console.log('User data being sent to the server:', newUser);
+    const user = await addUser(newUser);  // מבצע קריאה ל-API
+    return user;
+  } catch (error) {
+    throw new Error('Failed to add new user');
+  }
 });
 
 // פעולה לעדכון משתמש
 export const updateUserAction = createAsyncThunk('user/updateUser', async (updatedUser) => {
-    const response = await fetch(`/api/users/${updatedUser.id}`, {
-      method: 'PUT',
-      body: JSON.stringify(updatedUser),
-      headers: { 'Content-Type': 'application/json' }
-    });
-    const data = await response.json();
-    return data;
+  try {
+    const user = await updateUser(updatedUser);  // מבצע קריאה ל-API
+    return user;
+  } catch (error) {
+    throw new Error('Failed to update user');
+  }
 });
 
 // פעולה למחיקת משתמש
 export const deleteUserAction = createAsyncThunk('user/deleteUser', async (id) => {
-    const response = await fetch(`/api/users/${id}`, {
-      method: 'DELETE',
-    });
-    if (response.ok) {
-      return id; // מחזיר את ה-ID של המשתמש שנמחק
-    }
+  try {
+    const deletedUser = await deleteUser(id);  // מבצע קריאה ל-API
+    return id;  // מחזיר את ה-ID של המשתמש שנמחק
+  } catch (error) {
     throw new Error('Failed to delete user');
+  }
 });
