@@ -17,7 +17,7 @@ namespace Psagot.Controllers
             _daysForCourseBL = daysForCourseBL;
         }
 
-        [HttpGet("AddDaysForCourse")]
+        [HttpPost("AddDaysForCourse")]
         public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
         {
             var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
