@@ -5,6 +5,7 @@ using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace DL
 {
     public class RoomDL : IRoomDL
@@ -16,6 +17,17 @@ namespace DL
             _context = context;
         }
 
+        public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
+        {
+            try {
+                var rooms = await _context.Set<Room>().ToListAsync();
+                return (rooms, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
         public async Task<(Room Room, string ErrorMessage)> AddRoom(Room room)
         {
             try
@@ -30,7 +42,18 @@ namespace DL
             }
         }
 
-
+        public async Task<(Room Room, string ErrorMessage)> GetRoomById(int id)
+        {
+            try
+            {
+                var room = await _context.Set<Room>().FindAsync(id);
+                return (room, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
 
         public async Task<(Room Room, string ErrorMessage)> UpdateRoom(Room room)
         {

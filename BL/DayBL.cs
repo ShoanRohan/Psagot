@@ -35,5 +35,26 @@ namespace BL
 
                 return (_mapper.Map<IEnumerable<DayDTO>>(days), null);
             }
+
+        public async Task<(DayDTO Day, string ErrorMessage)> AddDay(DayDTO dayDTO)
+        {
+            var day = _mapper.Map<Day>(dayDTO);
+            var (addedDay, errorMessage) = await _dayDL.AddDay(day);
+
+            if (addedDay == null) return (null, errorMessage);
+
+            return (_mapper.Map<DayDTO>(addedDay), null);
         }
+
+        public async Task<(DayDTO Day, string ErrorMessage)> UpdateDay(DayDTO dayDTO)
+        {
+            var day = _mapper.Map<Day>(dayDTO);
+            var (updatedDay, errorMessage) = await _dayDL.UpdateDay(day);
+
+            if (updatedDay == null) return (null, errorMessage);
+
+            return (_mapper.Map<DayDTO>(updatedDay), null);
+        }
+
+    }
 }
