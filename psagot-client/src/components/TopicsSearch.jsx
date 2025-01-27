@@ -3,7 +3,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Box, Button, LinearProgress } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
 export default function SelectVariants() {
@@ -16,7 +16,7 @@ export default function SelectVariants() {
   return (
     <div>
       <Box sx={{ width: "100%" }}>
-        <LinearProgress />
+      
 
         {/* שימוש ב-flexbox ליישור הרכיבים */}
         <Box
@@ -25,6 +25,7 @@ export default function SelectVariants() {
             justifyContent: "space-between",
             alignItems: "center", // מיישר את האלמנטים לאורך הציר האנכי
             marginTop: 2,
+            backgroundColor: "#E3EEFFCC"
           }}
         >
           {/* רכיבים מצד ימין */}
