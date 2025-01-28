@@ -2,10 +2,7 @@
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Psagot.Controllers
 {
@@ -19,29 +16,31 @@ namespace Psagot.Controllers
         {
             _userBL = userBL;
         }
-
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
-            if (userDTO == null)
-                return BadRequest("Invalid user data");
-            try
+            // אימות פרטי המשתמש
+            if (string.IsNullOrEmpty(userDTO.Name))
             {
-                var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
-                if (addedUser == null)
-                    return BadRequest(errorMessage);
-
-                return CreatedAtAction(nameof(AddUser), new { id = addedUser.UserId }, new
-                {
-                    User = addedUser
-                });
+                return BadRequest("Name is required.");
             }
-            catch (Exception ex)
+
+            if (string.IsNullOrEmpty(userDTO.Email) || !Regex.IsMatch(userDTO.Email, @"\S+@\S+\.\S+"))
             {
+                return BadRequest("Invalid email format.");
+            }
+
+            var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
+            if (addedUser == null)
+            {
+                return BadRequest(errorMessage);
+            }
 
                 return StatusCode(500, "Internal server error");
             }
         }
+
+
 
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDTO)
