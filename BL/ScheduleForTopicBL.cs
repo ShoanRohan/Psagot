@@ -7,9 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DL;
+using Entities.Models;
 
 namespace BL
 {
+
     public class ScheduleForTopicBL : IScheduleForTopicBL
     {
         private readonly IScheduleForTopicDL _scheduleForTopicDL;
@@ -20,28 +23,58 @@ namespace BL
             _scheduleForTopicDL = scheduleForTopicDL;
             _mapper = mapper;
         }
-
-        public async Task<(IEnumerable<ScheduleForTopicDTO> scheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+      
+        public async Task<(ScheduleForTopicDTO Schedule, string ErrorMessage)> GetScheduleForTopicById(int id)
         {
-            
-            var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopics();
-            if (scheduleForTopic == null) return (null, errorMessage);
+            var (schedule, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicById(id);
 
-            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
+            if (schedule == null)
+                return (null, errorMessage);
+
+            return (_mapper.Map<ScheduleForTopicDTO >(schedule), null);
         }
-        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+
+
+        public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO)
         {
-            var (scheduleForTopics, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
+            var scheduleForTopic = _mapper.Map<ScheduleForTopic>(scheduleForTopicDTO);
+            var (updatedScheduleForTopic, errorMessage) = await _scheduleForTopicDL.UpdateScheduleForTopic(scheduleForTopic);
+
+            if (updatedScheduleForTopic == null) return (null, errorMessage);
+
+            return (_mapper.Map<ScheduleForTopicDTO>(updatedScheduleForTopic), null);
+        }
+
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
+
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
+       
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
+        {
+            var (scheduleForTopics, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopics();
             if (scheduleForTopics == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopics), null);
         }
 
-        public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id)
+
+        public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
         {
-            var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetScheduleForTopicById(id);
+            var (scheduleForTopic, errorMessage) = await _scheduleForTopicDL.GetAllScheduleForTopicByTopicId(topicId);
             if (scheduleForTopic == null) return (null, errorMessage);
-            return (_mapper.Map<ScheduleForTopicDTO>(scheduleForTopic), null);
+
+            return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
         }
     }
+
+
 }
+
