@@ -76,5 +76,32 @@ namespace DL
             return user;
         }
 
+        public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Join(_context.UserTypes,
+                        user => user.UserTypeId,
+                        userType => userType.UserTypeId,
+                        (user, userType) => new { user, userType })
+                    .Where(u => u.userType.Name == "Coordinator" || u.userType.Name == "Lecturer")
+                    .Select(u => u.user)
+                    .ToListAsync();
+
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
+
+
+
+
     }
 }
+
