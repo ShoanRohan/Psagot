@@ -11,8 +11,8 @@ namespace DL
 {
     public class CourseDL : ICourseDL
     {
-        private readonly PsagotContext _context;
-        public CourseDL(PsagotContext context)
+        private readonly PsagotDbContext _context;
+        public CourseDL(PsagotDbContext context)
         {
             _context = context;
         }

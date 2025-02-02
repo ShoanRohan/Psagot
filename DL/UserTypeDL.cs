@@ -8,9 +8,9 @@ namespace DL
 {
     public class UserTypeDL : IUserTypeDL
     {
-        private readonly PsagotContext _context;
+        private readonly PsagotDbContext _context;
 
-        public UserTypeDL(PsagotContext context)
+        public UserTypeDL(PsagotDbContext context)
         {
             _context = context;
         }
