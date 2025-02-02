@@ -34,6 +34,20 @@ namespace DL
             }
         }
 
+         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
+        {
+            try
+            {
+                var addedCourse = await _context.Set<Course>().AddAsync(course);
+                await _context.SaveChangesAsync();
+                return (addedCourse.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
 
 
 

@@ -13,6 +13,8 @@ namespace BL
         public interface ICourseBL
         {
             Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course);
+                    Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
+
 
         }
     
