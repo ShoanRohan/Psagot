@@ -147,6 +147,13 @@ const UserTable = () => {
         />
         <input
           type="text"
+          name="password"
+          value={newUser.password}
+          onChange={handleUserInputChange}
+          placeholder="password"
+        />
+        <input
+          type="text"
           name="userTypeName"
           value={newUser.userTypeName}
           onChange={handleUserInputChange}
