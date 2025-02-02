@@ -57,6 +57,21 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<bool> DeleteCourse(int id)
+        {
+            try
+            {
+                Course currentCourse = await _context.Courses.SingleOrDefaultAsync(item => item.CourseId == id);
+                if (currentCourse != null)
+                {
+                    throw new ArgumentException($"{id} is not found");
+                }
+                _context.Courses.Remove(currentCourse);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
