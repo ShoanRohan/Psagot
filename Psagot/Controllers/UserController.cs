@@ -97,7 +97,7 @@ namespace Psagot.Controllers
         [HttpGet("GetUsersByUserType/{userType}")]
         public async Task<IActionResult> GetUsersByUserType([FromRoute] string userType)
         {
-            var (user, errorMessage) = await _userBL.GetUserById(userType);
+            var (user, errorMessage) = await _userBL.GetUsersByUserType(userType);
             if (user == null || !user.Any()) return NotFound(errorMessage);
 
             return Ok(user);
