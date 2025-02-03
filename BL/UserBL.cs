@@ -65,6 +65,14 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
+        public async Task<(UserDTO User, string ErrorMessage)> GetUsersByUserType(User userType)
+        {
+            var (user, errorMessage) = await _userDL.GetUsersByUserType(userType);
+            if (user == null) return (null, errorMessage);
+
+            return (_mapper.Map<UserDTO>(user), null);
+        }
+
 
     }
 }

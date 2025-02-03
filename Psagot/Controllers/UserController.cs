@@ -93,5 +93,15 @@ namespace Psagot.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("GetUsersByUserType/{userType}")]
+        public async Task<IActionResult> GetUsersByUserType([FromRoute] string userType)
+        {
+            var (user, errorMessage) = await _userBL.GetUserById(userType);
+            if (user == null || !user.Any()) return NotFound(errorMessage);
+
+            return Ok(user);
+        }
+
     }
 }

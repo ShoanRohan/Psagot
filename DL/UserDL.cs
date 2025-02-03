@@ -76,5 +76,20 @@ namespace DL
             return user;
         }
 
+        public async Task<(User User, string ErrorMessage)> GetUsersByUserType(User userType)
+        {
+            try
+            {
+                var user = await _context.Set<User>().FindAsync(userType);
+                return (user, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
+
     }
 }
