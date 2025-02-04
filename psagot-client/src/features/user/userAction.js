@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUsers, getUserById, addUser, updateUser, deleteUser } from '../../utils/userUtil';
+import { getAllUsers, getUserById, addUser, updatedUser} from '../../utils/userUtil';
 
 // פעולה להבאת כל המשתמשים
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
@@ -35,19 +35,11 @@ export const addUserAction = createAsyncThunk('user/addUser', async (newUser) =>
 // פעולה לעדכון משתמש
 export const updateUserAction = createAsyncThunk('user/updateUser', async (updatedUser) => {
   try {
-    const user = await updateUser(updatedUser);  // מבצע קריאה ל-API
+    const user = await updatedUser(updatedUser);  // מבצע קריאה ל-API
     return user;
   } catch (error) {
     throw new Error('Failed to update user');
   }
 });
 
-// פעולה למחיקת משתמש
-export const deleteUserAction = createAsyncThunk('user/deleteUser', async (id) => {
-  try {
-    const deletedUser = await deleteUser(id);  // מבצע קריאה ל-API
-    return id;  // מחזיר את ה-ID של המשתמש שנמחק
-  } catch (error) {
-    throw new Error('Failed to delete user');
-  }
-});
+

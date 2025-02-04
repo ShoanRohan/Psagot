@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllUsers, addUserAction, updateUserAction, deleteUserAction } from '../features/user/userAction';
+import { fetchAllUsers, addUserAction, updateUserAction} from '../features/user/userAction';
 import { useEffect } from 'react';
 import { DataGrid, GridRowModes, GridActionsCellItem } from '@mui/x-data-grid'; 
 import SaveIcon from '@mui/icons-material/Save';
@@ -43,11 +43,6 @@ const UserTable = () => {
   const handleSaveClick = (id, updatedRow) => () => {
     dispatch(updateUserAction(updatedRow)); // שולחים את עדכון המשתמש
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id) => () => {
-    dispatch(deleteUserAction(id)); // שולחים את בקשת המחיקה
-    setRows(rows.filter((row) => row.id !== id));
   };
 
   const handleCancelClick = (id) => () => {
@@ -96,8 +91,8 @@ const UserTable = () => {
           ];
         }
         return [
-          <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={handleEditClick(id)} />,
-          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} />,
+          <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={handleEditClick(id)} />
+         
         ];
       },
     },
