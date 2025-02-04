@@ -45,11 +45,6 @@ const UserTable = () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => () => {
-    dispatch(deleteUserAction(id)); // שולחים את בקשת המחיקה
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -59,11 +54,11 @@ const UserTable = () => {
   };
 
   const handleAddClick = () => {
-    const newId = Date.now(); // משתמש ב-ID ייחודי
+    const newId = Date.now();
     const newRow = { ...newUser, id: newId, isNew: true };
 
     setRows([...rows, newRow]);
-    dispatch(addUserAction(newUser)); // שולח את הנתונים לשרת
+    dispatch(addUserAction(newUser));
     setRowModesModel({ ...rowModesModel, [newId]: { mode: GridRowModes.Edit } });
     setNewUser({ name: '', email: '', phone: '', password: '', userTypeId: 0, role: '', userTypeName: '', isActive: true }); // מנקה את השדות אחרי הוספה
   };
@@ -98,8 +93,7 @@ const UserTable = () => {
           ];
         }
         return [
-          <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={handleEditClick(id)} />,
-          <GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDeleteClick(id)} />,
+          <GridActionsCellItem icon={<EditIcon />} label="Edit" onClick={handleEditClick(id)} />
         ];
       },
     },
