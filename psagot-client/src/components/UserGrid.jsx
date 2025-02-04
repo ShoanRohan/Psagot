@@ -7,11 +7,10 @@ import { DataGrid, GridRowModes, GridActionsCellItem } from '@mui/x-data-grid';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 
-const UserTable = () => {
+const UserGrid = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
 
@@ -167,4 +166,4 @@ const UserTable = () => {
   );
 };
 
-export default UserTable;
+export default UserGrid;
