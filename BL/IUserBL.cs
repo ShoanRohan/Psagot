@@ -15,7 +15,7 @@ namespace BL
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
-        Task<(UserDTO User, string ErrorMessage)> GetUsersByUserType(User userType);
+        Task<(List<UserDTO> Users, string ErrorMessage)> GetSecretarialPositions();
     }
 }
 

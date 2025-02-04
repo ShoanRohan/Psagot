@@ -14,7 +14,6 @@ namespace DL
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
         Task<User> UserLoginAsync(string email, string password);
-        Task<(User User, string ErrorMessage)> GetUsersByUserType(User userType);
-
+        Task<(List<User> Users, string ErrorMessage)> GetSecretarialPositions();
     }
 }

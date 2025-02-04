@@ -75,21 +75,17 @@ namespace DL
 
             return user;
         }
-
-        public async Task<(User User, string ErrorMessage)> GetUsersByUserType(User userType)
+        public async Task<(List<User> Users, string ErrorMessage)> GetSecretarialPositions()
         {
             try
             {
-                var user = await _context.Set<User>().FindAsync(userType);
-                return (user, null);
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Secretary").ToListAsync();
+                return (users, null);
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
         }
-
-
-
     }
 }

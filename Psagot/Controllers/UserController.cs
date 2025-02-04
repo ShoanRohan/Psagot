@@ -93,12 +93,11 @@ namespace Psagot.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpGet("GetUsersByUserType/{userType}")]
-        public async Task<IActionResult> GetUsersByUserType([FromRoute] string userType)
+        [HttpGet("GetSecretarialPositions")]
+        public async Task<IActionResult> GetSecretarialPositions()
         {
-            var (user, errorMessage) = await _userBL.GetUsersByUserType(userType);
-            if (user == null || !user.Any()) return NotFound(errorMessage);
+            var (user, errorMessage) = await _userBL.GetSecretarialPositions();
+            if (user== null || !user.Any()) return Ok("this Position Not Found");
 
             return Ok(user);
         }
