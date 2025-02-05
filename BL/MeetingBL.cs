@@ -2,6 +2,7 @@
 using DL;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,17 @@ namespace BL
         public async Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetAllMeetings()
         {
             var (meetings, errorMessage) = await _meetingDL.GetAllMeetings();
+            if (meetings == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), null);
+        }
+
+        public async Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetMeetingsInRange(DateOnly startDate, DateOnly endDate)
+        {
+            if (startDate == null) return (null, "Invalid input");
+            if (endDate == null) return (null, "Invalid input");
+
+            var (meetings, errorMessage) = await _meetingDL.GetMeetingsInRange(startDate,endDate);
             if (meetings == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), null);
