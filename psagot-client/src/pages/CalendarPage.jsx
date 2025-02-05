@@ -1,11 +1,12 @@
 import Calendar from "../components/Calendar"
 
-const CalendarPage=()=>{
+const CalendarPage = () => {
     return (
         <div>
             <h1>לוח שנה</h1>
-            <Calendar/>
+            <Calendar />
         </div>
     )
 };
+
 export default CalendarPage;
