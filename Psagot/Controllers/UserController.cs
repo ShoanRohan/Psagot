@@ -98,7 +98,7 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetSecretarialPositions()
         {
             var (users, errorMessage) = await _userBL.GetAllCoordinators();
-            if (users== null) return BadRequest(errorMessage);
+            if (users == null) return BadRequest(errorMessage);
 
             return Ok(users);
         }

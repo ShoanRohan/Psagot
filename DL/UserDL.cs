@@ -80,7 +80,8 @@ namespace DL
         {
             try
             {
-                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator").Include(user=> user.UserType).ToListAsync();
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+                    .Include(user => user.UserType).ToListAsync();
                 return (users, null);
             }
             catch (Exception ex)
