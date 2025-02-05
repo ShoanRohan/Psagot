@@ -1,5 +1,4 @@
 ﻿using Entities.DTO;
-using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace BL
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
-        Task<(List<UserDTO> Users, string ErrorMessage)> GetSecretarialPositions();
+        Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators();
     }
 }
 

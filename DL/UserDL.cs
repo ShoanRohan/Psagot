@@ -75,11 +75,12 @@ namespace DL
 
             return user;
         }
-        public async Task<(List<User> Users, string ErrorMessage)> GetSecretarialPositions()
+
+        public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
         {
             try
             {
-                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Secretary").ToListAsync();
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator").Include(user=> user.UserType).ToListAsync();
                 return (users, null);
             }
             catch (Exception ex)

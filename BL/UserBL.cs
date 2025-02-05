@@ -65,14 +65,13 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
-        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetSecretarialPositions()
-        {
-            var (users, errorMessage) = await _userDL.GetSecretarialPositions();
 
-            if (users == null || !users.Any()) return (null, errorMessage);
+        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userDL.GetAllCoordinators();
+            if (users == null) return (null, errorMessage);
 
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
-
     }
 }
