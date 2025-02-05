@@ -91,6 +91,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            try
+            {
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+                    .Include(user => user.UserType).ToListAsync();
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }
-

@@ -15,6 +15,7 @@ namespace BL
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
         Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers();
+        Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators();
     }
 }
 
