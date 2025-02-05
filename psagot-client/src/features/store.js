@@ -1,14 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userTypeReducer from '../features/userType/userTypeSlice';
 import roomReducer from '../features/room/roomSlice';
-import userReducer from './user/userSlice';
-
+import userReduser from './user/userSlice';
+import scheduleForTopicReducer from '../features/scheduleForTopic/scheduleForTopicSlice';
+import meetingReducer from '../features/meeting/meetingSlice';
+import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
+import topicReducer from '../features/topic/topicSlice';
+import courseReducer from './course/courseSlice';
 
 const store = configureStore({
   reducer: {
     userType: userTypeReducer, //Slice of userType
     room: roomReducer,
-    user: userReducer, 
+    user: userReduser, 
+    course: courseReducer,
+    scheduleForTopic: scheduleForTopicReducer, //Slice of scheduleForTopic
+    meeting: meetingReducer, //Slice of meeting
+    daysForCourse: daysForCourseReducer, //Slice of daysForCourse
+    topic:topicReducer,
   },
   
 });

@@ -20,8 +20,10 @@ namespace BL
 
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
-            var user = _mapper.Map<User>(userDTO);
-            var (addedUser, errorMessage) = await _userDL.AddUser(user);
+            var userEntity = _mapper.Map<User>(userDTO);
+
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 
             if (addedUser == null) return (null, errorMessage);
 
@@ -37,22 +39,15 @@ namespace BL
 
             return (_mapper.Map<UserDTO>(updatedUser), null);
         }
-
-        public async Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers()
+        public async Task<UserDTO> UserLoginAsync(string email, string password)
         {
-            var (users, errorMessage) = await _userDL.GetAllUsers();
-            if (users == null) return (null, errorMessage);
+            var user = await _userDL.UserLoginAsync(email, password);
 
-            var userDTOs = _mapper.Map<IEnumerable<UserDTO>>(users);
-
-            // הוספת שם סוג משתמש לכל משתמש
-            foreach (var userDTO in userDTOs)
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-               
-                userDTO.UserTypeName = userDTO.UserTypeName;  // רק מתעדכן אם יש בעיה
+                return _mapper.Map<UserDTO>(user);
             }
-
-            return (userDTOs, null);
+            return null;
         }
 
         public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
@@ -60,17 +55,16 @@ namespace BL
             var (user, errorMessage) = await _userDL.GetUserById(id);
             if (user == null) return (null, errorMessage);
 
-            var userDTO = _mapper.Map<UserDTO>(user);
-
-          
-            userDTO.UserTypeName = user.UserType?.Name;  // הוספת שם סוג משתמש אם קיים
-
-            return (userDTO, null);
+            return (_mapper.Map<UserDTO>(user), null);
         }
 
+        public async Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers()
+        {
+            var (users, errorMessage) = await _userDL.GetAllUsers();
+            if (users == null) return (null, errorMessage);
 
-
-
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+        }
 
     }
 }

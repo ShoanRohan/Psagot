@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllUsers, addUserAction, updateUserAction, deleteUserAction } from './userAction';
+import { fetchAllUsers, addUserAction, updateUserAction } from './userAction';
 
 const initialState = {
   users: [],
@@ -52,17 +52,7 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
 
-      .addCase(deleteUserAction.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(deleteUserAction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = state.users.filter((user) => user.id !== action.payload);
-      })
-      .addCase(deleteUserAction.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      });
+     
   },
 });
 
