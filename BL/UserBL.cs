@@ -73,6 +73,5 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
-
     }
 }

@@ -75,18 +75,13 @@ namespace DL
 
             return user;
         }
-
         public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
         {
             try
             {
                 var users = await _context.Users
-                    .Join(_context.UserTypes,
-                        user => user.UserTypeId,
-                        userType => userType.UserTypeId,
-                        (user, userType) => new { user, userType })
-                    .Where(u => u.userType.Name == "Coordinator" || u.userType.Name == "Lecturer")
-                    .Select(u => u.user)
+                    .Where(u => u.userType != null && (u.userType.Name == "Coordinator" || u.userType.Name == "Lecturer"))
+                    .Include(u => u.userType)
                     .ToListAsync();
 
                 return (users, null);
@@ -96,12 +91,6 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-
-
-
-
-
     }
 }
 

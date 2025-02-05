@@ -95,14 +95,13 @@ namespace Psagot.Controllers
             }
         }
 
-
         [HttpGet("GetCoordinatorsAndLecturers")]
         public async Task<IActionResult> GetCoordinatorsAndLecturers()
         {
             var (users, errorMessage) = await _userBL.GetCoordinatorsAndLecturers();
             if (!string.IsNullOrEmpty(errorMessage))
             {
-                return BadRequest(new { Message = errorMessage });
+                return BadRequest(errorMessage);
             }
             return Ok(users);
         }
