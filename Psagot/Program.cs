@@ -38,6 +38,9 @@ namespace Psagot
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
 
+            builder.Services.AddScoped<ICourseDL, CourseDL>();
+            builder.Services.AddScoped<ICourseBL, CourseBL>();
+
             builder.Services.AddControllers();
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
