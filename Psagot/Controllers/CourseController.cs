@@ -18,12 +18,21 @@ namespace Psagot.Controllers
         }
 
         [HttpPut("UpdateCourse")]
-        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO course)
         {
-            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(courseDTO);
+            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(course);
             if (updatedCourse == null) return BadRequest(errorMessage);
 
             return Ok(updatedCourse);
+        }
+        
+        [HttpPost("AddCourse")]
+        public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
+        {
+            var (addedCourse, errorMessage) = await _courseBL.AddCourse(courseDTO);
+            if (addedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(addedCourse);
         }
 
     }
