@@ -1,5 +1,4 @@
-
-﻿using Entities.DTO;
+using Entities.DTO;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace DL
     {
 
         Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course);
-                Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
+        Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
 
     }
 }

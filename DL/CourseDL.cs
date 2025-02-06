@@ -1,5 +1,5 @@
 
-﻿using Entities.Contexts;
+using Entities.Contexts;
 using Entities.Models;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-
     public class CourseDL : ICourseDL
     {
         private readonly PsagotDbContext _context;
@@ -47,9 +46,6 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-
-
 
     }
 }

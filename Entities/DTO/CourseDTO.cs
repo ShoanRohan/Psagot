@@ -1,4 +1,4 @@
-﻿using Entities.Models;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -21,7 +21,6 @@ namespace Entities.DTO
         public int? NumberOfMeetings { get; set; }
         public int NumberOfStudents { get; set; }
         public string? Notes { get; set; }
-
     }
 
 }
