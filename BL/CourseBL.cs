@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DL;
 using Entities.DTO;
 using Entities.Models;
@@ -28,6 +28,21 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<CourseDTO>(addedCourse), null);
+        }
+
+    }
+
+
+
+    
+        public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
+        {
+            var courseDetails = _mapper.Map<Course>(course);
+            var (updatedCourse, errorMessage) = await _courseDL.UpdateCourse(courseDetails);
+
+            if (updatedCourse == null) return (null, errorMessage);
+
+            return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
 
     }

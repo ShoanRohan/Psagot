@@ -1,3 +1,4 @@
+
 ﻿using Entities.DTO;
 using System;
 using System.Collections.Generic;
@@ -7,8 +8,14 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public interface ICourseBL
-    {
-        Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
-    }
+
+    
+        public interface ICourseBL
+        {
+            Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course);
+                    Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
+
+
+        }
+    
 }

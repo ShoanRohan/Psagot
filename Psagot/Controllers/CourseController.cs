@@ -1,3 +1,4 @@
+
 ﻿using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
@@ -10,10 +11,21 @@ namespace Psagot.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseBL _courseBL;
+
         public CourseController(ICourseBL courseBL)
         {
             _courseBL = courseBL;
         }
+
+        [HttpPut("UpdateCourse")]
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO course)
+        {
+            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(course);
+            if (updatedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updatedCourse);
+        }
+        
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {
