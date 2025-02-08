@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using BL;
 using Entities.DTO;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Psagot.Controllers
 {
@@ -11,7 +10,6 @@ namespace Psagot.Controllers
     public class CourseController : ControllerBase
     {
         private readonly ICourseBL _courseBL;
-
 
         public CourseController(ICourseBL courseBL)
         {
@@ -26,5 +24,24 @@ namespace Psagot.Controllers
 
             return Ok(Course);
         }
+        
+        [HttpPut("UpdateCourse")]
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO course)
+        {
+            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(course);
+            if (updatedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updatedCourse);
+        }
+        
+        [HttpPost("AddCourse")]
+        public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
+        {
+            var (addedCourse, errorMessage) = await _courseBL.AddCourse(courseDTO);
+            if (addedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(addedCourse);
+        }
+
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Entities.Models;
-
 public partial class Course
 {
     public int CourseId { get; set; }
@@ -13,9 +12,9 @@ public partial class Course
 
     public string Color { get; set; } = null!;
 
-    public DateOnly StartDate { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public DateOnly? EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
 
     public int? NumberOfMeetings { get; set; }
 
