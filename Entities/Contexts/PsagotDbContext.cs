@@ -12,7 +12,6 @@ public partial class PsagotDbContext : DbContext
     {
     }
 
-
     public virtual DbSet<Course> Courses { get; set; }
 
     public virtual DbSet<Day> Days { get; set; }
@@ -30,9 +29,6 @@ public partial class PsagotDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<UserType> UserTypes { get; set; }
-
-    private readonly DbContext _context;
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

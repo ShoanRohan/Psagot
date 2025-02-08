@@ -38,7 +38,6 @@ namespace BL
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
 
-    }
 
         public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
         {

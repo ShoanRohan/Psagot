@@ -16,19 +16,19 @@ namespace DL
         {
             _context = context;
         }
-        private readonly PsagotDbContext _context;
         public async Task<(Course Course, string ErrorMessage)> GetCourseById(int id)
         {
             try
             {
                 var course = await _context.Set<Course>().FindAsync(id);
-                 await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
                 return (course, null);
             }
-              catch (Exception ex)
+            catch (Exception ex)
             {
                 return (null, ex.Message);
             }
+        }
 
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
