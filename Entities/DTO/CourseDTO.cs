@@ -23,5 +23,4 @@ namespace Entities.DTO
         public string? Notes { get; set; }
 
     }
-
 }

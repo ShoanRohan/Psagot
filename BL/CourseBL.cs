@@ -20,6 +20,14 @@ namespace BL
             _mapper = mapper;
         }
 
+        public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+        {
+            var (Course, errorMessage) = await _courseDL.GetCourseById(id);
+            if (Course == null) return (null, errorMessage);
+
+            return (_mapper.Map<CourseDTO>(Course), null);
+        }
+
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -32,9 +40,6 @@ namespace BL
 
     }
 
-
-
-    
         public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
         {
             var courseDetails = _mapper.Map<Course>(course);

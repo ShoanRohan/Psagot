@@ -1,5 +1,4 @@
-
-﻿using BL;
+using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +16,15 @@ namespace Psagot.Controllers
             _courseBL = courseBL;
         }
 
+        [HttpGet("GetCourseById/{id}")]
+        public async Task<IActionResult> GetCorseById([FromBody] int id)
+        {
+            var (Course, errorMessage) = await _courseBL.GetCourseById(id);
+            if (Course == null) return NotFound(errorMessage);
+
+            return Ok(Course);
+        }
+        
         [HttpPut("UpdateCourse")]
         public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO course)
         {
