@@ -1,12 +1,11 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, Button } from '@mui/material';
+import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-
 const RoomsScheduleSearch = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -60,7 +59,16 @@ const RoomsScheduleSearch = () => {
                   
                   '& .MuiInputBase-root': {
                     padding: isMobile ? '2px' : '6px',
+
                     fontSize: isMobile ? '0.8rem' : '1rem',
+                  },
+                  '& input': {
+                    padding: 0, 
+                  },
+                }}
+                slotProps={{
+                  textField: {
+                    inputProps: { style: { height: '100%', overflow: 'hidden' } },
                   },
                 }}
               />
