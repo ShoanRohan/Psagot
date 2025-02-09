@@ -93,5 +93,14 @@ namespace Psagot.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetSecretarialPositions()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok(users);
+        }
     }
 }
