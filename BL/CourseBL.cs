@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 
 namespace BL
 {
+    public class CourseBL : ICourseBL
     {
-        private readonly ICourseDL _courseDL;
+        
+private readonly ICourseDL _courseDL;
         private readonly IMapper _mapper;
     public CourseBL(ICourseDL courseDL, IMapper mapper) {
         _courseDL = courseDL;

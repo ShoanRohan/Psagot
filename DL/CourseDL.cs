@@ -12,7 +12,7 @@ namespace DL
 {
     public class CourseDL:ICourseDL
     {
-        private readonly PsagotDbContext _context
+        private readonly PsagotDbContext _context;
         public CourseDL(PsagotDbContext context)
         {
             _context = context;
@@ -37,9 +37,8 @@ namespace DL
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(id);
-                return (course, null);
                 var addedCourse = await _context.Set<Course>().AddAsync(course);
+                return (course, null);
                 await _context.SaveChangesAsync();
                 return (addedCourse.Entity, null);
             }
