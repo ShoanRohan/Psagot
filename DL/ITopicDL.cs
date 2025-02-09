@@ -11,7 +11,7 @@ namespace DL
     {
         Task<(Topic Topic, string ErrorMessage)> GetTopicById(int id);
 
-        Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id);
+        Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId);
         Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic);
         Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId);
         Task<(Topic Topic, string ErrorMessage)> AddTopic(Topic topic);
