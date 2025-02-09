@@ -4,6 +4,7 @@ import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from '.
 const initialState = {
     rooms: [],
     selectedRoom: null,
+    roomSchedule: [],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
@@ -15,6 +16,9 @@ const roomSlice = createSlice({
         
         setRoom: (state, action) => {
             
+        },
+        setRoomSchedule: (state, action) => {
+            state.roomSchedule = action.payload; 
         }
     },
     extraReducers: (builder) => {
