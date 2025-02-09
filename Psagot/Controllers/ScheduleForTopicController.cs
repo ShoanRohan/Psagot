@@ -1,6 +1,7 @@
 ﻿using BL;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,12 @@ namespace Psagot.Controllers
 
         private readonly IScheduleForTopicBL _scheduleForTopicBL;
 
-       
+
         public ScheduleForTopicController(IScheduleForTopicBL scheduleForTopicBL)
         {
             _scheduleForTopicBL = scheduleForTopicBL;
         }
+
         [HttpGet("GetScheduleForTopicById/{id}")]
         public async Task<IActionResult> GetScheduleForTopicById([FromRoute] int id)
         {
@@ -28,6 +30,7 @@ namespace Psagot.Controllers
                 return NotFound(errorMessage);
             return Ok(schedule);
         }
+
         [HttpPut("UpdateScheduleForTopic")]
         public async Task<IActionResult> UpdateScheduleForTopic([FromBody] ScheduleForTopicDTO scheduleForTopicDTO)
         {
@@ -37,17 +40,13 @@ namespace Psagot.Controllers
             return Ok(updatedScheduleForTopic);
         }
 
-
         [HttpGet("GetAllScheduleForTopics")]
         public async Task<IActionResult> GetAllScheduleForTopics()
         {
             var (scheduleForTopics, errorMessage) = await _scheduleForTopicBL.GetAllScheduleForTopics();
             if (scheduleForTopics == null) return BadRequest(errorMessage);
             return Ok(scheduleForTopics);
-
-            
         }
-
 
         [HttpGet("GetAllScheduleForTopicByTopicId/{topicId}")]
         public async Task<IActionResult> GetAllScheduleForTopicByTopicId([FromRoute] int topicId)
