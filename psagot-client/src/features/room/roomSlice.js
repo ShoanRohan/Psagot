@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction, fetchRoomScheduleByDate } from './roomActions';
 
 const initialState = {
     rooms: [],
@@ -45,6 +45,17 @@ const roomSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(fetchRoomScheduleByDate.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchRoomScheduleByDate.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.roomSchedule = action.payload;
+            })
+            .addCase(fetchRoomScheduleByDate.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
             .addCase(addRoomAction.fulfilled, (state, action) => {
                 state.rooms.push(action.payload);
             })
@@ -53,6 +64,7 @@ const roomSlice = createSlice({
                 if (index !== -1) {
                     state.rooms[index] = action.payload;
                 }
+                
             });
     },
 });
