@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -68,5 +69,27 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            try
+            {
+                var coordinators = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 2 && u.IsActive) // סינון רק רכזות פעילות
+                    .Select(u => new CoordinatorDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
+
+                return (coordinators, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
+
     }
 }

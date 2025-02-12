@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,6 @@ namespace DL
         Task<(User User, string ErrorMessage)> UpdateUser(User user);
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
-
+        Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
     }
 }
