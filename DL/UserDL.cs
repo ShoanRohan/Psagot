@@ -69,6 +69,14 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<User> UserLoginAsync(string email, string password)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            return user;
+        }
+
 
         public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
         {
