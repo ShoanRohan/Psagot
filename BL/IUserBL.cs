@@ -13,5 +13,7 @@ namespace BL
         Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO);
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
+
+        Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
     }
 }
