@@ -52,6 +52,7 @@ namespace Psagot.Controllers
             return Ok(updatedUser);
         }
 
+
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
@@ -94,12 +95,14 @@ namespace Psagot.Controllers
             }
         }
 
-        [HttpGet("GetAllCoordinators")]
-        public async Task<IActionResult> GetSecretarialPositions()
+        [HttpGet("GetCoordinatorsAndLecturers")]
+        public async Task<IActionResult> GetCoordinatorsAndLecturers()
         {
-            var (users, errorMessage) = await _userBL.GetAllCoordinators();
-            if (users == null) return BadRequest(errorMessage);
-
+            var (users, errorMessage) = await _userBL.GetCoordinatorsAndLecturers();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
             return Ok(users);
         }
     }

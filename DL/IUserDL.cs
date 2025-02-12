@@ -15,5 +15,9 @@ namespace DL
         Task<(User User, string ErrorMessage)> GetUserById(int id);
         Task<User> UserLoginAsync(string email, string password);
         Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
+        Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers();
+
+
+
     }
 }
