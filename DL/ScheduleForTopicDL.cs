@@ -17,6 +17,19 @@ namespace DL
         {
             _context = context;
         }
+
+        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> GetScheduleForTopicById(int id)
+        {
+            try
+            {
+                var schedule = await _context.Set<ScheduleForTopic>().FindAsync(id);
+                return (schedule, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
         public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {
             try
