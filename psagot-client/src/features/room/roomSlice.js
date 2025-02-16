@@ -5,6 +5,7 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     roomSchedule: [],
+    displayDate:new Date().toLocaleDateString('en-GB'),
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
@@ -16,6 +17,9 @@ const roomSlice = createSlice({
         
         setRoom: (state, action) => {
             
+        },
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
         },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
@@ -69,5 +73,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setDisplayDate,setRoom } = roomSlice.actions;
 export default roomSlice.reducer;

@@ -28,3 +28,9 @@ export const updateRoomAction = createAsyncThunk('room/updateRoomAction', async 
   const data = await updateRoom(updatedRoom);
   return data;
 });
+
+//   export const updateDisplayDateAction = createAsyncThunk('room/updateDisplayDateAction', async (updateDisplayDate) => {
+//     const data = await updateDisplayDate(updateDisplayDate);
+//     return data;
+  
+// });

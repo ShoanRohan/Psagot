@@ -26,4 +26,9 @@ const getRoomScheduleByDate = async (dateTime) =>{
     return response.data;
 }
 
-export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomScheduleByDate };
+// const updateDisplayDate = async(displayDate)=>{
+//     const response= await api.put('/Room',displayDate)
+//     return response.data;
+// }
+
+export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomScheduleByDate,};
