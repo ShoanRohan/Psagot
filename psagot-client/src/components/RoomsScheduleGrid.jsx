@@ -13,19 +13,19 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: theme.palette.common.white,
     color: theme.palette.common.black,
     fontWeight: 'bold',
-    border: `1px solid ${theme.palette.divider}`, // הוספת גבול מסביב לכל תא בכותרת
+    border: `1px solid ${theme.palette.divider}`,
     
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
-    border: `1px solid ${theme.palette.divider}`, // הוספת גבול מסביב לכל תא בגוף
+    border: `1px solid ${theme.palette.divider}`,
   },
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
   '& td, & th': {
-    border: `1px solid rgba(224, 224, 224, 1)`, // גבול מסביב לכל תא
-  },
+    border: `1px solid rgba(224, 224, 224, 1)`, 
+},
 }));
 
 function createData(a, b, c, d, e, f, g, h, i, j, k, l, m) {

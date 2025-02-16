@@ -49,6 +49,15 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<RoomDTO>>(rooms), null);
         }
+        public async Task<(List<CourseScheduleDTO>, string ErrorMessage)> GetCourseScheduleByDate(DateTime dateTime)
+        {
+            var (schedule, errorMessage) = await _roomDL.GetCourseScheduleByDate(dateTime);
+          
+            if (schedule == null) return (null, errorMessage);
+
+            return (_mapper.Map<List<CourseScheduleDTO>>(schedule), null);
+        }
+
 
     }
 }
