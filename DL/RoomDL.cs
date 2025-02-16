@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Contexts;
 using Entities.DTO;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -21,6 +23,8 @@ namespace DL
 
         public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
         {
+            try
+            {
             try
             {
                 var rooms = await _context.Set<Room>().ToListAsync();
