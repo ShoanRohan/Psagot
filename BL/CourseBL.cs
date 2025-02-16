@@ -15,11 +15,16 @@ namespace BL
         
 private readonly ICourseDL _courseDL;
         private readonly IMapper _mapper;
+<<<<<<< HEAD
     public CourseBL(ICourseDL courseDL, IMapper mapper) {
         _courseDL = courseDL;
         _mapper = mapper;
     }
         public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+=======
+
+        public CourseBL(ICourseDL courseDL, IMapper mapper)
+>>>>>>> mainJM
         {
             var (course, errorMessage) = await _courseDL.GetCourseById(id);
             if (course == null) return (null, errorMessage);
@@ -28,6 +33,21 @@ private readonly ICourseDL _courseDL;
           
         }
 
+        public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+        {
+            var (course, errorMessage) = await _courseDL.GetCourseById(id);
+            if (course == null) return (null, errorMessage);
+
+            return (_mapper.Map<CourseDTO>(course), null);
+        }
+
+        public async Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses()
+        {
+            var (courses, errorMessage) = await _courseDL.GetAllCourses();
+            if (courses == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
+        }
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -36,6 +56,15 @@ private readonly ICourseDL _courseDL;
             if (addedCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<CourseDTO>(addedCourse), null);
+        }
+        public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
+        {
+            var course = _mapper.Map<Course>(courseDTO);
+            var (updatedCourse, errorMessage) = await _courseDL.UpdateCourse(course);
+
+            if (updatedCourse == null) return (null, errorMessage);
+
+            return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
 
     }

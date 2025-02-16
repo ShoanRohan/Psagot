@@ -34,6 +34,14 @@ namespace Psagot.Controllers
             if (addedCourse == null) return BadRequest(errorMessage);
             return Ok(addedCourse);
         }
+        [HttpPut("UpdateCourse")]
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
+        {
+            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(courseDTO);
+            if (updatedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updatedCourse);
+        }
 
     }
 }
