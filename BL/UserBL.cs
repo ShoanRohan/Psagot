@@ -2,6 +2,7 @@
 using DL;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -72,6 +73,16 @@ namespace BL
             if (users == null) return (null, errorMessage);
 
             return (_mapper.Map<List<UserDTO>>(users), null);
+        }
+        
+
+        public async Task<List<UserDTO>> GetUsers()
+
+        {
+            var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
+            var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name }).ToList(); // המרה ל-DTO
+            return userDTOs; ;
+           
         }
     }
 }
