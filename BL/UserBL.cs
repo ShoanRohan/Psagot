@@ -24,6 +24,10 @@ namespace BL
 
             userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
+            var userEntity = _mapper.Map<User>(userDTO);
+
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 
             if (addedUser == null) return (null, errorMessage);
 
@@ -46,6 +50,16 @@ namespace BL
             {
                 return _mapper.Map<UserDTO>(user);
             }
+        public async Task<UserDTO> UserLoginAsync(string email, string password)
+        {
+            var user = await _userDL.UserLoginAsync(email, password);
+
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+            return null;
+        }
 
             return null;
         }
