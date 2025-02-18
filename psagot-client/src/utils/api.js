@@ -5,6 +5,14 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  
+  
 });
+const getAllUsers = async () => {
+  const response = await api.get('/User/GetAllUsers'); 
+  return response.data;  
+};
+
+export { getAllUsers };
 
 export default api;
