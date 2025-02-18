@@ -8,8 +8,8 @@ namespace Psagot.Controllers
     {
         [Route("api/[controller]")]
         [ApiController]
-        public class RoomController : ControllerBase
-        {
+        public class RoomController : ControllerBase { }
+
     }
     }
 
