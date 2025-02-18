@@ -14,6 +14,7 @@ const Header = () => {
         </Typography>
         <Button color="inherit">Login</Button>
         <Button color="inherit" onClick={() => {navigate('/Register')}}>Register</Button>
+        <Button color="inherit" onClick={() => {navigate('/Courses')}}>Courses</Button>
       </Toolbar>
     </AppBar>
   );
