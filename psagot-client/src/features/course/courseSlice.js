@@ -4,7 +4,7 @@ import { fetchAllCourses, fetchCourseById, addCourseAction, updateCourseAction }
 const initialState = {
     courses: [],
     selectedCourse: null,
-    status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
+    status: 'idle', 
     error: null,
 };
 
