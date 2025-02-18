@@ -3,6 +3,7 @@ import { fetchAllCourses, fetchCourseById, addCourseAction, updateCourseAction }
 
 const initialState = {
     courses: [],
+    filtersCourses: [],
     selectedCourse: null,
     status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
@@ -24,6 +25,7 @@ const courseSlice = createSlice({
             .addCase(fetchAllCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.courses = action.payload;
+                state.filtersCourses = action.payload
             })
             .addCase(fetchAllCourses.rejected, (state, action) => {
                 state.status = 'failed';
@@ -51,6 +53,8 @@ const courseSlice = createSlice({
             });
     },
 });
+
+export const selectFiltersCourses = state => state.course.filtersCourses;
 
 export const { setCourse } = courseSlice.actions;
 export default courseSlice.reducer;
