@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 
-const CourseGrid = () => {
+const Courses = () => {
   const courses = [
     {
       CourseId: 1,
@@ -78,6 +77,4 @@ const CourseGrid = () => {
   );
 };
 
-export default CourseGrid;
-
-
+export default Courses;
