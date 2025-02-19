@@ -15,6 +15,9 @@ const StyledButton = styled(Button)(({ theme }) => ({
   textAlign: 'right',
   width: '100%',
   gap: '12px',
+  fontFamily: 'rubik',
+  fontSize: '22px',
+  lineHeight: '33px',
   '&:hover': {
     backgroundColor: 'rgba(255,255,255,0.1)',
   },
@@ -39,7 +42,12 @@ const Header = () => {
       sx={{ 
         backgroundColor: '#1A237E', 
         height: '100vh', 
-        width: '200px', 
+        width: '240px',
+        //top: '-6213px',
+        //left: '8252px',
+        borderTopLeftRadius: '40px', 
+        borderBottomLeftRadius: '40px', 
+        //transform: 'rotate(90deg)',
         padding: '16px',
         color: 'white'
       }}
@@ -50,9 +58,10 @@ const Header = () => {
         sx={{ 
           width: '100%',
           alignItems: 'center',
-          marginBottom: '40px'
+          marginBottom: '60px'
         }}
       >
+      
         <img 
           src="/assets/logo_psagot.png" 
           alt="Logo" 
@@ -60,7 +69,7 @@ const Header = () => {
             width: '80%',
             maxHeight: '60px',
             objectFit: 'contain',
-            marginBottom: '20px'
+            marginTop: '50px'
           }}
         />
         
@@ -112,6 +121,7 @@ const Header = () => {
         
       </Stack>
     </Stack>
+    
   );
 };
 
