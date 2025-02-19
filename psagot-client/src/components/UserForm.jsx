@@ -1,92 +1,62 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import "../styles/UserForm.css"; // ייבוא קובץ ה-CSS
+import { TextField, Button, MenuItem, FormControlLabel, Checkbox } from "@mui/material";
 
 const UserForm = ({ user, onSubmit }) => {
   const [formData, setFormData] = useState({
-    name: user ? user.name : "",
-    email: user ? user.email : "",
-    phone: user ? user.phone : "",
-    userTypeId: user ? user.userTypeId : "",
-    isActive: user ? user.isActive : false,
+    name: "",
+    email: "",
+    phone: "",
+    userTypeId: "",
+    isActive: false,
   });
 
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        userTypeId: user.userTypeId,
-        isActive: user.isActive,
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        userTypeId: user.userTypeId || "",
+        isActive: user.isActive || false,
       });
     }
   }, [user]);
 
+  const handleChange = useCallback((e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  }, []);
+
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    const userData = {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      userTypeId: formData.userTypeId,
-      isActive: formData.isActive,
-    };
-    if (user) {
-      console.log("עדכון משתמש קיים:", userData);
-    } else {
-      console.log("הוספת משתמש חדש:", userData);
-    }
-    onSubmit(userData);
+    onSubmit(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>שם משתמש:</label>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-        />
+    <form className="user-form" onSubmit={handleSubmit}>
+      <h2>{user ? "עריכת משתמש" : "הוספת משתמש"}</h2>
+      <TextField label="שם משתמש" name="name" fullWidth value={formData.name} onChange={handleChange} />
+      <TextField label="אימייל" name="email" type="email" fullWidth value={formData.email} onChange={handleChange} />
+      <TextField label="טלפון" name="phone" type="tel" fullWidth value={formData.phone} onChange={handleChange} />
+      <TextField select label="הרשאה" name="userTypeId" fullWidth value={formData.userTypeId} onChange={handleChange}>
+        <MenuItem value="">בחר סוג</MenuItem>
+        <MenuItem value="admin">מנהל</MenuItem>
+        <MenuItem value="user">משתמש רגיל</MenuItem>
+        <MenuItem value="guest">אורח</MenuItem>
+      </TextField>
+      <FormControlLabel
+        control={<Checkbox name="isActive" checked={formData.isActive} onChange={handleChange} />}
+        label={formData.isActive ? "פעיל" : "לא פעיל"}
+      />
+      <div className="form-actions">
+        <Button type="submit" variant="contained" color="primary">
+          {user ? "עדכן משתמש" : "הוסף משתמש"}
+        </Button>
       </div>
-      <div>
-        <label>אימייל:</label>
-        <input
-          type="email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-        />
-      </div>
-      <div>
-        <label>טלפון:</label>
-        <input
-          type="tel"
-          value={formData.phone}
-          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-        />
-      </div>
-      <div>
-        <label>הרשאה:</label>
-        <select
-          value={formData.userTypeId}
-          onChange={(e) => setFormData({ ...formData, userTypeId: e.target.value })}
-        >
-          <option value="">בחר סוג</option>
-          <option value="admin">מנהל</option>
-          <option value="user">משתמש רגיל</option>
-          <option value="guest">אורח</option>
-        </select>
-      </div>
-      <div>
-        <label>סטטוס:</label>
-        <input
-          type="checkbox"
-          checked={formData.isActive}
-          onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-        />
-        <label>{formData.isActive ? "פעיל" : "לא פעיל"}</label>
-      </div>
-      <button type="submit">{user ? "עדכן משתמש" : "הוסף משתמש"}</button>
     </form>
   );
 };
