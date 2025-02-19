@@ -9,7 +9,7 @@ const ExampleUseGenericPopup = () => {
     const handleClosePopup = () => setOpen(false);
 
     const handleConfirm = () => {
-        alert("כפתור אישור נלחץ");
+        alert("כפתור שמור נלחץ");
         setOpen(false);
     };
 

@@ -1,12 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import IconButton from "@mui/material/IconButton";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, showConfirmCancelButtons = true }) => {
@@ -14,28 +8,46 @@ const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, sho
     <Dialog
       open={open}
       onClose={onClose}
-      aria-labelledby="dialog-title">
-      <DialogTitle id="dialog-title">
-        {title}
-        <IconButton
-          aria-label="close"
-          onClick={onClose}>
-          <CloseIcon />
+      aria-labelledby="dialog-title"
+      sx={{
+        "& .MuiDialog-paper": { padding: 2, borderRadius: 2, boxShadow: 5, width: "300px", textAlign: "center" },
+      }}
+    >
+      <DialogTitle
+        id="dialog-title"
+        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "1rem" }}
+      >
+        <Typography variant="h6" sx={{ fontSize: "0.9rem" }}>
+          {title}
+        </Typography>
+        <IconButton onClick={onClose} sx={{ fontSize: "small", padding: "5px" }}>
+          <CloseIcon fontSize="small" />
         </IconButton>
       </DialogTitle>
+
       <DialogContent>
         <DialogContentText>{children}</DialogContentText>
       </DialogContent>
+
       {showConfirmCancelButtons && (
-        <DialogActions>
+        <DialogActions sx={{ justifyContent: "center", gap: 2, marginBottom: 1 }}>
           {onCancel && (
-            <Button onClick={onCancel}>
+            <Button
+              variant="outlined"
+              onClick={onCancel}
+              sx={{ borderRadius: "20px", borderColor: "#2196F3", color: "#2196F3" }}
+            >
               ביטול
             </Button>
           )}
           {onConfirm && (
-            <Button onClick={onConfirm} autoFocus>
-              אישור
+            <Button
+              variant="contained"
+              onClick={onConfirm}
+              autoFocus
+              sx={{ borderRadius: "20px", backgroundColor: "#2196F3", color: "white" }}
+            >
+              שמור
             </Button>
           )}
         </DialogActions>
