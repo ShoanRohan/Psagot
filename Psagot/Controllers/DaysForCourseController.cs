@@ -17,15 +17,13 @@ namespace Psagot.Controllers
             _daysForCourseBL = daysForCourseBL;
         }
 
-
-        [HttpGet("AddDaysForCourse")]
-        public async Task<IActionResult> AddDaysForCourse([FromQuery] int courseId, [FromQuery] int daysToAdd)
+        [HttpPost("AddDaysForCourse")]
+        public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
         {
-            var (success, errorMessage) = await _daysForCourseBL.AddDaysForCourse(courseId, daysToAdd);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
+            if (addedDaysForCourse == null) return BadRequest(errorMessage);
 
-            if (!success) return BadRequest(errorMessage);
-
-            return Ok("Days added successfully.");
+            return Ok(addedDaysForCourse);
         }
 
         [HttpGet("GetAllDaysForCourse")]
@@ -37,11 +35,20 @@ namespace Psagot.Controllers
             return Ok(daysForCourse);
         }
 
+        [HttpPut("UpdateDaysForCourse")]
+        public async Task<IActionResult> UpdateDaysForCourse([FromBody] DaysForCourseDTO daysForCourseDTO)
+        {
+            var (updateDaysForCourse, errorMessage) = await _daysForCourseBL.UpdateDaysForCourse(daysForCourseDTO);
+            if (updateDaysForCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updateDaysForCourse);
+        }
+
         [HttpGet("GetDaysForCourseById/{id}")]
         public async Task<IActionResult> GetDaysForCourseById([FromRoute] int id)
         {
             var (dayForCourse, errorMessage) = await _daysForCourseBL.GetDaysForCourseById(id);
-            if (dayForCourse == null) return NoContent();
+            if (dayForCourse == null) return NotFound(errorMessage);
 
             return Ok(dayForCourse);
         }
