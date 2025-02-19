@@ -90,29 +90,60 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(List<User> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Skip((pageNumber - 1) * pageSize)  // דילוג על תוצאות קודמות
+                    .Take(pageSize)  // הגבלת מספר השורות
+                    .ToListAsync();
+
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        //public async Task<List<User>> GetUsers()
+        //{
+        //    try
+        //    {
+        //        var users = await _context.Users
+        //         .Select(u => new User
+        //         {
+        //             Name = u.Name,
+        //             Phone = u.Phone,
+        //             Email = u.Email
+        //         })
+        //          .ToListAsync();
+        //        return users;
+        //    }
+
+        //    catch (Exception)
+        //    {
+
+        //        throw;
+        //    }
+
+
+        //}
+
 
         public async Task<List<User>> GetUsers()
         {
             try
             {
-                var users = await _context.Users
-                 .Select(u => new User
-                 {
-                     Name = u.Name,
-                     Phone = u.Phone,
-                     Email = u.Email
-                 })
-                  .ToListAsync();
-                return users;
+                return await _context.Users.AsNoTracking().ToListAsync();
             }
-
             catch (Exception)
             {
-
                 throw;
             }
-
-         
         }
     }
 }
+
+
