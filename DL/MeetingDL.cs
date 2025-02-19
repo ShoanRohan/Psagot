@@ -57,6 +57,21 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetMeetingsInRange(DateOnly startDate, DateOnly endDate)
+        {
+            try
+            {
+                //TODO -  need to add calculation get meetings in range
+                //var meetings = await _context.Set<Meeting>().Where(m => m.DayId.HasValue && m.DayId.Value >= startDate && m.DayId.Value <= endDate).ToListAsync();
+                var meetings = await _context.Set<Meeting>().ToListAsync();
+
+                return (meetings, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
 
         public async Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting)
         {

@@ -10,6 +10,7 @@ namespace DL
     public interface IMeetingDL
     {
         Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId);
+        Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetMeetingsInRange(DateOnly startDate, DateOnly endDate);
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);

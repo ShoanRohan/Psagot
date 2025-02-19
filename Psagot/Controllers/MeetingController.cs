@@ -53,6 +53,15 @@ namespace Psagot.Controllers
             return Ok(meetings);
         }
 
+        [HttpGet("GetMeetingsInRange")]
+        public async Task<IActionResult> GetMeetingsInRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetMeetingsInRange(startDate,endDate);
+            if (meetings == null) return BadRequest(errorMessage);
+
+            return Ok(meetings);
+        }
+
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
         {
