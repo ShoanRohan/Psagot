@@ -61,7 +61,10 @@ namespace DL
         {
             try
             {
-                var meetings = await _context.Set<Meeting>().Where(m => m.DayId.HasValue && m.DayId.Value >= startDate && m.DayId.Value <= endDate).ToListAsync();
+                //TODO -  need to add calculation get meetings in range
+                //var meetings = await _context.Set<Meeting>().Where(m => m.DayId.HasValue && m.DayId.Value >= startDate && m.DayId.Value <= endDate).ToListAsync();
+                var meetings = await _context.Set<Meeting>().ToListAsync();
+
                 return (meetings, null);
             }
             catch (Exception ex)
