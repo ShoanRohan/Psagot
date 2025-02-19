@@ -6,10 +6,12 @@ import { Box } from "@mui/material";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh' }}>
             <Header />
-            <Section />
-            <Footer />
+            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <Section />
+            </Box>
+            {/* <Footer /> */}
         </Box>
     );
 }
