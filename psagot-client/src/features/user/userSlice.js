@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers,fetchAllLecturersAndCoordinators } from './userAction';
 
 const initialState = {
     user: [],
@@ -48,6 +48,16 @@ const userSlice = createSlice({
             if (index !== -1) {
                 state.user[index]=action.payload;
             }
+        }).addCase(fetchAllLecturersAndCoordinators.pending, (state) =>{
+            state.status = 'loading';
+        })
+        .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) =>{
+            state.status ='succeeded';
+            state.user =action.payload;
+        })
+        .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
         });
 
     },
