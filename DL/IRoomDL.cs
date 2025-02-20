@@ -11,7 +11,7 @@ namespace DL
         Task<(Room Room, string ErrorMessage)> UpdateRoom(Room room);
         Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms();
         Task<(Room Room, string ErrorMessage)> GetRoomById(int id);
-        Task<(List<CourseScheduleDTO>, string ErrorMessage)> GetCourseScheduleByDate(DateTime dateTime);
+        Task<(List<RoomsScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime);
 
 
     }
