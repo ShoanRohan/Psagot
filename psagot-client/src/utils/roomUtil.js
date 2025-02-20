@@ -20,10 +20,9 @@ const getRoomById = async (id) => {
     const response = await api.get(`/Room/GetRoomById/${id}`);
     return response.data;
 };
-
-const getRoomScheduleByDate = async (dateTime) =>{
-    const response = await api.get(`/Room/GetCourseScheduleByDate/${dateTime}`);
+const getRoomsScheduleByDate = async (dateTime) =>{
+    const response = await api.get(`/Room/GetRoomsScheduleByDate`,dateTime);
     return response.data;
 }
 
-export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomScheduleByDate };
+export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomsScheduleByDate };

@@ -6,12 +6,15 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+
 const RoomsScheduleSearch = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
+    <>
     <Box
       sx={{
         mt: 5,
@@ -97,6 +100,9 @@ const RoomsScheduleSearch = () => {
         </Toolbar>
       </AppBar>
     </Box>
+     <RoomScheduleGrid/>
+     </>
+
   );
 };
 

@@ -25,8 +25,6 @@ namespace DL
         {
             try
             {
-            try
-            {
                 var rooms = await _context.Set<Room>().ToListAsync();
                 return (rooms, null);
             }
@@ -75,7 +73,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        public async Task<(List<CourseScheduleDTO> , string ErrorMessage)> GetCourseScheduleByDate(DateTime dateTime)
+        public async Task<(List<RoomsScheduleByDateDTO> , string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
         {
             try
             {
@@ -94,8 +92,8 @@ namespace DL
                      && m.ScheduleForTopic.Topic.Course != null) 
                 .Where(m => dateTime >= m.ScheduleForTopic.Topic.Course.StartDate
                      && (m.ScheduleForTopic.Topic.Course.EndDate == null || dateTime <= m.ScheduleForTopic.Topic.Course.EndDate)) 
-                .Select(m => new CourseScheduleDTO
-            {
+                .Select(m => new RoomsScheduleByDateDTO
+                {
                  CourseName = m.ScheduleForTopic.Topic.Course.Name,
                  TopicName = m.ScheduleForTopic.Topic.Name,
                  CourseColor = m.ScheduleForTopic.Topic.Course.Color,
