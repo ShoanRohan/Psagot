@@ -23,7 +23,7 @@ namespace BL
         {
             var userEntity = _mapper.Map<User>(userDTO);
 
-            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            //userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 
             if (addedUser == null) return (null, errorMessage);
@@ -84,29 +84,30 @@ namespace BL
             return (userDTOs, null);
         }
 
-        //public async Task<List<UserDTO>> GetUsers()
-
-        //{
-        //    var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
-        //    var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name,Email=u.Email }).ToList(); // המרה ל-DTO
-        //    return userDTOs; ;
-
-        //}
         public async Task<List<UserDTO>> GetUsers()
+
         {
-            var users = await _userDL.GetUsers(); // קריאה ל-DL שמחזיר List<User>
+            var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
+            var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name, Email = u.Email }).ToList(); // המרה ל-DTO
+            return userDTOs; ;
 
-            var userDTOs = users.Select(u => new UserDTO
-            {
-                UserId = u.UserId,
-                Name = u.Name,
-                Email = u.Email,
-                UserTypeId = u.UserTypeId,
-                UserTypeName = u.UserType.Name, // אם רוצים לכלול את שם ההרשאה
-                IsActive = u.IsActive
-            }).ToList();
-
-            return userDTOs;
         }
+        //public async Task<List<UserDTO>> GetUsers()
+        //{
+        //    var users = await _userDL.GetUsers(); // קריאה ל-DL שמחזיר List<User>
+
+        //    var userDTOs = users.Select(u => new UserDTO
+        //    {
+        //        UserId = u.UserId,
+        //        Name = u.Name,
+        //        Email = u.Email,
+        //        UserTypeId = u.UserTypeId,
+        //        UserTypeName = u.UserType.Name, // אם רוצים לכלול את שם ההרשאה
+        //        IsActive = u.IsActive
+        //    }).ToList();
+        //    if (users == null) return (null);
+
+        //    return (_mapper.Map<List<UserDTO>>(users));
+        //}
     }
 }

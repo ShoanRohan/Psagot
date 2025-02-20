@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { tableUsers } from "../utils/userUtil";
 
-const UsersTableUtil = () => {
+const UsersTable = () => {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalUsers, setTotalUsers] = useState(0);
 
     useEffect(() => {
+        const fetchUsers = async () => {
+            const usersData = await tableUsers();
+            setUsers(usersData);
+            setTotalUsers(usersData.length); // אם יש לך שדה אחר לספירה, עדכן בהתאם
+        };
         fetchUsers();
     }, [page, pageSize]);
-
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get(`http://localhost:44333/api/users/paged?page=${page}&pageSize=${pageSize}`);
-            setUsers(response.data.users);
-            setTotalUsers(response.data.total);
-        } catch (error) {
-            console.error("Error fetching users:", error);
-        }
-    };
-
     const handlePageChange = (newPage) => {
         setPage(newPage);
     };
@@ -41,15 +35,15 @@ const UsersTableUtil = () => {
                 </thead>
                 <tbody>
                     {users.map((user) => (
-                        <tr key={user.id}>
-                            <td>{user.id}</td>
-                            <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role}</td>
-                            <td>{user.isActive ? "✅" : "❌"}</td>
+                        <tr key={user?.UserId}>
+                            <td>{user?.UserId}</td>
+                            <td>{user?.Name}</td>
+                            <td>{user?.Email}</td>
+                            <td>{user?.Role}</td>
+                            <td>{user?.IsActive ? "✅" : "❌"}</td>
                             <td>
-                                {user.role === "Admin" && (
-                                    <button onClick={() => alert(`עריכת משתמש ${user.id}`)}>✏️</button>
+                                {user.Role === "Admin" && (
+                                    <button onClick={() => alert(`עריכת משתמש ${user.UserId}`)}>✏️</button>
                                 )}
                             </td>
                         </tr>
@@ -73,4 +67,4 @@ const UsersTableUtil = () => {
     );
 };
 
-export default UsersTableUtil;
+export default UsersTable;

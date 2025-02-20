@@ -113,6 +113,7 @@ namespace Psagot.Controllers
 
             return Ok(users);
         }
+
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
