@@ -30,20 +30,20 @@ const UsersTable = () => {
                         <th>מייל</th>
                         <th>רמת הרשאה</th>
                         <th>פעיל</th>
-                        <th>עריכה</th>
+                        {/* <th>עריכה</th> */}
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map((user) => (
-                        <tr key={user?.UserId}>
-                            <td>{user?.UserId}</td>
-                            <td>{user?.Name}</td>
-                            <td>{user?.Email}</td>
-                            <td>{user?.Role}</td>
-                            <td>{user?.IsActive ? "✅" : "❌"}</td>
+                    {users?.map((user, index) => (
+                        <tr key={`${user?.UserId}-${index}`}>
+                            <td>{user?.userId}</td>
+                            <td>{user?.name}</td>
+                            <td>{user?.email}</td>
+                            <td>{user?.isActive ? "✅" : "❌"}</td>
+                            <td>{user?.role}</td>
                             <td>
-                                {user.Role === "Admin" && (
-                                    <button onClick={() => alert(`עריכת משתמש ${user.UserId}`)}>✏️</button>
+                                {user.role === "Admin" && (
+                                    <button onClick={() => alert(`עריכת משתמש ${user.userId}`)}>✏️</button>
                                 )}
                             </td>
                         </tr>

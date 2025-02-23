@@ -116,9 +116,12 @@ namespace DL
                 var users = await _context.Users
                  .Select(u => new User
                  {
+                     UserId=u.UserId,
                      Name = u.Name,
-                     Phone = u.Phone,
-                     Email = u.Email
+                     Email = u.Email,
+                     UserType = u.UserType,
+                     IsActive = u.IsActive,
+
                  })
                   .ToListAsync();
                 return users;
