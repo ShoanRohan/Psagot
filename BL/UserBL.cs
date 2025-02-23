@@ -75,14 +75,14 @@ namespace BL
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
 
-        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
-        {
-            var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
-            if (users == null) return (null, errorMessage);
+        //public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        //{
+        //    var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+        //    if (users == null) return (null, errorMessage);
 
-            var userDTOs = _mapper.Map<List<UserDTO>>(users);
-            return (userDTOs, null);
-        }
+        //    var userDTOs = _mapper.Map<List<UserDTO>>(users);
+        //    return (userDTOs, null);
+        //}
 
         public async Task<List<UserDTO>> GetUsers()
 

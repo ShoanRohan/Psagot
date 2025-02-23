@@ -19,17 +19,22 @@ const UsersTable = () => {
         setPage(newPage);
     };
 
+    const handleStatusChange = (userId, status) => {
+    // כאן תוכל לעדכן את הסטטוס במצב שלך או לשלוח בקשה לשרת
+    console.log(`User ID: ${userId}, New Status: ${status}`);
+};
+
     return (
         <div>
-            <h2>רשימת משתמשים</h2>
+            <h2>משתמשים</h2>
             <table>
                 <thead>
                     <tr>
                         <th>קוד משתמש</th>
                         <th>שם משתמש</th>
                         <th>מייל</th>
-                        <th>רמת הרשאה</th>
-                        <th>פעיל</th>
+                        <th>הרשאה</th>
+                        <th>סטטוס</th>
                         {/* <th>עריכה</th> */}
                     </tr>
                 </thead>
@@ -39,8 +44,14 @@ const UsersTable = () => {
                             <td>{user?.userId}</td>
                             <td>{user?.name}</td>
                             <td>{user?.email}</td>
-                            <td>{user?.isActive ? "✅" : "❌"}</td>
-                            <td>{user?.role}</td>
+                            <td>{user?.userType}</td>
+                            <td>
+                         <select value={user?.IsActive ? "active" : "inactive"} onChange={(e) => handleStatusChange(user.userId, e.target.value)}>
+                    <option value="active">פעיל</option>
+                    <option value="inactive">לא פעיל</option>
+                     </select>
+                          </td>
+                            
                             <td>
                                 {user.role === "Admin" && (
                                     <button onClick={() => alert(`עריכת משתמש ${user.userId}`)}>✏️</button>
@@ -56,7 +67,7 @@ const UsersTable = () => {
                 <button disabled={page * pageSize >= totalUsers} onClick={() => handlePageChange(page + 1)}>הבא</button>
             </div>
             <div>
-                <label>שורות לעמוד:</label>
+                <label>מספר שורות:</label>
                 <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
                     <option value="10">10</option>
                     <option value="20">20</option>
