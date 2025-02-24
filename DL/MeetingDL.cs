@@ -71,5 +71,24 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<Meeting> Meetings, int TotalCount, string ErrorMessage)> GetMeetingsPage(int page, int pageSize)
+        {
+            try
+            {
+                var query = _context.Set<Meeting>().AsQueryable();
+                int totalCount = await query.CountAsync();
+
+                var meetings = await query
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (meetings, totalCount, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
+            }
+        }
     }
 }
