@@ -88,7 +88,7 @@ namespace BL
 
         {
             var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
-            var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name, Email = u.Email }).ToList(); // המרה ל-DTO
+            var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name, Email = u.Email, UserTypeName = u.UserType.ToString(), IsActive=u.IsActive }).ToList(); // המרה ל-DTO
             return userDTOs; ;
 
         }
