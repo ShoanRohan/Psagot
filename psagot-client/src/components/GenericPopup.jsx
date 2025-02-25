@@ -1,71 +1,69 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUserTypes } from "../features/userType/userTypeActions";
-import { Typography, Button, Container } from "@mui/material";
-import GenericPopup from "../components/GenericPopup";
+import React from "react";
+import PropTypes from "prop-types";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
-const HomePage = () => {
-  const dispatch = useDispatch();
-  const { userTypes, status, error } = useSelector((state) => state.userType);
-
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchAllUserTypes());
-    }
-  }, [status, dispatch]);
-
-  const [open, setOpen] = useState(false);
-  const [showButtons, setShowButtons] = useState(true); // מצב האם להראות כפתורים
-
-  const handleOpenPopup = () => setOpen(true);
-  const handleClosePopup = () => setOpen(false);
-
-  const handleConfirm = () => {
-    alert("כפתור אישור נלחץ");
-    setOpen(false);
-  };
-
-  const handleCancel = () => {
-    // alert("כפתור ביטול נלחץ");
-    setOpen(false);
-  };
-
-  const handleClickButton = () => {
-    alert("handle click button - userTypes" + JSON.stringify(userTypes));
-  };
-
-  const toggleButtons = () => {
-    setShowButtons(prevState => !prevState); // משנה את המצב של כפתורים
-  };
-
-  if (status === 'loading') return <Typography>Loading...</Typography>;
-  if (status === 'failed') return <Typography>Error: {error}</Typography>;
-
+const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, showConfirmCancelButtons = true }) => {
   return (
-    <Container item style={{ textAlign: 'center', padding: 10 }}>
-      <Typography variant="h5">😀hello psagot project😀</Typography>
-      <Button onClick={handleClickButton}>Example of a function structure</Button>
-      <div>
-        {/* כפתור לפתיחת הפופ-אפ */}
-        <button onClick={handleOpenPopup}>פתח פופ-אפ</button>
-        
-        {/* כפתור לשנות את מצב הצגת כפתורי אישור וביטול */}
-        <button onClick={toggleButtons}>שנה מצב כפתורי אישור/ביטול</button>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      aria-labelledby="dialog-title"
+      sx={{
+        "& .MuiDialog-paper": { padding: 2, borderRadius: 2, boxShadow: 5, width: "300px", textAlign: "center" },
+      }}
+    >
+      <DialogTitle
+        id="dialog-title"
+        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "1rem" }}
+      >
+        <Typography variant="h6" sx={{ fontSize: "0.9rem" }}>
+          {title}
+        </Typography>
+        <IconButton onClick={onClose} sx={{ fontSize: "small", padding: "5px" }}>
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      </DialogTitle>
 
-        {/* שימוש בקומפוננטה של GenericPopup */}
-        <GenericPopup
-          open={open}
-          onClose={handleClosePopup}
-          title="כותרת הפופ-אפ"
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
-          showConfirmCancelButtons={showButtons} 
-        >
-          זהו תוכן הפופ-אפ!
-        </GenericPopup>
-      </div>
-    </Container>
+      <DialogContent>
+        <DialogContentText>{children}</DialogContentText>
+      </DialogContent>
+
+      {showConfirmCancelButtons && (
+        <DialogActions sx={{ justifyContent: "center", gap: 2, marginBottom: 1 }}>
+          {onCancel && (
+            <Button
+              variant="outlined"
+              onClick={onCancel}
+              sx={{ borderRadius: "20px", borderColor: "#2196F3", color: "#2196F3" }}
+            >
+              ביטול
+            </Button>
+          )}
+          {onConfirm && (
+            <Button
+              variant="contained"
+              onClick={onConfirm}
+              autoFocus
+              sx={{ borderRadius: "20px", backgroundColor: "#2196F3", color: "white" }}
+            >
+              שמור
+            </Button>
+          )}
+        </DialogActions>
+      )}
+    </Dialog>
   );
 };
 
-export default HomePage;
+GenericPopup.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
+  showConfirmCancelButtons: PropTypes.bool,
+};
+
+export default GenericPopup;

@@ -1,54 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import "../styles/GenericPopup.css";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUserTypes } from "../features/userType/userTypeActions";
+import { Typography, Button, Container } from "@mui/material";
+import ExampleUseGenericPopup from "../components/ExampleUseGenericPopup";
 
-const GenericPopup = ({ open, onClose, title, children, showCloseButton = true, onConfirm, onCancel, showConfirmCancelButtons }) => {
-  if (!open) return null;
+const HomePage = () => {
+  const dispatch = useDispatch();
+  const { userTypes, status, error } = useSelector((state) => state.userType);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchAllUserTypes());
+    }
+  }, [status, dispatch]);
+
+  const handleClickButton = () => {
+    alert("handle click button - userTypes" + JSON.stringify(userTypes));
+};
+  
+  if (status === 'loading') return <Typography>Loading...</Typography>;
+  if (status === 'failed') return <Typography>Error: {error}</Typography>;
 
   return (
-    <div className="popup-container">
-      {/* כפתור סגירה בפינה השמאלית העליונה */}
-      {showCloseButton && (
-        <button className="popup-close-button" onClick={onClose}>❌</button>
-      )}
-
-      {/* כותרת הפופ-אפ */}
-      {title && <h2>{title}</h2>}
-
-      {/* תוכן הפופ-אפ */}
-      <div>{children}</div>
-
-      {/* כפתורי אישור וביטול */}
-      {showConfirmCancelButtons && (
-        <div className="popup-buttons">
-          {onConfirm && (
-            <button className="popup-button confirm" onClick={onConfirm}>אישור</button>
-          )}
-          {onCancel && (
-            <button className="popup-button cancel" onClick={onCancel}>ביטול</button>
-          )}
-        </div>
-      )}
-    </div>
+    <Container item style={{ textAlign: 'center', padding: 10 }}>
+      <Typography variant="h5">😀hello psagot project😀</Typography>
+      <Button onClick={handleClickButton}>Example of a function structure</Button>
+      <ExampleUseGenericPopup/>
+    </Container>
   );
 };
 
-// PropTypes
-GenericPopup.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  children: PropTypes.node,
-  showCloseButton: PropTypes.bool,
-  onConfirm: PropTypes.func,
-  onCancel: PropTypes.func,
-  showConfirmCancelButtons: PropTypes.bool,
-};
-
-// ברירת מחדל לערכים אופציונליים
-GenericPopup.defaultProps = {
-  showCloseButton: true,
-  showConfirmCancelButtons: true, // ברירת מחדל היא להראות את הכפתורים
-};
-
-export default GenericPopup;
+export default HomePage;
