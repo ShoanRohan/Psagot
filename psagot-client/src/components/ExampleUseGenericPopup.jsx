@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import GenericPopup from '../components/GenericPopup';
+import { Button } from '@mui/material';
 
 const ExampleUseGenericPopup = () => {
-    const [showButtons, setShowButtons] = useState(true); // מצב האם להראות כפתורים
+    const [showCancel, setShowCancel] = useState(true); // מצב האם להראות כפתור ביטול
+    const [showSave, setShowSave] = useState(true); // מצב האם להראות כפתור שמור
     const [open, setOpen] = useState(false);
 
-    const handleOpenPopup = () => setOpen(true);
-    const handleClosePopup = () => setOpen(false);
+    const handleOpenPopup = () => {
+        setOpen(true);
+    }
 
-    const handleConfirm = () => {
+    const handleClosePopup = () => {
+        setOpen(false);
+    }
+
+    const handleSave = () => {
         alert("כפתור שמור נלחץ");
         setOpen(false);
     };
@@ -17,30 +24,23 @@ const ExampleUseGenericPopup = () => {
         setOpen(false);
     };
 
-    const toggleButtons = () => {
-        setShowButtons(prevState => !prevState);
-    };
-
     return (
-        <div>
+        <React.Fragment>
             {/* כפתור לפתיחת הפופ-אפ */}
-            <button onClick={handleOpenPopup}>פתח פופ-אפ</button>
-
-            {/* כפתור לשינוי מצב הצגת כפתורי אישור וביטול */}
-            {/* <button onClick={toggleButtons}>שנה מצב כפתורי אישור/ביטול</button> */}
-
+            <Button onClick={handleOpenPopup}>דוגמא לפופ-אפ</Button>
             {/* שימוש בקומפוננטה של GenericPopup */}
             <GenericPopup
                 open={open}
                 onClose={handleClosePopup}
                 title="כותרת הפופ-אפ"
-                onConfirm={handleConfirm}
+                onSave={handleSave}
                 onCancel={handleCancel}
-                showConfirmCancelButtons={showButtons}
+                showCancelButton={showCancel}
+                showSaveButton={showSave}
             >
                 זהו תוכן הפופ-אפ!
             </GenericPopup>
-        </div>
+        </React.Fragment>
     );
 };
 
