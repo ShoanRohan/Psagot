@@ -364,3 +364,6 @@ FodyWeavers.xsd
 /Psagot/appsettings.json
 FodyWeavers.xsd
 /Psagot/appsettings.Development.json
+/psagot-client/src/components/ExampleUseGenericPopup.jsx
+/.gitignore
+/.gitignore
