@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
-const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, showConfirmCancelButtons = true }) => {
+const GenericPopup = ({ open, onClose, title, children, onSave, onCancel, showCancelButton = true, showSaveButton = true }) => {
   return (
     <Dialog
       open={open}
@@ -29,7 +29,7 @@ const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, sho
         <DialogContentText>{children}</DialogContentText>
       </DialogContent>
 
-      {showConfirmCancelButtons && (
+      {showCancelButton &&(
         <DialogActions sx={{ justifyContent: "center", gap: 2, marginBottom: 1 }}>
           {onCancel && (
             <Button
@@ -40,10 +40,10 @@ const GenericPopup = ({ open, onClose, title, children, onConfirm, onCancel, sho
               ביטול
             </Button>
           )}
-          {onConfirm && (
+          {onSave && (
             <Button
               variant="contained"
-              onClick={onConfirm}
+              onClick={onSave}
               autoFocus
               sx={{ borderRadius: "20px", backgroundColor: "#2196F3", color: "white" }}
             >
@@ -61,9 +61,11 @@ GenericPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   title: PropTypes.string,
   children: PropTypes.node,
-  onConfirm: PropTypes.func,
+  onSave: PropTypes.func,
   onCancel: PropTypes.func,
-  showConfirmCancelButtons: PropTypes.bool,
+  showCancelButton: PropTypes.bool,
+  showSaveButton: PropTypes.bool,
+
 };
 
 export default GenericPopup;
