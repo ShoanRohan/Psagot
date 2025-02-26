@@ -74,8 +74,8 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetCoordinators()
         {
             var (coordinators, errorMessage) = await _userBL.GetCoordinators();
-            if(coordinators == null || !coordinators.Any()) 
-                return BadRequest( errorMessage);
+            if (coordinators == null || !coordinators.Any())
+                return BadRequest(errorMessage);
 
             return Ok(coordinators);
         }
@@ -102,6 +102,8 @@ namespace Psagot.Controllers
 
                 return StatusCode(500, "Internal server error");
             }
+
         }
+
     }
 }
