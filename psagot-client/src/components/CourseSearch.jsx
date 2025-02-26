@@ -105,11 +105,11 @@ const CourseSearch = () => {
     <Box
       sx={{
         display: "flex",
-        justifyContent: "flex-end",
-        gap: "30px",
-        flexWrap: "wrap",
+        justifyContent: "flex-start",
+        gap: "20px",
+        flexWrap: "nowrap",
         flex: 1,
-        marginRight: "auto",
+        marginRight: 0,
       }}
     >
         {/* קוד קורס - ערך מספרי בלבד */}
@@ -117,7 +117,7 @@ const CourseSearch = () => {
           label="קוד קורס"
           type="number"
           variant="standard"
-          sx={sharedStyles}
+          sx={{ ...sharedStyles, order: -1}}
           value={filters.courseCode}
           onChange={handleCourseCodeChange}
         />
