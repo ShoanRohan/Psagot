@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators} from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators,tableUsers} from "../../utils/userUtil";
+
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
     const data = await getAllUsers();
@@ -22,5 +23,10 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
 
 export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
     const data = await getAllLecturersAndCoordinators();
+    return data;
+});
+
+export const userTableAction =createAsyncThunk('user/userTableAction', async()=>{
+    const data = await tableUsers();
     return data;
 });

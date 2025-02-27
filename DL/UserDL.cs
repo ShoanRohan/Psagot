@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -89,5 +90,85 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(List<User> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Skip((pageNumber - 1) * pageSize)  // דילוג על תוצאות קודמות
+                    .Take(pageSize)  // הגבלת מספר השורות
+                    .Include(user => user.UserType)
+                    .ToListAsync();
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<List<User>> GetUsers()
+        {
+            try
+            {
+                var users = await _context.Users
+                 .Select(u => new User
+                 {
+                     UserId=u.UserId,
+                     Name = u.Name,
+                     Email = u.Email,
+                     UserType = u.UserType,
+                     IsActive = u.IsActive,
+
+                 })
+                  .ToListAsync();
+                return users;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        //public async Task<(List<User> Users, string ErrorMessage)> GetUsersPage(int? pageNumber, int? pageSize)
+        //{
+        //    try
+        //    {
+        //        IQueryable<User> query = _context.Users.Include(user => user.UserType);
+
+        //        if (pageNumber.HasValue && pageSize.HasValue)
+        //        {
+        //            var users = await query
+        //                .Skip((pageNumber.Value - 1) * pageSize.Value)  // דילוג על תוצאות קודמות
+        //                .Take(pageSize.Value)  // הגבלת מספר השורות
+        //                .ToListAsync();
+
+        //            return (users, null);
+        //        }
+        //        else
+        //        {
+        //            var users = await query
+        //                .Select(u => new User
+        //                {
+        //                    UserId = u.UserId,
+        //                    Name = u.Name,
+        //                    Email = u.Email,
+        //                    UserType = u.UserType,
+        //                    IsActive = u.IsActive,
+        //                })
+        //                .ToListAsync();
+
+        //            return (users, null);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex.Message);
+        //    }
+        //}
+
     }
 }
+
+

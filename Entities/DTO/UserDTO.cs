@@ -26,6 +26,5 @@ namespace Entities.DTO
 
         public string? Role { get; set; }
 
-
     }
 }

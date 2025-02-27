@@ -16,7 +16,9 @@ const addUser = async (newUser) => {
 };
 
 const updatedUser = async (updateUser) => {
+    console.log(updateUser)
     const response = await api.put('/User/UpdateUser',updateUser);
+    console.log(response)
     return response.data;
 };
 
@@ -25,7 +27,20 @@ const getAllLecturersAndCoordinators = async ()=> {
     return response.data;
 };
 
+const tableUsers = async () =>{
+        const response = await api.get(`/User/GetUsers`);
+        return response.data;
+};
 
-export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators};
+const getUserByPage = async (pageNumber, pageSize) => {
+    const response = await api.get(`/User/GetUsersByPage?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    return response.data;
+};
+
+
+
+
+export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators,tableUsers,getUserByPage};
+
 
 
