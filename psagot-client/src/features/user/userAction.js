@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators} from "../../utils/userUtil";
-import { getAllUsers, getUserById, addUser, updatedUser, tableUsers } from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators,tableUsers} from "../../utils/userUtil";
+
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
     const data = await getAllUsers();

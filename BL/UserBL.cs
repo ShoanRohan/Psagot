@@ -75,14 +75,14 @@ namespace BL
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
 
-        //public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
-        //{
-        //    var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
-        //    if (users == null) return (null, errorMessage);
+        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return (null, errorMessage);
 
-        //    var userDTOs = _mapper.Map<List<UserDTO>>(users);
-        //    return (userDTOs, null);
-        //}
+            var userDTOs = _mapper.Map<List<UserDTO>>(users);
+            return (userDTOs, null);
+        }
 
         public async Task<List<UserDTO>> GetUsers()
 
@@ -90,24 +90,38 @@ namespace BL
             var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
             var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name, Email = u.Email, UserTypeName = u.UserType.ToString(), IsActive=u.IsActive }).ToList(); // המרה ל-DTO
             return userDTOs; ;
-
         }
-        //public async Task<List<UserDTO>> GetUsers()
+        //public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersPage(int? pageNumber, int? pageSize)
         //{
-        //    var users = await _userDL.GetUsers(); // קריאה ל-DL שמחזיר List<User>
-
-        //    var userDTOs = users.Select(u => new UserDTO
+        //    try
         //    {
-        //        UserId = u.UserId,
-        //        Name = u.Name,
-        //        Email = u.Email,
-        //        UserTypeId = u.UserTypeId,
-        //        UserTypeName = u.UserType.Name, // אם רוצים לכלול את שם ההרשאה
-        //        IsActive = u.IsActive
-        //    }).ToList();
-        //    if (users == null) return (null);
+        //        if (pageNumber.HasValue && pageSize.HasValue)
+        //        {
+        //            var (users, errorMessage) = await _userDL.GetUsersPage(pageNumber.Value, pageSize.Value);
+        //            if (users == null) return (null, errorMessage);
 
-        //    return (_mapper.Map<List<UserDTO>>(users));
+        //            var userDTOs = _mapper.Map<List<UserDTO>>(users);
+        //            return (userDTOs, null);
+        //        }
+        //        else
+        //        {
+        //            var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
+        //            var userDTOs = users.Select(u => new UserDTO
+        //            {
+        //                UserId = u.UserId,
+        //                Name = u.Name,
+        //                Email = u.Email,
+        //                UserTypeName = u.UserType.ToString(),
+        //                IsActive = u.IsActive
+        //            }).ToList();
+
+        //            return (userDTOs, null);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex.Message);
+        //    }
         //}
     }
 }

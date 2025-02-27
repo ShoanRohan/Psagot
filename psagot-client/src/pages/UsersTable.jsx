@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { tableUsers } from "../utils/userUtil";
+import { getUserByPage, tableUsers } from "../utils/userUtil";
 import { Grid, Typography,Box, Grid2, IconButton, Button } from '@mui/material';
 import { DeleteOutline, SpaceBar } from "@mui/icons-material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -12,15 +12,20 @@ const UsersTable = () => {
     const [totalUsers, setTotalUsers] = useState(0);
     
 
+    const getUserByPage = (users, page, pageSize) => {
+        const startIndex = (page - 1) * pageSize;
+        return users.slice(startIndex, startIndex + pageSize);
+    };
+
     useEffect(() => {
         const fetchUsers = async () => {
-            const usersData = await tableUsers();
-            setUsers(usersData);
-            setTotalUsers(usersData.length); // אם יש לך שדה אחר לספירה, עדכן בהתאם
+            const usersData = await tableUsers(); // קבלת כל המשתמשים
+            const paginatedUsers = getUserByPage(usersData, page, pageSize); // חתוך את המידע לעמוד הנוכחי
+            setUsers(paginatedUsers);
+            setTotalUsers(usersData.length); // מספר כל המשתמשים
         };
         fetchUsers();
     }, [page, pageSize]);
-
     const handlePageChange = (newPage) => {
         setPage(newPage);
     };
