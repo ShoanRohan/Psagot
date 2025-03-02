@@ -1,16 +1,9 @@
 import * as React from 'react';
 import { AppProvider } from '@toolpad/core/AppProvider';
 import { Box, Button, Typography, TextField, Link } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
-
-const theme = createTheme({
-	typography: {
-		fontFamily: 'Rubik, Arial, sans-serif',
-	},
-});
 
 const signIn = async (formData, setError) => {
 	try {
@@ -34,7 +27,6 @@ const signIn = async (formData, setError) => {
 
 export default function CredentialsSignInPage() {
 	const theme = useTheme();
-
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [emailError, setEmailError] = React.useState('');
@@ -88,13 +80,13 @@ export default function CredentialsSignInPage() {
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',
-					justifyContent: 'flex-start',
+					justifyContent: 'center',
 					alignItems: 'center',
-					height: '79%', // שים לב שזה height ולא minHeight
+					height: '79%',
 					width: '100%',
 					direction: 'rtl',
 					fontFamily: 'Rubik',
-					marginTop: '-10vh', // דוחף את הטופס למעלה
+					marginTop: '-3vh',
 				}}
 			>
 				<Typography
@@ -110,7 +102,7 @@ export default function CredentialsSignInPage() {
 					כניסה למערכת
 				</Typography>
 
-				{/* BOX שני שמכיל את שדות הטופס */}
+				{/* BOX שמכיל את כל שדות הטופס כולל הכפתור */}
 				<Box
 					component="form"
 					onSubmit={handleSubmit}
@@ -118,55 +110,62 @@ export default function CredentialsSignInPage() {
 						display: 'flex',
 						flexDirection: 'column',
 						gap: 2,
-						height: '77%',
 						width: '100%',
-						//fontFamily: 'Rubik',
+						height: '100%',
+						fontFamily: 'Rubik',
 					}}
 				>
-					<TextField
-						label="אימייל"
-						name="email"
-						variant="standard"
-						fullWidth
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-						onBlur={() => setEmailError(validateEmail(email))}
-						error={!!emailError}
-						helperText={emailError}
-						InputLabelProps={{
-							style: {
-								textAlign: 'right',
-								width: '100%',
-								fontFamily: 'Rubik',
-								fontSize: '14px',
-							},
+					{/* BOX של שם משתמש, סיסמה ושכחתי סיסמה */}
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							width: '100%',
+							height: '100%',
+							gap: 2,
 						}}
-						sx={{ fontFamily: 'Rubik' }}
-					/>
+					>
+						<TextField
+							label="שם משתמש"
+							name="email"
+							variant="standard"
+							fullWidth
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+							onBlur={() => setEmailError(validateEmail(email))}
+							error={!!emailError}
+							helperText={emailError}
+							InputLabelProps={{
+								style: {
+									textAlign: 'right',
+									width: '100%',
+									fontFamily: 'Rubik',
+									fontSize: '14px',
+								},
+							}}
+						/>
 
-					<TextField
-						label="סיסמה"
-						name="password"
-						type="password"
-						variant="standard"
-						fullWidth
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-						onBlur={() => setPasswordError(validatePassword(password))}
-						error={!!passwordError}
-						helperText={passwordError}
-						InputLabelProps={{
-							style: {
-								textAlign: 'right',
-								width: '100%',
-								fontFamily: 'Rubik',
-								fontSize: '14px',
-							},
-						}}
-						sx={{ fontFamily: 'Rubik' }}
-					/>
+						<TextField
+							label="סיסמה"
+							name="password"
+							type="password"
+							variant="standard"
+							fullWidth
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+							onBlur={() => setPasswordError(validatePassword(password))}
+							error={!!passwordError}
+							helperText={passwordError}
+							InputLabelProps={{
+								style: {
+									textAlign: 'right',
+									width: '100%',
+									fontFamily: 'Rubik',
+									fontSize: '14px',
+								},
+							}}
+						/>
 
-					
 						<Link
 							href="/forgot-password"
 							sx={{
@@ -179,29 +178,16 @@ export default function CredentialsSignInPage() {
 						>
 							שכחתי סיסמה
 						</Link>
-					
+					</Box>
 
-					{formError && (
-						<Typography
-							sx={{
-								color: 'red',
-								textAlign: 'center',
-								fontSize: '14px',
-								fontFamily: 'Rubik',
-							}}
-						>
-							{formError}
-						</Typography>
-					)}
-
-					{/* BOX שלישי שמכיל את הכפתור והלינק להרשמה */}
+					{/* BOX של כפתור הכניסה וההרשמה */}
 					<Box
 						sx={{
 							display: 'flex',
 							flexDirection: 'column',
-							height: '9%',
-							width: '100%',
 							alignItems: 'center',
+							width: '100%',
+							height: '99%',
 							gap: 1,
 						}}
 					>
@@ -222,11 +208,12 @@ export default function CredentialsSignInPage() {
 								borderRadius: '25px',
 								py: 1,
 								fontSize: '14px',
-								width: '60%',
-								mx: 'auto',
+								width: '100px',
+								height: '30px',
 								fontFamily: 'Rubik',
 								'&:hover': {
-									backgroundColor: '#1565c0',
+									backgroundColor: '#112B83',
+
 								},
 							}}
 						>
@@ -236,7 +223,6 @@ export default function CredentialsSignInPage() {
 						<Button
 							variant="text"
 							sx={{
-								mt: 1,
 								color: '#6F6F6F',
 								textDecoration: 'underline',
 								fontWeight: 'bold',
@@ -245,7 +231,7 @@ export default function CredentialsSignInPage() {
 							}}
 							onClick={() => (window.location.href = '/register')}
 						>
-							אין לך חשבון? תרשם
+							אין לך חשבון? הירשם
 						</Button>
 					</Box>
 				</Box>
