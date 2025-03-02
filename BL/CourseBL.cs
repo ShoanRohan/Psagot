@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
-    public class CourseBL : ICourseBL
+public class CourseBL: ICourseBL
     {
         private readonly ICourseDL _courseDL;
         private readonly IMapper _mapper;
@@ -27,8 +27,24 @@ namespace BL
 
             if (addedCourse == null) return (null, errorMessage);
 
+
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
+        public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+        {
+            var (Course, errorMessage) = await _courseDL.GetCourseById(id);
+            if (Course == null) return (null, errorMessage);
+            return (_mapper.Map<CourseDTO>(Course), null);
+        }
+       public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopicsDTO, string ErrorMessage)> GetInclude()
+        {
+            var (includes, errorMessage) = await _courseDL.GetInclude();
+            if (includes == null) return (null, errorMessage);
+            return (_mapper.Map< IEnumerable<ScheduleForTopicDTO>>(includes), null);
+        }
+
+
+
 
     }
 }

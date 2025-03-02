@@ -19,6 +19,8 @@ namespace Psagot
             builder.Services.AddAutoMapper(typeof(MappingProfile));
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
+            builder.Services.AddScoped<ICourseDL, CourseDL>();
+            builder.Services.AddScoped<ICourseBL, CourseBL>();
 
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
