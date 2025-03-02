@@ -9,12 +9,12 @@ const AppRouter = () => {
     return (
 
         <Routes>  
-             <Route path='/' element={<Layout/>}>
+             <Route path='/home' element={<Layout/>}>
                 <Route path='/' element={<HomePage/>}/>    
             </Route> 
                 
-            <Route path='/login' element={<LoginPage/>}> 
-                <Route path='' element={<Login/>}/> 
+            <Route path='/' element={<LoginPage/>}> 
+                <Route path='login' element={<Login/>}/> 
             </Route>
            
         </Routes>
