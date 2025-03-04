@@ -3,6 +3,7 @@ import { getUserByPage, tableUsers } from "../utils/userUtil";
 import { Grid, Typography,Box, Grid2, IconButton, Button } from '@mui/material';
 import { DeleteOutline, SpaceBar } from "@mui/icons-material";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { useNavigate } from 'react-router-dom';
 
 
 const UsersTable = () => {
@@ -10,7 +11,7 @@ const UsersTable = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalUsers, setTotalUsers] = useState(0);
-    
+    const navigate = useNavigate();       
 
     const getUserByPage = (users, page, pageSize) => {
         const startIndex = (page - 1) * pageSize;
@@ -93,7 +94,7 @@ const UsersTable = () => {
                                 <IconButton aria-label="delete" size="small" width='30px'height='34px' color="#F6F7F9">
                                     <DeleteOutline fontSize="inherit" />
                                   </IconButton>
-                                  <IconButton aria-label="delete" size="small">
+                                  <IconButton aria-label="edit" size="small" onClick={() => navigate(`/EditUser/${user?.userId}`)} >
                                     <EditOutlinedIcon fontSize="inherit" />
                                   </IconButton>
                             </td>

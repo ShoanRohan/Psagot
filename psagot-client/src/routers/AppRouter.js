@@ -12,9 +12,7 @@ const AppRouter = () => {
                 <Route path='/' element={<HomePage/>}/>
                 <Route path='/users' element={<UsersTable/>}/>
                 <Route
-                    path='/edit-user/:id' element={<EditUser/>}/>
-                      {/* element={useRole === "Manager" ? <EditUser/> : <Navigate to="/" />} */}
-                
+                    path='/EditUser/:id' element={<EditUser/>}/>
             </Route>
         </Routes>
     );
