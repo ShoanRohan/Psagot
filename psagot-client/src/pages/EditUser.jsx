@@ -27,14 +27,9 @@ const EditUser = () => {
     };
 
     const handleSave = async () => {
-        console.log('444')
         try {
-            console.log(user)
-
             await updatedUser(user)
-            console.log('666')
             alert("המשתמש עודכן בהצלחה!");
-            console.log('777')
             navigate("/users"); // חזרה לרשימת המשתמשים
         } catch (error) {
             setError("שגיאה בעדכון המשתמש");
