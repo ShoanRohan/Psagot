@@ -18,7 +18,7 @@ const EditUser = () => {
         try {
             const response = await getUserById(id);
             console.log(response)
-            setUser(response.data);
+            setUser(response);
         } catch (error) {
             setError("שגיאה בטעינת נתוני המשתמש");
         } finally {
@@ -29,8 +29,9 @@ const EditUser = () => {
     const handleSave = async () => {
         console.log('444')
         try {
-            console.log('555')
-            await updatedUser(user.data)
+            console.log(user)
+
+            await updatedUser(user)
             console.log('666')
             alert("המשתמש עודכן בהצלחה!");
             console.log('777')
@@ -51,7 +52,7 @@ const EditUser = () => {
             <input type="id" value={user?.userId} onChange={(e) => setUser({ ...user, userId: e.target.value })} />
 
             <label>שם משתמש:</label>
-            <input type="text" value={user?.name} onChange={(e) => setUser({ ...user, username: e.target.value })} />
+            <input type="name" value={user?.name} onChange={(e) => setUser({ ...user, name: e.target.value })} />
 
             <label>אימייל:</label>
             <input type="email" value={user?.email} onChange={(e) => setUser({ ...user, email: e.target.value })} />
