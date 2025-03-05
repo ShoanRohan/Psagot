@@ -52,6 +52,7 @@ namespace Psagot.Controllers
 
             return Ok(meetings);
         }
+        //by
 
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
@@ -61,5 +62,13 @@ namespace Psagot.Controllers
 
             return Ok(addedMeeting);
         }
+
+        [HttpGet("GetMeetingsPaged")]
+        public async Task<IActionResult> GetMeetingsPage([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        {
+            var (meetings, totalCount, errorMessage) = await _meetingBL.GetMeetingsPage(page, pageSize);
+            return meetings == null ? BadRequest(errorMessage) : Ok(new { Meetings = meetings, TotalCount = totalCount });
+        }
+
     }
 }
