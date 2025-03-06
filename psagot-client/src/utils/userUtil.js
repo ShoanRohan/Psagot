@@ -10,6 +10,12 @@ const getUserById = async (id) => {
     return response.data;
 };
 
+const getFilteredUsers = async (filteredUsersParamaters) => {
+    const response = await api.get(`/User/GetFilteredPagedUsers?username=${filteredUsersParamaters.username}&phone=${filteredUsersParamaters.phone}&role=${filteredUsersParamaters.role}&isActive=${filteredUsersParamaters.isActive}&pageNumber=${filteredUsersParamaters.pageNumber}&pageSize=${filteredUsersParamaters.pageSize}`);
+    return response.data;
+};
+
+
 const addUser = async (newUser) => {
     const response = await api.post('/User/AddUser', newUser);
     return response.data;
@@ -26,6 +32,6 @@ const getAllLecturersAndCoordinators = async ()=> {
 };
 
 
-export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators};
+export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators,getFilteredUsers};
 
 
