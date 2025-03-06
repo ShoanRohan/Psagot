@@ -70,6 +70,23 @@ namespace Psagot.Controllers
             return Ok(users);
         }
 
+        [HttpGet("GetFilteredPagedUsers")]
+        public async Task<IActionResult> GetFilteredPagedUsers(
+            [FromQuery] string username,
+            [FromQuery] string phone,
+            [FromQuery] string role,
+            [FromQuery] bool? isActive,
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize)
+        {
+            var (users, totalCount, errorMessage) = await _userBL.GetFilteredPagedUsers(username, phone, role, isActive, pageNumber, pageSize);
+
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok(new { TotalCount = totalCount, Users = users });
+        }
+
+
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
@@ -92,6 +109,15 @@ namespace Psagot.Controllers
 
                 return StatusCode(500, "Internal server error");
             }
+        }
+
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetSecretarialPositions()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok(users);
         }
     }
 }
