@@ -12,17 +12,45 @@
      height:'34px';
      color:"#F6F7F9";
   }
-/* 
+
   .isActive-button{ 
-      border-radius: '68.31px';
-      background-color: user?.isActive?  '#DAF8E6' : '#E5E7EB';
-      color:user?.isActive? '#1A8245':'#374151';
+     
+      /* background-color: user?.isActive?  '#DAF8E6' : '#E5E7EB';
+      color:user?.isActive? '#1A8245':'#374151'; */
+      
       width: 97px;
       height: 39px; 
-      paddingTop: '4.1px'; 
-      paddingRight: '20.49px';
-      paddingBottom: '4.1px';
-      paddingLeft: '20.49px';
+      padding-top: '4.1px'; 
+      padding-right: '20.49px';
+      padding-bottom: '4.1px';
+      padding-left: '20.49px';
       gap: '1.37px'
-  } */
+  }
  
+  .box-size{
+    width: 1496;
+    height: 782;
+    top:300;
+    left:63;
+    padding-top:8;
+    padding-right:8;
+    padding-left:8;
+    gap:24;
+  }
+
+table {
+  width: 100%; /* מגדיר את הרוחב של הטבלה ל-100% */
+  height: 100%; /* מגדיר את הגובה של הטבלה ל-100% */
+  border-collapse: collapse; /* מאחד את הגבולות של התאים */
+  display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 1482px;
+    height: 860px;
+}
+
+td, th {
+ /* מוסיף גבול לתאים */
+  padding: 8px; /* מוסיף רווח פנימי לתאים */
+  text-align: center; /* מ-align את הטקסט לשמאל */
+}

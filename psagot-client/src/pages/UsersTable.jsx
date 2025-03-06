@@ -39,12 +39,11 @@ const UsersTable = () => {
     return (
         <div>
             <h2>משתמשים</h2>
-            <Box sx={{ width: 1496, height: 782,top:300,left:63,paddingtop:8,paddingRight:8,paddingLeft:8,gap:24}}>
-            <table>
-                {}
+            <Box className="box-size">
+            <table className="table">
                 <thead>
                     <tr>
-                        <th>קוד משתמש</th>
+                        <th className="th">קוד משתמש</th>
                         <th>שם משתמש</th>
                         <th>מייל</th>
                         <th>הרשאה</th>
@@ -55,7 +54,7 @@ const UsersTable = () => {
                 <tbody>
                     {users?.map((user, index) => (
                         <tr key={`${user?.UserId}-${index}`}>
-                            <td>{user?.userId}</td>
+                            <td className="td">{user?.userId}</td>
                             <td>{user?.name}</td>
                             <td>{user?.email}</td>
                             <td>{user?.userType}</td>
@@ -65,19 +64,11 @@ const UsersTable = () => {
         <option value="inactive">לא פעיל</option>
     </select> */}
     <Button
-        variant="contained"
+        variant="contained" className="isActive-button"
         style={{
-            borderRadius: '68.31px', // עיגול
-            backgroundColor: user?.isActive ? '#DAF8E6' : '#E5E7EB', // צבע ירוק
-            color:user?.isActive? '#1A8245':'#374151', // צבע טקסט
-            
-            width: '97px', // רוחב
-            height: '39px', // גובה
-            paddingTop: '4.1px', // רווח בין ה-select לכפתור
-            paddingRight: '20.49px',
-            paddingBottom: '4.1px',
-            paddingLeft: '20.49px',
-            gap: '1.37px'
+            borderRadius: '68.31px', 
+            backgroundColor: user?.isActive ? '#DAF8E6' : '#E5E7EB',
+            color:user?.isActive? '#1A8245':'#374151', 
         }}
         onClick={() => {
             const newStatus = user?.IsActive ? "inactive" : "active";
