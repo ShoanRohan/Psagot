@@ -91,7 +91,7 @@ const UsersTable = () => {
                                 {user.role === "Meneger" && (
                                     <button onClick={() => alert(`עריכת משתמש ${user.userId}`)}></button>
                                 )}
-                                <IconButton aria-label="delete" size="small" width='30px'height='34px' color="#F6F7F9">
+                                <IconButton aria-label="delete" className="delete-Button">
                                     <DeleteOutline fontSize="inherit" />
                                   </IconButton>
                                   <IconButton aria-label="edit" size="small" onClick={() => navigate(`/EditUser/${user?.userId}`)} >
