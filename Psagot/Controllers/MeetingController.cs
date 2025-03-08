@@ -52,7 +52,7 @@ namespace Psagot.Controllers
 
             return Ok(meetings);
         }
-        //by
+     
 
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
@@ -63,10 +63,26 @@ namespace Psagot.Controllers
             return Ok(addedMeeting);
         }
 
-        [HttpGet("GetMeetingsPaged")]
-        public async Task<IActionResult> GetMeetingsPage([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+        [HttpGet("GetMeetingsByRange")]
+        public async Task<IActionResult> GetMeetingsByRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
         {
-            var (meetings, totalCount, errorMessage) = await _meetingBL.GetMeetingsPage(page, pageSize);
+            if (startDate > endDate)
+                return BadRequest("Start date cannot be after end date.");
+            var (events, errorMessage) = await _meetingBL.GetMeetingsByRange(startDate, endDate);
+            if (!string.IsNullOrEmpty(errorMessage))
+                return BadRequest(errorMessage); 
+            if (events == null || !events.Any())
+                return NotFound("No meetings found in the specified date range.");
+            return Ok(events);
+        }
+
+
+
+
+        [HttpGet("GetMeetingsByPage")]
+        public async Task<IActionResult> GetMeetingsByPage([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var (meetings, totalCount, errorMessage) = await _meetingBL.GetMeetingsByPage(page, pageSize);
             return meetings == null ? BadRequest(errorMessage) : Ok(new { Meetings = meetings, TotalCount = totalCount });
         }
 
