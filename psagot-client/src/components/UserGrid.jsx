@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllUsers, addUserAction, updateUserAction, deleteUserAction } from '../features/user/userAction';
+import { fetchAllUsers, addUserAction, updateUserAction} from '../features/user/userAction';
 import { useEffect } from 'react';
 import { DataGrid, GridRowModes, GridActionsCellItem } from '@mui/x-data-grid'; 
 import SaveIcon from '@mui/icons-material/Save';
@@ -10,7 +10,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 
-const UserTable = () => {
+const UserGrid = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
 
@@ -142,6 +142,13 @@ const UserTable = () => {
         />
         <input
           type="text"
+          name="password"
+          value={newUser.password}
+          onChange={handleUserInputChange}
+          placeholder="password"
+        />
+        <input
+          type="text"
           name="userTypeName"
           value={newUser.userTypeName}
           onChange={handleUserInputChange}
@@ -156,9 +163,8 @@ const UserTable = () => {
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
       />
-      console.log(users);
     </Box>
   );
 };
 
-export default UserTable;
+export default UserGrid;
