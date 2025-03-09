@@ -1,0 +1,51 @@
+.room-details-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+ margin-left: 0px;
+}
+
+.room-bar {
+  height: 1080px;
+  width: 280px;
+  top: 1080px;
+  left: 1640px;
+  border-top-left-radius: 40px;
+  border-bottom-left-radius: 40px;
+  background-color: #0D1783; /* כחול כהה */
+}
+
+.input-group {
+  margin: 20px 0;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+#RoomNumber{
+  margin: top 50px; ;
+}
+.input-group input { 
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.equipment-group {
+  margin-top: 20px;
+  margin-right: 51px;
+}
+
+.equipment-item {
+  margin-bottom: 10px;
+}
+
+.equipment-item input {
+  margin-right: 10px;
+}
