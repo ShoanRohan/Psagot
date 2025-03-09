@@ -1,6 +1,16 @@
 import * as React from 'react';
+import EyeIcon from '../assets/icons/eye_icon.svg';
 import { AppProvider } from '@toolpad/core/AppProvider';
-import { Box, Button, Typography, TextField, Link } from '@mui/material';
+import {
+	Box,
+	Button,
+	Typography,
+	TextField,
+	Link,
+	IconButton,
+	InputAdornment,
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
@@ -33,6 +43,7 @@ export default function CredentialsSignInPage() {
 	const [passwordError, setPasswordError] = React.useState('');
 	const [formError, setFormError] = React.useState('');
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
+	const [showPassword, setShowPassword] = React.useState(false);
 
 	const validateEmail = (value) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -82,7 +93,7 @@ export default function CredentialsSignInPage() {
 					flexDirection: 'column',
 					justifyContent: 'center',
 					alignItems: 'center',
-					height: '79%',
+					height: '100%',
 					width: '100%',
 					direction: 'rtl',
 					fontFamily: 'Rubik',
@@ -96,13 +107,13 @@ export default function CredentialsSignInPage() {
 						fontWeight: 'bold',
 						color: '#333',
 						fontFamily: 'Rubik',
-						fontSize: '20px',
+						fontSize: '25px',
 					}}
 				>
 					כניסה למערכת
 				</Typography>
 
-				{/* BOX שמכיל את כל שדות הטופס כולל הכפתור */}
+				{/* BOX חיצוני שמכיל את כל שדות הטופס */}
 				<Box
 					component="form"
 					onSubmit={handleSubmit}
@@ -115,69 +126,116 @@ export default function CredentialsSignInPage() {
 						fontFamily: 'Rubik',
 					}}
 				>
-					{/* BOX של שם משתמש, סיסמה ושכחתי סיסמה */}
+					{/* BOX שמכיל את שם משתמש, סיסמה ושכחתי סיסמה */}
 					<Box
 						sx={{
 							display: 'flex',
 							flexDirection: 'column',
 							width: '100%',
-							height: '100%',
-							gap: 2,
+							height: '53%',
+							gap: 1,
 						}}
 					>
-						<TextField
-							label="שם משתמש"
-							name="email"
-							variant="standard"
-							fullWidth
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-							onBlur={() => setEmailError(validateEmail(email))}
-							error={!!emailError}
-							helperText={emailError}
-							InputLabelProps={{
-								style: {
-									textAlign: 'right',
-									width: '100%',
-									fontFamily: 'Rubik',
-									fontSize: '14px',
-								},
-							}}
-						/>
-
-						<TextField
-							label="סיסמה"
-							name="password"
-							type="password"
-							variant="standard"
-							fullWidth
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-							onBlur={() => setPasswordError(validatePassword(password))}
-							error={!!passwordError}
-							helperText={passwordError}
-							InputLabelProps={{
-								style: {
-									textAlign: 'right',
-									width: '100%',
-									fontFamily: 'Rubik',
-									fontSize: '14px',
-								},
-							}}
-						/>
-
-						<Link
-							href="/forgot-password"
+						{/* BOX לשם משתמש וסיסמה */}
+						<Box
 							sx={{
-								fontSize: '12px',
-								color: '#6F6F6F',
-								cursor: 'pointer',
-								textDecoration: 'none',
-								fontFamily: 'Rubik',
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								gap: 2,
 							}}
 						>
-							שכחתי סיסמה
-						</Link>
+							<TextField
+								label="שם משתמש"
+								name="email"
+								variant="standard"
+								fullWidth
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								onBlur={() => setEmailError(validateEmail(email))}
+								error={!!emailError}
+								helperText={emailError}
+								InputLabelProps={{
+									style: {
+										textAlign: 'right',
+										width: '100%',
+										fontFamily: 'Rubik',
+										fontSize: '16px',
+									},
+								
+								}}
+							/>
+
+							<TextField
+								label="סיסמה"
+								name="password"
+								type={showPassword ? 'text' : 'password'}
+								variant="standard"
+								fullWidth
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								onBlur={() => setPasswordError(validatePassword(password))}
+								error={!!passwordError}
+								helperText={passwordError}
+								InputLabelProps={{
+									style: {
+										textAlign: 'right',
+										width: '100%',
+										fontFamily: 'Rubik',
+										fontSize: '16px',
+									},
+								}}
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton
+												aria-label="Toggle password visibility"
+												onClick={() => setShowPassword((prev) => !prev)}
+												edge="end"
+											>
+												{showPassword ? (
+													<img
+														src={EyeIcon}
+														alt="Eye Icon"
+														style={{ width: '20px', height: '20px' }}
+													/>
+												) : (
+													<img
+														src={EyeIcon}
+														alt="Eye Icon"
+														style={{ width: '20px', height: '20px' }}
+													/>
+												)}
+											</IconButton>
+										</InputAdornment>
+									),
+								}}
+							/>
+						</Box>
+
+						{/* BOX של שכחתי סיסמה */}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								height: '4%',
+								justifyContent: 'center',
+							}}
+						>
+							<Link
+								href="/forgot-password"
+								sx={{
+									fontSize: '12px',
+									color: '#6F6F6F',
+									cursor: 'pointer',
+									textDecoration: 'none',
+									fontFamily: 'Rubik',
+								}}
+							>
+								שכחתי סיסמה
+							</Link>
+						</Box>
 					</Box>
 
 					{/* BOX של כפתור הכניסה וההרשמה */}
@@ -186,9 +244,9 @@ export default function CredentialsSignInPage() {
 							display: 'flex',
 							flexDirection: 'column',
 							alignItems: 'center',
-							width: '100%',
-							height: '99%',
-							gap: 1,
+							width: '99%',
+							height: '27%',
+							gap: 5,
 						}}
 					>
 						<Button
@@ -208,31 +266,43 @@ export default function CredentialsSignInPage() {
 								borderRadius: '25px',
 								py: 1,
 								fontSize: '14px',
-								width: '100px',
-								height: '30px',
+								width: '60%',
+								height: '48%',
+								fontSize: '12px',
 								fontFamily: 'Rubik',
 								'&:hover': {
 									backgroundColor: '#112B83',
-
 								},
 							}}
 						>
-							{isSubmitting ? 'מתחבר...' : 'כניסה'}
+							{isSubmitting ? 'מתחבר...' : ' כניסה למערכת'}
 						</Button>
 
-						<Button
-							variant="text"
+						<Box
 							sx={{
-								color: '#6F6F6F',
-								textDecoration: 'underline',
-								fontWeight: 'bold',
-								cursor: 'pointer',
-								fontFamily: 'Rubik',
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								height: '4%',
+								justifyContent: 'center',
+								alignItems: 'center',
 							}}
-							onClick={() => (window.location.href = '/register')}
 						>
-							אין לך חשבון? הירשם
-						</Button>
+							<Button
+								variant="text"
+								sx={{
+									color: '#6F6F6F',
+									textDecoration: 'underline',
+									fontWeight: 'bold',
+									cursor: 'pointer',
+									fontFamily: 'Rubik',
+									fontSize: '12px',
+								}}
+								onClick={() => (window.location.href = '/register')}
+							>
+								אין לך חשבון? הירשם
+							</Button>
+						</Box>
 					</Box>
 				</Box>
 			</Box>
