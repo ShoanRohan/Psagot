@@ -1,0 +1,25 @@
+[data-testid="EditOutlinedIcon"]{
+    background-image:url('../assets/icons/pen-to-square.svg') ;
+    background-size: cover;
+    width: 24px;
+    height: 24px;
+    fill: transparent;  
+    color: transparent;
+  }
+  [data-testid="EditOutlinedIcon"] path {
+    display: none; 
+  }
+  [data-testid="DeleteOutlineIcon"]{
+    background-image:url('../assets/icons/trash.svg') ;
+    background-size: contain;
+    background-repeat: no-repeat; 
+    background-position: center; 
+    width: 24px;
+    height: 24px;
+    fill: transparent;  
+    color: transparent;
+    display: block;
+  }
+  [data-testid="DeleteOutlineIcon"] path {
+    display: none; 
+  }

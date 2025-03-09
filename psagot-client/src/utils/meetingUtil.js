@@ -19,5 +19,11 @@ const getMeetingeById = async (id) => {
     const response = await api.get(`/Meeting/GetMeetingById/${id}`);
     return response.data;
 };
+const GetMeetingsByPage = async (page, pageSize) => {
+    const response = await api.get("/Meeting/GetMeetingsByPage", {
+        params: { page, pageSize }
+    });
+    return response.data;
+};
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage};

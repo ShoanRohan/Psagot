@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -70,25 +71,51 @@ namespace DL
             {
                 return (null, ex.Message);
             }
+
         }
-        public async Task<(IEnumerable<Meeting> Meetings, int TotalCount, string ErrorMessage)> GetMeetingsPage(int page, int pageSize)
+
+        public async Task<(IEnumerable<Meeting> Meetings, string ErrorMessage)> GetMeetingsByRange(DateOnly startDate, DateOnly endDate)
         {
             try
             {
-                var query = _context.Set<Meeting>().AsQueryable();
-                int totalCount = await query.CountAsync();
+                var meetings = await _context.Meetings
+                    .Where(m => m.MeetingDate >= startDate && m.MeetingDate <= endDate)
+                    .ToListAsync();
+                if (meetings == null || !meetings.Any())
+                    return (null, "No meetings found");
+                return (meetings, null);
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"Error in GetMeetingsByRange: {ex.Message}");
+                return (null, "An error occurred while retrieving meetings");
+            }
+        }
 
-                var meetings = await query
+
+
+
+        public async Task<(IEnumerable<Meeting>, int)> GetMeetingsByPage(int page, int pageSize)
+        {
+            try
+            {
+                var query = _context.Meetings.AsQueryable();
+                int totalCount = await query.CountAsync();
+                List<Meeting> meetings = await query
+                    .OrderBy(m => m.MeetingDate)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
 
-                return (meetings, totalCount, null);
+                return (meetings, totalCount);
             }
             catch (Exception ex)
             {
-                return (null, 0, ex.Message);
+               // Console.WriteLine($"Error fetching meetings: {ex.Message}");
+                return (Enumerable.Empty<Meeting>(), 0);
             }
         }
+
+
     }
 }

@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
-import MeetingsTable from '../components/MeetingsTable'
+import MeetingsTable from '../components/MeetingsTable';
 
 const AppRouter = () => {
     return (

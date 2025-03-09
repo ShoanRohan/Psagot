@@ -59,10 +59,36 @@ namespace BL
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
 
-        public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount, string ErrorMessage)> GetMeetingsPage(int page, int pageSize)
+        public async Task<(IEnumerable<EventDTO> Events, string ErrorMessage)> GetMeetingsByRange(DateOnly startDate, DateOnly endDate)
         {
-            var (meetings, totalCount, errorMessage) = await _meetingDL.GetMeetingsPage(page, pageSize);
-            return meetings == null ? (null, 0, errorMessage) : (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount, null);
+            try
+            {
+                var (meetings, errorMessage) = await _meetingDL.GetMeetingsByRange(startDate, endDate);
+                if (meetings == null || !meetings.Any())
+                    return (null, errorMessage ?? "No meetings found");
+                var events = _mapper.Map<IEnumerable<EventDTO>>(meetings);
+                return (events, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, "An error occurred while processing meetings.");
+            }
         }
+
+
+
+        public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount, string ErrorMessage)> GetMeetingsByPage(int page, int pageSize)
+        {
+            try
+            {
+                var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
+                return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount, null);
+            }
+            catch (Exception ex)
+            {
+                return (Enumerable.Empty<MeetingDTO>(), 0, ex.Message);
+            }
+        }
+
     }
 }
