@@ -25,5 +25,6 @@ namespace Entities.DTO
         public TimeOnly? EndTime { get; set; }
 
         public bool IsPartOfSchedule { get; set; }
+        public bool IsPartOfRoom { get; set; }
     }
 }
