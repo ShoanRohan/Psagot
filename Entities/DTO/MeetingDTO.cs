@@ -25,5 +25,7 @@ namespace Entities.DTO
         public TimeOnly? EndTime { get; set; }
 
         public bool IsPartOfSchedule { get; set; }
+
+        public DateTime? StartDate { get; set; }    
     }
 }
