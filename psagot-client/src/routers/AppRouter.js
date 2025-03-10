@@ -10,6 +10,8 @@ const AppRouter = () => {
             <Route path='/' element={<Layout />}>
                 <Route path='/' element={<HomePage />} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>עמוד המפגש</h1>}/>
+
             </Route>
         </Routes>
     );
