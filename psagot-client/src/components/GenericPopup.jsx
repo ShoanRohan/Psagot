@@ -1,71 +1,53 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Typography } from "@mui/material";
+import { Button, DialogActions, DialogContent, DialogContentText, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { DialogGeneric, TitleGeneric, XButton } from "../style/GenericPopupStyle";
 
-const GenericPopup = ({ open, onClose, title, children, onSave, onCancel, showCancelButton = true, showSaveButton = true }) => {
+const GenericPopup = ({ open, onClose, onSave, onCancel }) => {
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby="dialog-title"
-      sx={{
-        "& .MuiDialog-paper": { padding: 2, borderRadius: 2, boxShadow: 5, width: "300px", textAlign: "center" },
-      }}
-    >
-      <DialogTitle
-        id="dialog-title"
-        sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "1rem" }}
-      >
-        <Typography variant="h6" sx={{ fontSize: "0.9rem" }}>
-          {title}
-        </Typography>
-        <IconButton onClick={onClose} sx={{ fontSize: "small", padding: "5px" }}>
-          <CloseIcon fontSize="small" />
-        </IconButton>
-      </DialogTitle>
+    <DialogGeneric open={open} onClose={onClose}>
+      {/* כותרת הדיאלוג */}
+      <TitleGeneric>
+        שמירת מפגש
+        <XButton onClick={onClose}>
+          <CloseIcon />
+        </XButton>
+      </TitleGeneric>
 
+      {/* תוכן הפופאפ */}
       <DialogContent>
-        <DialogContentText>{children}</DialogContentText>
+        <Grid container justifyContent="center" textAlign="center">
+          <DialogContentText sx={{ fontSize: "18px", fontWeight: "500" }}>
+            האם לשמור את המפגש למרות שלא נמצא חדר מתאים?
+            <br />
+            תקבל על כך התראה בכניסה למערכת.
+          </DialogContentText>
+        </Grid>
       </DialogContent>
 
-      {showCancelButton &&(
-        <DialogActions sx={{ justifyContent: "center", gap: 2, marginBottom: 1 }}>
-          {onCancel && (
-            <Button
-              variant="outlined"
-              onClick={onCancel}
-              sx={{ borderRadius: "20px", borderColor: "#2196F3", color: "#2196F3" }}
-            >
-              ביטול
-            </Button>
-          )}
-          {onSave && (
-            <Button
-              variant="contained"
-              onClick={onSave}
-              autoFocus
-              sx={{ borderRadius: "20px", backgroundColor: "#2196F3", color: "white" }}
-            >
-              שמור
-            </Button>
-          )}
-        </DialogActions>
-      )}
-    </Dialog>
+      {/* כפתורים */}
+      <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+        {onCancel && (
+          <Button variant="outlined" onClick={onCancel} sx={{ borderRadius: "20px" }}>
+            ביטול
+          </Button>
+        )}
+        {onSave && (
+          <Button variant="contained" onClick={onSave} sx={{ borderRadius: "20px" }}>
+            שמור
+          </Button>
+        )}
+      </DialogActions>
+    </DialogGeneric>
   );
 };
 
 GenericPopup.propTypes = {
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  children: PropTypes.node,
   onSave: PropTypes.func,
   onCancel: PropTypes.func,
-  showCancelButton: PropTypes.bool,
-  showSaveButton: PropTypes.bool,
-
 };
 
 export default GenericPopup;
