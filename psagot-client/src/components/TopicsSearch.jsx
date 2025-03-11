@@ -29,15 +29,14 @@ const sharedStyles = {
 };
 
 const buttonStyles = {
-  width: "109px",
-  height: "44px",
-  gap: "8px",
+  minWidth: "100px",
+  height: "40px",
   borderRadius: "50px",
   boxShadow: "none",
   fontFamily: "Rubik",
   fontWeight: 400,
   fontSize: "16px",
-  lineHeight: "18.96px",
+  textTransform: "none",
 };
 
 const TopicsSearch = ({ id }) => {
@@ -61,36 +60,18 @@ const TopicsSearch = ({ id }) => {
   return (
     <Box
       sx={{
-        width: "90%",
-        margin: "auto",
-        position: "relative",
-        top: "100px",
-        borderRadius: "10px",
-        padding: "25px 24px",
-        backgroundColor: "white",
+        width: "100%",
         display: "flex",
-        flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+        padding: "10px 20px",
+        backgroundColor: "white",
         fontFamily: "Rubik",
-        fontWeight: 400,
-        fontSize: "16px",
-        lineHeight: "18.96px",
-        textAlign: "right",
         direction: "rtl",
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "30px",
-          flexWrap: "wrap",
-          flex: 1,
-          marginRight: "auto",
-        }}
-      >
-        {/* נושא */}
+      {/* שדות בחירה */}
+      <Box sx={{ display: "flex", gap: "20px" }}>
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>נושא</InputLabel>
           <Select
@@ -108,7 +89,6 @@ const TopicsSearch = ({ id }) => {
           </Select>
         </FormControl>
 
-        {/* שם מרצה */}
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>שם מרצה</InputLabel>
           <Select
@@ -127,26 +107,23 @@ const TopicsSearch = ({ id }) => {
         </FormControl>
       </Box>
 
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "15px",
-          marginLeft: "auto",
-        }}
-      >
-        {/* ניקוי */}
+      {/* כפתורים */}
+      <Box sx={{ display: "flex", gap: "10px" }}>
         <Button
-          variant="contained"
+          variant="outlined"
           sx={buttonStyles}
-          startIcon={<FilterAltOffOutlinedIcon />}
+          startIcon={<FilterAltOffOutlinedIcon sx={{ marginLeft: 1 }}/>}
+          // startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
           onClick={() => setFilters(initialState)}
         >
           ניקוי
         </Button>
 
-        {/* חיפוש */}
-        <Button variant="contained" sx={buttonStyles} startIcon={<SearchIcon />}>
+        <Button
+          variant="contained"
+          sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
+          startIcon={<SearchIcon sx={{ marginLeft: 1 }}/>}
+        >
           חיפוש
         </Button>
       </Box>
