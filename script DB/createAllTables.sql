@@ -1,5 +1,4 @@
-﻿
--- îçé÷ú èáìú UserType
+﻿-- îçé÷ú èáìú UserType
 DROP TABLE IF EXISTS UserType;
 
 -- éöéøú èáìú Days
