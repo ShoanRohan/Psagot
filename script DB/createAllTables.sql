@@ -1,13 +1,13 @@
--- מחיקת טבלת UserType
+-- ???÷? ???? UserType
 DROP TABLE IF EXISTS UserType;
 
--- יצירת טבלת Days
+-- ????? ???? Days
 CREATE TABLE Days (
     DayId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(10) NOT NULL,
     Descr NVARCHAR(10) NULL
 );
--- יצירת טבלת Courses
+-- ????? ???? Courses
 CREATE TABLE Courses (
     CourseId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -19,7 +19,7 @@ CREATE TABLE Courses (
     NumberOfStudents INT NOT NULL,
     Notes NVARCHAR(MAX) NULL
 );
--- יצירת טבלת DaysForCourse
+-- ????? ???? DaysForCourse
 CREATE TABLE DaysForCourse (
     DaysForCourseId INT IDENTITY PRIMARY KEY,
     DayId INT NOT NULL,
@@ -29,12 +29,12 @@ CREATE TABLE DaysForCourse (
     FOREIGN KEY (DayId) REFERENCES Days(DayId),
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
 );
--- יצירת טבלת UserTypes
+-- ????? ???? UserTypes
 CREATE TABLE UserTypes (
     UserTypeId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL
 );
--- יצירת טבלת Users
+-- ????? ???? Users
 CREATE TABLE Users (
     UserId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE Users (
     IsActive BIT DEFAULT 1 NOT NULL,
     FOREIGN KEY (UserTypeId) REFERENCES UserTypes(UserTypeId)
 );
--- יצירת טבלת Topics
+-- ????? ???? Topics
 CREATE TABLE Topics (
     TopicId INT IDENTITY PRIMARY KEY,
     CourseId INT NOT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE Topics (
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId),
     FOREIGN KEY (TeacherId) REFERENCES Users(UserId)
 );
--- יצירת טבלת ScheduleForTopic
+-- ????? ???? ScheduleForTopic
 CREATE TABLE ScheduleForTopic (
     ScheduleForTopicId INT IDENTITY PRIMARY KEY,
     TopicId INT NOT NULL,
@@ -70,7 +70,7 @@ CREATE TABLE ScheduleForTopic (
     FOREIGN KEY (TopicId) REFERENCES Topics(TopicId),
     FOREIGN KEY (DayId) REFERENCES Days(DayId)
 );
--- יצירת טבלת Rooms
+-- ????? ???? Rooms
 CREATE TABLE Rooms (
     RoomId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE Rooms (
     Speakers BIT NOT NULL,
     Capacity INT NOT NULL
 );
--- יצירת טבלת Meetings
+-- ????? ???? Meetings
 CREATE TABLE Meetings (
     MeetingId INT IDENTITY PRIMARY KEY,
     ScheduleForTopicId INT NULL,
@@ -94,4 +94,3 @@ CREATE TABLE Meetings (
     FOREIGN KEY (RoomId) REFERENCES Rooms(RoomId),
     FOREIGN KEY (DayId) REFERENCES Days(DayId)
 );
-
