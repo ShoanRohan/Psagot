@@ -94,4 +94,3 @@ CREATE TABLE Meetings (
     FOREIGN KEY (RoomId) REFERENCES Rooms(RoomId),
     FOREIGN KEY (DayId) REFERENCES Days(DayId)
 );
-

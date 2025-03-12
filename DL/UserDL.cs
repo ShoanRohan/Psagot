@@ -80,8 +80,8 @@ namespace DL
             try
             {
                 var users = await _context.Users
-                    .Where(u => u.userType != null && (u.userType.Name == "Coordinator" || u.userType.Name == "Lecturer"))
-                    .Include(u => u.userType)
+                    .Where(u => u.UserType != null && (u.UserType.Name == "Coordinator" || u.UserType.Name == "Lecturer"))
+                    .Include(u => u.UserType)
                     .ToListAsync();
 
                 return (users, null);
