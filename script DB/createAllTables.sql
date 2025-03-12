@@ -1,13 +1,14 @@
--- ???�? ???? UserType
+﻿
+-- îçé÷ú èáìú UserType
 DROP TABLE IF EXISTS UserType;
 
--- ????? ???? Days
+-- éöéøú èáìú Days
 CREATE TABLE Days (
     DayId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(10) NOT NULL,
     Descr NVARCHAR(10) NULL
 );
--- ????? ???? Courses
+-- éöéøú èáìú Courses
 CREATE TABLE Courses (
     CourseId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -19,7 +20,7 @@ CREATE TABLE Courses (
     NumberOfStudents INT NOT NULL,
     Notes NVARCHAR(MAX) NULL
 );
--- ????? ???? DaysForCourse
+-- éöéøú èáìú DaysForCourse
 CREATE TABLE DaysForCourse (
     DaysForCourseId INT IDENTITY PRIMARY KEY,
     DayId INT NOT NULL,
@@ -29,12 +30,12 @@ CREATE TABLE DaysForCourse (
     FOREIGN KEY (DayId) REFERENCES Days(DayId),
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
 );
--- ????? ???? UserTypes
+-- éöéøú èáìú UserTypes
 CREATE TABLE UserTypes (
     UserTypeId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL
 );
--- ????? ???? Users
+-- éöéøú èáìú Users
 CREATE TABLE Users (
     UserId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -45,7 +46,7 @@ CREATE TABLE Users (
     IsActive BIT DEFAULT 1 NOT NULL,
     FOREIGN KEY (UserTypeId) REFERENCES UserTypes(UserTypeId)
 );
--- ????? ???? Topics
+-- éöéøú èáìú Topics
 CREATE TABLE Topics (
     TopicId INT IDENTITY PRIMARY KEY,
     CourseId INT NOT NULL,
@@ -60,7 +61,7 @@ CREATE TABLE Topics (
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId),
     FOREIGN KEY (TeacherId) REFERENCES Users(UserId)
 );
--- ????? ???? ScheduleForTopic
+-- éöéøú èáìú ScheduleForTopic
 CREATE TABLE ScheduleForTopic (
     ScheduleForTopicId INT IDENTITY PRIMARY KEY,
     TopicId INT NOT NULL,
@@ -70,7 +71,7 @@ CREATE TABLE ScheduleForTopic (
     FOREIGN KEY (TopicId) REFERENCES Topics(TopicId),
     FOREIGN KEY (DayId) REFERENCES Days(DayId)
 );
--- ????? ???? Rooms
+-- éöéøú èáìú Rooms
 CREATE TABLE Rooms (
     RoomId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -79,7 +80,7 @@ CREATE TABLE Rooms (
     Speakers BIT NOT NULL,
     Capacity INT NOT NULL
 );
--- ????? ???? Meetings
+-- éöéøú èáìú Meetings
 CREATE TABLE Meetings (
     MeetingId INT IDENTITY PRIMARY KEY,
     ScheduleForTopicId INT NULL,
