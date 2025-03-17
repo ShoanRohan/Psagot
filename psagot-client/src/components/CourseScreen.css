@@ -1,0 +1,50 @@
+.course-container {
+    width: 90%;
+    margin: auto;
+    margin-top: 24px;
+    direction: rtl;
+  }
+  
+  .course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .course-title {
+    font-size: 40px;
+    font-weight: 700;
+    font-family: "Rubik", sans-serif;
+    color: var(--Brand-90, #0D1783);
+    text-align: right;
+    text-transform: capitalize;
+  }
+  
+  .course-status {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  .course-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .add-topic-btn {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    border-radius: 25px !important;
+    padding: 8px 16px !important;
+    gap: 8px !important;
+  }
+  
+  .course-tabs {
+    border-bottom: 1px solid #ddd;
+    margin-top: 16px;
+  }
+  
+  .course-tab {
+    font-weight: bold !important;
+  }
+  
