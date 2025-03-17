@@ -6,6 +6,8 @@ import CalendarHeader from "../components/CalendarHeader";
 import Calendar from "../components/Calendar";
 import { useNavigate } from "react-router-dom";
 
+
+// הצגת לוח השנה, כותרות ושליפת האירועים
 const CalendarPage = () => {
     const [currentDate, setCurrentDate] = useState(dayjs());
     const [view, setView] = useState("dayGridMonth");
@@ -37,8 +39,6 @@ const CalendarPage = () => {
         ];
         setEvents(fetchedEvents);
     };
-    
-
     
 
     return (

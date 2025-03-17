@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "./Calendar";
-import { TextField, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import moment from "moment";
-import NavigationBar from "./NavigationBar"; // ייבוא הקומפוננטה החדשה
+import NavigationBar from "./NavigationBar";
 
 const DayView = ({ events, fetchEvents }) => {
     const [searchDate, setSearchDate] = useState(moment());

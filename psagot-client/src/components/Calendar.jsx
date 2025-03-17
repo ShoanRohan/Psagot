@@ -1,6 +1,6 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid"; // נוסף עכשיו
+import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import heLocale from "@fullcalendar/core/locales/he";
 import { Box, Typography } from "@mui/material";
@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 
 const Calendar = ({ currentDate, view, events }) => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   return (
     <CalendarStyle>
       <Box sx={{ display: "grid", placeItems: "center", width: "100%" }}>
@@ -53,16 +53,16 @@ const Calendar = ({ currentDate, view, events }) => {
                 fontWeight: "600",
                 padding: "8px",
                 backgroundColor: "#F8F9FC",
-                width: "65px", // מגדיר רוחב קבוע לכל כותרת יום
+                width: "65px", //  רוחב קבוע לכל כותרת יום
               }}>
                 {dayLetters[args.date.getDay()]}
               </Box>
             );
           }}
 
-
+          //תאריכים עברי ולועזי
           dayCellContent={(args) => {
-            // מציג את התאריך רק בתצוגת חודש
+            // יציג את התאריך רק בתצוגת חודש
             if (view === "dayGridMonth") {
               const gregorianDate = args.date;
               const hebrewDate = new HDate(gregorianDate);
@@ -72,9 +72,9 @@ const Calendar = ({ currentDate, view, events }) => {
                 <Box
                   sx={{
                     display: "flex !important",
-                    flexDirection: "row !important", // שמים את התאריכים בשורה אחת
-                    justifyContent: "space-between !important", // מוודאים שהתאריכים יהיו בקצוות
-                    alignItems: "center !important", // מוודאים שהכל מיושר אנכית
+                    flexDirection: "row !important",
+                    justifyContent: "space-between !important",
+                    alignItems: "center !important",
                     flexWrap: "nowrap !important", // מונע מהמילים לעבור לשורה חדשה
                     width: "100% !important",
                     padding: "6px !important",
@@ -89,7 +89,7 @@ const Calendar = ({ currentDate, view, events }) => {
                       fontWeight: "500 !important",
                       fontSize: "16px !important",
                       direction: "rtl !important",
-                      width: "auto !important", // לא קובעים רוחב קבוע
+                      width: "auto !important",
                       marginLeft: "60px",
                     }}
                   >
@@ -104,10 +104,8 @@ const Calendar = ({ currentDate, view, events }) => {
                       fontWeight: "500 !important",
                       fontSize: "16px !important",
                       direction: "ltr !important",
-                      width: "auto !important", // לא קובעים רוחב קבוע
+                      width: "auto !important",
                       marginRight: "60px",
-
-
                     }}
                   >
                     {gregorianDate.getDate()}
@@ -121,10 +119,8 @@ const Calendar = ({ currentDate, view, events }) => {
 
           eventClick={(info) => {
             console.log("ID של האירוע:", info.event.id); // בדיקה
-            navigate(`/meetings/${info.event.id}`); // לנווט עם מזהה תקין
-        }}
-        
-
+            navigate(`/meetings/${info.event.id}`);
+          }}
 
 
           events={events}
@@ -136,7 +132,7 @@ const Calendar = ({ currentDate, view, events }) => {
               : [];
 
             if (overlappingEvents.length > 1) {
-              const width = 100 / overlappingEvents.length; // מחלק את הרוחב
+              const width = 100 / overlappingEvents.length; //מחלק את הרוחב של האירוע
               info.el.style.width = `${width}%`;
             }
           }}
@@ -169,7 +165,7 @@ const Calendar = ({ currentDate, view, events }) => {
                   whiteSpace: "normal",
                   wordBreak: "keep-all",
                   textOverflow: "ellipsis",
-                  fontSize, // הוספתי את גודל הטקסט הדינמי
+                  fontSize, //  גודל הטקסט דינמי
                   ...(isMonthView && {
                     maxHeight: "19.17px",
                     minHeight: "19.17px",

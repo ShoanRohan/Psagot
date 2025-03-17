@@ -1,6 +1,5 @@
 import { Button, ButtonGroup, Typography, Box, IconButton, useMediaQuery } from "@mui/material";
 import pdfIcon from "../assets/imgs/pdf.png";
-import dayjs from "dayjs";
 import "dayjs/locale/he";
 import NavigationBar from "./NavigationBar";
 import jsPDF from "jspdf";
@@ -77,10 +76,9 @@ const CalendarHeader = ({ currentDate, setCurrentDate, view, setView }) => {
                     sx={{
                         display: "flex",
                         flexWrap: "nowrap",
-                        gap: "4px", // מרווח קטן יותר
+                        gap: "4px",
                         minWidth: 0,
                         overflow: "hidden", // הסרת גלילה
-                        // marginLeft: "0 !important",
                       }}
                 >
                     {[{ label: "תצוגת חודש", value: "dayGridMonth" },
