@@ -19,6 +19,10 @@ public partial class User
 
     public bool IsActive { get; set; }
 
+    public virtual ICollection<Course> Courses { get; set; } = new List<Course>();
+
+    public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
+
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
     public virtual UserType UserType { get; set; } = null!;

@@ -25,9 +25,15 @@ public partial class Topic
 
     public bool Microphone { get; set; }
 
+    public int? StatusId { get; set; }
+
     public virtual Course Course { get; set; } = null!;
 
+    public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
+
     public virtual ICollection<ScheduleForTopic> ScheduleForTopics { get; set; } = new List<ScheduleForTopic>();
+
+    public virtual StatusTopic? Status { get; set; }
 
     public virtual User Teacher { get; set; } = null!;
 }
