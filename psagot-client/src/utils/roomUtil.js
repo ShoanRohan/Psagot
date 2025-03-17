@@ -25,8 +25,7 @@ const getRoomsScheduleByDate = async (dateTime) =>{
     return response.data;
 }
 const getAllRoomsBySearchWithPagination = async (searchRoom,pageNumber,pageSize) =>{
-    const response = await api.get(`/Room/GetAllRoomsBySearchWithPagination`,{params:{...searchRoom, pageNumber,pageSize}});
+    const response = await api.get(`/Room/GetAllRoomsBySearchWithPagination`,{params:{...searchRoom.roomName ,...searchRoom.mic,...searchRoom.projector ,...searchRoom.computer ,...searchRoom.numOfSeats , pageNumber,pageSize}});
     return response.data;
 }
-
 export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomsScheduleByDate,getAllRoomsBySearchWithPagination };
