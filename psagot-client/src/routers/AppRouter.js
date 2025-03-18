@@ -3,7 +3,8 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import { Register } from '../components/Register';
-import Courses from '../components/Courses';
+import CoursesGrid from '../components/CourseGrid';
+import CourseManagement from '../components/CourseManagement';
 
 
 
@@ -13,7 +14,8 @@ const AppRouter = () => {
             <Route path='/' element={<Layout/>}>
                 <Route path='/' element={<HomePage/>}/>
                 <Route path='/Register' element={<Register/>}/>
-                <Route path='/Courses' element={<Courses />} />
+                <Route path='/CourseGrid' element={<CoursesGrid />} />
+                <Route path='/CourseManagement' element={<CourseManagement />} />
             </Route>
         </Routes>
     );

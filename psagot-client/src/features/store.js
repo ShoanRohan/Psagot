@@ -8,13 +8,15 @@ import meetingReducer from './meeting/meetingSlice';
 import daysForCourseReducer from './daysForCourse/daysForCourseSlice';
 import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
+import CoursesGrid from '../components/CourseGrid';
 
 const store = configureStore({
   reducer: {
     userType: userTypeReducer, 
     room: roomReducer,
     user: userReduser, 
-    course: courseReducer,
+    CoursesGrid: courseReducer,
+    CoursesManagement: courseReducer,
     scheduleForTopic: scheduleForTopicReducer, 
     meeting: meetingReducer, 
     daysForCourse: daysForCourseReducer, 
