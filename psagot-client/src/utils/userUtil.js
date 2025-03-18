@@ -23,5 +23,3 @@ const updatedUser = async (updateUser) => {
 
 
 export { getAllUsers, getUserById, addUser, updatedUser };
-
-

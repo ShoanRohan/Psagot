@@ -4,6 +4,7 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
+import UserManagement from '../components/UserManagement';
 
 const AppRouter = () => {
     return (
@@ -15,6 +16,10 @@ const AppRouter = () => {
                 
             <Route path='/' element={<LoginPage/>}> 
                 <Route path='login' element={<Login/>}/> 
+        <Routes>
+            <Route path='/' element={<Layout/>}>
+                <Route path='/' element={<HomePage/>}/>
+                <Route path='/user' element={<UserManagement/>}/>
             </Route>
            
         </Routes>
