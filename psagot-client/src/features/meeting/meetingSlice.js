@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from './meetingActions';
 
 const initialState = {
   meetings: [],

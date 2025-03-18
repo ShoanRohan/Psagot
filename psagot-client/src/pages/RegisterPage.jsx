@@ -1,12 +1,11 @@
 import React from 'react';
-import Login from '../components/Login';
+import Register from '../components/Register'; 
 import { Box } from '@mui/material';
-import loginImage from '../assets/imgs/login_image.png';
+import loginImage from '../assets/imgs/login_image.png'; 
 import logoPsagot from '../assets/imgs/logo_psagot.svg';
 import { Outlet } from 'react-router-dom';
 
-
-const LoginPage = () => {
+const RegisterPage = () => {
 	return (
 		<Box
 			sx={{
@@ -31,7 +30,6 @@ const LoginPage = () => {
 					justifyContent: 'center',
 					borderBottomLeftRadius: '5%',
 					borderTopLeftRadius: '5%',
-					
 				}}
 			>
 				<Box
@@ -43,12 +41,10 @@ const LoginPage = () => {
 						justifyContent: 'flex-start',
 						alignItems: 'center',
 						gap: 10,
-						
 					}}
 				>
 					<Box
 						sx={{
-							
 							width: '84%',
 							height: '24%',
 							display: 'flex',
@@ -71,7 +67,7 @@ const LoginPage = () => {
 
 					<Box>
 						<Outlet />
-						{/* <Login/> */}
+						{/* <Register/> */} 
 					</Box>
 				</Box>
 			</Box>
@@ -93,4 +89,4 @@ const LoginPage = () => {
 	);
 };
 
-export default LoginPage;
+export default RegisterPage;
