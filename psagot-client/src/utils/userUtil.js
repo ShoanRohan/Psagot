@@ -21,7 +21,7 @@ const updatedUser = async (updateUser) => {
 };
 
 const getCoordinators = async () => {
-    const response = await api.get('/User/GetCoordinators'); 
+    const response = await api.get('/User/GetCoordinators');
     return response.data;
 };
 

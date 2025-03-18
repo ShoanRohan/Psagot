@@ -6,9 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCoordinators } from "../features/user/userAction";
 
 // סטייל לשדות בחירה
+
 const sharedStyles = {
   width: "150px",
-  height: "43px",
+  //height: "43px",
   textAlign: "right",
   direction: "rtl",
   "& .MuiInputLabel-root": {
@@ -21,10 +22,9 @@ const sharedStyles = {
   },
 };
 
-// סטייל לכפתורים
 const buttonStyles = {
-  width: "109px",
   height: "44px",
+  padding: "0px 20px",
   gap: "8px",
   borderRadius: "50px",
   boxShadow: "none",
@@ -36,7 +36,7 @@ const buttonStyles = {
 
 const CourseSearch = () => {
   const dispatch = useDispatch();
-  const coordinators = useSelector((state) => state.user.coordinators);
+  const coordinators = useSelector((state) => state.user.coordinatorsCode);
   const currentYear = new Date().getFullYear();
 
   const initialState = {
@@ -47,10 +47,15 @@ const CourseSearch = () => {
   };
 
   const [filters, setFilters] = useState(initialState);
+  
 
   useEffect(() => {
-    dispatch(fetchCoordinators());
+     dispatch(fetchCoordinators());
   }, [dispatch]);
+  
+  useEffect(() => {
+    console.log(coordinators); // Undefined
+  }, [coordinators]);
 
   // פונקציה לטיפול במיקוד בשדה השנה
   const handleYearFocus = () => {
@@ -77,42 +82,42 @@ const CourseSearch = () => {
 
   return (
     <Box
+    sx={{
+      width: "90%",
+      margin: "auto",
+      position: "relative",
+      top: "100px",
+      borderRadius: "10px",
+      padding: "25px 24px",
+      backgroundColor: "white",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      fontFamily: "Rubik",
+      fontWeight: 400,
+      fontSize: "16px",
+      lineHeight: "18.96px",
+      textAlign: "right",
+      direction: "rtl",
+    }}
+  >
+    <Box
       sx={{
-        width: "90%",
-        margin: "auto",
-        position: "relative",
-        top: "100px",
-        borderRadius: "10px",
-        padding: "25px 24px",
-        backgroundColor: "white",
         display: "flex",
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        fontFamily: "Rubik",
-        fontWeight: 400,
-        fontSize: "16px",
-        lineHeight: "18.96px",
-        textAlign: "right",
-        direction: "rtl",
+        justifyContent: "flex-start",
+        gap: "20px",
+        flexWrap: "nowrap",
+        flex: 1,
+        marginRight: 0,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: "30px",
-          flexWrap: "wrap",
-          flex: 1,
-          marginRight: "auto",
-        }}
-      >
         {/* קוד קורס - ערך מספרי בלבד */}
         <TextField
           label="קוד קורס"
           type="number"
           variant="standard"
-          sx={sharedStyles}
+          sx={{ ...sharedStyles, order: -1}}
           value={filters.courseCode}
           onChange={handleCourseCodeChange}
         />
@@ -125,6 +130,7 @@ const CourseSearch = () => {
           value={filters.courseName}
           onChange={(e) => setFilters({ ...filters, courseName: e.target.value })}
         />
+        
 
         {/* רכזת - מתוך רשימה */}
         <FormControl variant="standard" sx={sharedStyles}>
@@ -134,7 +140,7 @@ const CourseSearch = () => {
             onChange={(e) => setFilters({ ...filters, courseCoordinator: e.target.value })}
             sx={sharedStyles}
           >
-            {coordinators.map((coordinator) => (
+            {coordinators && coordinators?.map((coordinator) => (
               <MenuItem key={coordinator.userId} value={coordinator.userId}>
                 {coordinator.name}
               </MenuItem>
@@ -142,7 +148,6 @@ const CourseSearch = () => {
           </Select>
         </FormControl>
 
-        {/* שנה - ערך מספרי בלבד */}
         <TextField
           variant="standard"
           label="שנה"
@@ -158,28 +163,31 @@ const CourseSearch = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           gap: "15px",
-          marginLeft: "auto",
         }}
       >
-        {/* ניקוי כל השדות לברירת המחדל */}
         <Button
-          variant="contained"
-          sx={buttonStyles}
+          variant="outlined"
+          sx={{
+            ...buttonStyles,
+          }}
+          
           startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => setFilters(initialState)}
         >
           ניקוי
         </Button>
 
-        {/* חיפוש */}
-        <Button variant="contained" sx={buttonStyles} startIcon={<SearchIcon />}>
+        <Button
+          variant="contained"
+          sx={buttonStyles}
+          startIcon={<SearchIcon />}
+        >
           חיפוש
         </Button>
       </Box>
     </Box>
   );
 };
-
 export default CourseSearch;

@@ -20,7 +20,7 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
     return data;
 });
 
-export const fetchCoordinators = createAsyncThunk ("user/fetchCoordinators", async () => {
+export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", async () => {
         const data = await getCoordinators();
         return data;
 });
