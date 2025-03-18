@@ -15,9 +15,9 @@ import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 
-const signUp = async (formData, setError) => {
+const signIn = async (formData, setError) => {
 	try {
-		const response = await api.post('/auth/register', {
+		const response = await api.post('/auth/login', {
 			email: formData.get('email'),
 			password: formData.get('password'),
 		});
@@ -26,7 +26,7 @@ const signUp = async (formData, setError) => {
 			localStorage.setItem('token', response.data.token);
 			return { success: true };
 		} else {
-			setError('הרשמה נכשלה, אנא בדוק את הפרטים.');
+			setError('התחברות נכשלה, אנא בדוק את הפרטים.');
 			return { success: false };
 		}
 	} catch (error) {
@@ -35,18 +35,15 @@ const signUp = async (formData, setError) => {
 	}
 };
 
-export default function CredentialsSignUpPage() {
+export default function CredentialsSignInPage() {
 	const theme = useTheme();
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
-	const [confirmPassword, setConfirmPassword] = React.useState('');
 	const [emailError, setEmailError] = React.useState('');
 	const [passwordError, setPasswordError] = React.useState('');
-	const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
 	const [formError, setFormError] = React.useState('');
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
-	const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
 	const validateEmail = (value) => {
 		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,11 +58,6 @@ export default function CredentialsSignUpPage() {
 		return '';
 	};
 
-	const validateConfirmPassword = (value) => {
-		if (value !== password) return 'הסיסמאות אינן תואמות';
-		return '';
-	};
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setFormError('');
@@ -73,13 +65,11 @@ export default function CredentialsSignUpPage() {
 
 		const emailValidation = validateEmail(email);
 		const passwordValidation = validatePassword(password);
-		const confirmPasswordValidation = validateConfirmPassword(confirmPassword);
 
 		setEmailError(emailValidation);
 		setPasswordError(passwordValidation);
-		setConfirmPasswordError(confirmPasswordValidation);
 
-		if (emailValidation || passwordValidation || confirmPasswordValidation) {
+		if (emailValidation || passwordValidation) {
 			setIsSubmitting(false);
 			return;
 		}
@@ -88,7 +78,7 @@ export default function CredentialsSignUpPage() {
 		formData.append('email', email);
 		formData.append('password', password);
 
-		const result = await signUp(formData, setFormError);
+		const result = await signIn(formData, setFormError);
 		if (!result.success) {
 			setIsSubmitting(false);
 		}
@@ -96,6 +86,7 @@ export default function CredentialsSignUpPage() {
 
 	return (
 		<AppProvider theme={theme}>
+			{/* BOX חיצוני שמכיל את כל הקומפוננטה */}
 			<Box
 				sx={{
 					display: 'flex',
@@ -119,9 +110,10 @@ export default function CredentialsSignUpPage() {
 						fontSize: '25px',
 					}}
 				>
-					הרשמה למערכת
+					כניסה למערכת
 				</Typography>
 
+				{/* BOX חיצוני שמכיל את כל שדות הטופס */}
 				<Box
 					component="form"
 					onSubmit={handleSubmit}
@@ -134,6 +126,7 @@ export default function CredentialsSignUpPage() {
 						fontFamily: 'Rubik',
 					}}
 				>
+					{/* BOX שמכיל את שם משתמש, סיסמה ושכחתי סיסמה */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -143,6 +136,7 @@ export default function CredentialsSignUpPage() {
 							gap: 1,
 						}}
 					>
+						{/* BOX לשם משתמש וסיסמה */}
 						<Box
 							sx={{
 								display: 'flex',
@@ -168,6 +162,7 @@ export default function CredentialsSignUpPage() {
 										fontFamily: 'Rubik',
 										fontSize: '16px',
 									},
+								
 								}}
 							/>
 
@@ -216,55 +211,34 @@ export default function CredentialsSignUpPage() {
 									),
 								}}
 							/>
+						</Box>
 
-							<TextField
-								label="אימות סיסמה"
-								name="confirmPassword"
-								type={showConfirmPassword ? 'text' : 'password'}
-								variant="standard"
-								fullWidth
-								value={confirmPassword}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								onBlur={() => setConfirmPasswordError(validateConfirmPassword(confirmPassword))}
-								error={!!confirmPasswordError}
-								helperText={confirmPasswordError}
-								InputLabelProps={{
-									style: {
-										textAlign: 'right',
-										width: '100%',
-										fontFamily: 'Rubik',
-										fontSize: '16px',
-									},
+						{/* BOX של שכחתי סיסמה */}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								height: '4%',
+								justifyContent: 'center',
+							}}
+						>
+							<Link
+								href="/forgot-password"
+								sx={{
+									fontSize: '12px',
+									color: '#6F6F6F',
+									cursor: 'pointer',
+									textDecoration: 'none',
+									fontFamily: 'Rubik',
 								}}
-								InputProps={{
-									endAdornment: (
-										<InputAdornment position="end">
-											<IconButton
-												aria-label="Toggle confirm password visibility"
-												onClick={() => setShowConfirmPassword((prev) => !prev)}
-												edge="end"
-											>
-												{showConfirmPassword ? (
-													<img
-														src={EyeIcon}
-														alt="Eye Icon"
-														style={{ width: '20px', height: '20px' }}
-													/>
-												) : (
-													<img
-														src={EyeIcon}
-														alt="Eye Icon"
-														style={{ width: '20px', height: '20px' }}
-													/>
-												)}
-											</IconButton>
-										</InputAdornment>
-									),
-								}}
-							/>
+							>
+								שכחתי סיסמה
+							</Link>
 						</Box>
 					</Box>
 
+					{/* BOX של כפתור הכניסה וההרשמה */}
 					<Box
 						sx={{
 							display: 'flex',
@@ -276,11 +250,16 @@ export default function CredentialsSignUpPage() {
 						}}
 					>
 						<Box sx={{ height: '10px' }} />
-
 						<Button
 							type="submit"
 							variant="contained"
-							disabled={isSubmitting || !email || !password || !confirmPassword || emailError || passwordError || confirmPasswordError}
+							disabled={
+								isSubmitting ||
+								!email ||
+								!password ||
+								emailError ||
+								passwordError
+							}
 							sx={{
 								backgroundColor: '#1976d2',
 								color: '#fff',
@@ -297,7 +276,7 @@ export default function CredentialsSignUpPage() {
 								},
 							}}
 						>
-							{isSubmitting ? 'נרשם...' : 'הרשמה למערכת'}
+							{isSubmitting ? 'מתחבר...' : ' כניסה למערכת'}
 						</Button>
 
 						<Box
@@ -320,9 +299,9 @@ export default function CredentialsSignUpPage() {
 									fontFamily: 'Rubik',
 									fontSize: '12px',
 								}}
-								onClick={() => (window.location.href = '/login')}
+								onClick={() => (window.location.href = '/register')}
 							>
-								כבר יש לך חשבון? התחבר
+								אין לך חשבון? הירשם
 							</Button>
 						</Box>
 					</Box>

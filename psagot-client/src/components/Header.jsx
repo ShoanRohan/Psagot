@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const navigate = useNavigate();
-
   return (
     <AppBar position="sticky">
       <Toolbar>
@@ -14,6 +13,9 @@ const Header = () => {
         <Button color="inherit">Login</Button>
         <Button color="inherit" onClick={() => {navigate('/Register')}}>Register</Button>
         <Button color="inherit" onClick={() => {navigate('/CourseManagement')}}>Courses</Button>
+        <Button color="inherit" onClick={() => navigate('/login')}> 
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );
