@@ -18,7 +18,7 @@ const CourseScreen = () => {
       {/* כותרת הקורס */}
       <Box className="course-header">
         <Box>
-          <Typography className="course-title">קורס עיצוב</Typography>
+          <Typography className="course-title">קורס אדריכלות</Typography>
           <Typography className="course-status">סטטוס הקורס: פעיל</Typography>
         </Box>
         <Box className="course-actions">
@@ -34,7 +34,7 @@ const CourseScreen = () => {
       {/* בר ניווט */}
       <Tabs value={tabIndex} onChange={handleTabChange} className="course-tabs">
         <Tab label="פרטי קורס" className="course-tab" />
-        <Tab label="נושאים וחומרים" className="course-tab" />
+        <Tab label="נושאי קורס" className="course-tab" />
       </Tabs>
 
       {/* תוכן בהתאם ללשונית */}

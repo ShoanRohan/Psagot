@@ -68,6 +68,11 @@ const TopicsSearch = ({ id }) => {
         backgroundColor: "white",
         fontFamily: "Rubik",
         direction: "rtl",
+        borderRadius: "10px",
+        background: "#FFF",
+
+/* Drop Shadow */
+    boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
       }}
     >
       {/* שדות בחירה */}

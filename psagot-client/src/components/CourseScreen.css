@@ -12,12 +12,18 @@
   }
   
   .course-title {
-    font-size: 40px;
-    font-weight: 700;
-    font-family: "Rubik", sans-serif;
-    color: var(--Brand-90, #0D1783);
+  
+    font-size: 40px !important;
+    font-weight: 700px;
+    font-family: "Rubik"!important; 
+    /* , sans-serif */
+    font-style: normal;
+    line-height: normal;
+    color: var(--Brand-90, #0D1783)!important;
     text-align: right;
     text-transform: capitalize;
+    font-weight: bold !important;
+    
   }
   
   .course-status {
@@ -40,7 +46,7 @@
   }
   
   .course-tabs {
-    border-bottom: 1px solid #ddd;
+   
     margin-top: 16px;
   }
   
