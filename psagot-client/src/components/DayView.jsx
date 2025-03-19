@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "./Calendar";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import moment from "moment";
 import NavigationBar from "./NavigationBar";
 

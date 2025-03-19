@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import "@fontsource/rubik";
 
 const CalendarStyle = styled(Box)(({ theme }) => ({

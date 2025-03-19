@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import moment from "moment";
 import Calendar from "./Calendar";
 import NavigationBar from "./NavigationBar";

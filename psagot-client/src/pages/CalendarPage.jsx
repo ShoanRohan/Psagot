@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box } from "@mui/material";
+import Box from "@mui/material/Box";
 import dayjs from "dayjs";
 import "dayjs/locale/he";
 import CalendarHeader from "../components/CalendarHeader";

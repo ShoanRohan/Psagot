@@ -1,4 +1,9 @@
-import { Button, ButtonGroup, Typography, Box, IconButton, useMediaQuery } from "@mui/material";
+import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import pdfIcon from "../assets/imgs/pdf.png";
 import "dayjs/locale/he";
 import NavigationBar from "./NavigationBar";
