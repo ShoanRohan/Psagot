@@ -54,9 +54,9 @@ const CourseGrid = () => {
     }, [])
 
     return (
-        <div style={{ backgroundColor: '#FAFCFF' }}>
-            <TableContainer component={Paper} sx={{ width: '90%', margin: 'auto', p: '8px' }}>
-                <Table sx={{ p: '35px 24px 10px 24px', borderRadius: '10px' }} aria-label="courses table">
+        <div style={{ backgroundColor: '#FAFCFF',marginTop: "100px" }}>
+            <TableContainer component={Paper} sx={{ width: '100%', margin: 'auto', p: '8px' }}>
+                <Table sx={{ p: '35px 24px 10px 24px', borderRadius: '100px' }} aria-label="courses table">
                     <TableHead>
                         <TableRow>
                             <StyledTableCell align="center">קוד קורס</StyledTableCell>
