@@ -22,7 +22,17 @@ public partial class Course
 
     public string? Notes { get; set; }
 
+    public int? CoordinatorId { get; set; }
+
+    public int? StatusId { get; set; }
+
+    public virtual User? Coordinator { get; set; }
+
     public virtual ICollection<DaysForCourse> DaysForCourses { get; set; } = new List<DaysForCourse>();
+
+    public virtual ICollection<Meeting> Meetings { get; set; } = new List<Meeting>();
+
+    public virtual StatusCourse? Status { get; set; }
 
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 }

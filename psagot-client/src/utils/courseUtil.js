@@ -5,16 +5,19 @@ const getCourseById = async (id) => {
     return response.data;
 };
 
-
-const addCourse = async (newCourse) => {
-    const response = await api.post('/Course/AddCourse', newCourse);
-    return response.data;
- };
-
-
-const updateCourse= async (updateCourse) => {
-    const response = await api.put(`/Course/UpdateCourse`, updateCourse);
+const getAllCourses = async () => {
+    const response = await api.get('/Course/GetAllCourses');
     return response.data;
 };
 
-export{updateCourse,getCourseById,addCourse};
+const addCourse = async (courseDTO) => {
+    const response = await api.post('/Course/AddCourse', courseDTO);
+    return response.data;
+};
+
+const updateCourse = async (courseDTO) => {
+    const response = await api.put('/Course/UpdateCourse', courseDTO);
+    return response.data;
+};
+
+export { getCourseById, getAllCourses, addCourse, updateCourse };
