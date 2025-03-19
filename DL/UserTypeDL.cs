@@ -15,11 +15,11 @@ namespace DL
             _context = context;
         }
 
-        public async Task<(UserType UserType, string ErrorMessage)> AddUserType(UserType userType)
+        public async Task<(UserTypes UserType, string ErrorMessage)> AddUserType(UserTypes userType)
         {
             try
             {
-                var addedUserType = await _context.Set<UserType>().AddAsync(userType);
+                var addedUserType = await _context.Set<UserTypes>().AddAsync(userType);
                 await _context.SaveChangesAsync();
                 return (addedUserType.Entity, null);
             }
@@ -29,11 +29,11 @@ namespace DL
             }
         }
 
-        public async Task<(UserType UserType, string ErrorMessage)> UpdateUserType(UserType userType)
+        public async Task<(UserTypes UserType, string ErrorMessage)> UpdateUserType(UserTypes userType)
         {
             try
             {
-                _context.Set<UserType>().Update(userType);
+                _context.Set<UserTypes>().Update(userType);
                 await _context.SaveChangesAsync();
                 return (userType, null);
             }
@@ -43,11 +43,11 @@ namespace DL
             }
         }
 
-        public async Task<(UserType UserType, string ErrorMessage)> GetUserTypeById(int id)
+        public async Task<(UserTypes UserType, string ErrorMessage)> GetUserTypeById(int id)
         {
             try
             {
-                var userType = await _context.Set<UserType>().FindAsync(id);
+                var userType = await _context.Set<UserTypes>().FindAsync(id);
                 return (userType, null);
             }
             catch (Exception ex)
@@ -56,11 +56,11 @@ namespace DL
             }
         }
 
-        public async Task<(IEnumerable<UserType> UserTypes, string ErrorMessage)> GetAllUserTypes()
+        public async Task<(IEnumerable<UserTypes> UserTypes, string ErrorMessage)> GetAllUserTypes()
         {
             try
             {
-                var userTypes = await _context.Set<UserType>().ToListAsync();
+                var userTypes = await _context.Set<UserTypes>().ToListAsync();
                 return (userTypes, null);
             }
             catch (Exception ex)

@@ -15,11 +15,11 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int UserTypeId { get; set; }
+    public int UserTypesId { get; set; }
 
     public bool IsActive { get; set; }
 
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
-    public virtual UserType UserType { get; set; } = null!;
+    public virtual UserTypes UserTypes { get; set; } = null!;
 }
