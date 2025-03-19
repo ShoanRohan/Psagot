@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Entities.DTO;
 using Entities.Models;
 
@@ -7,9 +7,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<UserTypes, UserTypesDTO>().ReverseMap();
-        CreateMap<User, UserDTO>().ForMember(dest => dest.UserTypesName,
-                opt => opt.MapFrom(src => src.UserTypes.Name)).ReverseMap();
+        CreateMap<UserType, UserTypeDTO>().ReverseMap();
+        CreateMap<User, UserDTO>().ForMember(dest => dest.UserTypeName,
+                opt => opt.MapFrom(src => src.UserType.Name)).ReverseMap();
         CreateMap<Room, RoomDTO>().ReverseMap();
         CreateMap<Day, DayDTO>().ReverseMap();
         CreateMap<Meeting, MeetingDTO>().ReverseMap();

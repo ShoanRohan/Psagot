@@ -28,6 +28,6 @@ export const addMeetingAction = createAsyncThunk(
     "meeting/addMeetingAction",
     async (addNewMeeting) => {
         const data = await addMeeting(addNewMeeting);
-        return data;
-    }
+        return data;
+    }
 );

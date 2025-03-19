@@ -51,5 +51,6 @@ namespace API.Controllers
 
             return Ok(userTypes);
         }
+
     }
 }

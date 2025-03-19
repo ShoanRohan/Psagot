@@ -2,7 +2,7 @@ import api from "./api";
 
 // CRUD functions
 const getAllTopics = async () => {
-    const response = await api.get("/Topic/GetAllTopics");
+    const response = await api.get('/Topic/GetAllTopics');
     return response.data;
 };
 
@@ -12,7 +12,7 @@ const getTopicById = async (id) => {
 };
 
 const addTopic = async (newTopic) => {
-    const response = await api.post("/Topic/AddTopic", newTopic);
+    const response = await api.post('/Topic/AddTopic', newTopic);
     return response.data;
 };
 

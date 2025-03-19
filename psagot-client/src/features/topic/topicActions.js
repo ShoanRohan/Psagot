@@ -34,5 +34,5 @@ export const deleteTopicAction = createAsyncThunk('topic/deleteTopic',async(topi
 // getting All Topics For Course By Course Id
 export const fetchAllTopicFotCourseByCourseId = createAsyncThunk('topic/fetchAllTopicFotCourseByCourseId', async (CourseId) => {
     const data = await getAllTopicsForCourseByCourseId(CourseId);
-    return data;
-  });
+    return data;
+  });

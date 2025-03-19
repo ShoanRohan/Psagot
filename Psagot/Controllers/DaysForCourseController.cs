@@ -1,4 +1,5 @@
 ﻿using BL;
+using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -16,6 +17,15 @@ namespace Psagot.Controllers
             _daysForCourseBL = daysForCourseBL;
         }
 
+        [HttpPost("AddDaysForCourse")]
+        public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
+        {
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
+            if (addedDaysForCourse == null) return BadRequest(errorMessage);
+
+            return Ok(addedDaysForCourse);
+        }
+
         [HttpGet("GetAllDaysForCourse")]
         public async Task<IActionResult> GetAllDaysForCourse()
         {
@@ -23,6 +33,15 @@ namespace Psagot.Controllers
             if (daysForCourse == null) return BadRequest(errorMessage);
 
             return Ok(daysForCourse);
+        }
+
+        [HttpPut("UpdateDaysForCourse")]
+        public async Task<IActionResult> UpdateDaysForCourse([FromBody] DaysForCourseDTO daysForCourseDTO)
+        {
+            var (updateDaysForCourse, errorMessage) = await _daysForCourseBL.UpdateDaysForCourse(daysForCourseDTO);
+            if (updateDaysForCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updateDaysForCourse);
         }
 
         [HttpGet("GetDaysForCourseById/{id}")]
