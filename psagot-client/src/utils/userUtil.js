@@ -5,6 +5,11 @@ const getAllUsers = async ()=> {
     return response.data;
 };
 
+const getAllCoordinators = async ()=> {
+    const response = await api.get('/User/GetAllCoordinators');
+    return response.data;
+};
+
 const getUserById = async (id) => {
     const response = await api.get(`/User/GetUserById/${id}`);
     return response.data;
@@ -20,8 +25,6 @@ const updatedUser = async (updateUser) => {
     return response.data;
 };
 
-
-
-export{getAllUsers, getUserById, addUser, updatedUser};
+export{getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser};
 
 
