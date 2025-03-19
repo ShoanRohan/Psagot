@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import { Box, Select, MenuItem, FormControl, InputLabel, TextField, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
@@ -79,6 +79,12 @@ const CourseSearch = () => {
       setFilters((prevFilters) => ({ ...prevFilters, courseCode: value }));
     }
   };
+  
+
+   // בדיקה אם היה שינוי בערכים
+   const isSearchDisabled = useMemo(() => {
+    return JSON.stringify(filters) === JSON.stringify(initialState);
+  }, [filters]);
 
   return (
     <Box
@@ -174,7 +180,11 @@ const CourseSearch = () => {
           }}
           
           startIcon={<FilterAltOffOutlinedIcon />}
-          onClick={() => setFilters(initialState)}
+          onClick={() => {
+            setFilters(initialState);
+            dispatch(fetchCoordinators()); // טוען מחדש את הקורסים
+            //לבדוק שטעינת הקורסים מתבצעת דרך fetchCoordinators
+          }}
         >
           ניקוי
         </Button>
@@ -183,6 +193,7 @@ const CourseSearch = () => {
           variant="contained"
           sx={buttonStyles}
           startIcon={<SearchIcon />}
+          disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
         >
           חיפוש
         </Button>
