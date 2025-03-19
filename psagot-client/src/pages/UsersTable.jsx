@@ -41,28 +41,25 @@ const UsersTable = () => {
             <h2>משתמשים</h2>
             <Box className="box-size">
             <table className="table">
-                <thead>
-                    <tr>
-                        <th className="th">קוד משתמש</th>
-                        <th>שם משתמש</th>
-                        <th>מייל</th>
-                        <th>הרשאה</th>
+                <thead className="th">
+                    <tr className="coulm"> 
+                        <th >קוד משתמש</th>
+                        <th >שם משתמש</th>
+                        <th >מייל</th>
+                        <th >הרשאה</th>
                         <th>סטטוס</th>
                         {/* <th>עריכה</th> */}
                     </tr>
                 </thead> 
-                <tbody>
+                <tbody className="th">
                     {users?.map((user, index) => (
-                        <tr key={`${user?.UserId}-${index}`}>
+                        <tr key={`${user?.UserId}-${index}`} >
                             <td className="td">{user?.userId}</td>
                             <td>{user?.name}</td>
                             <td>{user?.email}</td>
                             <td>{user?.userType}</td>
                             <td>
-    {/* <select value={user?.IsActive ? "active" : "inactive"} onChange={(e) => handleStatusChange(user.userId, e.target.value)}>
-        <option value="active">פעיל</option>
-        <option value="inactive">לא פעיל</option>
-    </select> */}
+    
     <Button
         variant="contained" className="isActive-button"
         style={{
