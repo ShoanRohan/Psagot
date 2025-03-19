@@ -8,7 +8,7 @@ const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout/>}>
-            <Route path="/add-meeting" element={<AddMeeting />} />
+            <Route path='/' element={<AddMeeting />} />
                 <Route path='/' element={<HomePage/>}/>
             </Route>
         </Routes>
