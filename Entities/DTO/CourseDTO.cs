@@ -40,4 +40,5 @@ namespace Entities.DTO
 
         public virtual string? CoordinatorName { get;}
     }
+
 }
