@@ -1,21 +1,74 @@
 .modal-container {
-    width: 728px;
-    height: 339px;
-    padding: 40px;
-    border-radius: 10px;
-    background: white;
-  }
-  
-  .modal-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    margin-top: 20px;
-  }
-  
+  max-width: 600px; /* התאמת רוחב המודאל */
+  width: 90%; /* התאמה למסכים קטנים יותר */
+  padding: 20px; /* הפחתת ריפוד */
+  border-radius: 8px; /* עיגול פינות */
+  background: white;
+  position: relative; /* עבור מיקום כפתור הסגירה */
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px; /* הוספת מרווח מתחת לכותרת */
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* הפחתת מרווח בין שורות */
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px; /* הגדלת ריפוד */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
+  margin-top: 2px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  min-width: 90px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
