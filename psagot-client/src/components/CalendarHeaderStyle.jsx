@@ -52,15 +52,17 @@ const ViewButtonsContainer = styled(ButtonGroup)({
   overflow: "hidden",
 });
 
-const ViewButton = styled(Button)(({ theme, active }) => ({
-fontFamily: "Rubik",
+const ViewButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== "isActive",
+})(({ isActive }) => ({
+  fontFamily: "Rubik",
   fontSize: "16px",
   fontWeight: 400,
   borderRadius: "50px !important",
   padding: "10px 24px",
   borderColor: "#326DEF !important",
-  color: active ? "#FFFFFF" : "#326DEF",
-  background: active ? "#1E53CB" : "#FFFFFF",
+  color: isActive ? "#FFFFFF" : "#326DEF",
+  background: isActive ? "#1E53CB" : "#FFFFFF",
   minWidth: "auto",
   whiteSpace: "nowrap",
   flexShrink: 0,

@@ -38,7 +38,12 @@ const CalendarHeader = ({ currentDate, setCurrentDate, view, setView }) => {
                         { label: "תצוגת שבוע", value: "timeGridWeek" },
                         { label: "תצוגת יום", value: "timeGridDay" },
                     ].map(({ label, value }) => (
-                        <ViewButton key={value} active={view === value} onClick={() => setView(value)}  variant={view === value ? "contained" : "outlined"}>
+                        <ViewButton
+                            key={value}
+                            isActive={view === value}
+                            onClick={() => setView(value)}
+                            variant={view === value ? "contained" : "outlined"}
+                        >
                             {label}
                         </ViewButton>
                     ))}

@@ -1,7 +1,5 @@
 import { styled } from '@mui/system';
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-
 import "@fontsource/rubik";
 
 const CalendarStyle = styled(Box)(({ theme }) => ({
@@ -197,37 +195,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 }));
 
 
-  //  קומפוננטת CalendarHeader
-  // עיצוב רספונסיביות לכפתורי תצוגה
-const ButtonsContainer = styled(Box)({
-  display: "flex",
-  flexWrap: "nowrap",
-  overflowX: "auto",
-  maxWidth: "100%",
-  justifyContent: "center",
-  gap: "8px",
-  padding: "10px",
-});
-
-const ButtonStyle = styled("button")({
-  minWidth: "60px",
-  flexShrink: 1, // מאפשר לכפתור להתכווץ
-  whiteSpace: "nowrap",
-  padding: "6px 12px", // padding קטן יותר במסכים קטנים
-  backgroundColor: "#326DEF",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
-  fontSize: "14px",
-  "@media (max-width: 600px)": {
-    fontSize: "12px", // גודל טקסט קטן במסכים קטנים מאוד
-    padding: "4px 8px", // padding קטן יותר במסכים קטנים
-  },
-});
-
-
-
+ 
 
 //קומפוננטת Calendar
 
@@ -307,6 +275,6 @@ const StyledEventBox = styled(Box, {
 }));
 
 
-export {CalendarStyle, ButtonsContainer, ButtonStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} ;
+export {CalendarStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} ;
 
 
