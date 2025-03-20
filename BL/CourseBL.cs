@@ -21,6 +21,13 @@ public class CourseBL: ICourseBL
         _mapper = mapper;
     }
 
+        public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+        {
+            var (course, errorMessage) = await _courseDL.GetCourseById(id);
+            if (course == null) return (null, errorMessage);
+
+            return (_mapper.Map<CourseDTO>(course), null);
+        }
     public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
     {
         var course = _mapper.Map<Course>(courseDTO);
@@ -30,9 +37,22 @@ public class CourseBL: ICourseBL
 
         return (_mapper.Map<CourseDTO>(addedCourse), null);
     }
+=========
+        public async Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses()
+        {
+            var (courses, errorMessage) = await _courseDL.GetAllCourses();
+            if (courses == null) return (null, errorMessage);
+            var (course, errorMessage) = await _courseDL.GetCourseById(id);
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
+        }
+
+        public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
 
 
-    public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
+        }
+>>>>>>>>> Temporary merge branch 2
+        public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var (Course, errorMessage) = await _courseDL.GetCourseById(id);
             if (Course == null) return (null, errorMessage);

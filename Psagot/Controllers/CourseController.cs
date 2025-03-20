@@ -17,23 +17,21 @@ namespace Psagot.Controllers
         }
 
         [HttpGet("GetCourseById/{id}")]
-        public async Task<IActionResult> GetCorseById([FromBody] int id)
+        public async Task<IActionResult> GetCourseById([FromRoute] int id)
         {
-            var (Course, errorMessage) = await _courseBL.GetCourseById(id);
-            if (Course == null) return NotFound(errorMessage);
+            var (course, errorMessage) = await _courseBL.GetCourseById(id);
+            if (course == null) return NotFound(errorMessage);
 
-            return Ok(Course);
+            return Ok(course);
         }
-        
-        [HttpPut("UpdateCourse")]
-        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO course)
+        [HttpGet("GetAllCourses")]
+        public async Task<IActionResult> GetAllCourses()
         {
-            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(course);
-            if (updatedCourse == null) return BadRequest(errorMessage);
+            var (courses, errorMessage) = await _courseBL.GetAllCourses();
+            if (courses == null) return BadRequest(errorMessage);
 
-            return Ok(updatedCourse);
+            return Ok(courses);
         }
-        
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {
