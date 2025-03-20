@@ -8,7 +8,7 @@ import { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContai
 const CalendarHeader = ({ currentDate, setCurrentDate, view, setView }) => {
 
     const handleExportToPDF = () => {
-        const input = document.getElementById("calendar-container");
+        const input = document.getElementById("rooms-container");/////מי שעושה את עיצוב הטבלה עצמה לשנות פה כדי שהייצוא לPDF יתפוס את כל הטבלה
         html2canvas(input, {
             scale: 3,
             useCORS: true,
