@@ -220,10 +220,10 @@ const dayCellStyle = {
 };
 
 const hebrewDateStyle = {
-  color: "#333 !important",
+  color: "#393939 !important",
   textAlign: "right !important",
   fontFamily: "Rubik !important",
-  fontWeight: "500 !important",
+  fontWeight: 500 ,
   fontSize: "16px !important",
   direction: "rtl !important",
   width: "auto !important",
@@ -231,10 +231,10 @@ const hebrewDateStyle = {
 };
 
 const gregorianDateStyle = {
-  color: "#555 !important",
+  color: "#393939 !important",
   textAlign: "left !important",
   fontFamily: "Rubik !important",
-  fontWeight: "500 !important",
+  fontWeight: 300 ,
   fontSize: "16px !important",
   direction: "ltr !important",
   width: "auto !important",
