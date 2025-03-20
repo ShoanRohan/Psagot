@@ -75,7 +75,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   },
 
   // כותרות ימים בתצוגות שבוע/יום
-  "& .fc-timegrid .fc-col-header-cell": { 
+  "& .fc-timegrid .fc-col-header-cell": {
     backgroundColor: "#F6F7F9 !important",
     borderBottom: "1px solid #C6C6C6 !important",
   },
@@ -139,8 +139,8 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 
   // עיצוב לתצוגות שבוע ויום
 
-  "& .fc th":{//שורת כותרות הימים
-    borderRight:"none",
+  "& .fc th": {//שורת כותרות הימים
+    borderRight: "none",
   },
 
 
@@ -161,12 +161,12 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     height: "40px !important",
     borderBottom: "1px solid #C6C6C6 !important",
     borderLeft: "1px solid #ffffff !important",
-    textAlign: "center !important", 
+    textAlign: "center !important",
     fontFamily: "Rubik, sans-serif",
     fontWeight: "500 !important",
     fontSize: "14px !important",
     lineHeight: "16.59px !important",
-    color: "#393939 !important", 
+    color: "#393939 !important",
     paddingTop: "10px !important",
     paddingBottom: "10px !important",
     paddingLeft: "14px !important",
@@ -195,7 +195,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 }));
 
 
- 
+
 
 //קומפוננטת Calendar
 
@@ -275,6 +275,6 @@ const StyledEventBox = styled(Box, {
 }));
 
 
-export {CalendarStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} ;
+export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox };
 
 

@@ -65,16 +65,16 @@ const AddRoomButton = styled(Button)({
     flexWrap: "nowrap", // מונע שבירת שורות בתוך הכפתור
     minWidth: "auto", // מונע הרחבת יתר של הכפתור
     boxShadow: "none",
-  });
-  
-  const ListViewButton = styled(Button)({
+});
+
+const ListViewButton = styled(Button)({
     fontFamily: "Rubik",
     width: "158px",
     height: "44px",
     borderRadius: "50px",
     borderWidth: "1px",
-    borderColor: "#326DEF", 
-    color: "#326DEF", 
+    borderColor: "#326DEF",
+    color: "#326DEF",
     paddingRight: "24px",
     paddingLeft: "24px",
     fontSize: "1rem !important",
@@ -87,8 +87,8 @@ const AddRoomButton = styled(Button)({
     whiteSpace: "nowrap", // מונע שבירת שורות
     flexWrap: "nowrap", // מונע שבירת שורות בתוך הכפתור
     minWidth: "auto", // מונע הרחבת יתר של הכפתור
-  });
-  
+});
 
 
-export { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton , ListViewButton }
+
+export { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton }

@@ -28,11 +28,11 @@ const Title = styled(Typography)({
 });
 
 const ButtonsWrapper = styled(Box)({
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    flexShrink: 0,
-  });
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  flexShrink: 0,
+});
 
 const ExportButton = styled(IconButton)({
   width: "40px",
@@ -70,4 +70,4 @@ const ViewButton = styled(Button, {
 }));
 
 
-export {HeaderContainer , Title , ButtonsWrapper, ExportButton , ViewButtonsContainer , ViewButton}
+export { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton }

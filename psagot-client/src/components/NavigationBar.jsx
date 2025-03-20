@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Popover from "@mui/material/Popover";import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Popover from "@mui/material/Popover"; import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -17,7 +17,7 @@ const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
     // חישוב התאריך לתצוגה בהתאם לסוג התצוגה
     const getFormattedDate = () => {
         const localizedDate = currentDate.locale("he"); // הגדרת עברית כברירת מחדל
-    
+
         if (view === "dayGridMonth") {
             return localizedDate.format("MMMM YYYY"); // פברואר 2025
         } else if (view === "timeGridDay") {
@@ -29,7 +29,7 @@ const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
         }
         return "";
     };
-    
+
 
     const handlePrev = () =>
         setCurrentDate(currentDate.subtract(1, view === "dayGridMonth" ? "month" : view === "timeGridDay" ? "day" : "week"));

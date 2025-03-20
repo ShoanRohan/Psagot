@@ -7,11 +7,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { HDate, gematriya } from "@hebcal/core";
 import "@fontsource/rubik";
-import { CalendarStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} from './CalendarStyle';
+import { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox } from './CalendarStyle';
 import { useNavigate } from "react-router-dom";
 
 
-const handleDayHeaderContent =(args) => {
+const handleDayHeaderContent = (args) => {
   const dayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
   return (
     <Box sx={dayInWeekHeaderStyle}>
@@ -47,8 +47,8 @@ const handleEventClick = (info, navigate) => {
 const handleEventDidMount = (info) => {
   const overlappingEvents = info.event._def.groupId
     ? info.view.calendar.getEvents().filter(
-        (e) => e._def.groupId === info.event._def.groupId
-      )
+      (e) => e._def.groupId === info.event._def.groupId
+    )
     : [];
   if (overlappingEvents.length > 1) {
     const width = 100 / overlappingEvents.length;
@@ -69,15 +69,15 @@ const handleEventContent = (eventInfo) => {
       borderColor={eventInfo.event.extendedProps.borderColor}
       isMonthView={isMonthView}
     >
-      <Typography sx={{fontWeight: "bold", fontSize}}>
+      <Typography sx={{ fontWeight: "bold", fontSize }}>
         {eventInfo.event.title}
       </Typography>
 
       {eventInfo.event.extendedProps.location && (
-      <Typography sx={{ fontSize: `calc(${fontSize} - 2px)`}}>
-        {eventInfo.event.extendedProps.location}
-      </Typography>
-    )}
+        <Typography sx={{ fontSize: `calc(${fontSize} - 2px)` }}>
+          {eventInfo.event.extendedProps.location}
+        </Typography>
+      )}
     </StyledEventBox>
   );
 }
@@ -100,7 +100,7 @@ const Calendar = ({ currentDate, view, events }) => {
           contentHeight="auto"
           aspectRatio={1.2}
           hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
-          slotLabelFormat={{hour: "numeric", minute: "2-digit", hour12: false}}
+          slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
           slotDuration="01:00:00" // שורה אחת לכל שעה
           slotMinTime="08:00:00" // השעה הראשונה בתצוגת שבוע ויום
           slotMaxTime="23:00:00" // השעה האחרונה בתצוגת שבוע ויום
