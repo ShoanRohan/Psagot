@@ -7,7 +7,6 @@ import LoginPage from '../pages/LoginPage';
 
 const AppRouter = () => {
     return (
-
         <Routes>  
              <Route path='/home' element={<Layout/>}>
                 <Route index element={<HomePage/>}/>    
