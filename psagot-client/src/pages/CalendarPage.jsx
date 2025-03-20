@@ -33,9 +33,10 @@ const CalendarPage = () => {
 
     const fetchEvents = async (startDate, endDate) => {
         const fetchedEvents = [
-            { id: "1", title: "קורס תכנות - JAVA", start: "2025-03-09T12:00:00", end: "2025-03-09T14:00:00", extendedProps: { location: "חדר מחשבים", color: "#ffccf3", borderColor: "#ff00b4" } },
-            { id: "2", title: "קורס יעוץ מס - חשבונאות", start: "2025-03-10T13:00:00", end: "2025-03-10T15:00:00", extendedProps: { location: "חדר חדשנות", color: "#ccffcc", borderColor: "#00b400" } },
-            { id: "3", title: "קורס עיצוב - מיתוג", start: "2025-03-12T09:00:00", end: "2025-03-12T10:30:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } }
+            { id: "1", title: "קורס תכנות - JAVA", start: "2025-03-18T12:00:00", end: "2025-03-18T14:40:00", extendedProps: { location: "חדר מחשבים", color: "#ffccf3", borderColor: "#ff00b4" } },
+            { id: "2", title: "קורס עיצוב - מיתוג", start: "2025-03-18T11:00:00", end: "2025-03-18T12:30:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } },
+            { id: "3", title: "קורס יעוץ מס - חשבונאות", start: "2025-03-19T13:00:00", end: "2025-03-19T15:00:00", extendedProps: { location: "חדר חדשנות", color: "#ccffcc", borderColor: "#00b400" } },
+            { id: "4", title: "קורס עיצוב - מיתוג", start: "2025-03-20T11:00:00", end: "2025-03-20T12:00:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } }
         ];
         setEvents(fetchedEvents);
     };

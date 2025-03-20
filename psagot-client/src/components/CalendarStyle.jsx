@@ -1,5 +1,7 @@
 import { styled } from '@mui/system';
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 import "@fontsource/rubik";
 
 const CalendarStyle = styled(Box)(({ theme }) => ({
@@ -195,6 +197,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 }));
 
 
+  //  קומפוננטת CalendarHeader
   // עיצוב רספונסיביות לכפתורי תצוגה
 const ButtonsContainer = styled(Box)({
   display: "flex",
@@ -224,6 +227,86 @@ const ButtonStyle = styled("button")({
 });
 
 
-export {CalendarStyle, ButtonsContainer, ButtonStyle} ;
+
+
+//קומפוננטת Calendar
+
+const dayInWeekHeaderStyle = {
+  textAlign: "center",
+  fontSize: "16px",
+  fontWeight: "600",
+  padding: "8px",
+  backgroundColor: "#F8F9FC",
+  width: "65px", // רוחב קבוע לכל כותרת יום
+};
+
+const dayCellStyle = {
+  display: "flex !important",
+  flexDirection: "row !important",
+  justifyContent: "space-between !important",
+  alignItems: "center !important",
+  flexWrap: "nowrap !important",
+  width: "100% !important",
+  padding: "6px !important",
+  boxSizing: "border-box !important",
+};
+
+const hebrewDateStyle = {
+  color: "#333 !important",
+  textAlign: "right !important",
+  fontFamily: "Rubik !important",
+  fontWeight: "500 !important",
+  fontSize: "16px !important",
+  direction: "rtl !important",
+  width: "auto !important",
+  marginLeft: "60px",
+};
+
+const gregorianDateStyle = {
+  color: "#555 !important",
+  textAlign: "left !important",
+  fontFamily: "Rubik !important",
+  fontWeight: "500 !important",
+  fontSize: "16px !important",
+  direction: "ltr !important",
+  width: "auto !important",
+  marginRight: "60px",
+};
+
+
+
+
+//עיצוב האירוע
+const StyledEventBox = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "isMonthView",
+})(({ color, borderColor, isMonthView }) => ({
+  backgroundColor: color || "#ffccf3",
+  fontFamily: "Rubik",
+  color: "black",
+  padding: "6px",
+  borderRadius: "5px",
+  borderRight: `3px solid ${borderColor || "#ff00b4"}`,
+  textAlign: "center",
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  overflow: "hidden",
+  whiteSpace: "normal",
+  wordBreak: "keep-all",
+  textOverflow: "ellipsis",
+  fontSize: isMonthView ? "6px" : "inherit",
+  ...(isMonthView && {
+    maxHeight: "19.17px",
+    minHeight: "19.17px",
+    lineHeight: "19.17px",
+    whiteSpace: "nowrap",
+  }),
+}));
+
+
+export {CalendarStyle, ButtonsContainer, ButtonStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} ;
 
 

@@ -7,9 +7,80 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { HDate, gematriya } from "@hebcal/core";
 import "@fontsource/rubik";
-import { CalendarStyle } from './CalendarStyle';
+import { CalendarStyle , dayInWeekHeaderStyle , dayCellStyle , hebrewDateStyle , gregorianDateStyle , StyledEventBox} from './CalendarStyle';
 import { useNavigate } from "react-router-dom";
 
+
+const handleDayHeaderContent =(args) => {
+  const dayNames = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
+  return (
+    <Box sx={dayInWeekHeaderStyle}>
+      {dayNames[args.date.getDay()]}
+    </Box>
+  );
+}
+
+const handleDayCellContent = (args, view) => {
+  // יציג את התאריך רק בתצוגת חודש
+  if (view === "dayGridMonth") {
+    const gregorianDate = args.date;
+    const hebrewDate = new HDate(gregorianDate);
+    const hebrewDay = gematriya(hebrewDate.getDate());
+
+    return (
+      <Box sx={dayCellStyle}>
+        <Typography sx={hebrewDateStyle}> {hebrewDay} </Typography>
+        <Typography sx={gregorianDateStyle}> {gregorianDate.getDate()} </Typography>
+      </Box>
+    );
+  }
+  return null; // לא מציג כלום בתצוגות שבוע ויום
+}
+
+const handleEventClick = (info, navigate) => {
+  const eventId = info.event.id;
+  console.log("ID של האירוע:", eventId); // בדיקה
+  navigate(`/meetings/${eventId}`);
+};
+
+//פונקציה שמטפלת באירועים לאחר שהם נטענו ללוח השנה- אם יש כמה אירועים חופפים הרוחב ישתנה
+const handleEventDidMount = (info) => {
+  const overlappingEvents = info.event._def.groupId
+    ? info.view.calendar.getEvents().filter(
+        (e) => e._def.groupId === info.event._def.groupId
+      )
+    : [];
+  if (overlappingEvents.length > 1) {
+    const width = 100 / overlappingEvents.length;
+    info.el.style.width = `${width}%`;
+  }
+};
+
+const handleEventContent = (eventInfo) => {
+  const viewType = eventInfo.view.type;
+  const isMonthView = viewType === "dayGridMonth";
+  const isWeekView = viewType === "timeGridWeek";
+  const isDayView = viewType === "timeGridDay";
+  const fontSize = isMonthView ? "6px" : isWeekView ? "12px" : "16px";
+
+  return (
+    <StyledEventBox
+      color={eventInfo.event.extendedProps.color}
+      borderColor={eventInfo.event.extendedProps.borderColor}
+      isMonthView={isMonthView}
+    >
+      <Typography sx={{fontWeight: "bold", fontSize}}>
+        {eventInfo.event.title}
+      </Typography>
+
+      {eventInfo.event.extendedProps.location && (
+      <Typography sx={{ fontSize: `calc(${fontSize} - 2px)`}}>
+        {eventInfo.event.extendedProps.location}
+      </Typography>
+    )}
+    </StyledEventBox>
+  );
+}
 
 
 const Calendar = ({ currentDate, view, events }) => {
@@ -17,7 +88,6 @@ const Calendar = ({ currentDate, view, events }) => {
   return (
     <CalendarStyle>
       <Box sx={{ display: "grid", placeItems: "center", width: "100%" }}>
-
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -29,171 +99,22 @@ const Calendar = ({ currentDate, view, events }) => {
           height="auto"
           contentHeight="auto"
           aspectRatio={1.2}
-
           hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
-
-
-          slotLabelFormat={{
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: false,
-          }}
-
-
+          slotLabelFormat={{hour: "numeric", minute: "2-digit", hour12: false}}
           slotDuration="01:00:00" // שורה אחת לכל שעה
           slotMinTime="08:00:00" // השעה הראשונה בתצוגת שבוע ויום
           slotMaxTime="23:00:00" // השעה האחרונה בתצוגת שבוע ויום
           allDaySlot={false}//משמיט את השורה "כל היום" 
-
-          dayHeaderContent={(args) => {
-            const dayLetters = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
-            return (
-              <Box sx={{
-                textAlign: "center",
-                fontSize: "16px",
-                fontWeight: "600",
-                padding: "8px",
-                backgroundColor: "#F8F9FC",
-                width: "65px", //  רוחב קבוע לכל כותרת יום
-              }}>
-                {dayLetters[args.date.getDay()]}
-              </Box>
-            );
-          }}
-
-          //תאריכים עברי ולועזי
-          dayCellContent={(args) => {
-            // יציג את התאריך רק בתצוגת חודש
-            if (view === "dayGridMonth") {
-              const gregorianDate = args.date;
-              const hebrewDate = new HDate(gregorianDate);
-              const hebrewDay = gematriya(hebrewDate.getDate());
-
-              return (
-                <Box
-                  sx={{
-                    display: "flex !important",
-                    flexDirection: "row !important",
-                    justifyContent: "space-between !important",
-                    alignItems: "center !important",
-                    flexWrap: "nowrap !important", // מונע מהמילים לעבור לשורה חדשה
-                    width: "100% !important",
-                    padding: "6px !important",
-                    boxSizing: "border-box !important",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      color: "#333 !important",
-                      textAlign: "right !important",
-                      fontFamily: "Rubik !important",
-                      fontWeight: "500 !important",
-                      fontSize: "16px !important",
-                      direction: "rtl !important",
-                      width: "auto !important",
-                      marginLeft: "60px",
-                    }}
-                  >
-                    {hebrewDay}
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      color: "#555 !important",
-                      textAlign: "left !important",
-                      fontFamily: "Rubik !important",
-                      fontWeight: "500 !important",
-                      fontSize: "16px !important",
-                      direction: "ltr !important",
-                      width: "auto !important",
-                      marginRight: "60px",
-                    }}
-                  >
-                    {gregorianDate.getDate()}
-                  </Typography>
-                </Box>
-              );
-            }
-            return null; // לא מציג כלום בתצוגות שבוע ויום
-          }}
-
-
-          eventClick={(info) => {
-            console.log("ID של האירוע:", info.event.id); // בדיקה
-            navigate(`/meetings/${info.event.id}`);
-          }}
-
-
+          dayHeaderContent={handleDayHeaderContent}
+          dayCellContent={(args) => handleDayCellContent(args, view)}//תאריכים עברי ולועזי
+          eventClick={(info) => handleEventClick(info, navigate)}
           events={events}
-
           slotEventOverlap={false}
-          eventDidMount={(info) => {
-            const overlappingEvents = info.event._def.groupId
-              ? info.view.calendar.getEvents().filter(e => e._def.groupId === info.event._def.groupId)
-              : [];
-
-            if (overlappingEvents.length > 1) {
-              const width = 100 / overlappingEvents.length; //מחלק את הרוחב של האירוע
-              info.el.style.width = `${width}%`;
-            }
-          }}
-
-          eventContent={(eventInfo) => {
-            const viewType = eventInfo.view.type; // מזהה את סוג התצוגה
-            const isMonthView = viewType === "dayGridMonth";
-            const isWeekView = viewType === "timeGridWeek";
-            const isDayView = viewType === "timeGridDay";
-
-            // קביעת גודל הפונט לפי התצוגה
-            const fontSize = isMonthView ? "6px" : isWeekView ? "12px" : "16px";
-
-            return (
-              <Box
-                sx={{
-                  backgroundColor: eventInfo.event.extendedProps.color || "#ffccf3",
-                  color: "black",
-                  padding: "6px",
-                  borderRadius: "5px",
-                  borderRight: `3px solid ${eventInfo.event.extendedProps.borderColor || "#ff00b4"}`,
-                  textAlign: "center",
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  overflow: "hidden",
-                  whiteSpace: "normal",
-                  wordBreak: "keep-all",
-                  textOverflow: "ellipsis",
-                  fontSize, //  גודל הטקסט דינמי
-                  ...(isMonthView && {
-                    maxHeight: "19.17px",
-                    minHeight: "19.17px",
-                    lineHeight: "19.17px",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                  }),
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold", fontSize, textAlign: "center", whiteSpace: "normal" }}>
-                  {eventInfo.event.title}
-                </Typography>
-
-                <Typography sx={{ fontSize: `calc(${fontSize} - 2px)` }}>
-                  {eventInfo.event.extendedProps.location}
-                </Typography>
-              </Box>
-            );
-          }}
-
+          eventDidMount={handleEventDidMount}
+          eventContent={handleEventContent}
         />
       </Box>
     </CalendarStyle>
-
-
   );
 };
 
