@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserTypeDTO
+    public class LoginDTO
     {
-        public int UserTypeId { get; set; }
-        public string Name { get; set; }
+        public string Email { get; set; } = null!;
+        public string Password { get; set; } = null!;
     }
 }
