@@ -1,13 +1,13 @@
 import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
-import UserGrid from './UserGrid';
+import UserGrid from '../components/UserGrid';
 import circlePlus from '../assets/icons/circle-plus.png';
 import exptExsel from '../assets/icons/image 6.png';
 
 const UserManagement = () => {
   return (
     <Box sx={{
-      width: '100vw',
+      width: '85vw',
       height: '100vh',
       display: 'flex',
       flexDirection: 'column',
@@ -19,14 +19,14 @@ const UserManagement = () => {
         variant="h1"
         sx={{
           position: 'absolute',
-          width: { xs: '150px', sm: '7.5%', md: '182px' },
-          height: '47px',
-          top: { xs: '40px', sm: '60px', md: '81px' },
-          left: { xs: '71%', sm: '71%', md: '1377px' },
+          width: '9.48%',
+          height: '4.35%',
+          top: '7.5%',
+          left: '88%',
           transform: 'translateX(-50%)',
           fontFamily: 'Rubik',
           fontWeight: 700,
-          fontSize: { xs: '6.64px', sm: '12.5px', md: '40px' },
+          fontSize: '4.5vh',
           lineHeight: '100%',
           textAlign: 'right',
           color: '#112B83',
@@ -35,59 +35,59 @@ const UserManagement = () => {
       >
         משתמשים
       </Typography>
-      
 
-      {/* כפתור יצוא לאקסל */}
       <Button
         sx={{
           position: 'absolute',
-          width: { xs: '40px', sm: '42px', md: '44px' },
-          height: { xs: '40px', sm: '42px', md: '44px' },
-          top: { xs: '70px', sm: '78px', md: '84px' },
-          left: { xs: '15px', sm: '50px', md: '266px' },
-          borderRadius: '6.88px',
-          padding: '6.88px 8px',
+          width: '2.5rem',
+          height: '2.5rem',
+          top: '7.78%',
+          left: '16%',
+          borderRadius: '0.68vh',
+          padding: '0.2rem',
           backgroundColor: '#F0F1F3',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          minWidth: '2.5rem',
+          minHeight: '2.5rem'
         }}
       >
         <img
           src={exptExsel}
           alt="אייקון ייצוא לאקסל"
-          style={{ width: '29px', height: '29px' }}
+          style={{ width: '75%', height: '80%' }}
         />
       </Button>
 
-      {/* כפתור הוספת משתמש */}
       <Button
         variant="contained"
         sx={{
           position: 'absolute',
-          width: { xs: '140px', sm: '155px', md: '171px' },
-          height: { xs: '40px', sm: '42px', md: '44px' },
-          top: { xs: '70px', sm: '78px', md: '84px' },
-          left: { xs: '60px', sm: '90px', md: '79px' },
-          borderRadius: '50px',
-          padding: '0 24px',
-          gap: '8px',
+          width: '9.5rem',
+          height: '2.5rem',
+          top: '7.78%',
+          left: '3.5%',
+          borderRadius: '50vh',
+          padding: '0 1.3%',
+          gap: '0.5vw',
           backgroundColor: '#326DEF',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
+          minWidth:'9.5rem',
+          minHeight: 'rem'
         }}
       >
         <img
           src={circlePlus}
           alt="אייקון הוספת משתמש"
-          style={{ width: '14px', height: '14px' }}
+          style={{ width: '0.76vw', height: '1.8vh' }}
         />
         <Typography
           sx={{
             fontFamily: 'Rubik',
             fontWeight: 400,
-            fontSize: { xs: '14px', sm: '15px', md: '16px' },
+            fontSize: '1.8vh',
             lineHeight: '100%',
             textAlign: 'center',
             color: '#FFFFFF',
