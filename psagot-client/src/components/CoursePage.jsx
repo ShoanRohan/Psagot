@@ -1,12 +1,12 @@
 import React from "react";
 import CourseSearch from "./CourseSearch";
-import CoursesTable from "./CourseTable";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import GridOnIcon from "@mui/icons-material/GridOn"; // אייקון אקסל
 import { Stack } from "@mui/material"; // מסדר כפתורים בשורה
+import CourseGrid from "./CourseGrid";
 
 const buttonStyles = {
   height: "44px",
@@ -30,7 +30,7 @@ const buttonStyles = {
   },
 };
 
-const CoursesPage = () => {
+const CoursePage = () => {
   return (
     <Box sx={{ p: 3 }}>
       {/* כותרת עם כפתורים */}
@@ -71,9 +71,9 @@ const CoursesPage = () => {
       </Box>
 
       <CourseSearch />
-      <CoursesTable />
+      <CourseGrid />
     </Box>
   );
 };
 
-export default CoursesPage;
+export default CoursePage;
