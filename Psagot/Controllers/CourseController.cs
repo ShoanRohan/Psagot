@@ -33,6 +33,14 @@ namespace Psagot.Controllers
 
             return Ok(courses);
         }
+        [HttpGet("GetPaginatedCourses/{page}/{pageSize}")]
+        public async Task<IActionResult> GetPaginatedCourses(int page, int pageSize)
+        {
+            var (courses, totalCount, errorMessage) = await _courseBL.GetPaginatedCourses(page, pageSize);
+            if (courses == null) return BadRequest(errorMessage);
+
+            return Ok(new { courses, totalCount });
+        }
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {

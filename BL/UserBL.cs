@@ -66,5 +66,13 @@ namespace BL
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
 
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            var(coordinators, errorMessage)=await _userDL.GetCoordinators();
+            if (coordinators == null) return (null, errorMessage);
+
+            return (coordinators, null); ;
+        }
+        
     }
 }

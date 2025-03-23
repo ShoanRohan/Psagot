@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllCourses, getCourseById, addCourse, updateCourse } from '../../utils/courseUtil';
+import { getAllCourses, getCourseById, getPaginatedCourses, addCourse, updateCourse } from '../../utils/courseUtil';
 
 export const fetchAllCourses = createAsyncThunk('course/fetchAllCourses', async () => {
   const data = await getAllCourses();
@@ -10,6 +10,11 @@ export const fetchCourseById = createAsyncThunk('course/fetchCourseById', async 
   const data = await getCourseById(id);
   return data;
 });
+
+export const fetchPaginatedCourses = createAsyncThunk('course/fetchPaginatedCourses', async({pageNumber, pageSize}) => {
+  const data = await getPaginatedCourses(pageNumber, pageSize);
+  return data;
+})
 
 export const addCourseAction = createAsyncThunk('course/addCourseAction', async (newCourse) => {
   const data = await addCourse(newCourse);
