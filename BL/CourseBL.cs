@@ -32,6 +32,7 @@ namespace BL
         public async Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses()
         {
             var (courses, errorMessage) = await _courseDL.GetAllCourses();
+
             if (courses == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);

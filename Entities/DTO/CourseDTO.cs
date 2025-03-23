@@ -30,6 +30,8 @@ namespace Entities.DTO
 
         public string? Notes { get; set; }
 
+        public int? CoordinatorId { get; set; }
+
         public int? StatusId { get; set; }
 
         public string? CoordinatorName { get; set; }
