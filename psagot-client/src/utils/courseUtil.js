@@ -10,6 +10,11 @@ const getAllCourses = async () => {
     return response.data;
 };
 
+const getPaginatedCourses = async (page, pageSize) => {
+    const response = await api.get(`/Course/GetPaginatedCourses/${page}/${pageSize}`)
+    return response.data;
+}
+
 const addCourse = async (courseDTO) => {
     const response = await api.post('/Course/AddCourse', courseDTO);
     return response.data;
@@ -20,4 +25,4 @@ const updateCourse = async (courseDTO) => {
     return response.data;
 };
 
-export { getCourseById, getAllCourses, addCourse, updateCourse };
+export { getCourseById, getAllCourses, getPaginatedCourses, addCourse, updateCourse };

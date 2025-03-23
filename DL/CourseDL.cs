@@ -36,7 +36,25 @@ namespace DL
         {
             try
             {
-                var courses = await _context.Set<Course>().ToListAsync();
+                var courses = await _context.Set<Course>().Include(c => c.Status).Include(c => c.Coordinator).ToListAsync();
+                return (courses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public int GetTotalCoursesCount()
+        {
+            return _context.Courses.Count();
+        }
+
+        public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetPaginatedCourses(int skip, int pageSize)
+        {
+            try
+            {
+                var courses = await _context.Courses.Skip(skip).Take(pageSize).Include(c => c.Status).Include(c => c.Coordinator).ToListAsync();
                 return (courses, null);
             }
             catch (Exception ex)

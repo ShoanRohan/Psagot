@@ -1,22 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
+import { Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow, Table, TableBody, Select, MenuItem, Grid2 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { Box, IconButton, Typography } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
-import { DeleteOutline } from '@mui/icons-material';
-import { MdEditSquare } from 'react-icons/md';
-import { selectFiltersCourses } from '../features/course/courseSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllCourses } from '../features/course/courseActions';
+import { selectPaginatedCourses, selectCurrentPage, selectPageSize, setCurrentPage, selectTotalCount, setPageSize } from '../features/course/courseSlice';
+import { fetchPaginatedCourses } from '../features/course/courseActions';
+import editSvg from '../assets/icons/edit.svg'
 
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
         //backgroundColor: theme.palette.common.Neutral / 20,
         //color: theme.palette.common.Neutral / 80,
@@ -36,22 +28,29 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 const CourseGrid = () => {
-    const dispatch = useDispatch()
-    const fetchCourses = useSelector(selectFiltersCourses)
-    const courses = fetchCourses.map(course => {
-        const today = new Date();
-        const startDate = new Date(course?.startDate);
-        const endDate = new Date(course?.endDate);
-        const status = startDate > today ? "ממתין" : (today > endDate ? "הסתיים" : "פעיל");
-        return { ...course, status };
-    });
+    const dispatch = useDispatch();
+    const currentPage = useSelector(selectCurrentPage);
+    const pageSize = useSelector(selectPageSize);
+    const [selectSize, setSelectSize] = useState(pageSize)
+    const totalCount = useSelector(selectTotalCount);
+    const paginatedCourses = useSelector(selectPaginatedCourses)
+
+    const setPage = async (page) => {
+        await dispatch(setCurrentPage(page))
+    };
+
+    const handleSelectChange = (event) => {
+        const newPageSize = event.target.value;
+        setSelectSize(newPageSize);
+        dispatch(setPageSize(newPageSize));
+    };
 
     useEffect(() => {
-        const fetchFiltersCourses = async () => {
-            await dispatch(fetchAllCourses())
+        const getPaginatedCourses = async () => {
+            await dispatch(fetchPaginatedCourses({ pageNumber: currentPage, pageSize: pageSize }))
         };
-        fetchFiltersCourses()
-    }, [])
+        getPaginatedCourses()
+    }, [dispatch, currentPage, pageSize])
 
     return (
         <div style={{ backgroundColor: '#FAFCFF' }}>
@@ -79,12 +78,11 @@ const CourseGrid = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {courses?.map(course => (
-                            //The display: table-row property prevents justify-content and padding from having an effect.
-                            <StyledTableRow key={course?.courseId} sx={{ p: '20px 0px 20px 30px', borderTopLeftRadius: '4px', borderTopRightRadius: '4px', justifyContent: 'space-between', height: '79px' }}>
+                        {paginatedCourses?.map(course => (
+                            <StyledTableRow key={course?.courseId} sx={{ p: '20px 0px 20px 30px', borderTopLeftRadius: '4px', borderTopRightRadius: '4px', height: '79px' }}>
                                 <StyledTableCell align="center" >{course?.courseId}</StyledTableCell>
                                 <StyledTableCell align="center" >{course?.name}</StyledTableCell>
-                                <StyledTableCell align="center" >{course?.coordinator}</StyledTableCell>
+                                <StyledTableCell align="center" >{course?.coordinatorName}</StyledTableCell>
                                 <StyledTableCell align="center" >{course?.year}</StyledTableCell>
                                 <StyledTableCell align="center" >
                                     {new Date(course?.startDate).getDate() < 10 ?
@@ -105,33 +103,48 @@ const CourseGrid = () => {
                                 <StyledTableCell align="center" >{course?.numberOfMeetings}</StyledTableCell>
                                 <StyledTableCell align="center" >{course?.numberOfStudents}</StyledTableCell>
                                 <StyledTableCell align="center" sx={{ width: '140px', height: '39px' }}>
-                                    {course?.status == 'פעיל' &&
+                                    {course?.statusName == 'פעיל' &&
                                         <Box sx={{ borderRadius: '68.31px', p: '4.1px 20.49px', bgcolor: '#DAF8E6', width: '60px', height: '30px', margin: 'auto', alignContent: 'center' }} align="center">
-                                            <Typography width={'27px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#1A8245'>{course?.status}</Typography>
+                                            <Typography fontFamily={'Rubik'} width={'27px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#1A8245'>{course?.statusName}</Typography>
                                         </Box>
-                                        || course?.status == 'ממתין' &&
+                                        || course?.statusName == 'ממתין' &&
                                         <Box sx={{ borderRadius: '68.31px', p: '4.1px 20.49px', bgcolor: '#FEEBEB', width: '60px', height: '30px', margin: 'auto', alignContent: 'center' }} align="center">
-                                            <Typography width={'34px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#E10E0E'>{course?.status}</Typography>
+                                            <Typography fontFamily={'Rubik'} width={'34px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#E10E0E'>{course?.statusName}</Typography>
                                         </Box>
-                                        || course?.status == 'הסתיים' &&
+                                        || course?.statusName == 'הסתיים' &&
                                         <Box sx={{ borderRadius: '68.31px', p: '4.1px 20.49px', bgcolor: '#E5E7EB', width: '60px', height: '30px', margin: 'auto', alignContent: 'center' }} align="center">
-                                            <Typography width={'42px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#494747'>{course?.status}</Typography>
+                                            <Typography fontFamily={'Rubik'} width={'42px'} height={'17px'} fontWeight={'400'} fontSize={'14px'} color='#494747'>{course?.statusName}</Typography>
                                         </Box>
                                     }</StyledTableCell>
                                 <StyledTableCell align="center" sx={{ width: '90px', height: '34px' }}>
-                                    <IconButton sx={{ width: '30px', height: '32px', p: '5px 6px', bgcolor: '#F4F4F4', borderRadius: '5px', gap: '10px', marginX: '5px' }}>
-                                        <DeleteOutline sx={{ height: '20px', width: '18px', color: 'black' }} />
-                                    </IconButton>
-                                    <IconButton sx={{ width: '30px', height: '32px', p: '5px 6px', bgcolor: '#F4F4F4', borderRadius: '5px', gap: '10px', marginX: '5px' }}>
-                                        {/* <MdEditSquare fontWeight={100} sx={{ height: '20px', width: '20px', color: 'black' }} /> */}
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#000000"><path d="M224.62-160q-27.62 0-46.12-18.5Q160-197 160-224.62v-510.76q0-27.62 18.5-46.12Q197-800 224.62-800h335.46l-40 40H224.62q-9.24 0-16.93 7.69-7.69 7.69-7.69 16.93v510.76q0 9.24 7.69 16.93 7.69 7.69 16.93 7.69h510.76q9.24 0 16.93-7.69 7.69-7.69 7.69-16.93v-299.53l40-40v339.53q0 27.62-18.5 46.12Q763-160 735.38-160H224.62ZM480-480Zm-80 80v-104.62l357.77-357.76q6.61-6.62 13.92-9.16t15.39-2.54q7.54 0 14.73 2.54t13.04 8.39L859.31-820q6.38 6.62 9.69 14.58 3.31 7.96 3.31 16.04 0 8.07-2.43 15.26-2.42 7.2-9.03 13.81L500.77-400H400Zm432.54-388.62-44.46-46.76 44.46 46.76ZM440-440h43.69l266.62-266.62-21.85-21.84-24.38-23.39L440-487.77V-440Zm288.46-288.46-24.38-23.39 24.38 23.39 21.85 21.84-21.85-21.84Z" /></svg>
+                                    <IconButton sx={{ width: '32px', height: '32px', p: '5px 6px', bgcolor: '#F4F4F4', borderRadius: '5px', gap: '10px', marginX: '5px' }}>
+                                        <img src={editSvg} />
                                     </IconButton>
                                 </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer></div>
+
+            </TableContainer>
+            <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '90%', margin: '10px auto', p: '10px' }}>
+                <Grid2 container>
+                    <Grid2 size={3}>
+                        <Pagination onChange={(e, p) => setPage(p)} count={totalCount / pageSize} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
+                    </Grid2>
+                    <Grid2 size={9} textAlign={'right'} margin={'auto'}>
+                        <Select IconComponent={(props) => (
+                            <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />)}
+                            displayEmpty onChange={handleSelectChange} value={selectSize} sx={{ height: '26px', width: '49px', borderRadius: '4px', borderWidth: '0.5px', borderColor: '#F0F1F3', p: '6px 10px', fontSize: '12px', mr: '15px', verticalAlign: 'left' }}>
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                        </Select>
+                        <Typography display={'contents'} fontFamily={'Rubik'} fontSize={'14px'}>:מספר שורות</Typography>
+                    </Grid2>
+                </Grid2>
+            </Box>
+        </div >
     );
 };
 
