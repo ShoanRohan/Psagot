@@ -5,11 +5,11 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCoordinators } from "../features/user/userAction";
 
+
 // סטייל לשדות בחירה
 
 const sharedStyles = {
   width: "150px",
-  //height: "43px",
   textAlign: "right",
   direction: "rtl",
   "& .MuiInputLabel-root": {
@@ -57,7 +57,7 @@ const CourseSearch = () => {
     console.log(coordinators); // Undefined
   }, [coordinators]);
 
-  // פונקציה לטיפול במיקוד בשדה השנה
+  // פונקציה לטיפול במיקוxsxד בשדה השנה
   const handleYearFocus = () => {
     if (!filters.year) {
       setFilters((prevFilters) => ({ ...prevFilters, year: currentYear }));
@@ -89,10 +89,9 @@ const CourseSearch = () => {
   return (
     <Box
     sx={{
-      width: "90%",
+      width: "100%",
       margin: "auto",
-      position: "relative",
-      top: "100px",
+      //position: "relative",
       borderRadius: "10px",
       padding: "25px 24px",
       backgroundColor: "white",
@@ -179,7 +178,7 @@ const CourseSearch = () => {
             ...buttonStyles,
           }}
           
-          startIcon={<FilterAltOffOutlinedIcon />}
+          //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
             dispatch(fetchCoordinators()); // טוען מחדש את הקורסים
@@ -191,6 +190,7 @@ const CourseSearch = () => {
 
         <Button
           variant="contained"
+          backgroundColor= "#326DEF"
           sx={buttonStyles}
           startIcon={<SearchIcon />}
           disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
