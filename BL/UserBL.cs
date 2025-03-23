@@ -75,53 +75,13 @@ namespace BL
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
 
-        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        public async Task<(List<UserTableDTO> UsertableDto, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
         {
             var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
             if (users == null) return (null, errorMessage);
 
-            var userDTOs = _mapper.Map<List<UserDTO>>(users);
+            var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
             return (userDTOs, null);
         }
-
-        public async Task<List<UserDTO>> GetUsers()
-
-        {
-            var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
-            var userDTOs = users.Select(u => new UserDTO { UserId = u.UserId, Name = u.Name, Email = u.Email, UserTypeName = u.UserType.ToString(), IsActive=u.IsActive }).ToList(); // המרה ל-DTO
-            return userDTOs; ;
-        }
-        //public async Task<(List<UserDTO> Users, string ErrorMessage)> GetUsersPage(int? pageNumber, int? pageSize)
-        //{
-        //    try
-        //    {
-        //        if (pageNumber.HasValue && pageSize.HasValue)
-        //        {
-        //            var (users, errorMessage) = await _userDL.GetUsersPage(pageNumber.Value, pageSize.Value);
-        //            if (users == null) return (null, errorMessage);
-
-        //            var userDTOs = _mapper.Map<List<UserDTO>>(users);
-        //            return (userDTOs, null);
-        //        }
-        //        else
-        //        {
-        //            var users = await _userDL.GetUsers(); // קריאה לשכבת ה-DL
-        //            var userDTOs = users.Select(u => new UserDTO
-        //            {
-        //                UserId = u.UserId,
-        //                Name = u.Name,
-        //                Email = u.Email,
-        //                UserTypeName = u.UserType.ToString(),
-        //                IsActive = u.IsActive
-        //            }).ToList();
-
-        //            return (userDTOs, null);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return (null, ex.Message);
-        //    }
-        //}
     }
 }

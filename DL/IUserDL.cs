@@ -16,8 +16,6 @@ namespace DL
         Task<(User User, string ErrorMessage)> GetUserById(int id);
         Task<User> UserLoginAsync(string email, string password);
         Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
-        Task<List<User>> GetUsers();
         Task<(List<User> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
-        //Task<(List<User> Users, string ErrorMessage)> GetUsersPage(int? pageNumber , int? pageSize);
     }
 }

@@ -1,111 +1,151 @@
-import { useState, useEffect } from "react";
-import { getUserByPage, tableUsers } from "../utils/userUtil";
-import { Grid, Typography,Box, Grid2, IconButton, Button } from '@mui/material';
-import { DeleteOutline, SpaceBar } from "@mui/icons-material";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { useNavigate } from 'react-router-dom';
 
+import { tableUsers } from "../utils/userUtil";
+import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import { DeleteOutline } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import '../styles/editUser.css';
 
 const UsersTable = () => {
     const [users, setUsers] = useState([]);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalUsers, setTotalUsers] = useState(0);
-    const navigate = useNavigate();       
+    const [error, setError] = useState(null); // לטיפול בשגיאות
 
+    // פונקציה לפיצול דפים
     const getUserByPage = (users, page, pageSize) => {
         const startIndex = (page - 1) * pageSize;
         return users.slice(startIndex, startIndex + pageSize);
     };
 
+    // טוען את המשתמשים
     useEffect(() => {
         const fetchUsers = async () => {
-            const usersData = await tableUsers(); // קבלת כל המשתמשים
-            const paginatedUsers = getUserByPage(usersData, page, pageSize); // חתוך את המידע לעמוד הנוכחי
-            setUsers(paginatedUsers);
-            setTotalUsers(usersData.length); // מספר כל המשתמשים
+            try {
+                const usersData = await tableUsers(); // קבלת כל המשתמשים
+                const paginatedUsers = getUserByPage(usersData, page, pageSize); // חתוך את המידע לעמוד הנוכחי
+                setUsers(paginatedUsers);
+                setTotalUsers(usersData.length); // מספר כל המשתמשים
+            } catch (error) {
+                console.error("שגיאה בטעינת המשתמשים:", error);
+                setError("הייתה שגיאה בטעינת המשתמשים. אנא נסה שנית.");
+            }
         };
         fetchUsers();
     }, [page, pageSize]);
+
+    // שינוי דף
     const handlePageChange = (newPage) => {
-        setPage(newPage);
+        if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
+            setPage(newPage);
+        }
     };
 
+    // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
-    // כאן תוכל לעדכן את הסטטוס במצב שלך או לשלוח בקשה לשרת
-    console.log(`User ID: ${userId}, New Status: ${status}`);
-};
+        console.log(`User ID: ${userId}, New Status: ${status}`);
+        // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
+    };
 
     return (
         <div>
-            <h2>משתמשים</h2>
-            <Box className="box-size">
-            <table className="table">
-                <thead className="th">
-                    <tr className="coulm"> 
-                        <th >קוד משתמש</th>
-                        <th >שם משתמש</th>
-                        <th >מייל</th>
-                        <th >הרשאה</th>
-                        <th>סטטוס</th>
-                        {/* <th>עריכה</th> */}
-                    </tr>
-                </thead> 
-                <tbody className="th">
-                    {users?.map((user, index) => (
-                        <tr key={`${user?.UserId}-${index}`} >
-                            <td className="td">{user?.userId}</td>
-                            <td>{user?.name}</td>
-                            <td>{user?.email}</td>
-                            <td>{user?.userType}</td>
-                            <td>
-    
-    <Button
-        variant="contained" className="isActive-button"
-        style={{
-            borderRadius: '68.31px', 
-            backgroundColor: user?.isActive ? '#DAF8E6' : '#E5E7EB',
-            color:user?.isActive? '#1A8245':'#374151', 
-        }}
-        onClick={() => {
-            const newStatus = user?.IsActive ? "inactive" : "active";
-            handleStatusChange(user.userId, newStatus);
-        }}
-    >
-        {user?.isActive ? "פעיל" : "לא פעיל"}
-    </Button>
-</td>          
-                            <td>
-                                {user.role === "Meneger" && (
-                                    <button onClick={() => alert(`עריכת משתמש ${user.userId}`)}></button>
-                                )}
-                                <IconButton aria-label="delete" className="delete-Button">
-                                    <DeleteOutline fontSize="inherit" />
-                                  </IconButton>
-                                  <IconButton aria-label="edit" size="small" onClick={() => navigate(`/EditUser/${user?.userId}`)} >
-                                    <EditOutlinedIcon fontSize="inherit" />
-                                  </IconButton>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            </Box>
-            <Box sx={{ width: 1480, height: 58,borderRadius:8,paddingtop:16,paddingRight:24,paddingBottom:16,paddingLeft:24,gap:67,color:"white"}}>
-                <div sx={{width:1432,height:26, justif:SpaceBar}}>
-                <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>*</button>
-                <span> עמוד {page} מתוך {Math.ceil(totalUsers / pageSize)}</span>
-                <button disabled={page * pageSize >= totalUsers} onClick={() => handlePageChange(page + 1)}>*</button>
-                </div>
+            <Box sx={{ maxWidth:'100%', margin: "auto", paddingTop: 30,paddingRight:20,paddingBottom:10,paddingLeft:20 }}>
+                <Typography variant="h4" component="h2">משתמשים</Typography>
+                {error && <div style={{ color: "red", marginBottom: 16 }}>{error}</div>}  {/* הצגת הודעת שגיאה אם יש */}
+
+                <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
+                    <Table sx={{ Width: '100%' }} aria-label="users table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell className="tablecell">קוד משתמש</TableCell>
+                                <TableCell className="tablecell">שם משתמש</TableCell>
+                                <TableCell className="tablecell">מייל</TableCell> {/* יישור הכותרת למרכז */}
+                                <TableCell className="tablecell">הרשאה</TableCell>
+                                <TableCell className="tablecell">סטטוס</TableCell>
+                                <TableCell className="tablecell">עריכה</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {users?.map((user, index) => (
+                                <TableRow key={`${user.userId}-${index}`}>
+                                    <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
+                                    <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
+                                    <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
+                                    <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
+                                    <TableCell sx={{ textAlign: 'center' }}>
+                                        <Button
+                                            variant="contained"
+                                            style={{
+                                                borderRadius: '20px',
+                                                backgroundColor: user.isActive ? '#DAF8E6' : '#E5E7EB',
+                                                color: user.isActive ? '#1A8245' : '#374151',
+                                                width: '97px',
+                                                height: '39px',
+                                            }}
+                                            onClick={() => {
+                                                const newStatus = user.isActive ? "inactive" : "active";
+                                                handleStatusChange(user.userId, newStatus);
+                                            }}
+                                        >
+                                            {user.isActive ? "פעיל" : "לא פעיל"}
+                                        </Button>
+                                    </TableCell>
+                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center' , height: '79px' }}>
+                                        <IconButton
+                                            aria-label="delete"
+                                            size="small"
+                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
+                                        >
+                                            <DeleteOutline fontSize="inherit" />
+                                        </IconButton>
+                                        <IconButton
+                                            aria-label="edit"
+                                            size="small"
+                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}
+                                        >
+                                            <EditOutlinedIcon fontSize="inherit" />
+                                        </IconButton>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+
+                {/* ניווט עמודים */}
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 2 }}>
+                    <Button
+                        disabled={page === 1}
+                        onClick={() => handlePageChange(page - 1)}
+                        sx={{ padding: "6px 16px" }}
+                    >
+                        הקודם
+                    </Button>
+                    
+                    <Button
+                        disabled={page * pageSize >= totalUsers}
+                        onClick={() => handlePageChange(page + 1)}
+                        sx={{ padding: "6px 16px" }}
+                    >
+                        הבא
+                    </Button>
                 </Box>
-            <div>
-                <label>מספר שורות:</label>
-                <select value={pageSize} onChange={(e) => setPageSize(Number(e.target.value))}>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="50">50</option>
-                </select>
-            </div>
+
+                {/* בחירת מספר שורות */}
+                <Box sx={{ marginTop: 2, display: "flex", alignItems: "center" }}>
+                    <label style={{ marginRight: 8 }}>מספר שורות:</label>
+                    <select
+                        value={pageSize}
+                        onChange={(e) => setPageSize(Number(e.target.value))}
+                        style={{ padding: "6px", borderRadius: "4px" }}
+                    >
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </Box>
+            </Box>
         </div>
     );
 };

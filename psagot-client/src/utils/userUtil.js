@@ -28,7 +28,7 @@ const getAllLecturersAndCoordinators = async ()=> {
 };
 
 const tableUsers = async () =>{
-        const response = await api.get(`/User/GetUsers`);
+        const response = await api.get(`/User/GetUsersByPage?pageNumber=1&pageSize=10`);
         return response.data;
 };
 
