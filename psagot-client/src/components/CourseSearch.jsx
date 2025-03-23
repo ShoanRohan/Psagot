@@ -92,7 +92,7 @@ const CourseSearch = () => {
       width: "100%",
       margin: "auto",
       //position: "relative",
-      borderRadius: "10px",
+      borderRadius: "4px",
       padding: "25px 24px",
       backgroundColor: "white",
       display: "flex",

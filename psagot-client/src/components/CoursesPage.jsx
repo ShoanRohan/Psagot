@@ -31,10 +31,12 @@ const buttonStyles = {
 };
 const CoursesPage = () => {
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ p: 3,  width:"92%",
+    }}>
       {/* כותרת עם כפתורים */}
       <Box
              sx={{
+              
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
