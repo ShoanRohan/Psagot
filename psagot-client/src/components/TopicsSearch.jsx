@@ -70,6 +70,11 @@ const TopicsSearch = ({ id }) => {
         direction: "rtl",
         borderRadius: "10px",
         background: "#FFF",
+  
+      //  width: "1482px",
+      //   transform: "rotate(90deg)",
+          padding:"30px 32px" ,
+     
 
 /* Drop Shadow */
     boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
@@ -110,6 +115,22 @@ const TopicsSearch = ({ id }) => {
             ))}
           </Select>
         </FormControl>
+        <FormControl variant="standard" sx={sharedStyles}>
+          <InputLabel>סטאטוס</InputLabel>
+          <Select
+            value={filters.lecturerName}
+            onChange={(e) =>
+              setFilters({ ...filters, lecturerName: e.target.value })
+            }
+            sx={sharedStyles}
+          >
+            {lecturers?.map((lecturer) => (
+              <MenuItem key={lecturer.id} value={lecturer.name}>
+                {lecturer.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </Box>
 
       {/* כפתורים */}
@@ -117,7 +138,7 @@ const TopicsSearch = ({ id }) => {
         <Button
           variant="outlined"
           sx={buttonStyles}
-          startIcon={<FilterAltOffOutlinedIcon sx={{ marginLeft: 1 }}/>}
+          // startIcon={<FilterAltOffOutlinedIcon sx={{ marginLeft: 1 }}/>}
           // startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
           onClick={() => setFilters(initialState)}
         >
@@ -125,12 +146,15 @@ const TopicsSearch = ({ id }) => {
         </Button>
 
         <Button
+         
           variant="contained"
           sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
           startIcon={<SearchIcon sx={{ marginLeft: 1 }}/>}
+          disabled={true} // הכפתור מושבת
         >
           חיפוש
         </Button>
+              
       </Box>
     </Box>
   );

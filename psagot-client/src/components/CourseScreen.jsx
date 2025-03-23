@@ -1,10 +1,10 @@
 import React from "react";
 import { Box, Button, Typography, Tabs, Tab, IconButton } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CourseDetails from "./CourseDetails";
 import CourseTopics from "./CourseTopics";
 import "./CourseScreen.css"; // ייבוא עיצוב
+import exlIcon from "../assets/icons/exl.svg"; // ייבוא אייקון ה-Excel
 
 const CourseScreen = () => {
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -21,13 +21,15 @@ const CourseScreen = () => {
           <Typography className="course-title">קורס אדריכלות</Typography>
           <Typography className="course-status">סטטוס הקורס: פעיל</Typography>
         </Box>
-        <Box className="course-actions">
+
+        {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
+        <Box className="course-actions" sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <IconButton>
+            <img src={exlIcon} alt="Excel Icon" width="24px" height="24px" />
+          </IconButton>
           <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
             הוספת נושא
           </Button>
-          <IconButton>
-            <LockOutlinedIcon />
-          </IconButton>
         </Box>
       </Box>
 
