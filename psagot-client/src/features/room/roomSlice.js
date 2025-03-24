@@ -1,12 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
+import axios from 'axios';
 
 const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+    allRooms: [], // רשימה מקורית מהשרת
+    filteredRooms: [], // רשימה לאחר סינון
+    loading: false,
     error: null,
+      
 };
+
+// // שליפת רשימת חדרים מהשרת
+// export const fetchRooms = createAsyncThunk("rooms/fetchRooms", async () => {
+//     const response = await axios.get("http://localhost:5000/api/rooms");
+//     return response.data;
+//   });
 
 const roomSlice = createSlice({
     name: 'room',
@@ -15,7 +26,15 @@ const roomSlice = createSlice({
         
         setRoom: (state, action) => {
             
-        }
+        },
+        filterRooms: (state, action) => {
+            const { roomName, capacity, equipment } = action.payload;
+            state.filteredRooms = state.allRooms.filter(room =>
+              (roomName ? room.name.includes(roomName) : true) &&
+              (capacity ? room.capacity >= capacity : true) &&
+              (equipment ? room.equipment.includes(equipment) : true)
+            );
+          },
     },
     extraReducers: (builder) => {
         builder
@@ -24,7 +43,7 @@ const roomSlice = createSlice({
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.rooms = action.payload;
+                state.allRooms = action.payload;
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.status = 'failed';
@@ -35,23 +54,23 @@ const roomSlice = createSlice({
             })
             .addCase(fetchRoomById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.selectedRoom = action.payload;
             })
             .addCase(fetchRoomById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
             .addCase(addRoomAction.fulfilled, (state, action) => {
-                state.rooms.push(action.payload);
+                state.allRooms.push(action.payload);
             })
             .addCase(updateRoomAction.fulfilled, (state, action) => {
-                const index = state.rooms.findIndex((room) => room.id === action.payload.id);
+                const index = state.allRooms.findIndex((room) => room.id === action.payload.id);
                 if (index !== -1) {
-                    state.rooms[index] = action.payload;
+                    state.allRooms[index] = action.payload;
                 }
             });
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setRoom, filterRooms } = roomSlice.actions;
 export default roomSlice.reducer;
