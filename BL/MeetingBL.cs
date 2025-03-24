@@ -76,19 +76,16 @@ namespace BL
         }
 
 
-
-        public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount, string ErrorMessage)> GetMeetingsByPage(int page, int pageSize)
+        public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount)> GetMeetingsByPage(int page, int pageSize)
         {
-            try
-            {
-                var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
-                return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount, null);
-            }
-            catch (Exception ex)
-            {
-                return (Enumerable.Empty<MeetingDTO>(), 0, ex.Message);
-            }
+            var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
+            
+            if (meetings == null)
+            {return (Enumerable.Empty<MeetingDTO>(), 0);}
+           
+            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount);
         }
+
 
     }
 }

@@ -111,7 +111,6 @@ namespace DL
             }
             catch (Exception ex)
             {
-               // Console.WriteLine($"Error fetching meetings: {ex.Message}");
                 return (Enumerable.Empty<Meeting>(), 0);
             }
         }

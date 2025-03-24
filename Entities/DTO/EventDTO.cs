@@ -8,7 +8,7 @@ namespace Entities.DTO
 {
     public class EventDTO
     {
-        public int EventId { get; set; }
+        public int Id { get; set; }
         public string Title { get; set; } = null!;
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
@@ -21,5 +21,3 @@ namespace Entities.DTO
         public string Color { get; set; } = null!;
     }
 }
-//לבדוק אם המבנה טוב
-// title: "קורס תכנות - JAVA", start: "2025-03-02T12:00:00", end: "2025-03-02T14:00:00", extendedProps: { location: "חדר מחשבים", color: "#ffccf3"} }
