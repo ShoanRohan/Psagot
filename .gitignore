@@ -367,3 +367,7 @@ FodyWeavers.xsd
 /psagot-client/src/components/ExampleUseGenericPopup.jsx
 /.gitignore
 /.gitignore
+/psagot-client/src/components/ExampleUseGenericPopup.jsx
+/psagot-client/src/components/GenericPopup.jsx
+/psagot-client/src/style/GenericPopupStyle.jsx
+/.gitignore
