@@ -13,10 +13,6 @@ const AppRouter = () => {
              <Route path='/home' element={<Layout/>}>
                 <Route index element={<HomePage/>}/>    
             </Route> 
-                
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
-        <Routes>
             <Route path='/' element={<Layout/>}>
                 <Route path='/' element={<RoomsGrid/>}/>
             </Route>
