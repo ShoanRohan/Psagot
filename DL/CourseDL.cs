@@ -36,7 +36,7 @@ namespace DL
         {
             try
             {
-                var courses = await _context.Set<Course>().ToListAsync();
+                var courses = await _context.Set<Course>().Include(c=> c.Coordinator).ToListAsync();
                 return (courses, null);
             }
             catch (Exception ex)
