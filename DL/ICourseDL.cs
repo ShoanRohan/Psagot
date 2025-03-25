@@ -15,6 +15,11 @@ namespace DL
         Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetPaginatedCourses(int skip, int pageSize);
         Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
         Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course);
+        Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetFilteredCourses(
+         int? courseId ,
+         string courseName ,
+         string coordinatorName,
+         int? year );
 
     }
 }

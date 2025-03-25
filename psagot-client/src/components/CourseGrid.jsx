@@ -127,7 +127,7 @@ const CourseGrid = () => {
                 </Table>
 
             </TableContainer>
-            <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '90%', margin: '10px auto', p: '10px' }}>
+            <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px auto', p: '10px' }}>
                 <Grid2 container>
                     <Grid2 size={3}>
                         <Pagination onChange={(e, p) => setPage(p)} count={totalCount / pageSize} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />

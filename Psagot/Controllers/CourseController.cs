@@ -57,6 +57,21 @@ namespace Psagot.Controllers
 
             return Ok(updatedCourse);
         }
+        [HttpGet("filtered")]
+        public async Task<IActionResult> GetFilteredCourses(
+    [FromQuery] int? courseId = null,
+    [FromQuery] string courseName = null,
+    [FromQuery] string coordinatorName = null,
+    [FromQuery] int? year = null)
+        {
+            var (courses, errorMessage) = await _courseBL.GetFilteredCourses(courseId, courseName, coordinatorName, year);
+
+            if (courses != null)
+                return Ok(courses);
+
+            return BadRequest(new { Error = errorMessage });
+        }
+
 
     }
 }

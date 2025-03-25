@@ -88,5 +88,47 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetFilteredCourses(
+           int? courseId ,
+           string courseName,
+           string coordinatorName,
+           int? year )
+        {
+            try
+            {
+                var query = _context.Set<Course>()
+                    .Include(c => c.Status)
+                    .Include(c => c.Coordinator)
+                    .AsQueryable();
+
+                if (courseId.HasValue)
+                {
+                    query = query.Where(c => c.CourseId == courseId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(courseName))
+                {
+                    query = query.Where(c => c.Name.Contains(courseName));
+                }
+
+                if (!string.IsNullOrEmpty(coordinatorName))
+                {
+                    query = query.Where(c => c.Coordinator.Name.Contains(coordinatorName));
+                }
+
+                if (year.HasValue)
+                {
+                    query = query.Where(c => c.Year == year.Value);
+                }
+
+                var courses = await query.ToListAsync();
+                return (courses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
