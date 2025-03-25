@@ -25,7 +25,7 @@ const CourseScreen = () => {
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
         <Box className="course-actions" sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <IconButton>
-            <img src={exlIcon} alt="Excel Icon" width="24px" height="24px" />
+            <img src={exlIcon} alt="הורדת אקסל" width="24px" height="24px" />
           </IconButton>
           <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
             הוספת נושא
