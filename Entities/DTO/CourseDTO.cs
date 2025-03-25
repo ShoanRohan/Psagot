@@ -20,9 +20,9 @@ namespace Entities.DTO
 
         public string Color { get; set; } = null!;
 
-        public DateTime StartDate { get; set; }
+        public DateOnly StartDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+        public DateOnly? EndDate { get; set; }
 
         public int? NumberOfMeetings { get; set; }
 
@@ -30,6 +30,12 @@ namespace Entities.DTO
 
         public string? Notes { get; set; }
 
-    }
+        public int? CoordinatorId { get; set; }
 
+        public int? StatusId { get; set; }
+
+        public string? CoordinatorName { get; set; }
+
+        public string? StatusName { get; set; }
+    }
 }

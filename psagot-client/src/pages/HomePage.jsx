@@ -10,7 +10,7 @@ const HomePage = () => {
 
     useEffect(() => {
         if (status === 'idle') {
-            dispatch(fetchAllUserTypes());
+            // dispatch(fetchAllUserTypes());
         }
     }, [status, dispatch]);
 
@@ -23,7 +23,7 @@ const HomePage = () => {
     if (status === 'failed') return <Typography>Error: {error}</Typography>;
 
     return (
-        <Container item style={{ textAlign: 'center', padding: 10 }}>
+        <Container style={{ textAlign: 'center', padding: 10 }}>
             <Typography variant="h5">😀hello psagot project😀</Typography>
             <Button onClick={handleClickButton}>Example of a function structure</Button>
             {/* ofrat */}
