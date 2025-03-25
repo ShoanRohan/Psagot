@@ -87,7 +87,6 @@ namespace DL
             }
             catch (Exception ex)
             {
-                //Console.WriteLine($"Error in GetMeetingsByRange: {ex.Message}");
                 return (null, "An error occurred while retrieving meetings");
             }
         }

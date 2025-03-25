@@ -169,14 +169,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import "../styles/meetingsTable.css"
+import "../styles/meetingsTable.css"; 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${TableCell.head}`]: {
-        backgroundColor: theme.palette.common.black,
-        color: "white",
-        fontWeight: "bold",
-        fontFamily: "Rubik",
         textAlign: "center",
         padding: theme.spacing(1, 2),
     },
@@ -411,8 +407,6 @@ export default function MeetingsTable() {
     }, [dispatch]);
 
     const handleDelete = (id) => {
-        //להוסיף פונקציה של מחיקה 
-        //לבדוק על הרשאה
         setSnackbar({ open: true, message: "מחיקת מפגש נכשלה", severity: "error" });
     };
 
@@ -420,19 +414,15 @@ export default function MeetingsTable() {
         setPage(value);
     };
 
-
     const handleRowsPerPageChange = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(1);
     };
 
-
     if (loading) return <CircularProgress />;
     if (error) return <Alert severity="error">{error}</Alert>;
 
-    // const displayedMeetings = (meetings.length > 0 ? meetings : mockMeetings).slice((page - 1) * rowsPerPage, page * rowsPerPage);
-    // const pageCount = Math.ceil(meetings.length / rowsPerPage);
-    const displayedMeetings = (meetings.length > 0 || mockMeetings.length > 0 ? meetings.length > 0 ? meetings : mockMeetings : mockMeetings).slice(
+    const displayedMeetings = (meetings.length > 0 ? meetings : mockMeetings).slice(
         (page - 1) * rowsPerPage,
         page * rowsPerPage
     );
@@ -444,63 +434,50 @@ export default function MeetingsTable() {
                 {view === "table" ? "הצג לוח שנה" : "הצג טבלה"}
             </Button>
             {view === "table" ? (
-
-               <TableContainer component={Paper} >
-                {/* sx={{ Heigh: "600px", width: "950px"}} */}
-                    <Table sx={{ "& td, & th": { fontSize: "0.8rem" } }}>
+                <TableContainer component={Paper} className="table-container">
+                    <Table className="meetings-table">
                         <TableHead>
                             <TableRow>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>מספר מפגש</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שם קורס</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שם נושא</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שם מרצה</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>תאריך</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>יום</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שעת התחלה</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שעת סיום</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>מספר חדר</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>שיבוץ</StyledTableCell>
-                                <StyledTableCell align="center" sx={{ fontWeight: "bold" }}>סטטוס</StyledTableCell>
+                                <StyledTableCell className="table-header">מספר מפגש</StyledTableCell>
+                                <StyledTableCell className="table-header">שם קורס</StyledTableCell>
+                                <StyledTableCell className="table-header">שם נושא</StyledTableCell>
+                                <StyledTableCell className="table-header">שם מרצה</StyledTableCell>
+                                <StyledTableCell className="table-header">תאריך</StyledTableCell>
+                                <StyledTableCell className="table-header">יום</StyledTableCell>
+                                <StyledTableCell className="table-header">שעת התחלה</StyledTableCell>
+                                <StyledTableCell className="table-header">שעת סיום</StyledTableCell>
+                                <StyledTableCell className="table-header">מספר חדר</StyledTableCell>
+                                <StyledTableCell className="table-header">שיבוץ</StyledTableCell>
+                                <StyledTableCell className="table-header">סטטוס</StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {displayedMeetings.map((meeting) => (
                                 <StyledTableRow key={meeting.id}>
-                                    <StyledTableCell align="center">{meeting.meetingNumber}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.course}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.subject}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.lecturer}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.date}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.day}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.startTime}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.endTime}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.room}</StyledTableCell>
-                                    <StyledTableCell align="center">{meeting.valid ? "V" : "X"}</StyledTableCell>
-                                    <StyledTableCell align="center">
+                                    <StyledTableCell>{meeting.meetingNumber}</StyledTableCell>
+                                    <StyledTableCell>{meeting.course}</StyledTableCell>
+                                    <StyledTableCell>{meeting.subject}</StyledTableCell>
+                                    <StyledTableCell>{meeting.lecturer}</StyledTableCell>
+                                    <StyledTableCell>{meeting.date}</StyledTableCell>
+                                    <StyledTableCell>{meeting.day}</StyledTableCell>
+                                    <StyledTableCell>{meeting.startTime}</StyledTableCell>
+                                    <StyledTableCell>{meeting.endTime}</StyledTableCell>
+                                    <StyledTableCell>{meeting.room}</StyledTableCell>
+                                    <StyledTableCell>{meeting.valid ? "V" : "X"}</StyledTableCell>
+                                    <StyledTableCell>
                                         <Chip
                                             label={meeting.inSystem ? "פעיל" : "הסתיים"}
-                                            color={meeting.inSystem ? "success" : "default"}
-                                            sx={{
-                                                backgroundColor: meeting.inSystem ? "#DAF8E6" : "#f0f0f0",
-                                                borderRadius: "68.31px",
-                                                paddingX: "20.49px",
-                                                paddingY: "4.10px",
-                                                color: meeting.inSystem ? "#1A8245" : "#333",
-                                                fontSize: "0.875rem",
-                                                fontFamily: "Rubik, sans-serif",
-                                                fontWeight: "400",
-                                                textTransform: "capitalize",
-                                            }}
+                                            className={meeting.inSystem ? "status-chip active" : "status-chip inactive"}
                                         />
                                     </StyledTableCell>
                                     <StyledTableCell>
-                                        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                                            <IconButton sx={{ backgroundColor: "#f6f7f9", borderRadius: "5px" }} onClick={() => handleDelete(meeting.id)}>
-                                                <DeleteOutlineIcon sx={{ color: "#102b82" }} />
+                                        <Box className="icon-buttons">
+                                            <IconButton className="delete-button" onClick={() => handleDelete(meeting.id)}>
+                                                <DeleteOutlineIcon />
                                             </IconButton>
-                                            <IconButton sx={{ backgroundColor: "#f6f7f9", borderRadius: "5px" }}>
-                                                <EditOutlinedIcon sx={{ color: "#102b82" }} />
+                                            <IconButton className="edit-button">
+                                                <EditOutlinedIcon />
                                             </IconButton>
                                         </Box>
                                     </StyledTableCell>
@@ -517,9 +494,9 @@ export default function MeetingsTable() {
                     locale="he"
                 />
             )}
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} className="highlighted-box">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Typography sx={{ ml: 1 }}>מספר שורות:</Typography>
+                    <Typography sx={{ ml: 1}}>מספר שורות:</Typography>
                     <Select
                         value={rowsPerPage}
                         onChange={handleRowsPerPageChange}
@@ -574,6 +551,7 @@ export default function MeetingsTable() {
         </div>
     );
 }
+
 
 
 
