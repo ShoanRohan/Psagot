@@ -5,21 +5,73 @@
     height: 24px;
     fill: transparent;  
     color: transparent;
-  }
-  [data-testid="EditOutlinedIcon"] path {
-    display: none; 
-  }
-  [data-testid="DeleteOutlineIcon"]{
-    background-image:url('../assets/icons/trash.svg') ;
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center; 
-    width: 24px;
-    height: 24px;
-    fill: transparent;  
-    color: transparent;
-    display: block;
-  }
-  [data-testid="DeleteOutlineIcon"] path {
-    display: none; 
-  }
+}
+[data-testid="EditOutlinedIcon"] path {
+  display: none; 
+}
+[data-testid="DeleteOutlineIcon"]{
+  background-image:url('../assets/icons/trash.svg') ;
+  background-size: contain;
+  background-repeat: no-repeat; 
+  background-position: center; 
+  width: 24px;
+  height: 24px;
+  fill: transparent;  
+  color: transparent;
+  display: block;
+}
+[data-testid="DeleteOutlineIcon"] path {
+  display: none; 
+}
+.styled-table-cell-head {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  font-family: Rubik;
+  text-align: center;
+  padding: 8px 16px;
+}
+
+.styled-table-cell-body {
+  text-align: center;
+}
+
+.styled-table-row:nth-of-type(odd) {
+  background-color: #f9fbff;
+}
+
+.styled-table-row:last-child td,
+.styled-table-row:last-child th {
+  border: 0;
+}
+
+.meetings-table-container {
+  max-width: 100%;
+}
+
+.meetings-button {
+  margin-bottom: 16px;
+}
+
+.meetings-table {
+  font-size: 0.8rem;
+}
+
+.meetings-table-container-paper {
+  height: 600px;
+  width: 1345px;
+}
+
+.meetings-chip-active {
+  background-color: #daf8e6;
+  border-radius: 68.31px;
+  padding: 4px 20.49px;
+  font-size: 0.875rem;
+}
+
+.meetings-chip-inactive {
+  background-color: #f0f0f0;
+  border-radius: 68.31px;
+  padding: 4px 20.49px;
+  font-size: 0.875rem;
+}
