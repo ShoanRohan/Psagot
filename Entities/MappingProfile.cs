@@ -20,14 +20,14 @@ public class MappingProfile : Profile
         CreateMap<Course,CourseDTO> ().ReverseMap();
 
         CreateMap<Meeting,EventDTO>()
-           .ForMember(dest => dest.EventId, opt => opt.MapFrom(src => src.MeetingId)) 
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MeetingId)) 
            .ForMember(dest => dest.Title, opt => opt.MapFrom(src => $"{src.Course.Name} - {src.Topic.Name}"))
-           .ForMember(dest => dest.Start, opt => opt.MapFrom(src => CombineDateAndTime(src.MeetingDate, src.StartTime))) // חיבור של MeetingDate עם StartTime ל-DateTime
-           .ForMember(dest => dest.End, opt => opt.MapFrom(src => CombineDateAndTime(src.MeetingDate, src.EndTime))) // חיבור של MeetingDate עם EndTime ל-DateTime
+           .ForMember(dest => dest.Start, opt => opt.MapFrom(src => CombineDateAndTime(src.MeetingDate, src.StartTime))) 
+           .ForMember(dest => dest.End, opt => opt.MapFrom(src => CombineDateAndTime(src.MeetingDate, src.EndTime))) 
            .ForMember(dest => dest.ExtendedProps, opt => opt.MapFrom(src => new ExtendedProps
            {
                Location = src.Room.Name, 
-               Color = src.Course.Color ?? "#000000"  // קבלת הצבע מהקורס, אם לא קיים צבע, מחזירים צבע ברירת מחדל
+               Color = src.Course.Color ?? "#bdb9b9"
            }));
     }
 
