@@ -1,3 +1,7 @@
+
+//import { fetchAllUsers } from '../features/user/userAction';
+//import { fetchAllCourses } from '../features/course/courseActions';
+//import { fetchAllTopic } from '../features/topic/topicActions';
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography, Grid, FormControl, InputLabel, MenuItem, Select, FormHelperText} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -47,7 +51,7 @@ const AddMeeting = () => {
     >
       <MenuItem value="">בחר מרצה</MenuItem>
       {users?.filter(user => user.userTypeId === 4).map(lecturer => (
-        <MenuItem key={`lecturer-${lecturer.id}`} value={lecturer.id}>
+        <MenuItem key={lecturer-${lecturer.id}} value={lecturer.id}>
           {lecturer.name}
         </MenuItem>
       ))}
@@ -99,9 +103,9 @@ const AddMeeting = () => {
     navigate(-1);
   };
 
-  const [validationErrors, setValidationErrors] = useState({});
+    const [validationErrors, setValidationErrors] = useState({});
 
-const handleSaveMeeting = () => {
+    const handleSaveMeeting = () => {
     const requiredFields = {
         meetingId: 'מספר מפגש',
         topicName: 'שם נושא',
@@ -120,6 +124,7 @@ const handleSaveMeeting = () => {
             errors[field] = `${requiredFields[field]} - שדה חובה`;
         }
     });
+    
 
     setValidationErrors(errors);
 
@@ -410,4 +415,59 @@ const handleSaveMeeting = () => {
     );
 };
 
-export default AddMeeting;
+export default AddMeeting;
+
+
+
+    //const users = useSelector(state => state.user.user || []);
+    //const courses = useSelector(state => state.course.courses || []);
+    //const topics = useSelector(state => state.topic.topics || []);
+
+    
+
+    /*
+   useEffect(() => {
+           dispatch(fetchAllUsers());
+           dispatch(fetchAllCourses());
+       }, [dispatch]);
+
+               <Grid item>
+  <FormControl sx={{ ...textFieldStyle }} error={!!validationErrors.lecturerId}>
+    <InputLabel>שם מרצה</InputLabel>
+    <Select
+      name="lecturerName"
+      value={meeting.lecturerName || ''}
+      onChange={handleChange}
+      required
+    >
+      <MenuItem value="">בחר מרצה</MenuItem>
+      {users?.filter(user => user.userTypeId === 4).map(lecturer => (
+        <MenuItem key={`lecturer-${lecturer.id}`} value={lecturer.id}>
+          {lecturer.name}
+        </MenuItem>
+      ))}
+    </Select>
+    {validationErrors.lecturerName && (
+      <FormHelperText>{validationErrors.lecturerName}</FormHelperText>
+    )}
+  </FormControl>
+</Grid>
+       
+    <Grid item>
+    <TextField
+        label="מספר מפגש"
+        name="meetingId"
+        value={meeting.meetingId}
+        onChange={handleChange}
+        error={!!validationErrors.meetingId}
+        helperText={validationErrors.meetingId}
+        margin="normal"
+        required
+        variant="outlined"
+        sx={textFieldStyle}
+    />
+</Grid>
+*/
+        
+
+    

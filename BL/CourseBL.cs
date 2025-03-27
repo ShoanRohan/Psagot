@@ -56,8 +56,5 @@ namespace BL
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
 
-
-
-
     }
 }
