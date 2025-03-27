@@ -37,11 +37,15 @@ const signUp = async (formData, setError) => {
 
 export default function CredentialsSignUpPage() {
 	const theme = useTheme();
+	const [username, setUsername] = React.useState('');
+	const [usernameError, setUsernameError] = React.useState('');
 	const [email, setEmail] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [confirmPassword, setConfirmPassword] = React.useState('');
 	const [emailError, setEmailError] = React.useState('');
 	const [passwordError, setPasswordError] = React.useState('');
+	const [phone, setPhone] = React.useState('');
+	const [phoneError, setPhoneError] = React.useState('');
 	const [confirmPasswordError, setConfirmPasswordError] = React.useState('');
 	const [formError, setFormError] = React.useState('');
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -65,34 +69,52 @@ export default function CredentialsSignUpPage() {
 		if (value !== password) return 'הסיסמאות אינן תואמות';
 		return '';
 	};
-
-	const handleSubmit = async (e) => {
-		e.preventDefault();
-		setFormError('');
-		setIsSubmitting(true);
-
-		const emailValidation = validateEmail(email);
-		const passwordValidation = validatePassword(password);
-		const confirmPasswordValidation = validateConfirmPassword(confirmPassword);
-
-		setEmailError(emailValidation);
-		setPasswordError(passwordValidation);
-		setConfirmPasswordError(confirmPasswordValidation);
-
-		if (emailValidation || passwordValidation || confirmPasswordValidation) {
-			setIsSubmitting(false);
-			return;
-		}
-
-		const formData = new FormData();
-		formData.append('email', email);
-		formData.append('password', password);
-
-		const result = await signUp(formData, setFormError);
-		if (!result.success) {
-			setIsSubmitting(false);
-		}
+	const validatePhone = (value) => {
+		const phoneRegex = /^[0-9]{9,10}$/; 
+		if (!value) return 'שדה חובה';
+		if (!phoneRegex.test(value)) return 'מספר טלפון לא תקין';
+		return '';
 	};
+	
+const validateUsername = (value) => {
+    if (!value) return 'שדה חובה';
+    if (value.length < 3) return 'שם משתמש חייב להיות לפחות 3 תווים';
+    return '';
+};
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormError('');
+    setIsSubmitting(true);
+
+    const usernameValidation = validateUsername(username);
+    const emailValidation = validateEmail(email);
+    const passwordValidation = validatePassword(password);
+    const confirmPasswordValidation = validateConfirmPassword(confirmPassword);
+    const phoneValidation = validatePhone(phone);
+
+    setUsernameError(usernameValidation);
+    setEmailError(emailValidation);
+    setPasswordError(passwordValidation);
+    setConfirmPasswordError(confirmPasswordValidation);
+    setPhoneError(phoneValidation);
+
+    if (usernameValidation || emailValidation || passwordValidation || confirmPasswordValidation || phoneValidation) {
+        setIsSubmitting(false);
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('email', email);
+    formData.append('phone', phone);
+    formData.append('password', password);
+
+    const result = await signUp(formData, setFormError);
+    if (!result.success) {
+        setIsSubmitting(false);
+    }
+};
 
 	return (
 		<AppProvider theme={theme}>
@@ -106,7 +128,7 @@ export default function CredentialsSignUpPage() {
 					width: '100%',
 					direction: 'rtl',
 					fontFamily: 'Rubik',
-					marginTop: '-3vh',
+					marginTop: '-8vh',
 				}}
 			>
 				<Typography
@@ -132,6 +154,7 @@ export default function CredentialsSignUpPage() {
 						width: '100%',
 						height: '100%',
 						fontFamily: 'Rubik',
+						marginTop: "-3vh",
 					}}
 				>
 					<Box
@@ -152,7 +175,27 @@ export default function CredentialsSignUpPage() {
 							}}
 						>
 							<TextField
-								label="שם משתמש"
+    label="שם משתמש"
+    name="username"
+    variant="standard"
+    fullWidth
+    value={username}
+    onChange={(e) => setUsername(e.target.value)}
+    onBlur={() => setUsernameError(validateUsername(username))}
+    error={!!usernameError}
+    helperText={usernameError}
+    InputLabelProps={{
+        style: {
+            textAlign: 'right',
+            width: '100%',
+            fontFamily: 'Rubik',
+            fontSize: '16px',
+        },
+    }}
+/>
+
+							<TextField
+								label="מייל "
 								name="email"
 								variant="standard"
 								fullWidth
@@ -170,6 +213,25 @@ export default function CredentialsSignUpPage() {
 									},
 								}}
 							/>
+<TextField
+    label="טלפון"
+    name="phone"
+    variant="standard"
+    fullWidth
+    value={phone}
+    onChange={(e) => setPhone(e.target.value)}
+    onBlur={() => setPhoneError(validatePhone(phone))}
+    error={!!phoneError}
+    helperText={phoneError}
+    InputLabelProps={{
+        style: {
+            textAlign: 'right',
+            width: '100%',
+            fontFamily: 'Rubik',
+            fontSize: '16px',
+        },
+    }}
+/>
 
 							<TextField
 								label="סיסמה"
@@ -295,6 +357,7 @@ export default function CredentialsSignUpPage() {
 								'&:hover': {
 									backgroundColor: '#112B83',
 								},
+								marginTop: 6, 
 							}}
 						>
 							{isSubmitting ? 'נרשם...' : 'הרשמה למערכת'}
