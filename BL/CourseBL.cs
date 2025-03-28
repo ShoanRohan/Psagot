@@ -69,9 +69,5 @@ public class CourseBL: ICourseBL
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
 
-
-
-   
-       
-}
+    }
 }

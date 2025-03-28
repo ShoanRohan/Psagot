@@ -30,18 +30,6 @@ namespace DL
             }
         }
 
-        public async Task<(Course Course, string ErrorMessage)> GetCourseById(int id)
-        {
-            try
-            {
-                var course = await _context.Set<Course>().FindAsync(id);
-                return (course, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
 
         public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetAllCourses()
         {
