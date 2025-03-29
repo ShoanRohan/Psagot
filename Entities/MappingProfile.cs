@@ -16,9 +16,8 @@ public class MappingProfile : Profile
         CreateMap<DaysForCourse, DaysForCourseDTO>().ReverseMap();
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
         CreateMap<Topic, TopicDTO>().ReverseMap();
-        CreateMap<CourseDTO, Course>();
-        CreateMap<Course, CourseDTO>()
+        CreateMap<Course, CourseDTO>().ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name))
             .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name));
-
+        CreateMap<CourseDTO, Course>();
     }
 }

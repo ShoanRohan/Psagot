@@ -37,6 +37,15 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
+        public async Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedCourses(int page, int pageSize)
+        {
+            var skip = (page - 1) * pageSize;
+            var (courses, errorMessage) = await _courseDL.GetPaginatedCourses(skip, pageSize);
+            var totalCount = _courseDL.GetTotalCoursesCount();
+            if (courses == null) return (null, 0, errorMessage);
+
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), totalCount, null);
+        }
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -55,6 +64,22 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+        public async Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetFilteredCourses(
+           int? courseId,
+           string courseName,
+           string coordinatorName,
+           int? year)
+
+        {
+            var (courses, ErrorMessage) = await _courseDL.GetFilteredCourses(courseId, courseName, coordinatorName, year);
+
+            if (courses == null) return (null, ErrorMessage);
+
+
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
+
+        }
+
 
     }
 }
