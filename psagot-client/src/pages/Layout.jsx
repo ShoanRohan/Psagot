@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/Header";
 import Section from "../components/Section";
-import UserTable from "../components/UserTable";
+import UserGrid from "../components/UserGrid";
 import Footer from "../components/Footer";
 import { Box } from "@mui/material";
 
@@ -11,7 +11,7 @@ const Layout = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header />
             <Section />
-            <UserTable/>
+            <UserGrid/>
             <Footer />
         </Box>
     );

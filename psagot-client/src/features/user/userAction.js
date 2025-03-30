@@ -1,26 +1,42 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUsers, getUserById, addUser, updatedUser } from '../../utils/userUtil';
+import { getAllUsers, getUserById, addUser, updatedUser} from '../../utils/userUtil';
 
 // פעולה להבאת כל המשתמשים
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
-    const data = await getAllUsers();
-    return data;
+  try {
+    const users = await getAllUsers();  // מבצע קריאה ל-API
+    return users;  // מחזיר את התוצאה
+  } catch (error) {
+    throw new Error('Failed to fetch users');
+  }
 });
 
-// פעולה להבאת משתמש לפי ID
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) => {
-    const data = await getUserById(id);
-    return data;
+  try {
+    const user = await getUserById(id);  
+    return user;
+  } catch (error) {
+    throw new Error('Failed to fetch user by id');
+  }
 });
 
-// פעולה להוספת משתמש חדש
-export const addUserAction = createAsyncThunk('user/addUserAction', async (newUser) => {
-    const data = await addUser(newUser);
-    return data;
+export const addUserAction = createAsyncThunk('user/addUser', async (newUser) => {
+  try {
+    console.log('User data being sent to the server:', newUser);
+    const user = await addUser(newUser);  
+    return user;
+  } catch (error) {
+    throw new Error('Failed to add new user');
+  }
 });
 
-// פעולה לעדכון משתמש קיים
-export const updateUserAction = createAsyncThunk('user/updateUserAction', async (updateUser) => {
-    const data = await updatedUser(updateUser);
-    return data;
+export const updateUserAction = createAsyncThunk('user/updateUser', async (updatedUser) => {
+  try {
+    const user = await updatedUser(updatedUser);  
+    return user;
+  } catch (error) {
+    throw new Error('Failed to update user');
+  }
 });
+
+
