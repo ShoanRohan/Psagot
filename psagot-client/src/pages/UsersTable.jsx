@@ -1,10 +1,11 @@
 
 import { tableUsers } from "../utils/userUtil";
-import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, MenuItem, FormControl, Select, FormHelperText} from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { DeleteOutline } from "@mui/icons-material";
+import { DeleteOutline, Route, Router, RouterSharp } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import '../styles/editUser.css';
+import '../styles/usersTable.css';
+import { Pagination } from '@mui/material';
 
 const UsersTable = () => {
     const [users, setUsers] = useState([]);
@@ -12,6 +13,14 @@ const UsersTable = () => {
     const [pageSize, setPageSize] = useState(10);
     const [totalUsers, setTotalUsers] = useState(0);
     const [error, setError] = useState(null); // לטיפול בשגיאות
+
+    const handleChange = (event) => {
+        const value = Number(event.target.value); // עדכון ל-`event`
+        setPageSize(value); // עדכון `pageSize`
+        setPage(value); // קריאה ל-`setPage`
+    };
+
+
 
     // פונקציה לפיצול דפים
     const getUserByPage = (users, page, pageSize) => {
@@ -50,15 +59,15 @@ const UsersTable = () => {
 
     return (
         <div>
-            <Box sx={{ maxWidth:'100%', margin: "auto", paddingTop: 30,paddingRight:20,paddingBottom:10,paddingLeft:20 }}>
+            <Box sx={{ maxHeight:782,margin: "auto", paddingTop: 30,paddingRight:20,paddingBottom:10,paddingLeft:20 }}>
                 <Typography variant="h4" component="h2">משתמשים</Typography>
                 {error && <div style={{ color: "red", marginBottom: 16 }}>{error}</div>}  {/* הצגת הודעת שגיאה אם יש */}
 
                 <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table sx={{ Width: '100%' }} aria-label="users table">
+                    <Table sx={{ Width: 3000 ,height:682 }} aria-label="users table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className="tablecell">קוד משתמש</TableCell>
+                                <TableCell className="tablecell" height={72}width={1442}>קוד משתמש</TableCell>
                                 <TableCell className="tablecell">שם משתמש</TableCell>
                                 <TableCell className="tablecell">מייל</TableCell> {/* יישור הכותרת למרכז */}
                                 <TableCell className="tablecell">הרשאה</TableCell>
@@ -114,37 +123,27 @@ const UsersTable = () => {
                 </TableContainer>
 
                 {/* ניווט עמודים */}
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 2 }}>
-                    <Button
-                        disabled={page === 1}
-                        onClick={() => handlePageChange(page - 1)}
-                        sx={{ padding: "6px 16px" }}
-                    >
-                        הקודם
-                    </Button>
-                    
-                    <Button
-                        disabled={page * pageSize >= totalUsers}
-                        onClick={() => handlePageChange(page + 1)}
-                        sx={{ padding: "6px 16px" }}
-                    >
-                        הבא
-                    </Button>
-                </Box>
-
-                {/* בחירת מספר שורות */}
-                <Box sx={{ marginTop: 2, display: "flex", alignItems: "center" }}>
-                    <label style={{ marginRight: 8 }}>מספר שורות:</label>
-                    <select
-                        value={pageSize}
-                        onChange={(e) => setPageSize(Number(e.target.value))}
-                        style={{ padding: "6px", borderRadius: "4px" }}
-                    >
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                    </select>
-                </Box>
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
+    <Box sx={{ display: "flex", alignItems: "center" }}>
+        <label style={{ marginRight: 4 }}>מספר שורות:</label>
+        <FormControl sx={{ minWidth: 49, height: 26 }}>
+            <Select
+                value={pageSize}
+                onChange={handleChange}
+                displayEmpty
+            >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+            </Select>
+        </FormControl>
+    </Box>
+    <Pagination 
+        count={Math.ceil(totalUsers / pageSize)} 
+        page={page} 
+        onChange={handleChange} 
+    />
+</Box>
             </Box>
         </div>
     );
