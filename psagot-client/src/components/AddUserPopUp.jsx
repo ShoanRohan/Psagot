@@ -21,9 +21,9 @@ import "../styles/userModel.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
-  const { userTypes, status, error } = useSelector((state) => state.userType);
+  const { userTypes } = useSelector((state) => state.userType);
   const IsEdit = user && user.userId ? true : false;
-  
+
   const validationSchema = Yup.object({
     name: Yup.string()
       .matches(/^[א-תa-zA-Z\s]+$/, "השם יכול להכיל רק אותיות")
@@ -119,7 +119,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 helperText={formik.touched.password && formik.errors.password}
                 fullWidth
               />
-              <FormControl variant="standard" fullWidth error={formik.touched.permission && Boolean(formik.errors.permission)}>
+              <FormControl variant="standard" fullWidth>
                 <InputLabel>הרשאה</InputLabel>
                 <Select
                   name="permission"
@@ -135,20 +135,20 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 </Select>
               </FormControl>
               <FormControl component="fieldset">
-  <FormGroup>
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={formik.values.status === "פעיל"}
-          onChange={(e) => 
-            formik.setFieldValue("status", e.target.checked ? "פעיל" : "לא פעיל")
-          }
-        />
-      }
-      label="פעיל"
-    />
-  </FormGroup>
-</FormControl>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={formik.values.status === "פעיל"}
+                        onChange={(e) =>
+                          formik.setFieldValue("status", e.target.checked ? "פעיל" : "לא פעיל")
+                        }
+                      />
+                    }
+                    label="פעיל"
+                  />
+                </FormGroup>
+              </FormControl>
             </Box>
           </Box>
         </DialogContent>
