@@ -16,7 +16,7 @@ const store = configureStore({
     course: courseReducer,
     scheduleForTopic: scheduleForTopicReducer, //Slice of scheduleForTopic
     meeting: meetingReducer, //Slice of meeting
-    daysForCourse: daysForCourseReducer, //Slice of daysForCourse
+    daysForCourse: daysForCourseReducer, 
     topic:topicReducer,
   },
 });

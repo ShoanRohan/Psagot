@@ -11,12 +11,11 @@ import LocatorBar from '../components/LocatorBar';
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' element={<Layout/>}>
-            <Route path='/' element={<HomePage/>}/>
-            <Route path='/AddMeeting' element={<AddMeeting/>}/>
-                <Route path='/י' element={<HomePage/>}/>
-                <Route path='/LocatorBar' element={<LocatorBar/>}/>
-            </Route>
+            {/* <Route path="/" element={<Layout />}> */}
+                
+               
+                <Route path="locator-bar" element={<LocatorBar />} />
+            {/* </Route> */}
         </Routes>
     );
 };
