@@ -2,20 +2,21 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import AddMeeting from '../pages/AddMeeting';
-import MeetingButton from '../pages/MeetingButton';
-import MeetingLocatorBar from '../pages/MeetingLocatorBar';
-
-import LocatorBar from '../components/LocatorBar';
+import Login from '../components/Login'; 
+import LoginPage from '../pages/LoginPage';
 
 const AppRouter = () => {
     return (
-        <Routes>
-            {/* <Route path="/" element={<Layout />}> */}
+        
+        <Routes>  
+             <Route path='/home' element={<Layout/>}>
+                <Route index element={<HomePage/>}/>    
+            </Route> 
                 
-               
-                <Route path="locator-bar" element={<LocatorBar />} />
-            {/* </Route> */}
+            <Route path='/' element={<LoginPage/>}> 
+                <Route path='login' element={<Login/>}/> 
+            </Route>
+           
         </Routes>
     );
 };
