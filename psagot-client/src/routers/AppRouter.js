@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import CoursesGrid from '../components/CourseGrid';
+import CoursesGrid from '../components/CoursesGrid';
 import CourseManagement from '../components/CourseManagement';
 import Login from '../components/Login'; 
 import Register from '../components/Register';
@@ -14,7 +14,7 @@ const AppRouter = () => {
         <Routes>
             <Route path='/' element={<Layout />}>
                 <Route index element={<HomePage />} />
-                <Route path='CourseGrid' element={<CoursesGrid />} />
+                <Route path='CoursesGrid' element={<CoursesGrid />} />
                 <Route path='CourseManagement' element={<CourseManagement />} />
             </Route>
 

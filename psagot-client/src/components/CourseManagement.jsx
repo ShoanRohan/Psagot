@@ -1,72 +1,128 @@
-import { Box, Button, Typography, TextField, InputAdornment } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import CourseGrid from "./CourseGrid";
+import { Box, Button, Typography } from "@mui/material";
+import React from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import CourseGrid from "./CoursesGrid";
+import { useSelector } from "react-redux";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/image 6.png";
-import * as XLSX from "xlsx";
 
-const CoursesManagement = () => {
+const CourseManagement = () => {
+  const Course = useSelector((state) => state.course?.course || []); // קבלת הנתונים מה-Redux
+
+  // פונקציה לייצוא הנתונים לאקסל
   const exportToExcel = () => {
-    const data = [
-      { Name: "Course 1", Duration: "3 months" },
-      { Name: "Course 2", Duration: "6 months" },
-    ];
+    if (!Course || Course.length === 0) {
+      alert("אין נתונים לייצוא!");
+      return;
+    }
 
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Courses");
-    XLSX.writeFile(wb, "courses.xlsx");
+    // יוצרים worksheet מהנתונים
+    const worksheet = XLSX.utils.json_to_sheet(Course);
+
+    // יוצרים חוברת עבודה
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Course");
+
+    // ממירים את הנתונים לקובץ ביינארי
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+    // שמירת הקובץ
+    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+    saveAs(data, "Course.xlsx");
   };
 
   return (
-    <Box sx={{
-      padding: 0,
-      direction: "rtl",
-      width: "100%",
-      margin: "0 auto",
-      fontFamily: "Rubik" 
-    }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, px: 2 }}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#112B83" }}>
-          קורסים
-        </Typography>
+    <Box
+      sx={{
+        width: "85vw",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: "#FFFFFF",
+        position: "relative",
+      }}
+    >
+      <Typography
+        variant="h1"
+        sx={{
+          position: "absolute",
+          width: "9.48%",
+          height: "4.35%",
+          top: "7.5%",
+          left: "88%",
+          transform: "translateX(-50%)",
+          fontFamily: "Rubik",
+          fontWeight: 700,
+          fontSize: "4.5vh",
+          lineHeight: "100%",
+          textAlign: "right",
+          color: "#112B83",
+          textTransform: "capitalize",
+        }}
+      >
+        קורסים
+      </Typography>
 
-        <Box sx={{ display: "flex", gap: 1.5 }}>
-          <Button sx={{ backgroundColor: "#F0F1F3", borderRadius: "6px", padding: "5px 6px", minWidth: "40px" }}>
-            <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: 24, height: 24 }} />
-          </Button>
-          <Button
-            variant="contained"
-            sx={{ display: "flex", alignItems: "center", gap: 1, backgroundColor: "#326DEF", borderRadius: "40px", px: 2, py: 0.5, fontSize: "0.9rem" }}
-          >
-            <img src={circlePlus} alt="הוספת קורס" style={{ width: 18, height: 18 }} />
-            הוספת קורס
-          </Button>
-        </Box>
-      </Box>
+      <Button
+        onClick={exportToExcel}
+        sx={{
+          position: "absolute",
+          width: "2.5rem",
+          height: "2.5rem",
+          top: "7.78%",
+          left: "16%",
+          borderRadius: "0.68vh",
+          padding: "0.2rem",
+          backgroundColor: "#F0F1F3",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minWidth: "2.5rem",
+          minHeight: "2.5rem",
+        }}
+      >
+        <img src={exptExcel} alt="אייקון ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
+      </Button>
 
-      {/* Search Field */}
-      <Box sx={{ mb: 2, width: "100%", padding: 0 }}>
-        <TextField
-          placeholder="חיפוש"
-          variant="outlined"
-          fullWidth
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
+      <Button
+        variant="contained"
+        sx={{
+          position: "absolute",
+          width: "9.5rem",
+          height: "2.5rem",
+          top: "7.78%",
+          left: "3.5%",
+          borderRadius: "50vh",
+          padding: "0 1.3%",
+          gap: "0.5vw",
+          backgroundColor: "#326DEF",
+          display: "flex",
+          alignItems: "center",
+          minWidth: "9.5rem",
+          minHeight: "2.5rem",
+        }}
+      >
+        <img src={circlePlus} alt="אייקון הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
+        <Typography
+          sx={{
+            fontFamily: "Rubik",
+            fontWeight: 400,
+            fontSize: "1.8vh",
+            lineHeight: "100%",
+            textAlign: "center",
+            color: "#FFFFFF",
+            textTransform: "capitalize",
           }}
-        />
-      </Box>
+        >
+          הוספת קורס
+        </Typography>
+      </Button>
 
-      {/* Courses Table */}
-      <Box sx={{ width: "100%"}}>
-        <CourseGrid />
-      </Box>
+      <CourseGrid />
     </Box>
-  )
+  );
 };
 
-export default CoursesManagement;
+export default CourseManagement;
