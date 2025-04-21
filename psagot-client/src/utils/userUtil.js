@@ -5,11 +5,13 @@ const getAllUsers = async () => {
   return response.data;
 };
 
+// פעולה להבאת משתמש לפי ID
 const getUserById = async (id) => {
   const response = await api.get(`/User/GetUserById/${id}`);
   return response.data;
 };
 
+// פעולה להוספת משתמש חדש
 const addUser = async (newUser) => {
   const response = await api.post('/User/AddUser', newUser);
   return response.data;
