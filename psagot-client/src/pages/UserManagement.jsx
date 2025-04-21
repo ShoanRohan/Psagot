@@ -1,10 +1,39 @@
 import { Box, Button, Typography } from '@mui/material';
 import React from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import UserGrid from '../components/UserGrid';
+import { useSelector } from 'react-redux';
 import circlePlus from '../assets/icons/circle-plus.png';
 import exptExsel from '../assets/icons/image 6.png';
 
+
 const UserManagement = () => {
+
+  const users = useSelector((state) => state.user.user); // קבלת הנתונים מה-Redux
+
+  // פונקציה לייצוא הנתונים לאקסל
+  const exportToExcel = () => {
+    if (!users || users.length === 0) {
+      alert("אין נתונים לייצוא!");
+      return;
+    }
+
+    // יוצרים worksheet מהנתונים
+    const worksheet = XLSX.utils.json_to_sheet(users);
+
+    // יוצרים חוברת עבודה
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+
+    // ממירים את הנתונים לקובץ ביינארי
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+    // שמירת הקובץ
+    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+    saveAs(data, "users.xlsx");
+  };
+
   return (
     <Box sx={{
       width: '85vw',
@@ -37,6 +66,7 @@ const UserManagement = () => {
       </Typography>
 
       <Button
+        onClick={exportToExcel}
         sx={{
           position: 'absolute',
           width: '2.5rem',
