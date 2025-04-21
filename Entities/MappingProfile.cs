@@ -18,4 +18,3 @@ public class MappingProfile : Profile
         CreateMap<Topic, TopicDTO>().ReverseMap();
         CreateMap<Course,CourseDTO> ().ReverseMap();
     }
-}
