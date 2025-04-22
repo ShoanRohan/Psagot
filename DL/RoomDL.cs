@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Contexts;
-using Entities.DTO;
-using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DL
@@ -23,8 +19,7 @@ namespace DL
 
         public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
         {
-            try
-            {
+            try {
                 var rooms = await _context.Set<Room>().ToListAsync();
                 return (rooms, null);
             }
@@ -72,43 +67,6 @@ namespace DL
             {
                 return (null, ex.Message);
             }
-        }
-        public async Task<(List<RoomsScheduleByDateDTO> , string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
-        {
-            try
-            {
-                var dayOfWeek = (int)dateTime.DayOfWeek + 1;
-
-                await _context.SaveChangesAsync();
-                var schedule =  _context.Meetings
-                .Include(m => m.Day)
-                .Include(m => m.ScheduleForTopic)
-                 .ThenInclude(sft => sft.Topic)
-                 .ThenInclude(t => t.Course)  
-                .Where(m => m.IsValid) 
-                .Where(m => m.DayId == dayOfWeek) 
-                .Where(m => m.ScheduleForTopic != null
-                     && m.ScheduleForTopic.Topic != null
-                     && m.ScheduleForTopic.Topic.Course != null) 
-                .Where(m => dateTime >= m.ScheduleForTopic.Topic.Course.StartDate
-                     && (m.ScheduleForTopic.Topic.Course.EndDate == null || dateTime <= m.ScheduleForTopic.Topic.Course.EndDate)) 
-                .Select(m => new RoomsScheduleByDateDTO
-                {
-                 CourseName = m.ScheduleForTopic.Topic.Course.Name,
-                 TopicName = m.ScheduleForTopic.Topic.Name,
-                 CourseColor = m.ScheduleForTopic.Topic.Course.Color,
-                 StartTime = m.StartTime ?? TimeOnly.MinValue,
-                 EndTime = m.EndTime ?? TimeOnly.MaxValue
-            })
-             .ToList();
-
-                return (schedule, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-
         }
     }
 }

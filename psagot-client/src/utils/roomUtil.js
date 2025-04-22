@@ -20,12 +20,5 @@ const getRoomById = async (id) => {
     const response = await api.get(`/Room/GetRoomById/${id}`);
     return response.data;
 };
-const getRoomsScheduleByDate = async (dateTime) =>{
-    const response = await api.get(`/Room/GetRoomsScheduleByDate`,dateTime);
-    return response.data;
-}
-const getAllRoomsBySearchWithPagination = async (searchRoom,pageNumber,pageSize) =>{
-    const response = await api.get(`/Room/GetAllRoomsBySearchWithPagination`,{params:{...searchRoom.roomName ,...searchRoom.mic,...searchRoom.projector ,...searchRoom.computer ,...searchRoom.numOfSeats , pageNumber,pageSize}});
-    return response.data;
-}
-export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomsScheduleByDate,getAllRoomsBySearchWithPagination };
+
+export { addRoom, updateRoom,getAllRooms, getRoomById };
