@@ -70,8 +70,6 @@ const roomSlice = createSlice({
                 state.status = 'succeeded';
                 state.roomsWithPagination = action.payload.rooms;  
                 state.totalCount = action.payload.totalCount;  
-                state.pageNumber = action.payload.pageNumber; 
-                state.searchStatus = 'true'; 
             })
             .addCase(fetchAllRoomsBySearchWithPagination.rejected, (state, action) => {
                 state.status = 'failed';
