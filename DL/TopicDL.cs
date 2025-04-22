@@ -33,12 +33,12 @@ namespace DL
        
         
         
-        public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int id)
+        public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId)
         {
             try
             {
                 var topics = await _context.Set<Topic>()
-                                           .Where(topic => topic.CourseId == id)
+                                           .Where(topic => topic.CourseId == courseId)
                                            .ToListAsync();
                 return (topics, null);
             }
