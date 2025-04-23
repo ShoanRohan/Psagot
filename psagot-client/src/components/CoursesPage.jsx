@@ -8,6 +8,8 @@ import GridOnIcon from "@mui/icons-material/GridOn"; // אייקון אקסל
 import { Stack } from "@mui/material"; // מסדר כפתורים בשורה
 import CourseGrid from "./CourseGrid";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import excelIcon from  '../assets/icons/excelIcon.svg'
+
 const buttonStyles = {
   height: "44px",
   padding: "0px 20px",
@@ -57,11 +59,13 @@ const CoursesPage = () => {
             >
           קורסים
         </Typography>
+
+       
         {/* כפתורים בצד שמאל */}
         <Stack direction="row" spacing={2}>
           {/* כפתור עגול עם אייקון בלבד */}
           <IconButton >
-            <GridOnIcon />
+           <img src={excelIcon} alt="ייצוא לאקסל" />
           </IconButton>
           <Button variant="contained" sx={buttonStyles}
                     startIcon={<AddCircleOutlineIcon />}
