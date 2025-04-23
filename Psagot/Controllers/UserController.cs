@@ -99,10 +99,7 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetAllCoordinators()
         {
             var (users, errorMessage) = await _userBL.GetAllCoordinators();
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                return BadRequest(errorMessage);
-            }
+            if (users == null) return BadRequest(errorMessage);
             return Ok(users);
         }
 
@@ -110,10 +107,7 @@ namespace Psagot.Controllers
         public async Task<IActionResult> GetCoordinatorsAndLecturers()
         {
             var (users, errorMessage) = await _userBL.GetCoordinatorsAndLecturers();
-            if (!string.IsNullOrEmpty(errorMessage))
-            {
-                return BadRequest(errorMessage);
-            }
+            if (users == null) return BadRequest(errorMessage);
             return Ok(users);
         }
     }
