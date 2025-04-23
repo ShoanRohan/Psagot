@@ -6,7 +6,6 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
-    allRooms: [], // רשימה מקורית מהשרת
     filteredRooms: [], // רשימה לאחר סינון
     loading: false,
     error: null,
@@ -29,7 +28,7 @@ const roomSlice = createSlice({
         },
         filterRooms: (state, action) => {
             const { roomName, capacity, equipment } = action.payload;
-            state.filteredRooms = state.allRooms.filter(room =>
+            state.filteredRooms = state.Rooms.filter(room =>
               (roomName ? room.name.includes(roomName) : true) &&
               (capacity ? room.capacity >= capacity : true) &&
               (equipment ? room.equipment.includes(equipment) : true)
