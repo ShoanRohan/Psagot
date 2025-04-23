@@ -95,6 +95,17 @@ namespace Psagot.Controllers
             }
         }
 
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
+            return Ok(users);
+        }
+
         [HttpGet("GetCoordinatorsAndLecturers")]
         public async Task<IActionResult> GetCoordinatorsAndLecturers()
         {

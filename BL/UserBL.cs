@@ -73,6 +73,7 @@ namespace BL
 
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
+
         public async Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers()
         {
             var (users, errorMessage) = await _userDL.GetCoordinatorsAndLecturers();
