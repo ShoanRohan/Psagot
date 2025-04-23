@@ -1,15 +1,7 @@
 import * as React from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
 import { AppProvider } from '@toolpad/core/AppProvider';
-import {
-	Box,
-	Button,
-	Typography,
-	TextField,
-	Link,
-	IconButton,
-	InputAdornment,
-} from '@mui/material';
+import {Box,Button,Typography,TextField,Link,IconButton,InputAdornment,} from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
@@ -162,7 +154,6 @@ export default function CredentialsSignInPage() {
 										fontFamily: 'Rubik',
 										fontSize: '16px',
 									},
-								
 								}}
 							/>
 
@@ -193,19 +184,11 @@ export default function CredentialsSignInPage() {
 												onClick={() => setShowPassword((prev) => !prev)}
 												edge="end"
 											>
-												{showPassword ? (
-													<img
-														src={EyeIcon}
-														alt="Eye Icon"
-														style={{ width: '20px', height: '20px' }}
-													/>
-												) : (
-													<img
-														src={EyeIcon}
-														alt="Eye Icon"
-														style={{ width: '20px', height: '20px' }}
-													/>
-												)}
+												<img
+													src={EyeIcon}
+													alt="Eye Icon"
+													style={{ width: '20px', height: '20px' }}
+												/>
 											</IconButton>
 										</InputAdornment>
 									),
@@ -246,7 +229,7 @@ export default function CredentialsSignInPage() {
 							alignItems: 'center',
 							width: '99%',
 							height: '27%',
-							gap: 5,
+							gap: 2,
 						}}
 					>
 						<Button
@@ -292,7 +275,7 @@ export default function CredentialsSignInPage() {
 								variant="text"
 								sx={{
 									color: '#6F6F6F',
-									textDecoration: 'underline',
+									//textDecoration: 'underline',
 									fontWeight: 'bold',
 									cursor: 'pointer',
 									fontFamily: 'Rubik',
@@ -300,7 +283,16 @@ export default function CredentialsSignInPage() {
 								}}
 								onClick={() => (window.location.href = '/register')}
 							>
-								אין לך חשבון? הירשם
+								אין לך חשבון?{' '}
+								<span
+									style={{
+										borderBottom: '1px solid #6F6F6F',
+										display: 'inline-block',
+										lineHeight: '1',
+									}}
+								>
+									הירשם
+								</span>
 							</Button>
 						</Box>
 					</Box>
