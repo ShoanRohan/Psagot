@@ -16,6 +16,8 @@ namespace Entities.DTO
         public string Name { get; set; } = null!;
 
         public int TeacherId { get; set; }
+        
+        public string TeacherName { get; set; }
 
         public DateOnly StartDate { get; set; }
 

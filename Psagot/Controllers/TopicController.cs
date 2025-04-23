@@ -36,7 +36,7 @@ namespace Psagot.Controllers
         }
 
         //הפונקציה מקבלת קורס, ומחזירה את נושאי הקורס
-        [HttpGet("GetAllTopicsForCourseByCourseId/{id}")]
+        [HttpGet("GetAllTopicsForCourseByCourseId/{courseId}")]
         public async Task<IActionResult> GetAllTopicsForCourseByCourseId([FromRoute] int courseId)
         {
             var (topics, errorMessage) = await _topicBL.GetAllTopicsForCourseByCourseId(courseId);
@@ -73,7 +73,7 @@ namespace Psagot.Controllers
             if (topics == null) return BadRequest(errorMessage);
 
             return Ok(topics);
-        }
+        }  
     }
 }
 

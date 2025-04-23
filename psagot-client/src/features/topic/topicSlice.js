@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicFotCourseByCourseId } from './topicActions';
+import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicForCourseByCourseId } from './topicActions';
 import { Topic } from '@mui/icons-material';
 
 const initialState = {
     topics: [],
     selectedTopic: null,
+    filtersTopics: [],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
@@ -27,6 +28,7 @@ const topicSlice = createSlice({
             .addCase(fetchAllTopic.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.topics = action.payload;
+                state.filtersTopics = action.payload
             })
             .addCase(fetchAllTopic.rejected, (state, action) => {
                 state.status = 'failed';
@@ -76,20 +78,22 @@ const topicSlice = createSlice({
             })
 
             // Handle fetchAllTopicFotCourseByCourseId
-            .addCase(fetchAllTopicFotCourseByCourseId.pending, (state) => {
+            .addCase(fetchAllTopicForCourseByCourseId.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchAllTopicFotCourseByCourseId.fulfilled, (state, action) => {
+            .addCase(fetchAllTopicForCourseByCourseId.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.topics = action.payload;
+                state.filtersTopics = action.payload
             })
-            .addCase(fetchAllTopicFotCourseByCourseId.rejected, (state, action) => {
+            .addCase(fetchAllTopicForCourseByCourseId.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             });
     },
 });
 
+export const selectFilteredTopics = state => state.topic.filtersTopics;
 export const { setTopic } = topicSlice.actions;
 export default topicSlice.reducer;
 

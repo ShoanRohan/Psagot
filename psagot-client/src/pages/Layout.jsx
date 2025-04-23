@@ -3,13 +3,16 @@ import Header from "../components/Header";
 import Section from "../components/Section";
 import Footer from "../components/Footer";
 import { Box } from "@mui/material";
+import CourseTopicGrid from "../components/CourseTopicGrid";
 
 const Layout = () => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+           
             <Header />
-            <Section />
-            <Footer />
+            <CourseTopicGrid />
+            {/* <Section /> */}
+            <Footer />          
         </Box>
     );
 }

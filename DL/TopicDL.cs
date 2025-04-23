@@ -15,14 +15,14 @@ namespace DL
         public TopicDL(PsagotDbContext context)
         {
             _context = context;
-        
-}
-      public async Task<(Topic Topic, string ErrorMessage)> GetTopicById(int id)
+
+        }
+        public async Task<(Topic Topic, string ErrorMessage)> GetTopicById(int id)
         {
             try
             {
                 var topic = await _context.Set<Topic>().FindAsync(id);
-                    
+
                 return (topic, null);
             }
             catch (Exception ex)
@@ -30,16 +30,18 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-       
-        
-        
+
+
+
         public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId)
         {
             try
             {
-                var topics = await _context.Set<Topic>()
-                                           .Where(topic => topic.CourseId == courseId)
-                                           .ToListAsync();
+                var topics = await _context.Topics
+                           .Include(t => t.Teacher)
+                           .Where(t => t.CourseId == courseId)
+                           .ToListAsync();
+
                 return (topics, null);
             }
             catch (Exception ex)
@@ -47,6 +49,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic)
         {
             try
@@ -107,5 +110,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+
     }
 }
