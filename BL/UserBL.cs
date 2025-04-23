@@ -66,6 +66,20 @@ namespace BL
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
 
+        public async Task<(IEnumerable<UserDTO> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
+            string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
+        {
+            var (users, totalCount, errorMessage) = await _userDL.GetFilteredPagedUsers(username, phone, role, isActive, pageNumber, pageSize);
+
+            if (users == null) return (null, 0, errorMessage);
+
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), totalCount, null);
+        }
+
+
+
+
+
         public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
         {
             var (users, errorMessage) = await _userDL.GetAllCoordinators();
