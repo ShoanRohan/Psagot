@@ -1,3 +1,143 @@
+// import React, { useEffect, useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
+// import { fetchAllMeetings } from "../features/meeting/meetingActions";
+// import { flexRender, useReactTable, getCoreRowModel, getSortedRowModel } from "@tanstack/react-table";
+// import { Button, Chip, IconButton, Snackbar, Alert, CircularProgress, Paper } from "@mui/material";
+// import { Edit, Delete } from "@mui/icons-material";
+// import FullCalendar from "@fullcalendar/react";
+// import dayGridPlugin from "@fullcalendar/daygrid";
+
+// const mockMeetings = [
+//   {
+//     id: 1,
+//     course: "React Basics",
+//     subject: "Introduction",
+//     meetingNumber: 1,
+//     lecturer: "John Doe",
+//     day: "Sunday",
+//     date: "2025-03-01",
+//     startTime: "10:00",
+//     endTime: "12:00",
+//     room: "Room 101",
+//     valid: true,
+//     inSystem: true,
+//   },
+//   {
+//     id: 2,
+//     course: "Node.js Advanced",
+//     subject: "API Development",
+//     meetingNumber: 2,
+//     lecturer: "Jane Smith",
+//     day: "Monday",
+//     date: "2025-03-02",
+//     startTime: "14:00",
+//     endTime: "16:00",
+//     room: "Room 202",
+//     valid: false,
+//     inSystem: true,
+//   },
+// ];
+
+// export default function MeetingsTable() {
+//   const dispatch = useDispatch();
+//   const { meetings, loading, error } = useSelector((state) => state.meeting);
+//   const [view, setView] = useState("table");
+//   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+
+//   useEffect(() => {
+//     dispatch(fetchAllMeetings());
+//   }, [dispatch]);
+
+//   const handleDelete = (id) => {
+//     setSnackbar({ open: true, message: "מחיקת מפגש נכשלה", severity: "error" });
+//   };
+
+//   if (loading) return <CircularProgress />;
+//   if (error) return <Alert severity="error">{error}</Alert>;
+
+//   const displayedMeetings = meetings.length > 0 ? meetings : mockMeetings;
+
+//   const columns = [
+//     { accessorKey: "course", header: "שם קורס" },
+//     { accessorKey: "subject", header: "נושא" },
+//     { accessorKey: "meetingNumber", header: "מספר מפגש" },
+//     { accessorKey: "lecturer", header: "מרצה" },
+//     { accessorKey: "day", header: "יום" },
+//     { accessorKey: "date", header: "תאריך" },
+//     { accessorKey: "startTime", header: "שעת התחלה" },
+//     { accessorKey: "endTime", header: "שעת סיום" },
+//     { accessorKey: "room", header: "תיאור חדר" },
+//     {
+//       accessorKey: "valid",
+//       header: "שיבוץ תקין?",
+//       cell: ({ getValue }) => <Chip label={getValue() ? "כן" : "לא"} color={getValue() ? "success" : "default"} />,
+//     },
+//     {
+//       accessorKey: "inSystem",
+//       header: "חלק מהמערכת?",
+//       cell: ({ getValue }) => <Chip label={getValue() ? "כן" : "לא"} color={getValue() ? "success" : "default"} />,
+//     },
+//     {
+//       accessorKey: "actions",
+//       header: "פעולות",
+//       cell: ({ row }) => (
+//         <>
+//           <IconButton color="primary"><Edit /></IconButton>
+//           <IconButton color="secondary" onClick={() => handleDelete(row.original.id)}><Delete /></IconButton>
+//         </>
+//       ),
+//     },
+//   ];
+
+//   const table = useReactTable({
+//     columns,
+//     data: displayedMeetings,
+//     getCoreRowModel: getCoreRowModel(),
+//     getSortedRowModel: getSortedRowModel(),
+//   });
+
+//   return (
+//     <div>
+//       <Button variant="contained" onClick={() => setView(view === "table" ? "calendar" : "table")} sx={{ mb: 2 }}>
+//         {view === "table" ? "הצג לוח שנה" : "הצג טבלה"}
+//       </Button>
+//       {view === "table" ? (
+//         <Paper>
+//           <table>
+//             <thead>
+//               {table.getHeaderGroups().map((headerGroup) => (
+//                 <tr key={headerGroup.id}>
+//                   {headerGroup.headers.map((header) => (
+//                     <th key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</th>
+//                   ))}
+//                 </tr>
+//               ))}
+//             </thead>
+//             <tbody>
+//               {table.getRowModel().rows.map((row) => (
+//                 <tr key={row.id}>
+//                   {row.getVisibleCells().map((cell) => (
+//                     <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+//                   ))}
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </Paper>
+//       ) : (
+//         <FullCalendar
+//           plugins={[dayGridPlugin]}
+//           initialView="dayGridMonth"
+//           events={displayedMeetings.map((m) => ({ title: `${m.course} - ${m.lecturer}`, start: m.date }))}
+//           locale="he"
+//         />
+//       )}
+//       <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+//         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+//       </Snackbar>
+//     </div>
+//   );
+// }
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllMeetings } from "../features/meeting/meetingActions";
@@ -288,141 +428,130 @@ export default function MeetingsTable() {
     );
     const pageCount = Math.ceil((meetings.length > 0 ? meetings : mockMeetings).length / rowsPerPage);
 
-  return (
-    <div>
-      <Button variant="contained" onClick={() => setView(view === "table" ? "calendar" : "table")} sx={{ mb: 2 }}>
-        {view === "table" ? "הצג לוח שנה" : "הצג טבלה"}
-      </Button>
-      {view === "table" ? (
-       
-       <TableContainer component={Paper} sx={{ width: "100%"}}>
-<Table sx={{ "& td, & th": { fontSize: "0.8rem" } }}>
-<TableHead>
-              <TableRow>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>מספר מפגש</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שם קורס</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שם נושא</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שם מרצה</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>תאריך</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>יום</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שעת התחלה</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שעת סיום</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>מספר חדר</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>שיבוץ</StyledTableCell>
-                <StyledTableCell align="center" sx={{fontWeight: "bold"}}>סטטוס</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-            {displayedMeetings.map((meeting) => (
-                <StyledTableRow key={meeting.id}>
-                  <StyledTableCell align="center">{meeting.meetingNumber}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.course}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.subject}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.lecturer}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.date}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.day}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.startTime}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.endTime}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.room}</StyledTableCell>
-                  <StyledTableCell align="center">{meeting.valid ? "V" : "X"}</StyledTableCell>
-                  <StyledTableCell  align="center">
-                    <Chip
-                      label={meeting.inSystem ? "פעיל" : "הסתיים"}
-                      color={meeting.inSystem ? "success" : "default"}
-                      sx={{
-                        backgroundColor: meeting.inSystem ? "#DAF8E6" : "#f0f0f0",
-                        borderRadius: "68.31px",
-                        paddingX: "20.49px",
-                        paddingY: "4.10px",
-                        color: meeting.inSystem ? "#1A8245" : "#333",
-                        fontSize: "0.875rem",
-                        fontFamily: "Rubik, sans-serif",
-                        fontWeight: "400",
-                        textTransform: "capitalize",
-                      }}
-                    />
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                      <IconButton sx={{ backgroundColor: "#f6f7f9", borderRadius: "5px" }} onClick={() => handleDelete(meeting.id)}>
-                      <DeleteOutlineIcon sx={{ color: "#102b82"}} />
-                      </IconButton>
-                      <IconButton sx={{ backgroundColor: "#f6f7f9", borderRadius: "5px" }}>
-                        <EditOutlinedIcon sx={{ color: "#102b82"}} />
-                      </IconButton>
-                    </Box>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-      </TableContainer> 
-      ) : (
-        <FullCalendar
-          plugins={[dayGridPlugin]}
-          initialView="dayGridMonth"
-          events={displayedMeetings.map((m) => ({ title: `${m.course} - ${m.lecturer}`, start: m.date }))}
-          locale="he"
-        />
-      )}
-<Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", p: 2 }}>
-  <Box sx={{ display: "flex", alignItems: "center" }}>
-    <Typography sx={{ ml: 1 }}>מספר שורות:</Typography>
-    <Select
-      value={rowsPerPage}
-      onChange={handleRowsPerPageChange}
-      size="small"
-      sx={{
-        height: 28,
-        minWidth: 50,
-        fontSize: "0.75rem",
-        padding: "2px 8px",
-        "& .MuiSelect-icon": { display: "none" },
-        position: "relative",
-      }}
-      IconComponent={() => (
-        <Box
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: "50%",
-            transform: "translateY(-50%)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <KeyboardArrowUpIcon sx={{ fontSize: 14 }} />
-          <KeyboardArrowDownIcon sx={{ fontSize: 14, marginTop: "-4px" }} />
-        </Box>
-      )}
-    >
-      {[10, 25, 50].map((option) => (
-        <MenuItem key={option} value={option}>
-          {option}
-        </MenuItem>
-      ))}
-    </Select>
-  </Box>
-  <Pagination
-    count={pageCount}
-    page={page}
-    onChange={handlePageChange}
-    sx={{
-      direction: "ltr",
-      "& .MuiPaginationItem-root": {
-        borderRadius: "4px",
-      },
-    }}
-  />
-</Box>
-      <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-      </Snackbar>
-    </div>
-  );
+    return (
+        <div>
+            <Button variant="contained" onClick={() => setView(view === "table" ? "calendar" : "table")} sx={{ mb: 2 }}>
+                {view === "table" ? "הצג לוח שנה" : "הצג טבלה"}
+            </Button>
+            {view === "table" ? (
+                <TableContainer component={Paper} className="table-container">
+                    <Table className="meetings-table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell className="table-header">מספר מפגש</StyledTableCell>
+                                <StyledTableCell className="table-header">שם קורס</StyledTableCell>
+                                <StyledTableCell className="table-header">שם נושא</StyledTableCell>
+                                <StyledTableCell className="table-header">שם מרצה</StyledTableCell>
+                                <StyledTableCell className="table-header">תאריך</StyledTableCell>
+                                <StyledTableCell className="table-header">יום</StyledTableCell>
+                                <StyledTableCell className="table-header">שעת התחלה</StyledTableCell>
+                                <StyledTableCell className="table-header">שעת סיום</StyledTableCell>
+                                <StyledTableCell className="table-header">מספר חדר</StyledTableCell>
+                                <StyledTableCell className="table-header">שיבוץ</StyledTableCell>
+                                <StyledTableCell className="table-header">סטטוס</StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {displayedMeetings.map((meeting) => (
+                                <StyledTableRow key={meeting.id}>
+                                    <StyledTableCell>{meeting.meetingNumber}</StyledTableCell>
+                                    <StyledTableCell>{meeting.course}</StyledTableCell>
+                                    <StyledTableCell>{meeting.subject}</StyledTableCell>
+                                    <StyledTableCell>{meeting.lecturer}</StyledTableCell>
+                                    <StyledTableCell>{meeting.date}</StyledTableCell>
+                                    <StyledTableCell>{meeting.day}</StyledTableCell>
+                                    <StyledTableCell>{meeting.startTime}</StyledTableCell>
+                                    <StyledTableCell>{meeting.endTime}</StyledTableCell>
+                                    <StyledTableCell>{meeting.room}</StyledTableCell>
+                                    <StyledTableCell>{meeting.valid ? "V" : "X"}</StyledTableCell>
+                                    <StyledTableCell>
+                                        <Chip
+                                            label={meeting.inSystem ? "פעיל" : "הסתיים"}
+                                            className={meeting.inSystem ? "status-chip active" : "status-chip inactive"}
+                                        />
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                        <Box className="icon-buttons">
+                                            <IconButton className="delete-button" onClick={() => handleDelete(meeting.id)}>
+                                                <DeleteOutlineIcon />
+                                            </IconButton>
+                                            <IconButton className="edit-button">
+                                                <EditOutlinedIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <FullCalendar
+                    plugins={[dayGridPlugin]}
+                    initialView="dayGridMonth"
+                    events={displayedMeetings.map((m) => ({ title: `${m.course} - ${m.lecturer}`, start: m.date }))}
+                    locale="he"
+                />
+            )}
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }} className="highlighted-box">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <Typography sx={{ ml: 1}}>מספר שורות:</Typography>
+                    <Select
+                        value={rowsPerPage}
+                        onChange={handleRowsPerPageChange}
+                        size="small"
+                        sx={{
+                            height: 28,
+                            minWidth: 50,
+                            fontSize: "0.75rem",
+                            padding: "2px 8px",
+                            "& .MuiSelect-icon": { display: "none" },
+                            position: "relative",
+                        }}
+                        IconComponent={() => (
+                            <Box
+                                sx={{
+                                    position: "absolute",
+                                    right: 8,
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                }}
+                            >
+                                <KeyboardArrowUpIcon sx={{ fontSize: 14 }} />
+                                <KeyboardArrowDownIcon sx={{ fontSize: 14, marginTop: "-4px" }} />
+                            </Box>
+                        )}
+                    >
+                        {[10, 25, 50].map((option) => (
+                            <MenuItem key={option} value={option}>
+                                {option}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </Box>
+                <Pagination
+                    count={pageCount}
+                    page={page}
+                    onChange={handlePageChange}
+                    sx={{
+                        direction: "ltr",
+                        "& .MuiPaginationItem-root": {
+                            borderRadius: "4px",
+                        },
+                    }}
+                />
+            </Box>
+            <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+                <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+            </Snackbar>
+        </div>
+    );
 }
+
 
 
 

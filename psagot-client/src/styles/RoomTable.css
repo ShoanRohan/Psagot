@@ -1,0 +1,21 @@
+/* body {
+    margin: 0;
+    padding: 0;
+    background-color: #caacac;
+  }
+   */
+   body, html {
+    margin: 0;
+    padding: 0;
+  }
+  /* RoomTable.css */
+
+  .room-table-wrapper {
+  width: 80vw;
+  min-height: 70vh;
+  padding: 32px; /* padding: 4 => 4 * 8px (ברירת מחדל של MUI spacing) */
+  box-sizing: border-box;
+  background-color: '#f4f6f8'; /* צבע רקע אפור בהיר */
+  direction: rtl;
+  font-family: 'Assistant', sans-serif;
+}
