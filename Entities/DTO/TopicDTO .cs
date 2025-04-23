@@ -30,7 +30,8 @@ namespace Entities.DTO
         public bool Projector { get; set; }
 
         public bool Microphone { get; set; }
+        public int? StatusId { get; set; }
 
-     
+        public virtual StatusTopic? Status { get; set; }
     }
 }

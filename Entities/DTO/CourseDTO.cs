@@ -30,6 +30,14 @@ namespace Entities.DTO
 
         public string? Notes { get; set; }
 
-    }
+        public int? CoordinatorId { get; set; }
 
+        public int? StatusId { get; set; }
+
+        public virtual UserDTO? Coordinator { get; set; }
+
+        public virtual StatusCourse? Status { get; set; }
+
+        public virtual string? CoordinatorName { get;}
+    }
 }
