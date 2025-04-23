@@ -1,35 +1,25 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
-import axios from 'axios';
 
 const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
-    allRooms: [], // רשימה מקורית מהשרת
     filteredRooms: [], // רשימה לאחר סינון
     loading: false,
     error: null,
       
 };
 
-// // שליפת רשימת חדרים מהשרת
-// export const fetchRooms = createAsyncThunk("rooms/fetchRooms", async () => {
-//     const response = await axios.get("http://localhost:5000/api/rooms");
-//     return response.data;
-//   });
-
 const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        
-        setRoom: (state, action) => {
-            
-        },
+        // setRoom: (state, action) => {
+        // },
         filterRooms: (state, action) => {
             const { roomName, capacity, equipment } = action.payload;
-            state.filteredRooms = state.allRooms.filter(room =>
+            state.filteredRooms = state.rooms.filter(room =>
               (roomName ? room.name.includes(roomName) : true) &&
               (capacity ? room.capacity >= capacity : true) &&
               (equipment ? room.equipment.includes(equipment) : true)
@@ -43,7 +33,7 @@ const roomSlice = createSlice({
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.allRooms = action.payload;
+                state.rooms = action.payload;
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.status = 'failed';
@@ -61,12 +51,12 @@ const roomSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(addRoomAction.fulfilled, (state, action) => {
-                state.allRooms.push(action.payload);
+                state.rooms.push(action.payload);
             })
             .addCase(updateRoomAction.fulfilled, (state, action) => {
-                const index = state.allRooms.findIndex((room) => room.id === action.payload.id);
+                const index = state.rooms.findIndex((room) => room.id === action.payload.id);
                 if (index !== -1) {
-                    state.allRooms[index] = action.payload;
+                    state.rooms[index] = action.payload;
                 }
             });
     },

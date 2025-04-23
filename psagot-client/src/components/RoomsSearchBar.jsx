@@ -1,9 +1,13 @@
-import React from "react";
-import { Box, TextField, Button, InputAdornment } from "@mui/material";
+import React, { useState } from "react";
+import { Box, TextField, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 export default function SearchBar() {
+  const [roomName, setRoomName] = useState("");
+  const [equipment, setEquipment] = useState("");
+  const [capacity, setCapacity] = useState("");
+  
   return (
     <Box className="box">
 
@@ -13,6 +17,8 @@ export default function SearchBar() {
         variant="outlined"
         size="small"
         className="textField"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
       />
 
       <TextField
@@ -20,6 +26,8 @@ export default function SearchBar() {
         variant="outlined"
         size="small"
         className="textField"
+        value={equipment}
+        onChange={(e) => setEquipment(e.target.value)}
       />
 
       <TextField
@@ -28,6 +36,8 @@ export default function SearchBar() {
         size="small"
         type="number"
         className="textField"
+        value={capacity}
+        onChange={(e) => setCapacity(e.target.value)}
       />
 
        {/* כפתור חיפוש */}
