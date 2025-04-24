@@ -7,7 +7,7 @@ const initialState = {
     roomSchedule: [],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
-    searchRoom:{roomName:'',mic:'false',projector:'false',computer:'false',numOfSeats:0},
+    searchRoom : { RoomName: '', Mic: false, Projector: false, Computer: false, NumOfSeats: 0 },
     roomsWithPagination:[],
     pageNumber:1,
     pageSize:10,
@@ -23,6 +23,21 @@ const roomSlice = createSlice({
         setRoom: (state, action) => {
             
         },
+        setSearchRoom: (state, action) => {
+            state.searchRoom = action.payload;
+            state.searchStatus = 'true';
+          },
+          clearSearchRoom: (state) => {
+            state.searchRoom = {
+              RoomName: '',
+              Mic: false,
+              Projector: false,
+              Computer: false,
+              NumOfSeats: 0
+            };
+            state.searchStatus = 'false';
+          },
+          
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
         }
@@ -30,9 +45,12 @@ const roomSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
+                
                 state.status = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
+                console.log("payload:", action.payload); // ← כאן תראי מה הגיע מהשרת
+
                 state.status = 'succeeded';
                 state.rooms = action.payload;
             })
@@ -88,5 +106,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setRoom, setSearchRoom, clearSearchRoom, setRoomSchedule } = roomSlice.actions;
 export default roomSlice.reducer;

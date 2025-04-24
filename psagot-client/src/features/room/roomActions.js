@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllRooms, getRoomById, addRoom, updateRoom, getRoomsScheduleByDate,getAllRoomsBySearchWithPagination } from '../../utils/roomUtil';
+import api from '../../utils/api';
+
 
 
 export const fetchAllRooms = createAsyncThunk('room/fetchAllRooms', async () => {
@@ -25,8 +27,19 @@ export const updateRoomAction = createAsyncThunk('room/updateRoomAction', async 
   const data = await updateRoom(updatedRoom);
   return data;
 });
-export const fetchAllRoomsBySearchWithPagination = createAsyncThunk('room/fetchAllRoomsBySearchWithPagination',async ({ searchRoom, pageNumber,pageSize }) => {
-    const data = await getAllRoomsBySearchWithPagination(searchRoom, pageNumber,pageSize);
-    return data;
+
+export const fetchAllRoomsBySearchWithPagination = createAsyncThunk(
+  'room/fetchAllRoomsBySearchWithPagination',
+  async (params, thunkAPI) => {
+    try {
+      const response = await api.post('/rooms/search', params);
+      console.log("params:", params); // לוודא שהפרמטרים מגיעים
+      console.log("response:", response.data); // לוודא שהתשובה מהשרת תקינה
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
   }
 );
+
+

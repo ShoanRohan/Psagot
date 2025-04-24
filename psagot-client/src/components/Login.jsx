@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
-import { AppProvider } from '@toolpad/core/AppProvider';
+//import { AppProvider } from '@toolpad/core/AppProvider';
 import {
 	Box,
 	Button,
@@ -85,8 +85,8 @@ export default function CredentialsSignInPage() {
 	};
 
 	return (
-		<AppProvider theme={theme}>
-			{/* BOX חיצוני שמכיל את כל הקומפוננטה */}
+		//<AppProvider theme={theme}>
+		
 			<Box
 				sx={{
 					display: 'flex',
@@ -306,6 +306,6 @@ export default function CredentialsSignInPage() {
 					</Box>
 				</Box>
 			</Box>
-		</AppProvider>
+		//</AppProvider>
 	);
 }

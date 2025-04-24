@@ -1,28 +1,73 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import { useDispatch, useSelector } from 'react-redux';
+import { setSearchRoom, clearSearchRoom } from '../features/room/roomSlice';
+import { fetchAllRoomsBySearchWithPagination } from '../features/room/roomActions';
 
-const equipmentOptions = ["מקרן", "רמקול", "לוח", "מחשב"];
+const equipmentOptions = ['מקרן', 'רמקול', 'מחשב'];
 
 const RoomsSearch = () => {
   const [roomName, setRoomName] = useState('');
   const [selectedEquipment, setSelectedEquipment] = useState([]);
   const [numSeats, setNumSeats] = useState('');
+  const dispatch = useDispatch();
+  const searchStatus = useSelector((state) => state.room.searchStatus);
 
-  // פונקציה לניקוי כל השדות
   const handleClear = () => {
     setRoomName('');
     setSelectedEquipment([]);
     setNumSeats('');
+    dispatch(clearSearchRoom());
+    dispatch(
+      fetchAllRoomsBySearchWithPagination({
+        pageNumber: 1,
+        pageSize: 10,
+        roomName: '',
+        mic: false,
+        projector: false,
+        computer: false,
+        numOfSeats: 0,
+      })
+    );
   };
 
-  // שינוי ערך הציוד שנבחר
+  const handleSearch = () => {
+    const searchParams = {
+      RoomName: roomName,
+      Mic: selectedEquipment.includes('רמקול'),
+      Projector: selectedEquipment.includes('מקרן'),
+      Computer: selectedEquipment.includes('מחשב'),
+      NumOfSeats: parseInt(numSeats) || 0,
+      PageNumber: 1,
+      PageSize: 10,
+    };
+
+    dispatch(setSearchRoom(searchParams));
+    dispatch(
+      fetchAllRoomsBySearchWithPagination({
+        pageNumber: 1,
+        pageSize: 10,
+        ...searchParams,
+      })
+    );
+  };
+
   const handleEquipmentChange = (event) => {
     const { value } = event.target;
     setSelectedEquipment(value);
   };
 
-  // מוודא שמספר המקומות לא יהיה קטן מ-0
   const handleNumSeatsChange = (event) => {
     const value = event.target.value;
     if (value === '' || (Number(value) >= 0 && Number.isInteger(Number(value)))) {
@@ -31,98 +76,126 @@ const RoomsSearch = () => {
   };
 
   return (
-    <Box 
-      sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'space-between', 
-        bgcolor: 'white', 
-        p: 2, 
-        borderRadius: 2, 
-        boxShadow: 1,
-        maxWidth: '80%',
-        margin: 'auto',
-        direction: 'rtl' // יישור לימין
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        bgcolor: 'white',
+        p: 2,
+        borderRadius: '12px',
+        boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.1)',
+        maxWidth: '85%',
+        margin: '20px auto',
+        direction: 'rtl',
+        height: '72px',
+        gap: 2,
       }}
     >
-      {/* שדות הקלט */}
-      <Box sx={{ display: 'flex', gap: 2, flexGrow: 1, justifyContent: 'flex-start' }}>
-        <TextField 
-          label="שם חדר" 
-          variant="standard" 
-          sx={{ minWidth: '150px', textAlign: "right" }} 
-          inputProps={{ style: { textAlign: "right", direction: "rtl" } }} 
-          InputLabelProps={{ sx: { right: 0, textAlign: "right", direction: "rtl" } }} 
-          value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
-        />
+      <TextField
+        label="שם חדר"
+        variant="standard"
+        value={roomName}
+        onChange={(e) => setRoomName(e.target.value)}
+        sx={{
+          minWidth: '160px',
+          '& .MuiInputLabel-root': {
+            right: 0,
+            textAlign: 'right',
+            direction: 'rtl',
+          },
+          '& input': {
+            textAlign: 'right',
+            direction: 'rtl',
+            fontSize: '15px',
+          },
+        }}
+      />
 
-        {/* רכיב ציוד עם אפשרות לסמן מספר פריטים */}
-        <FormControl 
-          variant="standard" 
-          sx={{ minWidth: '150px', direction: "rtl", textAlign: "right" }} 
+      <FormControl
+        variant="standard"
+        sx={{
+          minWidth: '160px',
+          direction: 'rtl',
+          textAlign: 'right',
+        }}
+      >
+        <InputLabel
+          sx={{ textAlign: 'right', direction: 'rtl', right: 0, transformOrigin: 'right' }}
         >
-          <InputLabel 
-            sx={{ textAlign: "right", direction: "rtl", right: 0, transformOrigin: "right" }}
-          >
-            ציוד
-          </InputLabel>
-          <Select
-            multiple
-            value={selectedEquipment}
-            onChange={handleEquipmentChange}
-            renderValue={(selected) => 
-              selected.length > 2 ? `${selected.slice(0, 2).join(", ")}...` : selected.join(", ")
-            } // מקצר את הטקסט אם נבחרו מעל 2 פריטים
-            sx={{
-              textAlign: "right",
-              direction: "rtl",
-              display: "flex",
-              justifyContent: "flex-end",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              textOverflow: "ellipsis",
-              '& .MuiSelect-icon': {
-                left: 0, // ממקם את החץ בצד שמאל
-                right: 'unset',
-              }
-            }}
-            MenuProps={{ PaperProps: { sx: { textAlign: "right", direction: "rtl" } } }} 
-          >
-            {equipmentOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox checked={selectedEquipment.indexOf(option) > -1} />
-                <ListItemText primary={option} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField 
-          label="מספר המקומות" 
-          type="number" 
-          variant="standard" 
-          sx={{ minWidth: '150px', textAlign: "right" }} 
-          inputProps={{ style: { textAlign: "right", direction: "rtl" }, min: 0 }} 
-          InputLabelProps={{ sx: { right: 0, textAlign: "right", direction: "rtl" } }} 
-          value={numSeats}
-          onChange={handleNumSeatsChange} // הפעלת הפונקציה שבודקת שאין מספרים שליליים
-        />
-      </Box>
-
-      {/* כפתורים */}
-      <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button 
-          variant="outlined" 
-          sx={{ borderRadius: '20px', px: 3 }}
-          onClick={handleClear}
+          ציוד
+        </InputLabel>
+        <Select
+          multiple
+          value={selectedEquipment}
+          onChange={handleEquipmentChange}
+          renderValue={(selected) =>
+            selected.length > 2 ? `${selected.slice(0, 2).join(', ')}...` : selected.join(', ')
+          }
+          sx={{
+            textAlign: 'right',
+            direction: 'rtl',
+            '& .MuiSelect-icon': {
+              left: 0,
+              right: 'unset',
+            },
+          }}
+          MenuProps={{ PaperProps: { sx: { textAlign: 'right', direction: 'rtl' } } }}
         >
-          ניקוי חיפוש
-        </Button>
+          {equipmentOptions.map((option) => (
+            <MenuItem key={option} value={option}>
+              <Checkbox checked={selectedEquipment.indexOf(option) > -1} />
+              <ListItemText primary={option} />
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
 
-        <Button 
-          variant="contained" 
-          sx={{ bgcolor: 'navy', color: 'white', borderRadius: '20px', px: 3, display: 'flex', alignItems: 'center', gap: 1 }}
+      <TextField
+        label="מספר המקומות"
+        type="number"
+        variant="standard"
+        value={numSeats}
+        onChange={handleNumSeatsChange}
+        sx={{
+          minWidth: '140px',
+          '& input': {
+            textAlign: 'right',
+            direction: 'rtl',
+          },
+          '& .MuiInputLabel-root': {
+            right: 0,
+            textAlign: 'right',
+            direction: 'rtl',
+          },
+        }}
+        inputProps={{ min: 0 }}
+      />
+
+      <Box sx={{ display: 'flex', gap: 1, marginRight: 'auto' }}>
+        {searchStatus === 'true' && (
+          <Button
+            variant="outlined"
+            sx={{ borderRadius: '20px', px: 3, height: '36px' }}
+            onClick={handleClear}
+          >
+            ניקוי
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          onClick={handleSearch}
+          sx={{
+            bgcolor: '#2962ff',
+            color: 'white',
+            borderRadius: '20px',
+            px: 3,
+            height: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+            boxShadow: 'none',
+          }}
         >
           <SearchIcon sx={{ mr: 1 }} /> חיפוש
         </Button>

@@ -5,8 +5,21 @@ import { Box } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import { useEffect } from 'react';
+import React from 'react';
+
+const RoomScheduleGrid = ({ rooms }) => {
+  return (
+    <div>
+      {rooms.map((room, index) => (
+        <div key={index}>{room.roomName}</div>
+      ))}
+    </div>
+  );
+};
+
 
 export default function RoomSchedule() {
+  
   
   function renderEventContent(eventInfo) {
     return (

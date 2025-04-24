@@ -7,11 +7,33 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchAllRoomsBySearchWithPagination } from '../features/room/roomActions';
+
+
+
 
 const RoomsScheduleSearch = () => {
+  const rooms = useSelector((state) => state.room.roomsWithPagination);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const dispatch = useDispatch();
+
+useEffect(() => {
+  dispatch(fetchAllRoomsBySearchWithPagination({
+    pageNumber: 1,
+    pageSize: 10,
+    roomName: '',
+    mic: 'false',
+    projector: 'false',
+    computer: 'false',
+    numOfSeats: 0,
+  }));
+}, [dispatch]);
+
 
   return (
     <>
@@ -100,8 +122,14 @@ const RoomsScheduleSearch = () => {
         </Toolbar>
       </AppBar>
     </Box>
-     <RoomScheduleGrid/>
-     </>
+    <RoomScheduleGrid rooms={rooms} />
+
+
+
+
+
+
+</>
 
   );
 };
