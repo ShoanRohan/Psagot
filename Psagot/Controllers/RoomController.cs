@@ -11,11 +11,31 @@ namespace Psagot.Controllers
         [ApiController]
         public class RoomController : ControllerBase
         {
-            private readonly IRoomBL _roomBL;
+            private readonly IRoomBL _roomBL; // ← הזזתי למעלה
 
             public RoomController(IRoomBL roomBL)
             {
                 _roomBL = roomBL;
+            }
+
+            [HttpPost("search")]
+            public async Task<IActionResult> SearchRooms([FromBody] RoomDTO searchParams)
+            {
+                var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(
+                    searchParams.RoomName,
+                    searchParams.Mic,
+                    searchParams.Projector,
+                    searchParams.Computer,
+                    searchParams.NumOfSeats,
+                    searchParams.PageNumber,
+                    searchParams.PageSize,
+                    true
+                );
+
+                if (rooms == null && totalCount == 0)
+                    return NotFound(errorMessage);
+
+                return Ok(new { rooms, totalCount });
             }
 
             [HttpPost("AddRoom")]
@@ -51,31 +71,35 @@ namespace Psagot.Controllers
                 var (room, errorMessage) = await _roomBL.GetRoomById(id);
 
                 if (room == null)
-
                     return NotFound(errorMessage);
 
                 return Ok(room);
             }
+
             [HttpGet("GetCourseScheduleByDate")]
             public async Task<IActionResult> GetRoomsScheduleByDate([FromQuery] DateTime date)
             {
                 var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
                 if (schedule == null)
-                    return NotFound( errorMessage);
+                    return NotFound(errorMessage);
 
                 return Ok(schedule);
             }
+
             [HttpGet("GetAllRoomsBySearchWithPagination")]
             public async Task<IActionResult> GetAllRoomsBySearchWithPagination(
-             [FromQuery] string? roomName, [FromQuery] bool mic, [FromQuery] bool projector, [FromQuery] bool computer, [FromQuery] int numOfSeats,
-             [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool searchStatus)
+                [FromQuery] string? roomName, [FromQuery] bool mic, [FromQuery] bool projector,
+                [FromQuery] bool computer, [FromQuery] int numOfSeats,
+                [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool searchStatus)
             {
-                var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(roomName, mic, projector, computer, numOfSeats, pageNumber, pageSize, searchStatus);
+                var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(
+                    roomName, mic, projector, computer, numOfSeats, pageNumber, pageSize, searchStatus);
+
                 if (rooms == null && totalCount == 0)
                     return NotFound(errorMessage);
+
                 return Ok(new { rooms, totalCount });
             }
         }
     }
-    }
-
+}
