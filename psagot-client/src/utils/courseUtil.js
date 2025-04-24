@@ -24,5 +24,12 @@ const updateCourse = async (courseDTO) => {
     const response = await api.put('/Course/UpdateCourse', courseDTO);
     return response.data;
 };
+const courseFilter = async (filterObject) => {
+    const params = new URLSearchParams(filterObject).toString();
+    const response = await api.get(`/Course/filtered?${params}`);
+    return response.data;
 
-export { getCourseById, getAllCourses, getPaginatedCourses, addCourse, updateCourse };
+};
+
+
+export { getCourseById, getAllCourses, getPaginatedCourses, addCourse, updateCourse,courseFilter };

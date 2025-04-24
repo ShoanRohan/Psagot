@@ -3,7 +3,9 @@ import { Box, Select, MenuItem, FormControl, InputLabel, TextField, Button } fro
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCoordinators } from "../features/user/userAction";
+import { fetchCoordinators  } from "../features/user/userAction";
+import { fetchFilteredCourses  } from "../features/course/courseActions";
+
 
 
 // סטייל לשדות בחירה
@@ -38,6 +40,8 @@ const CourseSearch = () => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinatorsCode);
   const currentYear = new Date().getFullYear();
+  const filterCourse = useSelector((state)=> state.course.filtersCourses);
+
 
   const initialState = {
     courseCode: "",
@@ -54,7 +58,7 @@ const CourseSearch = () => {
   }, [dispatch]);
   
   useEffect(() => {
-    console.log(coordinators); // Undefined
+   // console.log(coordinators); // Undefined
   }, [coordinators]);
 
   // פונקציה לטיפול במיקוxsxד בשדה השנה
@@ -85,6 +89,11 @@ const CourseSearch = () => {
    const isSearchDisabled = useMemo(() => {
     return JSON.stringify(filters) === JSON.stringify(initialState);
   }, [filters]);
+
+  const courseFilter = () =>{
+    dispatch(fetchFilteredCourses(filters))
+  console.log(filterCourse)
+  }
 
   return (
     <Box
@@ -194,6 +203,9 @@ const CourseSearch = () => {
           sx={buttonStyles}
           startIcon={<SearchIcon />}
           disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
+          onClick={()=>{courseFilter()  
+            setFilters(initialState);}}
+          
         >
           חיפוש
         </Button>
