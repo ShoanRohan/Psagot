@@ -1,22 +1,23 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import {
+  Box, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, IconButton, Select,
+  MenuItem, Typography, Pagination
+} from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
-import { Box, IconButton } from "@mui/material";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms } from '../features/room/roomActions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { tableCellClasses } from '@mui/material/TableCell'; 
 
 export default function RoomsGrid() {
   const dispatch = useDispatch();
-  const { status, selectedRoom, rooms, error } = useSelector((state) => state.room);
+  const { status, rooms } = useSelector((state) => state.room);
+
+  const [rowsPerPage, setRowsPerPage] = useState(50);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -24,7 +25,14 @@ export default function RoomsGrid() {
     }
   }, [status, dispatch]);
 
+  const handleRowsPerPageChange = (event) => {
+    setRowsPerPage(event.target.value);
+    setCurrentPage(1); // כל שינוי כמות שורות מחזיר לעמוד ראשון
+  };
 
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -33,7 +41,6 @@ export default function RoomsGrid() {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 16,
-      width: '2000px',/////כאן
     },
   }));
 
@@ -43,19 +50,21 @@ export default function RoomsGrid() {
       textAlign: 'center',
     },
     height: '79px',
-    // hide last border
     '&:last-child td, &:last-child th': {
       border: 0,
     },
   }));
 
-  function createData(roomsNane, roomsNumber, pepoleCount, equipment) {
-    return { roomsNane, roomsNumber, pepoleCount, equipment };
-  }
+  // חישוב חיתוך נתונים לפי פאגינציה
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = rooms.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(rooms.length / rowsPerPage);
 
-    return (
+  return (
+    <Box dir="rtl">
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 1000 }} aria-label="customized table"> {/*כאן*/}
+        <Table sx={{ minWidth: 1000 }} aria-label="customized table">
           <TableHead>
             <TableRow>
               <StyledTableCell align="center">שם חדר</StyledTableCell>
@@ -66,32 +75,30 @@ export default function RoomsGrid() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rooms.map((row) => (
-              <StyledTableRow key={row.roomsNane}>
-                <StyledTableCell component="th" scope="row" align="center">
-                  {row.name}
-                </StyledTableCell>
+            {currentRows.map((row) => (
+              <StyledTableRow key={row.roomId}>
+                <StyledTableCell align="center">{row.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.roomId}</StyledTableCell>
                 <StyledTableCell align="center">{row.capacity}</StyledTableCell>
                 <StyledTableCell align="center">
-                 {[
-                 row.projector && "מקרן",
-                row.computers && "מחשב",
-                row.speakers && "רמקולים"
-                 ].filter(Boolean).join(", ") || "אין ציוד"}
+                  {[
+                    row.projector && "מקרן",
+                    row.computers && "מחשב",
+                    row.speakers && "רמקולים"
+                  ].filter(Boolean).join(", ") || "אין ציוד"}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  <Box display="flex" gap={2} justifyContent="left"> 
-                  <Paper sx={{ borderRadius: 3, padding: 1, backgroundColor: "#FAFAFA", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "none" }}>
+                  <Box display="flex" gap={2} justifyContent="left">
+                    <Paper sx={{ borderRadius: 3, padding: 1, backgroundColor: "#FAFAFA", boxShadow: "none" }}>
                       <IconButton sx={{ padding: 0 }}>
                         <DeleteOutlinedIcon sx={{ fontSize: "20px" }} />
                       </IconButton>
                     </Paper>
-                    <Paper sx={{ borderRadius: 3, padding: 1, backgroundColor: "#FAFAFA", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "none" }}>
+                    <Paper sx={{ borderRadius: 3, padding: 1, backgroundColor: "#FAFAFA", boxShadow: "none" }}>
                       <IconButton sx={{ padding: 0 }}>
                         <EditIcon sx={{ fontSize: "20px" }} />
                       </IconButton>
-                    </Paper>
+                    </Paper>
                   </Box>
                 </StyledTableCell>
               </StyledTableRow>
@@ -99,7 +106,36 @@ export default function RoomsGrid() {
           </TableBody>
         </Table>
       </TableContainer>
-    );
-  
 
+      {/* פאגינציה ובורר שורות */}
+      <Box mt={2} display="flex" justifyContent="space-between" alignItems="center" px={2}>
+        {/* בורר שורות */}
+        <Box display="flex" alignItems="center">
+          <Typography variant="body2" sx={{ ml: 1 }}>מספר שורות:</Typography>
+          <Select
+            value={rowsPerPage}
+            onChange={handleRowsPerPageChange}
+            size="small"
+            sx={{ width: 80 }}
+          >
+            {[50, 100, 150, 200, 250, 300, 350, 400, 450, 500].map((num) => (
+              <MenuItem key={num} value={num}>{num}</MenuItem>
+            ))}
+          </Select>
+        </Box>
+
+        {/* פאגינציה */}
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handlePageChange}
+          color="primary"
+          variant="outlined"
+          shape="rounded"
+          siblingCount={1}
+          boundaryCount={1}
+        />
+      </Box>
+    </Box>
+  );
 }
