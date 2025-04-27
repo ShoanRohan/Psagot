@@ -6,8 +6,6 @@ import Sidebar from "../components/Sidebar";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-            <Header /> 
         <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
             <Sidebar/>
             <Section />
