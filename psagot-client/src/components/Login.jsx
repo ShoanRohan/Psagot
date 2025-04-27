@@ -185,7 +185,7 @@ export default function CredentialsSignInPage() {
 										fontSize: '16px',
 									},
 								}}
-								InputProps={{
+								InputProps={{n
 									endAdornment: (
 										<InputAdornment position="end">
 											<IconButton
