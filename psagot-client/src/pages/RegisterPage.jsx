@@ -30,17 +30,19 @@ const RegisterPage = () => {
 					justifyContent: 'center',
 					borderBottomLeftRadius: '5%',
 					borderTopLeftRadius: '5%',
+					
 				}}
 			>
 				<Box
 					sx={{
+						flexGrow: 1,
 						width: '80%',
 						height: '40%',
 						display: 'flex',
 						flexDirection: 'column',
 						justifyContent: 'flex-start',
 						alignItems: 'center',
-						gap: 10,
+						gap: 13,
 					}}
 				>
 					<Box
@@ -51,7 +53,8 @@ const RegisterPage = () => {
 							flexDirection: 'column',
 							justifyContent: 'center',
 							alignItems: 'center',
-							marginTop: '-10vh',
+							marginTop: '13vh',
+							
 						}}
 					>
 						<img

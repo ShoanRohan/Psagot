@@ -127,13 +127,12 @@ const CourseGrid = () => {
     <Box
       sx={{
         direction:'rtl',
-         height: '72%',
-         width: '88%',
+         height: '70%',
+         width: '100%',
          display:'flex',
          flexGrow: 1,
          position: 'absolute',
-         top: '28%',
-         left: '4%', 
+         top: '25%',
       }}
     >
         <DataGrid
@@ -225,10 +224,12 @@ const CourseGrid = () => {
           rows={Courses}
           columns={columns}
           getRowId={(row) => row.CourseId}
-          pageSize={5}
           rowModesModel={rowModesModel}
+          hideFooter={true}
+
         />
     </Box>
+    
   );
 };
 

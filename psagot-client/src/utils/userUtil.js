@@ -11,10 +11,9 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (newUser) => {
-  const response = await api.post('/User/AddUser', newUser);
-  return response.data;
+  const response = await api.post('/User/AddUser', newUser);  
+    return response.data;
 };
-
 const updatedUser = async (updateUser) => {
   const response = await api.put('/User/UpdateUser', updateUser);
   return response.data;

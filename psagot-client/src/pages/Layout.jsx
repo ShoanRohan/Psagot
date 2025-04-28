@@ -5,9 +5,9 @@ import Sidebar from "../components/Sidebar";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
-            <Sidebar/>
-            <Section />
+        <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', maxWidth: '100vw' }}>
+            <Sidebar sx={{flexGrow: 0}}/>
+            <Section sx={{flexGrow: 1}}/>
         </Box>
     );
 }

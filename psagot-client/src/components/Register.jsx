@@ -17,9 +17,13 @@ import api from '../utils/api';
 
 const signUp = async (formData, setError) => {
 	try {
-		const response = await api.post('/auth/register', {
+		const response = await api.post('/auth/AddUser', {
+			username: formData.get('username'),
 			email: formData.get('email'),
+			phone: formData.get('phone'),
 			password: formData.get('password'),
+			isActive: true,
+			userTypeId: 5,
 		});
 
 		if (response.data.token) {
@@ -30,6 +34,7 @@ const signUp = async (formData, setError) => {
 			return { success: false };
 		}
 	} catch (error) {
+		console.error(error);
 		setError('אירעה שגיאה, נסה שוב מאוחר יותר.');
 		return { success: false };
 	}
@@ -128,7 +133,7 @@ const handleSubmit = async (e) => {
 					width: '100%',
 					direction: 'rtl',
 					fontFamily: 'Rubik',
-					marginTop: '-8vh',
+					marginTop: '-10vh',
 				}}
 			>
 				<Typography
@@ -139,6 +144,8 @@ const handleSubmit = async (e) => {
 						color: '#333',
 						fontFamily: 'Rubik',
 						fontSize: '25px',
+						marginTop: '5vh',
+						marginBottom: '5vh'
 					}}
 				>
 					הרשמה למערכת
@@ -342,14 +349,21 @@ const handleSubmit = async (e) => {
 						<Button
 							type="submit"
 							variant="contained"
-							disabled={isSubmitting || !email || !password || !confirmPassword || emailError || passwordError || confirmPasswordError}
+							disabled={
+								isSubmitting ||
+								!email ||
+								!password ||
+								!confirmPassword ||
+								!!emailError ||
+								!!passwordError ||
+								!!confirmPasswordError
+							  }
 							sx={{
 								backgroundColor: '#1976d2',
 								color: '#fff',
 								fontWeight: 'bold',
 								borderRadius: '25px',
 								py: 1,
-								fontSize: '14px',
 								width: '60%',
 								height: '48%',
 								fontSize: '12px',

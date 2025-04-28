@@ -2,32 +2,31 @@ import { Box, Button, Typography } from "@mui/material";
 import React from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import CourseGrid from "./CoursesGrid";
+import CourseGrid from "../components/CoursesGrid";
 import { useSelector } from "react-redux";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/image 6.png";
 
-const CourseManagement = () => {
-  const Course = useSelector((state) => state.course?.course || []); // קבלת הנתונים מה-Redux
+const CoursesPage = () => {
+  const Course = useSelector((state) => state.course?.course || []); 
 
-  // פונקציה לייצוא הנתונים לאקסל
+
   const exportToExcel = () => {
     if (!Course || Course.length === 0) {
       alert("אין נתונים לייצוא!");
       return;
     }
 
-    // יוצרים worksheet מהנתונים
     const worksheet = XLSX.utils.json_to_sheet(Course);
 
-    // יוצרים חוברת עבודה
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Course");
 
-    // ממירים את הנתונים לקובץ ביינארי
+
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
 
-    // שמירת הקובץ
+
     const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
     saveAs(data, "Course.xlsx");
   };
@@ -35,7 +34,7 @@ const CourseManagement = () => {
   return (
     <Box
       sx={{
-        width: "85vw",
+        width: "100%",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -93,7 +92,7 @@ const CourseManagement = () => {
           width: "9.5rem",
           height: "2.5rem",
           top: "7.78%",
-          left: "3.5%",
+          left: "1.5%",
           borderRadius: "50vh",
           padding: "0 1.3%",
           gap: "0.5vw",
@@ -125,4 +124,4 @@ const CourseManagement = () => {
   );
 };
 
-export default CourseManagement;
+export default CoursesPage;
