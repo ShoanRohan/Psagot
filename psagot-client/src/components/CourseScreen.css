@@ -1,21 +1,24 @@
 .course-container {
-    width: 90%;
-    margin: auto;
+    width: 100%;
+    margin-left: 0px;
     margin-right: 8px;
     margin-top: 24px;
     direction: rtl;
   }
+/* 
+  .helpBox{
+
+  } */
   
   .course-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 78vw;
+    width: 71vw;
   }
   
   
   .course-title {
-  
     font-size: 40px !important;
     font-weight: 700px;
     font-family: "Rubik"!important; 
@@ -47,13 +50,22 @@
     padding: 8px 16px !important;
     gap: 8px !important;
   }
+/* 
+  .course-container {
+    border: 2px dashed red;
+  }
   
   .course-tabs {
-   
+    border: 2px dashed blue;
+  } */
+  
+  
+  .course-tabs {
     margin-top: 16px;
   }
   
   .course-tab {
     font-weight: bold !important;
   }
+  
   

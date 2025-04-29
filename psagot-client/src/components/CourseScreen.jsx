@@ -44,6 +44,20 @@ const CourseScreen = ({ courseId }) => {
           </Button>
         </Box>
       </Box>
+{/* 
+      <Box 
+      className="helpBox"
+  component="section"
+  sx={{
+    position: "relative",
+    left: "50%",
+    right: "50%",
+    marginLeft: "-50vw",
+    marginRight: "-50vw",
+    width: "100vw",
+    pt: 2,     // אם תרצה קצת ריווח למעלה
+  }}
+> */}
 
       {/* בר ניווט */}
       <Tabs value={tabIndex} onChange={handleTabChange} className="course-tabs">
@@ -52,10 +66,11 @@ const CourseScreen = ({ courseId }) => {
       </Tabs>
 
       {/* תוכן בהתאם ללשונית */}
-      <Box mt={2}>
+      <Box mt={2} >
         {tabIndex === 0 && <CourseDetails />}
         {tabIndex === 1 && <CourseTopics />}
       </Box>
+
     </Box>
   );
 };
