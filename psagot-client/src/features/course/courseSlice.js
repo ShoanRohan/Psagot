@@ -17,9 +17,9 @@ const courseSlice = createSlice({
     name: 'course',
     initialState,
     reducers: {
-        setCourse: (state, action) => {
-            state.selectedCourse = action.payload;
-        },
+        // setCourse: (state, action) => {
+        //     state.selectedCourse = action.payload;
+        // },
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
         },
@@ -77,10 +77,11 @@ const courseSlice = createSlice({
 });
 
 //export const selectFiltersCourses = state => state.course.filtersCourses;
-export const selectPaginatedCourses = state => state.course.paginatedCourses;
-export const selectTotalCount = state => state.course.totalCount;
-export const selectCurrentPage = state => state.course.currentPage;
-export const selectPageSize = state => state.course.pageSize;
+export const selectPaginatedCourses = (state) => state.course.paginatedCourses;
+export const selectTotalCount = (state) => state.course.totalCount;
+export const selectCurrentPage = (state) => state.course.currentPage;
+export const selectPageSize = (state) => state.course.pageSize;
+export const selectSelectedCourse = (state) => state.course.selectedCourse;
 
 export const { setCourse, setCurrentPage, setPageSize } = courseSlice.actions;
 export default courseSlice.reducer;

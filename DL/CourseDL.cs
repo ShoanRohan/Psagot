@@ -23,7 +23,7 @@ namespace DL
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(id);
+                var course = await _context.Set<Course>().Include(c => c.Coordinator).Include(c => c.Status).SingleOrDefaultAsync(c => c.CourseId == id);
                 return (course, null);
             }
             catch (Exception ex)

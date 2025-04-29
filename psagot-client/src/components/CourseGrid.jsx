@@ -5,8 +5,9 @@ import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPaginatedCourses, selectCurrentPage, selectPageSize, setCurrentPage, selectTotalCount, setPageSize } from '../features/course/courseSlice';
-import { fetchPaginatedCourses } from '../features/course/courseActions';
+import { fetchCourseById, fetchPaginatedCourses } from '../features/course/courseActions';
 import editSvg from '../assets/icons/edit.svg'
+import { Link, useNavigate } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
@@ -28,6 +29,7 @@ const StyledTableRow = styled(TableRow)(() => ({
 }));
 
 const CourseGrid = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const currentPage = useSelector(selectCurrentPage);
     const pageSize = useSelector(selectPageSize);
@@ -39,9 +41,15 @@ const CourseGrid = () => {
         await dispatch(setCurrentPage(page))
     };
 
+    const selectCourse = async (courseId) => {
+        await dispatch(fetchCourseById(courseId))
+        navigate('/course/')
+    }
+
     const handleSelectChange = (event) => {
         const newPageSize = event.target.value;
         setSelectSize(newPageSize);
+        dispatch(setCurrentPage(1));
         dispatch(setPageSize(newPageSize));
     };
 
@@ -117,20 +125,20 @@ const CourseGrid = () => {
                                         </Box>
                                     }</StyledTableCell>
                                 <StyledTableCell align="center" sx={{ width: '90px', height: '34px' }}>
-                                    <IconButton sx={{ width: '32px', height: '32px', p: '5px 6px', bgcolor: '#F4F4F4', borderRadius: '5px', gap: '10px', marginX: '5px' }}>
-                                        <img src={editSvg} />
-                                    </IconButton>
+                                    <Link onClick={() => selectCourse(course?.courseId)} >
+                                        <IconButton sx={{ width: '32px', height: '32px', p: '5px 6px', bgcolor: '#F4F4F4', borderRadius: '5px', gap: '10px', marginX: '5px' }}>
+                                            <img src={editSvg} alt='edit_icon' />
+                                        </IconButton></Link>
                                 </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
                 </Table>
-
             </TableContainer>
             <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '90%', margin: '10px auto', p: '10px' }}>
                 <Grid2 container>
                     <Grid2 size={3}>
-                        <Pagination onChange={(e, p) => setPage(p)} count={totalCount / pageSize} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
+                        <Pagination onChange={(e, p) => setPage(p)} count={Math.ceil(totalCount / pageSize)} page={currentPage} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
                     </Grid2>
                     <Grid2 size={9} textAlign={'right'} margin={'auto'}>
                         <Select IconComponent={(props) => (

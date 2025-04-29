@@ -11,12 +11,12 @@ import CourseScreen from '../components/CourseScreen';
 const AppRouter = () => {
     return (
         <Routes>
-            {/* <Route path='/' element={<Layout/>}> */}
+            <Route path='/' element={<Layout/>}/>
 
-            <Route path='/' element={<CourseScreen />}/>
+            <Route path='/course' element={<CourseScreen />}/>
             {/* <Route path='/TopicsSearch' element={<TopicsSearch id={1}/>}/> */}
                 
-            {/* </Route> */}
+
         </Routes>
         //<Route path='/' element={<HomePage/>}/>
 
