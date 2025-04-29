@@ -79,28 +79,32 @@ namespace DL
             {
                 var dayOfWeek = (int)dateTime.DayOfWeek + 1;
 
-                await _context.SaveChangesAsync();
-                var schedule = _context.Meetings
-                .Include(m => m.Day)
-                .Include(m => m.ScheduleForTopic)
-                 .ThenInclude(sft => sft.Topic)
-                 .ThenInclude(t => t.Course)
-                .Where(m => m.IsValid)
-                .Where(m => m.DayId == dayOfWeek)
-                .Where(m => m.ScheduleForTopic != null
-                     && m.ScheduleForTopic.Topic != null
-                     && m.ScheduleForTopic.Topic.Course != null)
-                .Where(m => DateOnly.FromDateTime(dateTime) >= m.ScheduleForTopic.Topic.Course.StartDate
-                     && (m.ScheduleForTopic.Topic.Course.EndDate == null || DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
-                .Select(m => new RoomsScheduleByDateDTO
-                {
-                    CourseName = m.ScheduleForTopic.Topic.Course.Name,
-                    TopicName = m.ScheduleForTopic.Topic.Name,
-                    CourseColor = m.ScheduleForTopic.Topic.Course.Color,
-                    StartTime = m.StartTime ?? TimeOnly.MinValue,
-                    EndTime = m.EndTime ?? TimeOnly.MaxValue
-                })
-             .ToList();
+                var schedule = await _context.Meetings
+                    .Include(m => m.Day)
+                    .Include(m => m.Room)
+                    .Include(m => m.ScheduleForTopic)
+                        .ThenInclude(sft => sft.Topic)
+                        .ThenInclude(t => t.Course)
+                    .Where(m => m.IsValid)
+                    .Where(m => m.DayId == dayOfWeek)
+                    .Where(m => m.ScheduleForTopic != null
+                             && m.ScheduleForTopic.Topic != null
+                             && m.ScheduleForTopic.Topic.Course != null)
+                    .Where(m =>
+                        DateOnly.FromDateTime(dateTime) >= m.ScheduleForTopic.Topic.Course.StartDate &&
+                        (m.ScheduleForTopic.Topic.Course.EndDate == null ||
+                         DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
+                    .Where(m => m.MeetingDate == DateOnly.FromDateTime(dateTime))
+                    .Select(m => new RoomsScheduleByDateDTO
+                    {
+                        RoomName = m.Room.Name,
+                        CourseName = m.ScheduleForTopic.Topic.Course.Name,
+                        TopicName = m.ScheduleForTopic.Topic.Name,
+                        CourseColor = m.ScheduleForTopic.Topic.Course.Color,
+                        StartTime = m.StartTime ?? TimeOnly.MinValue,
+                        EndTime = m.EndTime ?? TimeOnly.MaxValue
+                    })
+                    .ToListAsync();
 
                 return (schedule, null);
             }
@@ -108,8 +112,8 @@ namespace DL
             {
                 return (null, ex.Message);
             }
-
         }
+
         public async Task<(List<Room> rooms, int totalCount, string ErrorMessage)> GetAllRoomsBySearchWithPagination(
          string roomName, bool mic, bool projector, bool computer, int numOfSeats,
          int pageNumber, int pageSize, bool searchStatus)
