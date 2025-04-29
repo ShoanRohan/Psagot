@@ -20,8 +20,12 @@ const updatedUser = async (updateUser) => {
     return response.data;
 };
 
+const getAllLecturersAndCoordinators = async ()=> {
+    const response = await api.get('/User/GetAllLecturersAndCoordinators');
+    return response.data;
+};
 
 
-export{getAllUsers, getUserById, addUser, updatedUser};
+export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators};
 
 
