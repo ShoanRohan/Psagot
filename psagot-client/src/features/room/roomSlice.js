@@ -5,6 +5,7 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     roomSchedule: [],
+    viewMode: 'rooms',
     displayDate:new Date().toLocaleDateString('en-GB'),
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
@@ -23,6 +24,9 @@ const roomSlice = createSlice({
         },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
+        },
+        setViewMode: (state, action) => {
+            state.viewMode = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -73,5 +77,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setDisplayDate,setRoom } = roomSlice.actions;
+export const { setDisplayDate,setRoom ,setViewMode } = roomSlice.actions;
 export default roomSlice.reducer;

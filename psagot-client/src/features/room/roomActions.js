@@ -7,6 +7,7 @@ export const fetchAllRooms = createAsyncThunk('room/fetchAllRooms', async () => 
   return data;
 });
 
+
 export const fetchRoomScheduleByDate = createAsyncThunk('room/fetchRoomScheduleByDate', async () => {
   const data = await getRoomScheduleByDate();
   return data;
