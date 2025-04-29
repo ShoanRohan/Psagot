@@ -13,5 +13,6 @@ namespace DL
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
+        Task<(ListOfMeetingsForTopic Result, string ErrorMessage)> SearchMeetings(int? courseId, int? topicId, string teacherName, DateOnly? date, int pageNumber = 1, int pageSize = 20);
     }
 }

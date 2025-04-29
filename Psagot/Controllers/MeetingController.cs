@@ -61,5 +61,22 @@ namespace Psagot.Controllers
 
             return Ok(addedMeeting);
         }
+        [HttpGet("SearchMeetings")]
+        public async Task<ActionResult<ListOfMeetingsForTopicDTO>> SearchMeetings(int? courseId, int? topicId, string teacherName, DateOnly? date, int pageNumber = 1, int pageSize = 20)
+        {
+            var (result, errorMessage) = await _meetingBL.SearchMeetings(courseId, topicId, teacherName, date, pageNumber, pageSize);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return BadRequest(errorMessage);
+            }
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
