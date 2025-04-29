@@ -4,7 +4,7 @@ import { Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHe
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPaginatedCourses, selectCurrentPage, selectPageSize, setCurrentPage, selectTotalCount, setPageSize } from '../features/course/courseSlice';
+import { selectPaginatedCourses, selectCurrentPage, selectPageSize, setCurrentPage, selectTotalCount, setPageSize, selectCourses } from '../features/course/courseSlice';
 import { fetchPaginatedCourses } from '../features/course/courseActions';
 import editSvg from '../assets/icons/edit.svg'
 
@@ -27,33 +27,42 @@ const StyledTableRow = styled(TableRow)(() => ({
     },
 }));
 
-const CourseGrid = () => {
+const CourseGrid = ({totalCount, currentPage, pageSize, onPageChange, onPageSizeChange}) => {
     const dispatch = useDispatch();
-    const currentPage = useSelector(selectCurrentPage);
-    const pageSize = useSelector(selectPageSize);
     const [selectSize, setSelectSize] = useState(pageSize)
-    const totalCount = useSelector(selectTotalCount);
-    const paginatedCourses = useSelector(selectPaginatedCourses)
+    const courses = useSelector(selectCourses)
+
+
+    const handlePageChange = (event, newPage) => {
+
+        onPageChange(newPage);
+
+    };
+
+    const handleSelectChange = (event) => {
+
+        const newPageSize = event.target.value;
+
+        setSelectSize(newPageSize);
+
+        onPageSizeChange(newPageSize);
+
+    };
 
     const setPage = async (page) => {
         await dispatch(setCurrentPage(page))
     };
 
-    const handleSelectChange = (event) => {
-        const newPageSize = event.target.value;
-        setSelectSize(newPageSize);
-        dispatch(setPageSize(newPageSize));
-    };
+    // const handleSelectChange = (event) => {
+    //     const newPageSize = event.target.value;
+    //     setSelectSize(newPageSize);
+    //     dispatch(setPageSize(newPageSize));
+    // };
 
-    useEffect(() => {
-        const getPaginatedCourses = async () => {
-            await dispatch(fetchPaginatedCourses({ pageNumber: currentPage, pageSize: pageSize }))
-        };
-        getPaginatedCourses()
-    }, [dispatch, currentPage, pageSize])
+ 
 
     return (
-        <div style={{ backgroundColor: '#FAFCFF',marginTop: "8px", minWidth:"94vw" }}>
+        <div style={{ backgroundColor: '#FAFCFF', marginTop: "8px", minWidth: "94vw" }}>
             <TableContainer component={Paper} sx={{ width: '100%', margin: 'auto', p: '8px' }}>
                 <Table sx={{ p: '35px 24px 10px 24px', borderRadius: '100px' }} aria-label="courses table">
                     <TableHead>
@@ -78,7 +87,7 @@ const CourseGrid = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedCourses?.map(course => (
+                        {courses?.map(course => (
                             <StyledTableRow key={course?.courseId} sx={{ p: '20px 0px 20px 30px', borderTopLeftRadius: '4px', borderTopRightRadius: '4px', height: '79px' }}>
                                 <StyledTableCell align="center" >{course?.courseId}</StyledTableCell>
                                 <StyledTableCell align="center" >{course?.name}</StyledTableCell>
@@ -130,7 +139,10 @@ const CourseGrid = () => {
             <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px auto', p: '10px' }}>
                 <Grid2 container>
                     <Grid2 size={3}>
-                        <Pagination onChange={(e, p) => setPage(p)} count={totalCount / pageSize} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
+                        <Pagination
+                            onChange={handlePageChange}
+                            count={Math.ceil(totalCount / pageSize)}
+                            page={currentPage} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
                     </Grid2>
                     <Grid2 size={9} textAlign={'right'} margin={'auto'}>
                         <Select IconComponent={(props) => (

@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllCourses, fetchCourseById, fetchPaginatedCourses, addCourseAction, updateCourseAction, fetchFilteredCourses } from './courseActions';
+import { fetchAllCourses, fetchCourseById, fetchPaginatedCourses, addCourseAction, updateCourseAction, fetchFilteredPaginatedCourses } from './courseActions';
 
 const initialState = {
     //courses: [],
-    paginatedCourses: [],
+    filterPaginatedCourses: [],
     currentPage: 1,
     pageSize: 1,
     totalCount: 0,
-    filtersCourses: [],
+   // filtersCourses: [],
     selectedCourse: null,
     status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
@@ -52,18 +52,20 @@ const courseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(fetchPaginatedCourses.pending, (state) => {
+            .addCase(fetchFilteredPaginatedCourses.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchPaginatedCourses.fulfilled, (state, action) => {
+            .addCase(fetchFilteredPaginatedCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.paginatedCourses = action.payload.courses;
+                state.filterPaginatedCourses = action.payload.courses;
                 state.totalCount = action.payload.totalCount;
             })
-            .addCase(fetchPaginatedCourses.rejected, (state, action) => {
+            .addCase(fetchFilteredPaginatedCourses.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+
+
             .addCase(addCourseAction.fulfilled, (state, action) => {
                 state.courses.push(action.payload);
             })
@@ -72,26 +74,16 @@ const courseSlice = createSlice({
                 if (index !== -1) {
                     state.courses[index] = action.payload;
                 }
-            })
-
-            .addCase(fetchFilteredCourses.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchFilteredCourses.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.filtersCourses = action.payload;
-            })
-            .addCase(fetchFilteredCourses.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
             });
+
+         
 
 
     },
 });
 
 //export const selectFiltersCourses = state => state.course.filtersCourses;
-export const selectPaginatedCourses = state => state.course.paginatedCourses;
+export const selectCourses = state => state.course.filterPaginatedCourses;
 export const selectTotalCount = state => state.course.totalCount;
 export const selectCurrentPage = state => state.course.currentPage;
 export const selectPageSize = state => state.course.pageSize;

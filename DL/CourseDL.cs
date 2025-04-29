@@ -45,23 +45,9 @@ namespace DL
             }
         }
 
-        public int GetTotalCoursesCount()
-        {
-            return _context.Courses.Count();
-        }
+       
 
-        public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetPaginatedCourses(int skip, int pageSize)
-        {
-            try
-            {
-                var courses = await _context.Courses.Skip(skip).Take(pageSize).Include(c => c.Status).Include(c => c.Coordinator).ToListAsync();
-                return (courses, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
+     
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
         {
             try
@@ -88,7 +74,13 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetFilteredCourses(
+        //public int GetTotalCoursesCount()
+        //{
+        //    return _context.Courses.Count();
+        //}
+        public async Task<(IEnumerable<Course> Courses,int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+            int skip,
+            int pageSize,
            int? courseId ,
            string courseName,
            string coordinatorName,
@@ -96,7 +88,7 @@ namespace DL
         {
             try
             {
-                var query = _context.Set<Course>()
+                var query = _context.Courses
                     .Include(c => c.Status)
                     .Include(c => c.Coordinator)
                     .AsQueryable();
@@ -120,14 +112,17 @@ namespace DL
                 {
                     query = query.Where(c => c.Year == year.Value);
                 }
+            
+                var courses = await query.Skip(skip).Take(pageSize).ToListAsync();
+                var totalCount = courses.Count();
+                return (courses, totalCount, null);
 
-                var courses = await query.ToListAsync();
-                return (courses, null);
             }
             catch (Exception ex)
             {
-                return (null, ex.Message);
+                return (null,0, ex.Message);
             }
+
         }
 
     }

@@ -13,14 +13,16 @@ namespace BL
     {
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses();
         Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
-        Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedCourses(int page, int pageSize);
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
         Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
-        Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetFilteredCourses(
+        Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+            int page, 
+            int pageSize,
           int? courseId ,
           string courseName ,
           string coordinatorName ,
           int? year );
+
     }
 
 }

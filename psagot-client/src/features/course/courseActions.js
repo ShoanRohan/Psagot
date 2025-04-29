@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllCourses, getCourseById, getPaginatedCourses, addCourse, updateCourse, courseFilter} from '../../utils/courseUtil';
+import { getAllCourses, getCourseById, getPaginatedCourses, addCourse, updateCourse, getFilterPaginatedCourses} from '../../utils/courseUtil';
 
 export const fetchAllCourses = createAsyncThunk('course/fetchAllCourses', async () => {
   const data = await getAllCourses();
@@ -11,10 +11,22 @@ export const fetchCourseById = createAsyncThunk('course/fetchCourseById', async 
   return data;
 });
 
-export const fetchPaginatedCourses = createAsyncThunk('course/fetchPaginatedCourses', async({pageNumber, pageSize}) => {
-  const data = await getPaginatedCourses(pageNumber, pageSize);
+// export const fetchPaginatedCourses = createAsyncThunk('course/fetchPaginatedCourses', async({pageNumber, pageSize}) => {
+//   const data = await getPaginatedCourses(pageNumber, pageSize);
+//   return data;
+// })
+
+export const fetchFilteredPaginatedCourses = createAsyncThunk('course/getFilteredPaginatedCourses', async ({courseCode,
+    courseName,
+    courseCoordinator,
+    year, pageNumber, pageSize}) => {
+      const filters = {courseCode: courseCode, courseName: courseName, courseCoordinator: courseCoordinator, year: year}
+  console.log(filters)
+  console.log(pageNumber)
+  const data = await getFilterPaginatedCourses(filters,pageNumber, pageSize);
   return data;
-})
+});
+
 
 export const addCourseAction = createAsyncThunk('course/addCourseAction', async (newCourse) => {
   const data = await addCourse(newCourse);
@@ -26,7 +38,4 @@ export const updateCourseAction = createAsyncThunk('course/updateCourseAction', 
   return data;
 });
 
-export const fetchFilteredCourses = createAsyncThunk('course/getFilteredCourses', async (filterObject) => {
-  const data = await courseFilter(filterObject);
-  return data;
-});
+

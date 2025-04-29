@@ -10,10 +10,10 @@ const getAllCourses = async () => {
     return response.data;
 };
 
-const getPaginatedCourses = async (page, pageSize) => {
-    const response = await api.get(`/Course/GetPaginatedCourses/${page}/${pageSize}`)
-    return response.data;
-}
+// const getPaginatedCourses = async (page, pageSize) => {
+//     const response = await api.get(`/Course/GetPaginatedCourses/${page}/${pageSize}`)
+//     return response.data;
+// }
 
 const addCourse = async (courseDTO) => {
     const response = await api.post('/Course/AddCourse', courseDTO);
@@ -24,12 +24,23 @@ const updateCourse = async (courseDTO) => {
     const response = await api.put('/Course/UpdateCourse', courseDTO);
     return response.data;
 };
-const courseFilter = async (filterObject) => {
+// const getFilterPaginatedCourses = async (filterObject,page,pageSize) => {
+//     const params = new URLSearchParams(filterObject).toString();
+//     const response = await api.get(`/Course/GetPaginatedFilteredCourses?${params}/${page}/${pageSize}`);
+//     return response.data;
+// };
+
+const getFilterPaginatedCourses = async (filterObject, page, pageSize) => {
+    console.log(filterObject)
     const params = new URLSearchParams(filterObject).toString();
-    const response = await api.get(`/Course/filtered?${params}`);
+    console.log(params)
+    const queryString = params ? `?${params}` : ''; // הוספת סימן שאלה רק אם יש פרמטרים
+    console.log(queryString)
+    const response = await api.get(`/Course/GetPaginatedFilteredCourses/${page}/${pageSize}${queryString}`);
+    console.log(response.data)
     return response.data;
+  };
 
-};
 
 
-export { getCourseById, getAllCourses, getPaginatedCourses, addCourse, updateCourse,courseFilter };
+export { getCourseById, getAllCourses, addCourse, updateCourse,getFilterPaginatedCourses };
