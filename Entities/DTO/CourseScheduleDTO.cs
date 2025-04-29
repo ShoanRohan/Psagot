@@ -13,5 +13,7 @@ namespace Entities.DTO
         public string CourseColor { get; set; }
         public TimeOnly  StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
+        public string RoomName { get; set; }
+
     }
 }
