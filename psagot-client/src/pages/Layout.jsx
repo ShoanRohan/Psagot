@@ -10,8 +10,7 @@ const Layout = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
            
             <Header />
-            <CourseTopicGrid />
-            {/* <Section /> */}
+         <Section /> 
             <Footer />          
         </Box>
     );

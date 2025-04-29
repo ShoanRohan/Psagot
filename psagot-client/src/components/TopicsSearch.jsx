@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { fetchAllTopicFotCourseByCourseId } from "../features/topic/topicActions";
+import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
 
 const sharedStyles = {
   width: "150px",
@@ -53,7 +53,7 @@ const TopicsSearch = ({ id }) => {
 
   useEffect(() => {
     if (status === "idle" && id) {
-      dispatch(fetchAllTopicFotCourseByCourseId(id));
+      dispatch(fetchAllTopicForCourseByCourseId(id));
     }
   }, [status, dispatch, id]);
 
