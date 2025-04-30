@@ -1,23 +1,23 @@
 .modal-container {
-  max-width: 600px; /* התאמת רוחב המודאל */
-  width: 90%; /* התאמה למסכים קטנים יותר */
-  padding: 20px; /* הפחתת ריפוד */
-  border-radius: 8px; /* עיגול פינות */
+  max-width: 600px;
+  width: 90%;
+  padding: 20px;
+  border-radius: 8px;
   background: white;
-  position: relative; /* עבור מיקום כפתור הסגירה */
+  position: relative;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px; /* הוספת מרווח מתחת לכותרת */
+  margin-bottom: 20px;
 }
 
 .modal-content {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* הפחתת מרווח בין שורות */
+  gap: 20px;
 }
 
 .row {
@@ -26,23 +26,25 @@
   gap: 10px;
 }
 
-label {
+.custom-input label {
   font-size: 14px;
   font-weight: 400;
   color: rgba(0, 0, 0, 0.7);
 }
 
-input,
-select {
+.custom-input input,
+.custom-input select,
+.custom-input textarea {
   width: 100%;
-  padding: 8px; /* הגדלת ריפוד */
+  padding: 8px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
-input:focus,
-select:focus {
+.custom-input input:focus,
+.custom-input select:focus,
+.custom-input textarea:focus {
   border-color: #007bff;
   outline: none;
 }
@@ -60,7 +62,7 @@ select:focus {
   margin-top: 20px;
 }
 
-button {
+.modal-button {
   min-width: 90px;
   padding: 8px;
   font-size: 14px;

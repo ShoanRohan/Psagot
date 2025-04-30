@@ -12,12 +12,12 @@ import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import CloseIcon from "@mui/icons-material/Close";
-import Checkbox from '@mui/material/Checkbox';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from "@mui/material/Checkbox";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import "../styles/userModel.css";
+import "../styles/AddUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
@@ -73,6 +73,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
           <Box className="modal-content">
             <Box className="row">
               <TextField
+                className="custom-input"
                 label="שם"
                 name="name"
                 variant="standard"
@@ -84,6 +85,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 fullWidth
               />
               <TextField
+                className="custom-input"
                 label="מייל"
                 name="email"
                 variant="standard"
@@ -95,6 +97,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 fullWidth
               />
               <TextField
+                className="custom-input"
                 label="טלפון"
                 name="phone"
                 variant="standard"
@@ -106,8 +109,10 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 fullWidth
               />
             </Box>
+
             <Box className="row">
               <TextField
+                className="custom-input"
                 label="סיסמה"
                 name="password"
                 type="password"
@@ -119,13 +124,15 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                 helperText={formik.touched.password && formik.errors.password}
                 fullWidth
               />
-              <FormControl variant="standard" fullWidth>
+
+              <FormControl variant="standard" fullWidth className="custom-input">
                 <InputLabel>הרשאה</InputLabel>
                 <Select
                   name="permission"
                   value={formik.values.permission}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  className="custom-select"
                 >
                   {userTypes?.map((userType) => (
                     <MenuItem key={userType.id} value={userType.id}>
@@ -134,7 +141,8 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
                   ))}
                 </Select>
               </FormControl>
-              <FormControl component="fieldset">
+
+              <FormControl component="fieldset" className="custom-input">
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -153,8 +161,8 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
           </Box>
         </DialogContent>
         <DialogActions className="modal-actions">
-          <Button variant="outlined" onClick={onClose}>ביטול</Button>
-          <Button variant="contained" color="primary" type="submit">שמור</Button>
+          <Button  className="modal-button" variant="outlined" onClick={onClose}>ביטול</Button>
+          <Button  className="modal-button" variant="contained" color="primary" type="submit">שמור</Button>
         </DialogActions>
       </Box>
     </Dialog>
