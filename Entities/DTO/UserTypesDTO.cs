@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserTypeDTO
+    public class UserTypesDTO
     {
-        public int UserTypeId { get; set; }
+        public int UserTypesId { get; set; }
         public string Name { get; set; }
-        public TimeOnly StartTime { get; set; }
-
         public TimeOnly EndTime { get; set; }
     }
 }

@@ -12,6 +12,7 @@ const HomePage = () => {
     useEffect(() => {
         if (status === 'idle') {
             // dispatch(fetchAllUserTypes());
+            // dispatch(fetchAllUserTypes());
         }
     }, [status, dispatch]);
 
