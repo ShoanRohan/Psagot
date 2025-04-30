@@ -3,15 +3,19 @@ using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OfficeOpenXml; 
+
 
 namespace DL
 {
     public class MeetingDL : IMeetingDL
     {
         private readonly PsagotDbContext _context;
+
 
         public MeetingDL(PsagotDbContext context)
         {
@@ -70,6 +74,10 @@ namespace DL
             {
                 return (null, ex.Message);
             }
+
         }
+
+        
+        
     }
 }
