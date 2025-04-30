@@ -25,6 +25,7 @@ namespace Psagot.Controllers
 
             return Ok(course);
         }
+
         [HttpGet("GetAllCourses")]
         public async Task<IActionResult> GetAllCourses()
         {
@@ -33,14 +34,23 @@ namespace Psagot.Controllers
 
             return Ok(courses);
         }
-        [HttpGet("GetPaginatedCourses/{page}/{pageSize}")]
-        public async Task<IActionResult> GetPaginatedCourses(int page, int pageSize)
-        {
-            var (courses, totalCount, errorMessage) = await _courseBL.GetPaginatedCourses(page, pageSize);
-            if (courses == null) return BadRequest(errorMessage);
 
-            return Ok(new { courses, totalCount });
+        [HttpGet("GetPaginatedFilteredCourses/{page}/{pageSize}")]
+        public async Task<IActionResult> GetPaginatedFilteredCourses(
+           int page, int pageSize,
+       [FromQuery] int? courseId = null,
+       [FromQuery] string courseName = null,
+       [FromQuery] string coordinatorName = null,
+       [FromQuery] int? year = null)
+        {
+            var (courses, totalCount, errorMessage) = await _courseBL.GetPaginatedFilteredCourses(page, pageSize, courseId, courseName, coordinatorName, year);
+
+            if (courses != null)
+                return Ok(new { courses, totalCount });
+
+            return BadRequest(new { Error = errorMessage });
         }
+
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {
@@ -49,6 +59,7 @@ namespace Psagot.Controllers
 
             return Ok(addedCourse);
         }
+
         [HttpPut("UpdateCourse")]
         public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
         {

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow, Table, TableBody, Select, MenuItem, Grid2 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectPaginatedCourses, selectCurrentPage, selectPageSize, setCurrentPage, selectTotalCount, setPageSize } from '../features/course/courseSlice';
-import { fetchCourseById, fetchPaginatedCourses } from '../features/course/courseActions';
+import { selectCourses } from '../features/course/courseSlice';
+import { fetchCourseById } from '../features/course/courseActions';
 import editSvg from '../assets/icons/edit.svg'
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -28,41 +28,30 @@ const StyledTableRow = styled(TableRow)(() => ({
     },
 }));
 
-const CourseGrid = () => {
-    const navigate = useNavigate()
+const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSizeChange }) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const currentPage = useSelector(selectCurrentPage);
-    const pageSize = useSelector(selectPageSize);
-    const [selectSize, setSelectSize] = useState(pageSize)
-    const totalCount = useSelector(selectTotalCount);
-    const paginatedCourses = useSelector(selectPaginatedCourses)
+    const [selectSize, setSelectSize] = useState(pageSize);
+    const courses = useSelector(selectCourses);
 
-    const setPage = async (page) => {
-        await dispatch(setCurrentPage(page))
+    const handlePageChange = (event, newPage) => {
+        onPageChange(newPage);
     };
 
     const selectCourse = async (courseId) => {
         await dispatch(fetchCourseById(courseId))
         navigate('/course/')
-    }
+    };
 
     const handleSelectChange = (event) => {
         const newPageSize = event.target.value;
         setSelectSize(newPageSize);
-        dispatch(setCurrentPage(1));
-        dispatch(setPageSize(newPageSize));
+        onPageSizeChange(newPageSize);
     };
 
-    useEffect(() => {
-        const getPaginatedCourses = async () => {
-            await dispatch(fetchPaginatedCourses({ pageNumber: currentPage, pageSize: pageSize }))
-        };
-        getPaginatedCourses()
-    }, [dispatch, currentPage, pageSize])
-
     return (
-        <div style={{ backgroundColor: '#FAFCFF' }}>
-            <TableContainer component={Paper} sx={{ width: '90%', margin: 'auto', p: '8px' }}>
+        <div style={{ backgroundColor: '#FAFCFF', marginTop: "8px", minWidth: "94vw" }}>
+            <TableContainer component={Paper} sx={{ width: '100%', margin: 'auto', p: '8px' }}>
                 <Table sx={{ p: '35px 24px 10px 24px', borderRadius: '10px' }} aria-label="courses table">
                     <TableHead>
                         <TableRow>
@@ -86,7 +75,7 @@ const CourseGrid = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {paginatedCourses?.map(course => (
+                        {courses?.map(course => (
                             <StyledTableRow key={course?.courseId} sx={{ p: '20px 0px 20px 30px', borderTopLeftRadius: '4px', borderTopRightRadius: '4px', height: '79px' }}>
                                 <StyledTableCell align="center" >{course?.courseId}</StyledTableCell>
                                 <StyledTableCell align="center" >{course?.name}</StyledTableCell>
@@ -135,10 +124,11 @@ const CourseGrid = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '90%', margin: '10px auto', p: '10px' }}>
+            <Box component={Paper} sx={{ p: '16px 24px', borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px auto', p: '10px' }}>
                 <Grid2 container>
                     <Grid2 size={3}>
-                        <Pagination onChange={(e, p) => setPage(p)} count={Math.ceil(totalCount / pageSize)} page={currentPage} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
+                        <Pagination onChange={handlePageChange} count={Math.ceil(totalCount / pageSize)}
+                            page={currentPage} sx={{ '& .MuiPaginationItem-root': { fontSize: 12, } }} />
                     </Grid2>
                     <Grid2 size={9} textAlign={'right'} margin={'auto'}>
                         <Select IconComponent={(props) => (

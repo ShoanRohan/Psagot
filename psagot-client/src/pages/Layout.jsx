@@ -4,8 +4,7 @@ import Section from "../components/Section";
 import Footer from "../components/Footer";
 import CourseGrid from "../components/CourseGrid";
 import { Box } from "@mui/material";
-import CoursePage from "../components/CoursePage";
-import CourseDetails from "../components/CourseDetails";
+import CoursesPage from "../components/CoursesPage";
 
 const Layout = () => {
     return (
@@ -13,8 +12,7 @@ const Layout = () => {
             {/* <Header />
             <Section />
             <Footer /> */}
-            <CoursePage />
-            {/* <CourseDetails /> */}
+            <CoursesPage/>
         </Box>
     );
 }

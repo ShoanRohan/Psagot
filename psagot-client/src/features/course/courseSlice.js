@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllCourses, fetchCourseById, fetchPaginatedCourses, addCourseAction, updateCourseAction } from './courseActions';
+import { fetchAllCourses, fetchCourseById, addCourseAction, updateCourseAction, fetchFilteredPaginatedCourses } from './courseActions';
 
 const initialState = {
     //courses: [],
-    paginatedCourses: [],
+    filterPaginatedCourses: [],
     currentPage: 1,
     pageSize: 1,
     totalCount: 0,
-    //filtersCourses: [],
     selectedCourse: null,
     status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
@@ -52,15 +51,15 @@ const courseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(fetchPaginatedCourses.pending, (state) => {
+            .addCase(fetchFilteredPaginatedCourses.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchPaginatedCourses.fulfilled, (state, action) => {
+            .addCase(fetchFilteredPaginatedCourses.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.paginatedCourses = action.payload.courses;
+                state.filterPaginatedCourses = action.payload.courses;
                 state.totalCount = action.payload.totalCount;
             })
-            .addCase(fetchPaginatedCourses.rejected, (state, action) => {
+            .addCase(fetchFilteredPaginatedCourses.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })
@@ -76,11 +75,10 @@ const courseSlice = createSlice({
     },
 });
 
-//export const selectFiltersCourses = state => state.course.filtersCourses;
-export const selectPaginatedCourses = (state) => state.course.paginatedCourses;
-export const selectTotalCount = (state) => state.course.totalCount;
-export const selectCurrentPage = (state) => state.course.currentPage;
-export const selectPageSize = (state) => state.course.pageSize;
+export const selectCourses = state => state.course.filterPaginatedCourses;
+export const selectTotalCount = state => state.course.totalCount;
+export const selectCurrentPage = state => state.course.currentPage;
+export const selectPageSize = state => state.course.pageSize;
 export const selectSelectedCourse = (state) => state.course.selectedCourse;
 
 export const { setCourse, setCurrentPage, setPageSize } = courseSlice.actions;

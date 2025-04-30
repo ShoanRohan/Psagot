@@ -11,10 +11,9 @@ namespace DL
     {
         Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetAllCourses();
         Task<(Course Course, string ErrorMessage)> GetCourseById(int id);
-        int GetTotalCoursesCount();
-        Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetPaginatedCourses(int skip, int pageSize);
         Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
         Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course);
-
+        Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+            int skip, int pageSize, int? courseId, string courseName, string coordinatorName, int? year);
     }
 }

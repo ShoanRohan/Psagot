@@ -1,13 +1,11 @@
-import React, { useState, useEffect,useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Box, Select, MenuItem, FormControl, InputLabel, TextField, Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCoordinators } from "../features/user/userAction";
 
-
 // סטייל לשדות בחירה
-
 const sharedStyles = {
   width: "150px",
   textAlign: "right",
@@ -34,28 +32,14 @@ const buttonStyles = {
   lineHeight: "18.96px",
 };
 
-const CourseSearch = () => {
+const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinatorsCode);
   const currentYear = new Date().getFullYear();
 
-  const initialState = {
-    courseCode: "",
-    courseName: "",
-    courseCoordinator: "",
-    year: "",
-  };
-
-  const [filters, setFilters] = useState(initialState);
-  
-
   useEffect(() => {
-     dispatch(fetchCoordinators());
+    dispatch(fetchCoordinators());
   }, [dispatch]);
-  
-  useEffect(() => {
-    console.log(coordinators); // Undefined
-  }, [coordinators]);
 
   // פונקציה לטיפול במיקוxsxד בשדה השנה
   const handleYearFocus = () => {
@@ -79,50 +63,49 @@ const CourseSearch = () => {
       setFilters((prevFilters) => ({ ...prevFilters, courseCode: value }));
     }
   };
-  
 
-   // בדיקה אם היה שינוי בערכים
-   const isSearchDisabled = useMemo(() => {
+  // בדיקה אם היה שינוי בערכים
+  const isSearchDisabled = useMemo(() => {
     return JSON.stringify(filters) === JSON.stringify(initialState);
   }, [filters]);
 
   return (
     <Box
-    sx={{
-      width: "100%",
-      margin: "auto",
-      //position: "relative",
-      borderRadius: "10px",
-      padding: "25px 24px",
-      backgroundColor: "white",
-      display: "flex",
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      fontFamily: "Rubik",
-      fontWeight: 400,
-      fontSize: "16px",
-      lineHeight: "18.96px",
-      textAlign: "right",
-      direction: "rtl",
-    }}
-  >
-    <Box
       sx={{
+        width: "100%",
+        margin: "auto",
+        //position: "relative",
+        borderRadius: "4px",
+        padding: "25px 24px",
+        backgroundColor: "white",
         display: "flex",
-        justifyContent: "flex-start",
-        gap: "20px",
-        flexWrap: "nowrap",
-        flex: 1,
-        marginRight: 0,
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        fontFamily: "Rubik",
+        fontWeight: 400,
+        fontSize: "16px",
+        lineHeight: "18.96px",
+        textAlign: "right",
+        direction: "rtl",
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: "20px",
+          flexWrap: "nowrap",
+          flex: 1,
+          marginRight: 0,
+        }}
+      >
         {/* קוד קורס - ערך מספרי בלבד */}
         <TextField
           label="קוד קורס"
           type="number"
           variant="standard"
-          sx={{ ...sharedStyles, order: -1}}
+          sx={{ ...sharedStyles, order: -1 }}
           value={filters.courseCode}
           onChange={handleCourseCodeChange}
         />
@@ -135,7 +118,6 @@ const CourseSearch = () => {
           value={filters.courseName}
           onChange={(e) => setFilters({ ...filters, courseName: e.target.value })}
         />
-        
 
         {/* רכזת - מתוך רשימה */}
         <FormControl variant="standard" sx={sharedStyles}>
@@ -152,7 +134,6 @@ const CourseSearch = () => {
             ))}
           </Select>
         </FormControl>
-
         <TextField
           variant="standard"
           label="שנה"
@@ -164,7 +145,6 @@ const CourseSearch = () => {
           sx={sharedStyles}
         />
       </Box>
-
       <Box
         sx={{
           display: "flex",
@@ -177,7 +157,6 @@ const CourseSearch = () => {
           sx={{
             ...buttonStyles,
           }}
-          
           //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
@@ -187,13 +166,15 @@ const CourseSearch = () => {
         >
           ניקוי
         </Button>
-
         <Button
           variant="contained"
-          backgroundColor= "#326DEF"
+          backgroundColor="#326DEF"
           sx={buttonStyles}
           startIcon={<SearchIcon />}
           disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
+          onClick={() => {
+            onSearch();
+          }}
         >
           חיפוש
         </Button>

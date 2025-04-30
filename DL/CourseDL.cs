@@ -1,5 +1,4 @@
-﻿
-using Entities.Contexts;
+﻿using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -45,23 +44,6 @@ namespace DL
             }
         }
 
-        public int GetTotalCoursesCount()
-        {
-            return _context.Courses.Count();
-        }
-
-        public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetPaginatedCourses(int skip, int pageSize)
-        {
-            try
-            {
-                var courses = await _context.Courses.Skip(skip).Take(pageSize).Include(c => c.Status).Include(c => c.Coordinator).ToListAsync();
-                return (courses, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
         {
             try
@@ -75,6 +57,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
@@ -88,5 +71,53 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+            int skip, int pageSize,
+           int? courseId,
+           string courseName,
+           string coordinatorName,
+           int? year)
+        {
+            try
+            {
+                var query = _context.Courses
+                    .Include(c => c.Status)
+                    .Include(c => c.Coordinator)
+                    .AsQueryable();
+
+                if (courseId.HasValue)
+                {
+                    query = query.Where(c => c.CourseId == courseId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(courseName))
+                {
+                    query = query.Where(c => c.Name.Contains(courseName));
+                }
+
+                if (!string.IsNullOrEmpty(coordinatorName))
+                {
+                    query = query.Where(c => c.Coordinator.Name.Contains(coordinatorName));
+                }
+
+                if (year.HasValue)
+                {
+                    query = query.Where(c => c.Year == year.Value);
+                }
+
+                var totalCount = query.Count();
+                var courses = await query.Skip(skip).Take(pageSize).ToListAsync();
+
+                return (courses, totalCount, null);
+
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
+            }
+
+        }
+
     }
 }
