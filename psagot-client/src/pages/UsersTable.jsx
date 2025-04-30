@@ -17,6 +17,12 @@ const UsersTable = () => {
     const handleChange = (event) => {
         const value = Number(event.target.value); // עדכון ל-`event`
         setPageSize(value); // עדכון `pageSize`
+        // setPage(value); // קריאה ל-`setPage`
+    };
+
+    const handleChangepage = (event) => {
+        const value = Number(event.target.value); // עדכון ל-`event`
+        // setPageSize(value); // עדכון `pageSize`
         setPage(value); // קריאה ל-`setPage`
     };
 
@@ -141,7 +147,7 @@ const UsersTable = () => {
     <Pagination 
         count={Math.ceil(totalUsers / pageSize)} 
         page={page} 
-        onChange={handleChange} 
+        onChange={handleChangepage} 
     />
 </Box>
             </Box>
