@@ -31,6 +31,7 @@ namespace DL
             }
         }
 
+
         public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetAllCourses()
         {
             try

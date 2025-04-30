@@ -207,8 +207,50 @@ const handleSaveMeeting = () => {
       <Box sx={{  display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2  }}>
         
         <Typography variant="h6" component="h2">
+    return (
+
+        <>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '0px', mb: 2 }}>
+        <Button
+                variant="outlined"
+                onClick={handleCancel}
+                sx={cancelButtonStyle}
+            >
+                ביטול
+            </Button>
+            <Button
+                variant="contained"
+                onClick={handleSaveMeeting}
+                sx={saveButtonStyle}
+            >
+                שמור
+            </Button>
+        </Box>
+      <br/> <br/> <br/> <br/> 
+        <Container
+      maxWidth="lg"
+      sx={{
+        width: '100%',
+        maxWidth: '1476px',
+        height: 'auto',
+        backgroundColor: '#FFFFFF',
+        borderRadius: '10px',
+        padding: '30px',
+        boxShadow: '0px 0px 4px 0px #DCE2ECCC',
+        marginTop: '20px',
+        boxSizing: 'border-box',
+      }}
+
+      >
+        
+      <Box sx={{  display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2  }}>
+        
+        <Typography variant="h6" component="h2">
           פרטים טכניים
         </Typography>
+  
+      </Box>
+      <Box sx={{ mt: 4, mb: 4 }}>
   
       </Box>
       <Box sx={{ mt: 4, mb: 4 }}>
@@ -223,13 +265,18 @@ const handleSaveMeeting = () => {
                 onChange={handleChange}
                 error={!!validationErrors.topicName}
                 helperText={validationErrors.topicName}
+                error={!!validationErrors.topicName}
+                helperText={validationErrors.topicName}
                 margin="normal"
                 required
+                variant="outlined"
+                sx={textFieldStyle}
                 variant="outlined"
                 sx={textFieldStyle}
               />
             </Grid>
 
+            <Grid item>
             <Grid item>
               <TextField
                 label="שם קורס"
@@ -238,13 +285,19 @@ const handleSaveMeeting = () => {
                 onChange={handleChange}
                 error={!!validationErrors.courseName}
                 helperText={validationErrors.courseName}
+                error={!!validationErrors.courseName}
+                helperText={validationErrors.courseName}
                 margin="normal"
                 required
+                variant="outlined"
+                sx={textFieldStyle}
                 variant="outlined"
                 sx={textFieldStyle}
               />
             </Grid>
 
+   
+            <Grid item>
    
             <Grid item>
               <TextField
@@ -256,6 +309,8 @@ const handleSaveMeeting = () => {
                 helperText={validationErrors.lecturerName}
                 margin="normal"
                 required
+                variant="outlined"
+                sx={textFieldStyle}
                 variant="outlined"
                 sx={textFieldStyle}
               />
@@ -288,14 +343,19 @@ const handleSaveMeeting = () => {
                 onChange={handleChange}
                 error={!!validationErrors.date}
                 helperText={validationErrors.date}
+                error={!!validationErrors.date}
+                helperText={validationErrors.date}
                 margin="normal"
                 required
                 InputLabelProps={{ shrink: true }}
                 variant="outlined"
                 sx={textFieldStyle}
+                variant="outlined"
+                sx={textFieldStyle}
               />
             </Grid>
 
+            <Grid item>
             <Grid item>
               <TextField
                 label="שנה"
@@ -304,13 +364,20 @@ const handleSaveMeeting = () => {
                 onChange={handleChange}
                 error={!!validationErrors.year}
                 helperText={validationErrors.year}
+                error={!!validationErrors.year}
+                helperText={validationErrors.year}
                 margin="normal"
                 required
+                variant="outlined"
+                sx={textFieldStyle}
                 variant="outlined"
                 sx={textFieldStyle}
               />
             </Grid>
 
+          
+
+            <Grid item>
           
 
             <Grid item>
@@ -322,9 +389,13 @@ const handleSaveMeeting = () => {
                 onChange={handleChange}
                 error={!!validationErrors.startTime}
                 helperText={validationErrors.startTime}
+                error={!!validationErrors.startTime}
+                helperText={validationErrors.startTime}
                 margin="normal"
                 required
                 InputLabelProps={{ shrink: true }}
+                variant="outlined"
+                sx={textFieldStyle}
                 variant="outlined"
                 sx={textFieldStyle}
               />
@@ -352,6 +423,12 @@ const handleSaveMeeting = () => {
                      
                     </Grid>
 
+   
+                </form>
+            </Box>
+        </Container>
+        </>
+    );
    
                 </form>
             </Box>
