@@ -13,6 +13,8 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useEffect, useState } from 'react';
 import 'dayjs/locale/he';
 
+import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+
 const RoomsScheduleSearch = () => {
   const dispatch = useDispatch();
   const currentDisplayDate = useSelector((state) => state.room.displayDate);
@@ -45,6 +47,7 @@ const RoomsScheduleSearch = () => {
   const open = Boolean(anchorEl);
 
   return (
+    <>
     <Box
       sx={{
         mt: 3,
@@ -148,6 +151,9 @@ const RoomsScheduleSearch = () => {
   היום
 </Button>
     </Box>
+     <RoomScheduleGrid/>
+     </>
+
   );
 };
 
