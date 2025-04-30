@@ -5,7 +5,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 import { useDispatch, useSelector } from 'react-redux';
 import { setDisplayDate } from '../features/room/roomSlice';
-import { fetchRoomScheduleByDate } from '../features/room/roomActions';
+import { fetchRoomScheduleByDate, fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import dayjs from 'dayjs';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -41,7 +41,7 @@ const RoomsScheduleSearch = () => {
     }
 
     dispatch(setDisplayDate(updatedDate));
-    dispatch(fetchRoomScheduleByDate(updatedDate));
+    dispatch(fetchRoomsScheduleByDate(updatedDate));
   };
 
   const open = Boolean(anchorEl);

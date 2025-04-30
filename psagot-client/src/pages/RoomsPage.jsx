@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setViewMode } from '../features/room/roomSlice';
-import { fetchAllRooms, fetchRoomScheduleByDate } from '../features/room/roomActions';
+import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
 
 const RoomsView = ({ rooms }) => (
   <div>
@@ -35,7 +35,7 @@ const RoomsPage = () => {
     if (viewMode === 'rooms') {
       dispatch(fetchAllRooms());
     } else {
-      dispatch(fetchRoomScheduleByDate());
+      dispatch(fetchRoomsScheduleByDate());
     }
   }, [viewMode, dispatch]);
 
