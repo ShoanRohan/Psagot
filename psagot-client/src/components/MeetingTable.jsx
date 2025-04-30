@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllMeetings } from '../utils/meetingUtil';
+import { ExportIconButton } from '../pages/ExcelButton'; 
 import {
   Paper,
   TableContainer,
@@ -76,6 +77,15 @@ const MeetingTable = () => {
       <Typography variant="h5" align="center" gutterBottom>
         טבלת מפגשים
       </Typography>
+      
+       {/* כפתור ייצוא */}
+       <Box textAlign="left" mb={2}>
+        <ExportIconButton
+          data={data}
+          fileName="meetings"
+          sheetName="Meetings"
+        />
+      </Box>
       <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
         <Table stickyHeader>
           <TableHead>

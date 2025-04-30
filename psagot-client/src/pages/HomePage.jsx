@@ -4,7 +4,7 @@ import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
 import MeetingButton from './MeetingButton';
 import { ExportIconButton } from "./ExcelButton";
-
+import MeetingTable from '../components/MeetingTable';
 const HomePage = () => {
     const dispatch = useDispatch();
     const { userTypes, status, error } = useSelector((state) => state.userType);
@@ -16,21 +16,7 @@ const HomePage = () => {
         }
     }, [status, dispatch]);
 
-    const fakeMeetings = [
-        {
-            meetingId: 1,
-            title: "פגישת צוות",
-            date: "2025-04-22",
-            location: "Zoom",
-        },
-        {
-            meetingId: 2,
-            title: "פגישה עם לקוח",
-            date: "2025-04-23",
-            location: "משרד תל אביב",
-        },
-    ];
-
+  
     const handleClickButton = () => {
         alert("handle click button - userTypes" + JSON.stringify(userTypes));
     };
@@ -46,13 +32,14 @@ const HomePage = () => {
 
             {/* כפתור ייצוא לפגישות לדוגמה */}
             <ExportIconButton
-                data={fakeMeetings}
-                fileName="demo-meetings"
+                data={MeetingTable}
                 sheetName="פגישות"
             />
 
             {/* כפתור להוספת פגישה */}
             <MeetingButton />
+            
+
         </Container>
     );
 };

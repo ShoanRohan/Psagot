@@ -5,8 +5,9 @@ import { ExportIconButton } from './ExportIconButton';
 
 export const ExportMeetingsButton = () => {
   const dispatch = useDispatch();
-  const meetings = useSelector((state) => state.meeting.meetings);
-  const status = useSelector((state) => state.meeting.status);
+ 
+  const { meetings, status } = useSelector((state) => state.meeting);
+
 
   useEffect(() => {
     if (status === 'idle') {
@@ -14,9 +15,10 @@ export const ExportMeetingsButton = () => {
     }
   }, [status, dispatch]);
 
-  if (status === 'loading') {
-    return <div>טוען פגישות...</div>;
-  }
+  if (status === 'loading') return <div>טוען...</div>;
+  if (status === 'failed') return <div>שגיאה בטעינה</div>;
+
+  
 
   return (
     <ExportIconButton
