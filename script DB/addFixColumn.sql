@@ -44,39 +44,3 @@ ADD CONSTRAINT FK_Meetings_Course FOREIGN KEY (CourseId) REFERENCES Courses(Cour
     CONSTRAINT FK_Meetings_Topic FOREIGN KEY (TopicId) REFERENCES Topics(TopicId),
     CONSTRAINT FK_Meetings_Teacher FOREIGN KEY (TeacherId) REFERENCES Users(UserId);
 
-    -- הכנסת נתונים לטבלת UserTypes
-INSERT INTO UserTypes (Name) 
-VALUES 
-    (N'מנהלת'),
-    (N'מזכירה'),
-    (N'רכזת'),
-    (N'מרצה'),
-    (N'משתמש רגיל');
-
--- הכנסת נתונים לטבלת StatusCourses
-INSERT INTO StatusCourses (Name) 
-VALUES 
-    (N'פעיל'),
-    (N'ממתין'),
-    (N'מושהה'),
-    (N'הסתיים');
-
--- הכנסת נתונים לטבלת StatusTopics
-INSERT INTO StatusTopics (Name) 
-VALUES 
-    (N'פעיל'),
-    (N'ממתין'),
-    (N'מושהה'),
-    (N'הסתיים');
-
--- הכנסת נתונים לטבלת Days
-INSERT INTO Days (Name,Descr) 
-VALUES 
-    (N'א',N'ראשון'),
-    (N'ב',N'שני'),
-    (N'ג',N'שלישי'),
-	(N'ד',N'רביעי'),
-	(N'ה',N'חמישי'),
-	(N'ו',N'שישי'),
-    (N'ז',N'שבת');
-
