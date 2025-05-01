@@ -1,5 +1,4 @@
-﻿
-using Entities.Contexts;
+﻿using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,7 +22,7 @@ namespace DL
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(id);
+                var course = await _context.Set<Course>().Include(c => c.Coordinator).Include(c => c.Status).SingleOrDefaultAsync(c => c.CourseId == id);
                 return (course, null);
             }
             catch (Exception ex)
@@ -45,9 +44,6 @@ namespace DL
             }
         }
 
-       
-
-     
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
         {
             try
@@ -61,6 +57,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
@@ -74,17 +71,13 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        //public int GetTotalCoursesCount()
-        //{
-        //    return _context.Courses.Count();
-        //}
-        public async Task<(IEnumerable<Course> Courses,int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
-            int skip,
-            int pageSize,
-           int? courseId ,
+
+        public async Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+            int skip, int pageSize,
+           int? courseId,
            string courseName,
            string coordinatorName,
-           int? year )
+           int? year)
         {
             try
             {
@@ -112,15 +105,16 @@ namespace DL
                 {
                     query = query.Where(c => c.Year == year.Value);
                 }
-            
+
+                var totalCount = query.Count();
                 var courses = await query.Skip(skip).Take(pageSize).ToListAsync();
-                var totalCount = courses.Count();
+
                 return (courses, totalCount, null);
 
             }
             catch (Exception ex)
             {
-                return (null,0, ex.Message);
+                return (null, 0, ex.Message);
             }
 
         }

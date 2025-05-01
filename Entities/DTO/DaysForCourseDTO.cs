@@ -21,6 +21,6 @@ namespace Entities.DTO
 
         public virtual CourseDTO Course { get; set; } = null!;
 
-        public virtual DayDTO Day { get; set; } = null!;
+        public string? DayName { get; set; }
     }
 }

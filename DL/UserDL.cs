@@ -75,7 +75,7 @@ namespace DL
             try
             {
                 var coordinators = await _context.Set<User>()
-                    .Where(u => u.UserTypeId == 2 && u.IsActive) // סינון רק רכזות פעילות
+                    .Where(u => u.UserTypeId == 9 && u.IsActive) // סינון רק רכזות פעילות
                     .Select(u => new CoordinatorDTO
                     {
                         UserId = u.UserId,

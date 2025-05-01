@@ -11,7 +11,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import excelIcon from  '../assets/icons/excelIcon.svg'
 import { useDispatch, useSelector } from "react-redux";
 import {  fetchFilteredPaginatedCourses } from "../features/course/courseActions";
-import { selectCurrentPage, selectPageSize, selectPaginatedCourses, selectTotalCount, setPageSize } from "../features/course/courseSlice";
+import { selectCurrentPage, selectPageSize, selectTotalCount, setCurrentPage, setPageSize } from "../features/course/courseSlice";
 
 
 const buttonStyles = {
@@ -52,37 +52,30 @@ const CoursesPage = () => {
 
   const totalCount = useSelector(selectTotalCount);
 
-  const setCurrentPage =async(page) =>
-     await dispatch(setCurrentPage(page))
+  const changePage = async (page) =>
+    await dispatch(setCurrentPage(page));
 
-  const handleSearch = async() => {
+  const handleSearch = async () => {
     const params = {
-      ...filters, // הפילטרים ממצב החיפוש
+      ...filters,
       pageNumber: currentPage,
       pageSize: pageSize,
     };
-    await dispatch(fetchFilteredPaginatedCourses(params)); // הפעולה שלך שמטפלת גם בחיפוש וגם בדפדוף    console.log(filters);
+    dispatch(setCurrentPage(1));
+    await dispatch(fetchFilteredPaginatedCourses(params));
+    setFilters(initialState)
   };
 
-  const handlePageSizeChange = (newPageSize)=>{
-    
-     dispatch(setCurrentPage(1));
+  const handlePageSizeChange = (newPageSize) => {
+    dispatch(setCurrentPage(1));
     console.log(newPageSize)
     dispatch(setPageSize(newPageSize));
-    // const params = {
-    //   ...filters,
-    //   pageNumber: 1, // כי אפסת
-    //   pageSize: newPageSize,
-    // };
-  
-    // dispatch(fetchFilteredPaginatedCourses(params));
-  }
-
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const params = {
-        ...filters, // הפילטרים ממצב החיפוש
+        ...filters,
         pageNumber: currentPage,
         pageSize: pageSize,
       };
@@ -91,7 +84,7 @@ const CoursesPage = () => {
     };
   
     fetchData();
-  }, [dispatch, filters, currentPage, pageSize]);
+  }, [dispatch, currentPage, pageSize]);
  
   return (
     <Box sx={{ p: 3,  width:"92%",
@@ -120,7 +113,7 @@ const CoursesPage = () => {
             >
           קורסים
         </Typography>
-
+       
        
         {/* כפתורים בצד שמאל */}
         <Stack direction="row" spacing={2}>
@@ -136,10 +129,8 @@ const CoursesPage = () => {
           </Button>
         </Stack>
       </Box>
-      <CourseSearch filters={filters} setFilters={setFilters} onSearch={handleSearch} initialState={initialState}
-      />
-     
-<CourseGrid totalCount={totalCount} currentPage={currentPage} pageSize={pageSize} onPageChange={setCurrentPage} onPageSizeChange =  {newPageSize => handlePageSizeChange(newPageSize)}  />
+      <CourseSearch filters={filters} setFilters={setFilters} onSearch={handleSearch} initialState={initialState} />
+      <CourseGrid totalCount={totalCount} currentPage={currentPage} pageSize={pageSize} onPageChange={changePage} onPageSizeChange={newPageSize => handlePageSizeChange(newPageSize)} />
     </Box>
   );
 };

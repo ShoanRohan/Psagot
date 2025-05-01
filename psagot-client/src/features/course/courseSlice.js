@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllCourses, fetchCourseById, fetchPaginatedCourses, addCourseAction, updateCourseAction, fetchFilteredPaginatedCourses } from './courseActions';
+import { fetchAllCourses, fetchCourseById, addCourseAction, updateCourseAction, fetchFilteredPaginatedCourses } from './courseActions';
 
 const initialState = {
     //courses: [],
@@ -7,7 +7,6 @@ const initialState = {
     currentPage: 1,
     pageSize: 1,
     totalCount: 0,
-   // filtersCourses: [],
     selectedCourse: null,
     status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
@@ -17,9 +16,9 @@ const courseSlice = createSlice({
     name: 'course',
     initialState,
     reducers: {
-        setCourse: (state, action) => {
-            state.selectedCourse = action.payload;
-        },
+        // setCourse: (state, action) => {
+        //     state.selectedCourse = action.payload;
+        // },
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
         },
@@ -82,11 +81,11 @@ const courseSlice = createSlice({
     },
 });
 
-//export const selectFiltersCourses = state => state.course.filtersCourses;
 export const selectCourses = state => state.course.filterPaginatedCourses;
 export const selectTotalCount = state => state.course.totalCount;
 export const selectCurrentPage = state => state.course.currentPage;
 export const selectPageSize = state => state.course.pageSize;
+export const selectSelectedCourse = (state) => state.course.selectedCourse;
 
 export const { setCourse, setCurrentPage, setPageSize } = courseSlice.actions;
 export default courseSlice.reducer;

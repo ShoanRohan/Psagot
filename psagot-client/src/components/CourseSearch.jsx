@@ -6,10 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCoordinators } from "../features/user/userAction";
 // import { fetchFilteredCourses  } from "../features/course/courseActions";
 
-
-
 // סטייל לשדות בחירה
-
 const sharedStyles = {
   width: "150px",
   textAlign: "right",
@@ -36,43 +33,15 @@ const buttonStyles = {
   lineHeight: "18.96px",
 };
 
-const CourseSearch = ({ filters, setFilters, onSearch, initialState }
-) => {
+const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinatorsCode);
   const currentYear = new Date().getFullYear();
   const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
 
-console.log(filterCourse)
-
-  // const initialState = {
-  //   courseCode: "",
-  //   courseName: "",
-  //   courseCoordinator: "",
-  //   year: "",
-  // };
-
-  // const [filters, setFilters] = useState(initialState);
-
-
   useEffect(() => {
     dispatch(fetchCoordinators());
   }, [dispatch]);
-
-  useEffect(() => {
-    // console.log(coordinators); // Undefined
-  }, [coordinators]);
-
-  // הדפסת תוצאות החיפוש לאחר שהן מתעדכנות
-  // console.log("Filtered courses:", filterCourse);
-  // useEffect(() => {
-  //   //console.log("Filtered courses:", filterCourse);
-
-  //   // איפוס הפילטרים אחרי קבלת התוצאות
-  //   if (filterCourse) {
-  //     setFilters(initialState);
-  //   }
-  // }, [filterCourse]);
 
   // פונקציה לטיפול במיקוxsxד בשדה השנה
   const handleYearFocus = () => {
@@ -96,7 +65,6 @@ console.log(filterCourse)
       setFilters((prevFilters) => ({ ...prevFilters, courseCode: value }));
     }
   };
-
 
   // בדיקה אם היה שינוי בערכים
   const isSearchDisabled = useMemo(() => {
@@ -158,7 +126,6 @@ console.log(filterCourse)
           onChange={(e) => setFilters({ ...filters, courseName: e.target.value })}
         />
 
-
         {/* רכזת - מתוך רשימה */}
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>רכזת</InputLabel>
@@ -174,7 +141,6 @@ console.log(filterCourse)
             ))}
           </Select>
         </FormControl>
-
         <TextField
           variant="standard"
           label="שנה"
@@ -186,7 +152,6 @@ console.log(filterCourse)
           sx={sharedStyles}
         />
       </Box>
-
       <Box
         sx={{
           display: "flex",
@@ -199,7 +164,6 @@ console.log(filterCourse)
           sx={{
             ...buttonStyles,
           }}
-
           //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
@@ -209,7 +173,6 @@ console.log(filterCourse)
         >
           ניקוי
         </Button>
-
         <Button
           variant="contained"
           backgroundColor="#326DEF"
@@ -218,9 +181,7 @@ console.log(filterCourse)
           disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
           onClick={() => {
             onSearch();
-            // setFilters(initialState);
           }}
-
         >
           חיפוש
         </Button>
