@@ -45,6 +45,12 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
+        public async Task<bool> DeleteCourse(int id)
+        {
+            int u = _mapper.Map<int>(id);
+            bool isRemove = await _courseDL.DeleteCourse(u);
+            return isRemove;
+        }
         public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
