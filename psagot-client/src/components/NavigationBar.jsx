@@ -1,9 +1,9 @@
-//בכל תצוגה יש פס ניווט לתאריך:
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import Popover from "@mui/material/Popover"; import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import Popover from "@mui/material/Popover";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { DateCalendar, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -14,10 +14,14 @@ import { useState } from "react";
 const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
     const [anchorEl, setAnchorEl] = useState(null);
 
+    dayjs.locale("he"); // הגדרת עברית כברירת מחדל
+
     // חישוב התאריך לתצוגה בהתאם לסוג התצוגה
     const getFormattedDate = () => {
+        if (!currentDate) return "";  // אם currentDate לא מאופס, נחזיר מחרוזת ריקה
+    
         const localizedDate = currentDate.locale("he"); // הגדרת עברית כברירת מחדל
-
+    
         if (view === "dayGridMonth") {
             return localizedDate.format("MMMM YYYY"); // פברואר 2025
         } else if (view === "timeGridDay") {
@@ -29,7 +33,6 @@ const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
         }
         return "";
     };
-
 
     const handlePrev = () =>
         setCurrentDate(currentDate.subtract(1, view === "dayGridMonth" ? "month" : view === "timeGridDay" ? "day" : "week"));
@@ -47,7 +50,6 @@ const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
 
                 {/* תאריך מוצג במילים (כפתור לבחירת תאריך) */}
                 <Typography
-                    // variant="h6"
                     onClick={(event) => setAnchorEl(event.currentTarget)} // פותח את ה-Popover
                     sx={{
                         fontFamily: "Rubik",
@@ -60,7 +62,8 @@ const NavigationBar = ({ currentDate, setCurrentDate, view }) => {
                         padding: "5px 10px", // ריווח פנימי למראה נעים יותר
                         borderRadius: "5px", // קצוות מעוגלים
                         cursor: "pointer",
-                    }}                >
+                    }}
+                >
                     {getFormattedDate()}
                 </Typography>
 
