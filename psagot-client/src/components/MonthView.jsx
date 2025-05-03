@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
-import moment from "moment";
 import Calendar from "./Calendar";
 import NavigationBar from "./NavigationBar";
+import dayjs from "dayjs";
 
 const MonthView = ({ events, fetchEvents }) => {
-    const [searchDate, setSearchDate] = useState(moment());
+    const [searchDate, setSearchDate] = useState(dayjs());
 
     useEffect(() => {
         const startDate = searchDate.clone().startOf("month");

@@ -1,4 +1,7 @@
 import React from 'react';
+import CalendarHeader from './CalendarHeader';
+import SideBar from './SideBar';
+import CalendarPage from '../pages/CalendarPage';
 
 const Test = () => {
   return (
@@ -39,22 +42,7 @@ const Test = () => {
           padding: 20px;
         }
 
-        .sidebar a {
-          color: white;
-          text-decoration: none;
-          display: block;
-          margin: 10px 0;
-        }
-
-        @media (max-width: 768px) {
-          .container {
-            grid-template-areas:
-              "header"
-              "sidebar"
-              "calendar";
-            grid-template-columns: 1fr;
-            grid-template-rows: auto auto 1fr;
-          }
+    
 
           .sidebar {
             text-align: center;
@@ -63,19 +51,9 @@ const Test = () => {
       `}</style>
 
       <div className="container">
-        <div className="sidebar">
-          <h2>תפריט צד</h2>
-          <a href="#">קישור 1</a>
-          <a href="#">קישור 2</a>
-          <a href="#">קישור 3</a>
-        </div>
-        <div className="header">
-          <h1>כותרת עליונה</h1>
-        </div>
-        <div className="calendar">
-          <h2>לוח שנה</h2>
-          <p>כאן תוכלי להוסיף את רכיב לוח השנה שלך.</p>
-        </div>
+        <div className="sidebar"><SideBar/></div>
+        <div className="header"><CalendarHeader/></div>
+        <div className="calendar"><CalendarPage/></div>
       </div>
     </>
   );

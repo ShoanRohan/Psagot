@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "./Calendar";
 import Box from "@mui/material/Box";
-import moment from "moment";
 import NavigationBar from "./NavigationBar";
+import dayjs from "dayjs";
 
 const WeekView = ({ events, fetchEvents }) => {
-    const [searchDate, setSearchDate] = useState(moment());
+    const [searchDate, setSearchDate] = useState(dayjs());
 
     useEffect(() => {
         const startDate = searchDate.clone().startOf("week");
