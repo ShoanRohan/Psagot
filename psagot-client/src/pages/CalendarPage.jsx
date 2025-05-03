@@ -42,7 +42,6 @@ const CalendarPage = () => {
 
     return (
         <Box >
-            {/* sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }} */}
             <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} view={view} setView={setView} />
             <Box sx={{ overflow: 'auto' }}>
                 <Calendar currentDate={currentDate} view={view} events={events} />

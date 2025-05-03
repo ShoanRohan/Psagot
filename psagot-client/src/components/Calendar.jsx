@@ -99,7 +99,7 @@ const Calendar = ({ currentDate, view, events }) => {
           height="auto"
           contentHeight="auto"
           aspectRatio={1.2}
-          hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
+          // hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
           slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
           slotDuration="01:00:00" // שורה אחת לכל שעה
           slotMinTime="08:00:00" // השעה הראשונה בתצוגת שבוע ויום

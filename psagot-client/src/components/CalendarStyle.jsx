@@ -5,17 +5,11 @@ import "@fontsource/rubik";
 const CalendarStyle = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "100%",
-  // height: "100vh", // גובה מלא של המסך
-  // maxWidth: "1480px",
-  // minHeight: "600px",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
   backgroundColor: "blue",
   boxSizing: "border-box",
-  // marginRight: "100px",
-  // marginLeft: "100px",
-  padding:"40px",
-    // overflow: "hidden", // מונע גלילה
+  padding:"10px",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
@@ -24,9 +18,9 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: "10px",
-
     padding: "12px",
     boxShadow: "0px 0px 4px 0px #D7E6FC",
+    flexShrink:"1",
   },
 
   //טבלת התאריכים- ריבוע אחד גדול
@@ -37,8 +31,8 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     width: "100%", // מבטיח שהתאים לא יתפרסו
     display: "flex",
 
-    gridAutoRows: "20px !important", // כמו ה-minHeight של תא
-
+    // gridAutoRows: "20px !important", // כמו ה-minHeight של תא
+    gridAutoRows: "100px",
   },
 
   //, יש בצד שמאל איזה מקלון שלא הצלחי להעיף ריבוע כללי מסגרת של כל הלוח
@@ -93,6 +87,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   //ריבוע שעוטף את כל טבלת הימים , לא כולל ימות השבוע
   "& .fc-daygrid td": {
     border: "none !important",
+    maxHeight: "20px !important",
   },
 
   //תא בטבלה תצוגה חודשית

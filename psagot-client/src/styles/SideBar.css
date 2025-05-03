@@ -1,7 +1,7 @@
 
 .sideBarStyle{
   background-color: #1A237E;
-  width: "250px";
+  width: 250px;
   height: 100vh;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -12,18 +12,23 @@
   justify-content: space-between;
 }
 
+
+
+
+ .mainContentStyle{
+  flex-grow: 1;   
+  height: 100vh;
+  padding: 16px;  
+  background-color: green; 
+ }
+
+
+
 .sidebar-logo {
   width: 80%;
   max-height: 60px;
   object-fit: contain;
   margin-top: 50px; 
-}
-
-.mainContentStyle{
-  flex-grow: 1;    /* יגרום לתוכן למלא את השטח הפנוי */
-  height: 100vh;
-  padding: 16px;   /* מוסיף ריפוד פנימי */
-  background-color: green; /* צבע רקע לדף */
 }
 
 .navItems{
