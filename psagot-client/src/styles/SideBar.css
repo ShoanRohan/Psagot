@@ -1,6 +1,8 @@
-.Stack1 {
+
+.sideBarStyle{
   background-color: #1A237E;
-  width: 100%;
+  width: "250px";
+  height: 100vh;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
   padding: 16px;
@@ -17,10 +19,11 @@
   margin-top: 50px; 
 }
 
-.Stack2 {
-  text-decoration: none;
-  width: 80%;
-  margin-bottom: 10px; 
+.mainContentStyle{
+  flex-grow: 1;    /* יגרום לתוכן למלא את השטח הפנוי */
+  height: 100vh;
+  padding: 16px;   /* מוסיף ריפוד פנימי */
+  background-color: green; /* צבע רקע לדף */
 }
 
 .navItems{

@@ -16,59 +16,31 @@ import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
 
 const menuItems = [
-  {
-    path: "/",
-    icon: <HomeIcon />,
-    text: "מסך ראשי",
-    exact: true
-  },
-  {
-    path: "/courses",
-    icon: <PeopleIcon />,
-    text: "קורסים",
-    exact: true
-  },
-  {
-    path: "/meetings",
-    icon: <EventIcon />,
-    text: "מפגשים",
-    exact: true
-  },
-  {
-    path: "/rooms",
-    icon: <MeetingRoomIcon />,
-    text: "חדרים",
-    exact: true
-  },
-  {
-    path: "/calendar",
-    icon: <CalendarMonthIcon />,
-    text: "לוח שנה",
-    exact: true
-  },
-  {
-    path: "/users",
-    icon: <PersonIcon />,
-    text: "משתמשים",
-    exact: true
-  }
+  { path: "/", icon: <HomeIcon />, text: "מסך ראשי", exact: true },
+  { path: "/courses", icon: <PeopleIcon />, text: "קורסים", exact: true },
+  { path: "/meetings", icon: <EventIcon />, text: "מפגשים", exact: true },
+  { path: "/rooms", icon: <MeetingRoomIcon />, text: "חדרים", exact: true },
+  { path: "/calendar", icon: <CalendarMonthIcon />, text: "לוח שנה", exact: true },
+  { path: "/users", icon: <PersonIcon />, text: "משתמשים", exact: true }
 ];
 
 const SideBar = () => {
   const { selectedUser } = useSelector((state) => state.user);
 
   return (
-    <Stack direction="column" spacing={0} className='Stack1'>
-      <Stack direction="column" spacing={0} className='Stack2'>
-      <img src="/assets/logo_psagot.png" alt="Logo" className="sidebar-logo" />
+    // <Stack direction="column" spacing={0} className='sydeBarStyle'>
+    //   <Stack direction="column" spacing={0} className='mainContentStyle'>
+    <Stack direction="column" spacing={0}>
+      <Stack direction="column" spacing={0}>
+        <img src="/assets/logo_psagot.png" alt="Logo" className="sidebar-logo" />
       </Stack>
 
       <Stack direction="column" spacing={1} className='navItems'>
         {menuItems.map((item, index) => (
-          <NavLink 
-            key={index} 
-            to={item.path} 
-            end={item.exact} 
+          <NavLink
+            key={index}
+            to={item.path}
+            end={item.exact}
             className="navLink"
           >
             <Button startIcon={item.icon} className="styledButton">
@@ -89,7 +61,7 @@ const SideBar = () => {
         </Box>
         <Avatar className="user-avatar">
           <AccountCircleIcon />
-          </Avatar>
+        </Avatar>
       </Box>
     </Stack>
   );
