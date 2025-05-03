@@ -3,24 +3,34 @@ import Box from "@mui/material/Box";
 import "@fontsource/rubik";
 
 const CalendarStyle = styled(Box)(({ theme }) => ({
+
+  "*": {
+    boxSizing: "border-box",
+  },
+
+  overflow: "hidden",
+
   width: "100%",
-  height: "100%",
+  // height: "100vh",
+  // maxHeight:"85vh",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
-  backgroundColor: "blue",
+  backgroundColor: "red",
   boxSizing: "border-box",
-  padding:"10px",
+  padding: "10px",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
   "& .fc": {
+
     width: "100%",
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: "10px",
     padding: "12px",
     boxShadow: "0px 0px 4px 0px #D7E6FC",
-    flexShrink:"1",
+    flexShrink: "1",
+    boxSizing: "border-box",
   },
 
   //טבלת התאריכים- ריבוע אחד גדול
@@ -32,7 +42,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     display: "flex",
 
     // gridAutoRows: "20px !important", // כמו ה-minHeight של תא
-    gridAutoRows: "100px",
+    // gridAutoRows: "100px",
   },
 
   //, יש בצד שמאל איזה מקלון שלא הצלחי להעיף ריבוע כללי מסגרת של כל הלוח
@@ -87,7 +97,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   //ריבוע שעוטף את כל טבלת הימים , לא כולל ימות השבוע
   "& .fc-daygrid td": {
     border: "none !important",
-    maxHeight: "20px !important",
+    // maxHeight: "20px !important",
   },
 
   //תא בטבלה תצוגה חודשית
@@ -230,7 +240,7 @@ const hebrewDateStyle = {
   color: "#393939 !important",
   textAlign: "right !important",
   fontFamily: "Rubik !important",
-  fontWeight: 500 ,
+  fontWeight: 500,
   fontSize: "16px !important",
   direction: "rtl !important",
   width: "auto !important",
@@ -241,7 +251,7 @@ const gregorianDateStyle = {
   color: "#393939 !important",
   textAlign: "left !important",
   fontFamily: "Rubik !important",
-  fontWeight: 300 ,
+  fontWeight: 300,
   fontSize: "16px !important",
   direction: "ltr !important",
   width: "auto !important",

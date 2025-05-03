@@ -87,7 +87,7 @@ const Calendar = ({ currentDate, view, events }) => {
   const navigate = useNavigate();
   return (
     <CalendarStyle>
-      <Box sx={{ display: "grid", placeItems: "center", width: "100%" }}>
+      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden'}}>
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -96,9 +96,16 @@ const Calendar = ({ currentDate, view, events }) => {
           direction="rtl"
           headerToolbar={false}
           initialDate={currentDate.format("YYYY-MM-DD")}
-          height="auto"
-          contentHeight="auto"
-          aspectRatio={1.2}
+
+          // aspectRatio={1.5} // לדוגמה: גובה קטן יותר מרוחב
+          height="86vh" // חשוב לוודא שזה מוגדר
+          contentHeight="100%" // הגדרת גובה לתוכן
+          // eventHeight={10} // גובה האירוע יהיה 30px
+
+      
+        
+
+
           // hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
           slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
           slotDuration="01:00:00" // שורה אחת לכל שעה

@@ -1,7 +1,7 @@
 
 .sideBarStyle{
   background-color: #1A237E;
-  width: 250px;
+  width: 145px;
   height: 100vh;
   border-top-left-radius: 25px;
   border-bottom-left-radius: 25px;
@@ -12,17 +12,12 @@
   justify-content: space-between;
 }
 
-
-
-
  .mainContentStyle{
   flex-grow: 1;   
   height: 100vh;
   padding: 16px;  
   background-color: green; 
  }
-
-
 
 .sidebar-logo {
   width: 80%;
