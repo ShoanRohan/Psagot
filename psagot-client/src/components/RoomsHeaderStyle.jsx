@@ -43,6 +43,12 @@ const ExportButton = styled(IconButton)({
     flexShrink: 0,
 });
 
+const PdfLogo = styled("img")({
+    width: "24px",
+    height: "24px",
+    marginTop:"0px",
+  });
+
 
 const AddRoomButton = styled(Button)({
     fontFamily: "Rubik",
@@ -91,4 +97,4 @@ const ListViewButton = styled(Button)({
 
 
 
-export { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton }
+export { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton, PdfLogo }

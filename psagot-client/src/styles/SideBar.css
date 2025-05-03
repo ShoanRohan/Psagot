@@ -1,8 +1,8 @@
 .Stack1 {
   background-color: #1A237E;
-  width: 240px;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
+  width: 100%;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
   padding: 16px;
   color: white;
   display: flex;
@@ -10,16 +10,16 @@
   justify-content: space-between;
 }
 
-.logo {
+.sidebar-logo {
   width: 80%;
   max-height: 60px;
   object-fit: contain;
-  margin-top: 100px; 
+  margin-top: 50px; 
 }
 
 .Stack2 {
   text-decoration: none;
-  width: 100%;
+  width: 80%;
   margin-bottom: 10px; 
 }
 

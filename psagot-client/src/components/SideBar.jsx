@@ -60,7 +60,7 @@ const SideBar = () => {
   return (
     <Stack direction="column" spacing={0} className='Stack1'>
       <Stack direction="column" spacing={0} className='Stack2'>
-        <img src="/assets/logo_psagot.png" alt="Logo" />
+      <img src="/assets/logo_psagot.png" alt="Logo" className="sidebar-logo" />
       </Stack>
 
       <Stack direction="column" spacing={1} className='navItems'>

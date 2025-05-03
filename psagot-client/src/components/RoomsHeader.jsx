@@ -1,7 +1,7 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import NavigationBar from "./NavigationBar";
-import { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton } from "./RoomsHeaderStyle";
+import { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton , PdfLogo } from "./RoomsHeaderStyle";
 import pdfIcon from "../assets/imgs/pdf.png";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -38,7 +38,7 @@ const RoomsHeader = () => {
             />
             <ButtonsWrapper>
                 <ExportButton onClick={handleExportToPDF}>
-                    <img src={pdfIcon} alt="Export to PDF" style={{ width: "24px", height: "24px" }} />
+                    <PdfLogo src={pdfIcon} alt="Export to PDF"/>
                 </ExportButton>
 
                 <ListViewButton variant="outlined">

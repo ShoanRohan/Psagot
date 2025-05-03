@@ -5,12 +5,18 @@ import "@fontsource/rubik";
 const CalendarStyle = styled(Box)(({ theme }) => ({
   width: "100%",
   height: "100%",
-  maxWidth: "1480px",
-  minHeight: "600px",
+  // height: "100vh", // גובה מלא של המסך
+  // maxWidth: "1480px",
+  // minHeight: "600px",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
   backgroundColor: "blue",
   boxSizing: "border-box",
+  // marginRight: "100px",
+  // marginLeft: "100px",
+  padding:"40px",
+    // overflow: "hidden", // מונע גלילה
+
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
   "& .fc": {
@@ -18,6 +24,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     height: "100%",
     backgroundColor: "#FFFFFF",
     borderRadius: "10px",
+
     padding: "12px",
     boxShadow: "0px 0px 4px 0px #D7E6FC",
   },
@@ -29,6 +36,9 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     gridAutoRows: "120px", // כל שורה תהיה בגובה אחיד
     width: "100%", // מבטיח שהתאים לא יתפרסו
     display: "flex",
+
+    gridAutoRows: "20px !important", // כמו ה-minHeight של תא
+
   },
 
   //, יש בצד שמאל איזה מקלון שלא הצלחי להעיף ריבוע כללי מסגרת של כל הלוח
@@ -109,7 +119,9 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 
   //עיצוב תא
   "& .fc-daygrid-day-frame": {
-    minHeight: "142px !important",
+    // minHeight: "142px !important",
+    minHeight: "30px !important",
+
     border: "0.5px solid #C6C6C6", // גבול על כל התא
     borderRadius: "10px",
     overflow: "hidden",

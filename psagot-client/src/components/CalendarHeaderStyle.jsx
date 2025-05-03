@@ -14,6 +14,7 @@ const HeaderContainer = styled(Box)({
   flexWrap: "nowrap",
   overflow: "hidden",
   minWidth: 0,
+  backgroundColor:"pink"
 });
 
 const Title = styled(Typography)({
@@ -32,6 +33,8 @@ const ButtonsWrapper = styled(Box)({
   alignItems: "center",
   gap: "8px",
   flexShrink: 0,
+  minWidth: 0,
+  flexWrap: "wrap",
 });
 
 const ExportButton = styled(IconButton)({
@@ -43,6 +46,13 @@ const ExportButton = styled(IconButton)({
   borderRadius: "6.88px",
   flexShrink: 0,
 });
+
+const PdfLogo = styled("img")({
+  width: "24px",
+  height: "24px",
+  marginTop:"0px",
+});
+
 
 const ViewButtonsContainer = styled(ButtonGroup)({
   display: "flex",
@@ -70,4 +80,4 @@ const ViewButton = styled(Button, {
 }));
 
 
-export { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton }
+export { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton , PdfLogo }

@@ -3,7 +3,7 @@ import "dayjs/locale/he";
 import NavigationBar from "./NavigationBar";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton } from "./CalendarHeaderStyle";
+import { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton , PdfLogo } from "./CalendarHeaderStyle";
 
 const CalendarHeader = ({ currentDate, setCurrentDate, view, setView }) => {
 
@@ -29,7 +29,7 @@ const CalendarHeader = ({ currentDate, setCurrentDate, view, setView }) => {
             <NavigationBar currentDate={currentDate} setCurrentDate={setCurrentDate} view={view} />
             <ButtonsWrapper>
                 <ExportButton onClick={handleExportToPDF}>
-                    <img src={pdfIcon} alt="Export to PDF" style={{ width: "24px", height: "24px" }} />
+                    <PdfLogo src={pdfIcon} alt="Export to PDF" className="pdf-logo" style={{ width: "24px", height: "24px" }} />
                 </ExportButton>
 
                 <ViewButtonsContainer>
