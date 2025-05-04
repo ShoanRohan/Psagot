@@ -8,11 +8,20 @@ const MeetingTable = () => {
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
 
+
+  useEffect(() => {
+    console.log('Redux state - meetings:', meetings);
+    console.log('Redux state - status:', status);
+    console.log('Redux state - error:', error);
+  }, [meetings, status, error]);
+
   useEffect(() => {
     if (status === 'idle') {
+      console.log('Dispatching fetchAllMeetings');
       dispatch(fetchAllMeetings());
     }
   }, [status, dispatch]);
+
 
   const columns = [
     'שם קורס', 'נושא', 'שם מפגש', 'מספר מפגש', 'יום', 'שעת התחלה', 'שעת סיום', 
