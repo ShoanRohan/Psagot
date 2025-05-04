@@ -60,6 +60,8 @@ namespace Psagot.Controllers
             return Ok(addedCourse);
         }
 
+     
+
         [HttpPut("UpdateCourse")]
         public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
         {
@@ -68,6 +70,8 @@ namespace Psagot.Controllers
 
             return Ok(updatedCourse);
         }
+
+
 
 
 

@@ -12,6 +12,7 @@ import excelIcon from  '../assets/icons/excelIcon.svg'
 import { useDispatch, useSelector } from "react-redux";
 import {  fetchFilteredPaginatedCourses } from "../features/course/courseActions";
 import { selectCurrentPage, selectPageSize, selectTotalCount, setCurrentPage, setPageSize } from "../features/course/courseSlice";
+import api from "../utils/api";
 
 
 const buttonStyles = {
@@ -54,6 +55,26 @@ const CoursesPage = () => {
 
   const changePage = async (page) =>
     await dispatch(setCurrentPage(page));
+
+  const handleExportToExcel = async () => {
+    console.log('לחיצה על כפתור ייצוא לאקסל'); // בדיקה
+    try {
+      const response = await api.get('/export-courses', {
+        responseType: 'blob', // חשוב! כדי שהתגובה תתקבל כקובץ
+      });
+  
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'courses.xlsx');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('שגיאה בייצוא לאקסל:', error);
+    }
+  };
+  
 
   const handleSearch = async () => {
     const params = {
@@ -118,7 +139,7 @@ const CoursesPage = () => {
         {/* כפתורים בצד שמאל */}
         <Stack direction="row" spacing={2}>
           {/* כפתור עגול עם אייקון בלבד */}
-          <IconButton >
+          <IconButton  onClick={handleExportToExcel}>
            <img src={excelIcon} alt="ייצוא לאקסל" />
           </IconButton>
           <Button variant="contained" sx={buttonStyles}
