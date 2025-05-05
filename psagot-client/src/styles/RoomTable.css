@@ -9,13 +9,79 @@
     padding: 0;
   }
   /* RoomTable.css */
-
-  .room-table-wrapper {
-  width: 80vw;
-  min-height: 70vh;
-  padding: 32px; /* padding: 4 => 4 * 8px (ברירת מחדל של MUI spacing) */
+/* עטיפת ה־Box הראשי */
+.room-table-wrapper {
+  width: 84vw;
+  margin-right: 75px;
+  min-height: 40px;
+  padding: 32px;
   box-sizing: border-box;
-  background-color: '#f4f6f8'; /* צבע רקע אפור בהיר */
+  background-color: #f4f6f8;
   direction: rtl;
   font-family: 'Assistant', sans-serif;
+}
+
+.room-table-paper {
+  width: 80vw;
+  height: 73vh;
+  padding: 8px;
+  box-sizing: border-box;
+  background-color: #fff;
+  direction: rtl;
+  font-family: 'Assistant', sans-serif;
+  border-radius: 24px;
+}
+
+.room-table-container {
+  display: flex;
+  width: 70vw;
+  margin-right: 20px;
+  margin-top: 9px;
+  height: 69vh;
+}
+
+.room-table {
+  table-layout: fixed;
+}
+
+.time-cell {
+  border-bottom: 1px solid black;
+  font-weight: bold;
+  text-align: center;
+  color: #555;
+  padding: 4px;
+  font-size: 0.75rem;
+}
+
+.time-cell-highlight {
+  background-color: #ecf2f9;
+}
+
+.room-header {
+  border-bottom: 1px solid black;
+  border-right: 1px solid #ccc;
+  background-color: #e9eef3;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  padding: 4px;
+  font-size: 0.75rem;
+  width: 70px;
+}
+
+.room-cell {
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  padding: 4px;
+  min-width: 70px;
+  height: 15px;
+}
+
+.room-cell-highlight {
+  background-color: #ecf2f9;
+}
+
+.room-cell-normal {
+  background-color: #fff;
 }
