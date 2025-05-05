@@ -9,10 +9,17 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import excelIcon from '../assets/icons/excelIcon.svg';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFilteredPaginatedCourses } from "../features/course/courseActions";
-import { selectCurrentPage, selectPageSize,selectTotalCount,selectCourses,setCurrentPage,setPageSize,} from "../features/course/courseSlice";
+import {
+  selectCurrentPage,
+  selectPageSize,
+  selectTotalCount,
+  selectCourses,
+  setCurrentPage,
+  setPageSize
+} from "../features/course/courseSlice";
 import CourseGrid from "./CourseGrid";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const buttonStyles = {
   height: "44px",
@@ -50,43 +57,37 @@ const CoursesPage = () => {
   const currentPage = useSelector(selectCurrentPage);
   const pageSize = useSelector(selectPageSize);
   const totalCount = useSelector(selectTotalCount);
-  const courses = useSelector(selectCourses); // נוספה השורה הזו
+  const courses = useSelector(selectCourses);
 
   const changePage = async (page) => {
     await dispatch(setCurrentPage(page));
   };
 
-  const exportToExcel = (courses, fileName = "קורסים.xlsx") => {
-  if (!Array.isArray(courses) || courses.length === 0) {
-    alert("אין נתונים לייצוא");
-    return;
-  }
+  const handleExportToExcel = () => {
+    if (!courses || courses.length === 0) {
+      console.warn("אין נתונים לייצוא");
+      return;
+    }
 
-  // מיפוי לקובץ בעברית עם שדות נוחים
-  const formattedData = courses.map(course => ({
-    'מזהה': course.id || '',
-    'קוד קורס': course.courseCode || '',
-    'שם קורס': course.courseName || '',
-    'רכז הקורס': course.courseCoordinator || '',
-    'שנה': course.year || ''
-  }));
+    const worksheet = XLSX.utils.json_to_sheet(courses.map(course => ({
+      'קוד קורס': course.courseId,
+      'שם קורס': course.name,
+      'רכזת': course.coordinatorName,
+      'שנה': course.year,
+      'תאריך התחלה': new Date(course.startDate).toLocaleDateString('he-IL'),
+      'תאריך סיום': new Date(course.endDate).toLocaleDateString('he-IL'),
+      'מספר מפגשים': course.numberOfMeetings,
+      'מספר תלמידים': course.numberOfStudents,
+      'סטטוס': course.statusName
+    })));
 
-  const worksheet = XLSX.utils.json_to_sheet(formattedData);
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, "קורסים");
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "קורסים");
 
-  const excelBuffer = XLSX.write(workbook, {
-    bookType: "xlsx",
-    type: "array"
-  });
-
-  const blob = new Blob([excelBuffer], {
-    type:
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
-  });
-
-  saveAs(blob, fileName);
-};
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const fileData = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(fileData, "courses.xlsx");
+  };
 
   const handleSearch = async () => {
     const params = {
@@ -119,6 +120,7 @@ const CoursesPage = () => {
 
   return (
     <Box sx={{ p: 3, width: "92%" }}>
+      {/* כותרת עם כפתורים */}
       <Box
         sx={{
           display: "flex",
@@ -142,13 +144,16 @@ const CoursesPage = () => {
           קורסים
         </Typography>
 
+        {/* כפתורים בצד שמאל */}
         <Stack direction="row" spacing={2}>
-          <IconButton onClick={() => {     
-               console.log("courses:", courses);
-            exportToExcel(courses)}}>
+          <IconButton onClick={handleExportToExcel}>
             <img src={excelIcon} alt="ייצוא לאקסל" />
           </IconButton>
-          <Button variant="contained" sx={buttonStyles} startIcon={<AddCircleOutlineIcon />}>
+          <Button
+            variant="contained"
+            sx={buttonStyles}
+            startIcon={<AddCircleOutlineIcon />}
+          >
             הוספת קורס
           </Button>
         </Stack>
@@ -166,7 +171,7 @@ const CoursesPage = () => {
         currentPage={currentPage}
         pageSize={pageSize}
         onPageChange={changePage}
-        onPageSizeChange={handlePageSizeChange}
+        onPageSizeChange={(newPageSize) => handlePageSizeChange(newPageSize)}
       />
     </Box>
   );
