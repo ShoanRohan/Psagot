@@ -81,7 +81,7 @@ namespace BL
             var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
             
             if (meetings == null)
-            {return (Enumerable.Empty<MeetingDTO>(), 0);}
+            {return (null,null,errorMessage);}
            
             return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount);
         }

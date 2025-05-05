@@ -94,7 +94,7 @@ namespace DL
 
 
 
-        public async Task<(IEnumerable<Meeting>, int)> GetMeetingsByPage(int page, int pageSize)
+        public async Task<(IEnumerable<Meeting>, int,string)> GetMeetingsByPage(int page, int pageSize)
         {
             try
             {
@@ -106,11 +106,11 @@ namespace DL
                     .Take(pageSize)
                     .ToListAsync();
 
-                return (meetings, totalCount);
+                return (meetings, totalCount,null);
             }
             catch (Exception ex)
             {
-                return (Enumerable.Empty<Meeting>(), 0);
+                return (Enumerable.Empty<Meeting>(), 0,ex.Message);
             }
         }
 
