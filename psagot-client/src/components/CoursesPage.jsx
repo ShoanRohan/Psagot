@@ -4,16 +4,15 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
-import GridOnIcon from "@mui/icons-material/GridOn"; // אייקון אקסל
-import { Stack } from "@mui/material"; // מסדר כפתורים בשורה
-import CourseGrid from "./CourseGrid";
+import { Stack } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import excelIcon from  '../assets/icons/excelIcon.svg'
+import excelIcon from '../assets/icons/excelIcon.svg';
 import { useDispatch, useSelector } from "react-redux";
-import {  fetchFilteredPaginatedCourses } from "../features/course/courseActions";
-import { selectCurrentPage, selectPageSize, selectTotalCount, setCurrentPage, setPageSize } from "../features/course/courseSlice";
-import api from "../utils/api";
-
+import { fetchFilteredPaginatedCourses } from "../features/course/courseActions";
+import { selectCurrentPage, selectPageSize,selectTotalCount,selectCourses,setCurrentPage,setPageSize,} from "../features/course/courseSlice";
+import CourseGrid from "./CourseGrid";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const buttonStyles = {
   height: "44px",
@@ -36,45 +35,58 @@ const buttonStyles = {
     boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.3)",
   },
 };
+
 const CoursesPage = () => {
   const dispatch = useDispatch();
+
   const initialState = {
     courseCode: "",
     courseName: "",
     courseCoordinator: "",
     year: "",
   };
-  
+
   const [filters, setFilters] = useState(initialState);
-
   const currentPage = useSelector(selectCurrentPage);
-
   const pageSize = useSelector(selectPageSize);
-
   const totalCount = useSelector(selectTotalCount);
+  const courses = useSelector(selectCourses); // נוספה השורה הזו
 
-  const changePage = async (page) =>
+  const changePage = async (page) => {
     await dispatch(setCurrentPage(page));
-
-  const handleExportToExcel = async () => {
-    console.log('לחיצה על כפתור ייצוא לאקסל'); // בדיקה
-    try {
-      const response = await api.get('/export-courses', {
-        responseType: 'blob', // חשוב! כדי שהתגובה תתקבל כקובץ
-      });
-  
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'courses.xlsx');
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (error) {
-      console.error('שגיאה בייצוא לאקסל:', error);
-    }
   };
-  
+
+  const exportToExcel = (courses, fileName = "קורסים.xlsx") => {
+  if (!Array.isArray(courses) || courses.length === 0) {
+    alert("אין נתונים לייצוא");
+    return;
+  }
+
+  // מיפוי לקובץ בעברית עם שדות נוחים
+  const formattedData = courses.map(course => ({
+    'מזהה': course.id || '',
+    'קוד קורס': course.courseCode || '',
+    'שם קורס': course.courseName || '',
+    'רכז הקורס': course.courseCoordinator || '',
+    'שנה': course.year || ''
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(formattedData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "קורסים");
+
+  const excelBuffer = XLSX.write(workbook, {
+    bookType: "xlsx",
+    type: "array"
+  });
+
+  const blob = new Blob([excelBuffer], {
+    type:
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+  });
+
+  saveAs(blob, fileName);
+};
 
   const handleSearch = async () => {
     const params = {
@@ -84,12 +96,11 @@ const CoursesPage = () => {
     };
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
-    setFilters(initialState)
+    setFilters(initialState);
   };
 
   const handlePageSizeChange = (newPageSize) => {
     dispatch(setCurrentPage(1));
-    console.log(newPageSize)
     dispatch(setPageSize(newPageSize));
   };
 
@@ -100,59 +111,65 @@ const CoursesPage = () => {
         pageNumber: currentPage,
         pageSize: pageSize,
       };
-      console.log("Fetching with params:", params); // לוודא שהפילטרים נמצאים כאן
       await dispatch(fetchFilteredPaginatedCourses(params));
     };
-  
+
     fetchData();
   }, [dispatch, currentPage, pageSize]);
- 
+
   return (
-    <Box sx={{ p: 3,  width:"92%",
-    }}>
-      {/* כותרת עם כפתורים */}
+    <Box sx={{ p: 3, width: "92%" }}>
       <Box
-             sx={{
-              
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "16px",
-              width: "105%",
-              marginX: "auto",
-            }}
-          >
-            <Typography
-              variant="h1"
-              align="right"
-              sx={{
-                fontFamily: "Rubik, sans-serif",
-                fontWeight: 700,
-                fontSize: "40px",
-                color: "#0D1783",
-              }}
-            >
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "16px",
+          width: "105%",
+          marginX: "auto",
+        }}
+      >
+        <Typography
+          variant="h1"
+          align="right"
+          sx={{
+            fontFamily: "Rubik, sans-serif",
+            fontWeight: 700,
+            fontSize: "40px",
+            color: "#0D1783",
+          }}
+        >
           קורסים
         </Typography>
-       
-       
-        {/* כפתורים בצד שמאל */}
-        <Stack direction="row" spacing={2}>
-          {/* כפתור עגול עם אייקון בלבד */}
-          <IconButton  onClick={handleExportToExcel}>
-           <img src={excelIcon} alt="ייצוא לאקסל" />
-          </IconButton>
-          <Button variant="contained" sx={buttonStyles}
-                    startIcon={<AddCircleOutlineIcon />}
->
-            הוספת קורס
 
+        <Stack direction="row" spacing={2}>
+          <IconButton onClick={() => {     
+               console.log("courses:", courses);
+            exportToExcel(courses)}}>
+            <img src={excelIcon} alt="ייצוא לאקסל" />
+          </IconButton>
+          <Button variant="contained" sx={buttonStyles} startIcon={<AddCircleOutlineIcon />}>
+            הוספת קורס
           </Button>
         </Stack>
       </Box>
-      <CourseSearch filters={filters} setFilters={setFilters} onSearch={handleSearch} initialState={initialState} />
-      <CourseGrid totalCount={totalCount} currentPage={currentPage} pageSize={pageSize} onPageChange={changePage} onPageSizeChange={newPageSize => handlePageSizeChange(newPageSize)} />
+
+      <CourseSearch
+        filters={filters}
+        setFilters={setFilters}
+        onSearch={handleSearch}
+        initialState={initialState}
+      />
+
+      <CourseGrid
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={changePage}
+        onPageSizeChange={handlePageSizeChange}
+      />
     </Box>
   );
 };
+
 export default CoursesPage;
