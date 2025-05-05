@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers, loginAction } from './userAction';
 
 const initialState = {
     user: [],
@@ -48,6 +48,14 @@ const userSlice = createSlice({
             if (index !== -1) {
                 state.user[index]=action.payload;
             }
+        })
+        .addCase(loginAction.fulfilled, (state, action)=>{
+            state.status = 'succeeded';
+            state.user = action.payload;
+        })
+        .addCase(loginAction.rejected, (state, action)=>{
+            state.status = 'failed';
+            state.error = action.error.message;
         });
 
     },

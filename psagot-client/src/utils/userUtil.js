@@ -20,8 +20,11 @@ const updatedUser = async (updateUser) => {
     return response.data;
 };
 
+const login = async (loginUser) =>{
+    const response = await api.post('/User/login', loginUser);
+    return response;
+}
 
-
-export{getAllUsers, getUserById, addUser, updatedUser};
+export{getAllUsers, getUserById, addUser, updatedUser, login};
 
 
