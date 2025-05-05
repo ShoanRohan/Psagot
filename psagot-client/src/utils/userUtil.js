@@ -5,6 +5,11 @@ const getAllUsers = async ()=> {
     return response.data;
 };
 
+const getAllCoordinators = async ()=> {
+    const response = await api.get('/User/GetAllCoordinators');
+    return response.data;
+};
+
 const getUserById = async (id) => {
     const response = await api.get(`/User/GetUserById/${id}`);
     return response.data;
@@ -20,11 +25,20 @@ const updatedUser = async (updateUser) => {
     return response.data;
 };
 
+const getAllLecturersAndCoordinators = async ()=> {
+    const response = await api.get('/User/GetAllLecturersAndCoordinators');
+    return response.data;
+};
+
+const getCoordinators = async () => {
+    const response = await api.get('/User/GetCoordinators');
+    return response.data;
+};
 const login = async (loginUser) =>{
     const response = await api.post('/User/login', loginUser);
     return response;
 }
 
-export{getAllUsers, getUserById, addUser, updatedUser, login};
+export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators };
 
 

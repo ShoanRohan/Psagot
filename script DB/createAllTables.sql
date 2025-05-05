@@ -1,14 +1,13 @@
-USE [psagot]
-GO -- ξηιχϊ θαμϊ UserType
+-- Γ®Γ§Γ©Γ·ΓΊ Γ¨Γ΅Γ¬ΓΊ UserType
 DROP TABLE IF EXISTS UserType;
 
--- ιφιψϊ θαμϊ Days
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Days
 CREATE TABLE Days (
     DayId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(10) NOT NULL,
     Descr NVARCHAR(10) NULL
 );
--- ιφιψϊ θαμϊ Courses
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Courses
 CREATE TABLE Courses (
     CourseId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -20,7 +19,7 @@ CREATE TABLE Courses (
     NumberOfStudents INT NOT NULL,
     Notes NVARCHAR(MAX) NULL
 );
--- ιφιψϊ θαμϊ DaysForCourse
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ DaysForCourse
 CREATE TABLE DaysForCourse (
     DaysForCourseId INT IDENTITY PRIMARY KEY,
     DayId INT NOT NULL,
@@ -30,12 +29,12 @@ CREATE TABLE DaysForCourse (
     FOREIGN KEY (DayId) REFERENCES Days(DayId),
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId)
 );
--- ιφιψϊ θαμϊ UserTypes
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ UserTypes
 CREATE TABLE UserTypes (
     UserTypeId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL
 );
--- ιφιψϊ θαμϊ Users
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Users
 CREATE TABLE Users (
     UserId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -46,7 +45,7 @@ CREATE TABLE Users (
     IsActive BIT DEFAULT 1 NOT NULL,
     FOREIGN KEY (UserTypeId) REFERENCES UserTypes(UserTypeId)
 );
--- ιφιψϊ θαμϊ Topics
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Topics
 CREATE TABLE Topics (
     TopicId INT IDENTITY PRIMARY KEY,
     CourseId INT NOT NULL,
@@ -61,7 +60,7 @@ CREATE TABLE Topics (
     FOREIGN KEY (CourseId) REFERENCES Courses(CourseId),
     FOREIGN KEY (TeacherId) REFERENCES Users(UserId)
 );
--- ιφιψϊ θαμϊ ScheduleForTopic
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ ScheduleForTopic
 CREATE TABLE ScheduleForTopic (
     ScheduleForTopicId INT IDENTITY PRIMARY KEY,
     TopicId INT NOT NULL,
@@ -71,7 +70,7 @@ CREATE TABLE ScheduleForTopic (
     FOREIGN KEY (TopicId) REFERENCES Topics(TopicId),
     FOREIGN KEY (DayId) REFERENCES Days(DayId)
 );
--- ιφιψϊ θαμϊ Rooms
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Rooms
 CREATE TABLE Rooms (
     RoomId INT IDENTITY PRIMARY KEY,
     Name NVARCHAR(50) NOT NULL,
@@ -80,7 +79,7 @@ CREATE TABLE Rooms (
     Speakers BIT NOT NULL,
     Capacity INT NOT NULL
 );
--- ιφιψϊ θαμϊ Meetings
+-- Γ©Γ¶Γ©ΓΈΓΊ Γ¨Γ΅Γ¬ΓΊ Meetings
 CREATE TABLE Meetings (
     MeetingId INT IDENTITY PRIMARY KEY,
     ScheduleForTopicId INT NULL,

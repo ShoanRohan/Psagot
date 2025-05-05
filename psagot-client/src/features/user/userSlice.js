@@ -1,7 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers, loginAction } from './userAction';
+import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchAllCoordinators, fetchAllLecturersAndCoordinators, loginAction } from './userAction';
 
 const initialState = {
+    coordinators:[],
     user: [],
     selectedUser: null,
     status: 'idle',
@@ -56,8 +57,29 @@ const userSlice = createSlice({
         .addCase(loginAction.rejected, (state, action)=>{
             state.status = 'failed';
             state.error = action.error.message;
-        });
+        }).addCase(fetchAllLecturersAndCoordinators.pending, (state) =>{
+            state.status = 'loading';
+        })
+        .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) =>{
+            state.status ='succeeded';
+            state.user =action.payload;
+        })
+        .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(fetchAllCoordinators.fulfilled, (state, action) =>{
+            state.status = 'succeeded';
+            state.coordinators = action.payload;
+        })
+        .addCase(fetchAllCoordinators.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(fetchAllCoordinators.pending, (state) =>{
+            state.status ='loading';
 
+        });
     },
 });
 
