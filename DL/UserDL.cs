@@ -75,13 +75,12 @@ namespace DL
             try
             {
                 var coordinators = await _context.Set<User>()
-                    .Where(u => u.UserTypeId == 9 && u.IsActive) // סינון רק רכזות פעילות
-                    .Select(u => new CoordinatorDTO
-                    {
-                        UserId = u.UserId,
-                        Name = u.Name
-                    })
-                    .ToListAsync();
+                   .Select(u => new CoordinatorDTO
+                   {
+                       UserId = u.UserId,
+                       Name = u.Name
+                   })
+            .ToListAsync();
 
                 return (coordinators, null); // אם הכל הצליח
             }
