@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+import SideBar from "../components/SideBar";
 import Section from "../components/Section";
 import Footer from "../components/Footer";
 import { Box } from "@mui/material";
@@ -8,13 +8,12 @@ import { Box } from "@mui/material";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-        <Header />
-        <Section /> 
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vh'}}>
+            <SideBar />
+            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <Section />
+            </Box>
         </Box>
-        <Footer />
-    </Box>
     );
 }
 

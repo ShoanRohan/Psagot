@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addDaysForCourseAction, fetchDaysForCourseByCourseId, fetchAllDaysForCourse, fetchDaysForCourseById, updateDaysForCourseAction } from './daysForCourseActions';
+import { fetchAllDaysForCourse, fetchDaysForCourseById, fetchDaysForCourseByCourseId, addDaysForCourseAction, updateDaysForCourseAction } from './daysForCourseActions';
 
 const initialState = {
     daysForCourses: [],
@@ -16,28 +16,6 @@ const daysForCourseSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addDaysForCourseAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(addDaysForCourseAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourses = [...state.daysForCourses, action.payload];
-            })
-            .addCase(addDaysForCourseAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
-            .addCase(fetchDaysForCourseByCourseId.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchDaysForCourseByCourseId.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourseByCourseId = action.payload;
-            })
-            .addCase(fetchDaysForCourseByCourseId.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
             .addCase(fetchAllDaysForCourse.pending, (state) => {
                 state.status = 'loading';
             })
@@ -59,6 +37,28 @@ const daysForCourseSlice = createSlice({
             .addCase(fetchDaysForCourseById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
+            })
+            .addCase(fetchDaysForCourseByCourseId.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchDaysForCourseByCourseId.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.daysForCourseByCourseId = action.payload;
+            })
+            .addCase(fetchDaysForCourseByCourseId.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(addDaysForCourseAction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(addDaysForCourseAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.daysForCourses = [...state.daysForCourses, action.payload];
+            })
+            .addCase(addDaysForCourseAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             })
             .addCase(updateDaysForCourseAction.pending, (state) => {
                 state.status = 'loading';
