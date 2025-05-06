@@ -9,14 +9,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import excelIcon from '../assets/icons/excelIcon.svg';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFilteredPaginatedCourses } from "../features/course/courseActions";
-import {
-  selectCurrentPage,
-  selectPageSize,
-  selectTotalCount,
-  selectCourses,
-  setCurrentPage,
-  setPageSize
-} from "../features/course/courseSlice";
+import { selectCurrentPage,selectPageSize,selectTotalCount,selectCourses,setCurrentPage,setPageSize} from "../features/course/courseSlice";
 import CourseGrid from "./CourseGrid";
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -120,7 +113,6 @@ const CoursesPage = () => {
 
   return (
     <Box sx={{ p: 3, width: "92%" }}>
-      {/* כותרת עם כפתורים */}
       <Box
         sx={{
           display: "flex",

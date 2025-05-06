@@ -4,7 +4,6 @@ import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCoordinators } from "../features/user/userAction";
-// import { fetchFilteredCourses  } from "../features/course/courseActions";
 
 // סטייל לשדות בחירה
 const sharedStyles = {
@@ -70,11 +69,6 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const isSearchDisabled = useMemo(() => {
     return JSON.stringify(filters) === JSON.stringify(initialState);
   }, [filters]);
-
-  // const courseFilter = () =>{
-  //   dispatch(fetchFilteredCourses(filters))
-  // console.log(filterCourse)
-  // }
 
   return (
     <Box
@@ -164,11 +158,9 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           sx={{
             ...buttonStyles,
           }}
-          //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
-            dispatch(fetchCoordinators()); // טוען מחדש את הקורסים
-            //לבדוק שטעינת הקורסים מתבצעת דרך fetchCoordinators
+            dispatch(fetchCoordinators());
           }}
         >
           ניקוי
