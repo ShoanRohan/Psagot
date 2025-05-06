@@ -26,4 +26,5 @@ const GetMeetingsByPage = async (page, pageSize) => {
     return response.data;
 };
 
+
 export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage};

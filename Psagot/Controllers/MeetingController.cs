@@ -80,6 +80,8 @@ namespace Psagot.Controllers
         [HttpGet("GetMeetingsByPage")]
         public async Task<IActionResult> GetMeetingsByPage([FromQuery] int page, [FromQuery] int pageSize)
         {
+            Console.WriteLine($"Received page: {page}, pageSize: {pageSize}");
+
             var (meetings, totalCount) = await _meetingBL.GetMeetingsByPage(page, pageSize);
             return Ok(new{Meetings = meetings, TotalCount = totalCount });
         }

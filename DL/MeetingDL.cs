@@ -99,17 +99,22 @@ namespace DL
             try
             {
                 var query = _context.Meetings.AsQueryable();
+
+                // חישוב מספר כל המפגשים הכולל
                 int totalCount = await query.CountAsync();
+
+                // החלק הזה עושה את ה-Skip ו-Take בצורה נכונה
                 List<Meeting> meetings = await query
-                    .OrderBy(m => m.MeetingDate)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .OrderBy(m => m.MeetingDate)  // סדר את המפגשים לפי תאריך (או כל שדה אחר שצריך)
+                    .Skip((page - 1) * pageSize)  // דלג על המפגשים עד העמוד הנוכחי
+                    .Take(pageSize)  // קח את המפגשים של העמוד הנוכחי
                     .ToListAsync();
 
                 return (meetings, totalCount);
             }
             catch (Exception ex)
             {
+                // במקרה של שגיאה מחזיר מערך ריק
                 return (Enumerable.Empty<Meeting>(), 0);
             }
         }

@@ -4,8 +4,10 @@ import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingBy
 const initialState = {
   meetings: [],
   meeting: null,
-  status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+  status: 'idle', 
   error: null,
+  totalCount: 0, 
+
 };
 
 const meetingSlice = createSlice({
@@ -66,8 +68,9 @@ const meetingSlice = createSlice({
             })
             .addCase(fetchMeetingsByPage.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.meetings = action.payload.Meetings;
-                state.totalCount = action.payload.TotalCount;
+                state.meetings = action.payload.meetings;
+                state.totalCount = action.payload.totalCount;
+                
             })
             .addCase(fetchMeetingsByPage.rejected, (state, action) => {
                 state.status = 'failed';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllMeetings } from "../features/meeting/meetingActions";
+import { fetchAllMeetings,fetchMeetingsByPage } from "../features/meeting/meetingActions";
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import {
     Table,
@@ -247,9 +247,9 @@ const mockMeetings = [
 
 export default function MeetingsTable() {
     const dispatch = useDispatch();
-    const { meetings, loading, error } = useSelector((state) => state.meeting);
-    const [view, setView] = useState("table");
+    const { meetings, loading, error, totalCount } = useSelector((state) => state.meeting);
     const [page, setPage] = useState(1);
+    const [pageNumber, setPageNumber] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [snackbar, setSnackbar] = useState({
         open: false,
@@ -258,30 +258,35 @@ export default function MeetingsTable() {
     });
 
     useEffect(() => {
-        dispatch(fetchAllMeetings());
-    }, [dispatch]);
+        if (!pageNumber || !rowsPerPage) return;
+    
+        dispatch(fetchMeetingsByPage({ page: pageNumber, pageSize: rowsPerPage }));
+    }, [dispatch, pageNumber, rowsPerPage]);
 
     const handleDelete = (id) => {
         setSnackbar({ open: true, message: "מחיקת מפגש נכשלה", severity: "error" });
     };
-
     const handlePageChange = (event, value) => {
-        setPage(value);
+        setPageNumber(value); // נעדכן רק את ה-state
     };
-
+    
     const handleRowsPerPageChange = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(1);
+        const newRowsPerPage = parseInt(event.target.value, 10);
+        setRowsPerPage(newRowsPerPage); // נעדכן רק את השורות
+        setPageNumber(1); // חוזרים לעמוד ראשון
     };
+    
+    
+
 
     if (loading) return <CircularProgress />;
     if (error) return <Alert severity="error">{error}</Alert>;
 
-    const displayedMeetings = (meetings.length > 0 ? meetings : mockMeetings).slice(
-        (page - 1) * rowsPerPage,
-        page * rowsPerPage
-    );
-    const pageCount = Math.ceil((meetings.length > 0 ? meetings : mockMeetings).length / rowsPerPage);
+   // הנח שהשרת מחזיר רק את המפגשים של העמוד הנוכחי
+   const displayedMeetings = Array.isArray(meetings) ? meetings : [];
+
+// ה-totalMeetings צריך להגיע מה-Redux (ראה הסבר למטה)
+const pageCount = Math.ceil(totalCount / rowsPerPage);
 
     return (
         <div >
