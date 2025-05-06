@@ -2,10 +2,10 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
-import RoomsPage from '../pages/RoomsPage';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
+import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
+import RoomsPage from '../pages/RoomsPage';
 import RoomSchedule from '../components/RoomsScheduleGrid';
 
 const AppRouter = () => {
@@ -18,10 +18,7 @@ const AppRouter = () => {
             </Route> 
          
              <Route path='/home' element={<Layout/>}>
-                <Route index element={<HomePage/>}/> 
-                   
-           
-                   
+                <Route index element={<HomePage/>}/>        
             </Route> 
                 
             <Route path='/' element={<LoginPage/>}> 
