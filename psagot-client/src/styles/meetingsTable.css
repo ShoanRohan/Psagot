@@ -37,6 +37,7 @@
 
 .table-container {
   width: 950px;
+  margin-top:30px;
 }
 
 /* טבלה */
@@ -113,6 +114,49 @@ padding:10px;
 margin-top:20px;
 width: 1120px;
 
+}
+
+.highlighted-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.ml-1 {
+  margin-left: 1rem;
+}
+
+.custom-select {
+  height: 28px;
+  min-width: 50px;
+  font-size: 0.5rem;
+  padding: 2px 8px;
+}
+
+.custom-select .MuiSelect-icon {
+  display: none;
+}
+
+.icon-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pagination {
+  direction: ltr;
+}
+
+.pagination .MuiPaginationItem-root {
+  border-radius: 4px;
 }
 
 
