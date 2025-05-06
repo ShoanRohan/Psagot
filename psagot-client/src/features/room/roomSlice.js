@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllRoomsBySearchWithPagination, 
+    fetchRoomsScheduleByDate  } from './roomActions';
 
 const initialState = {
     rooms: [],
@@ -15,7 +16,11 @@ const roomSlice = createSlice({
         
         setRoom: (state, action) => {
             
-        }
+        },
+        setViewMode: (state, action) => {
+            state.viewMode = action.payload;
+        },
+        
     },
     extraReducers: (builder) => {
         builder
@@ -77,5 +82,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setRoom ,setViewMode } = roomSlice.actions;
 export default roomSlice.reducer;

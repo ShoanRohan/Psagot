@@ -56,8 +56,8 @@ namespace Psagot.Controllers
 
                 return Ok(room);
             }
-            [HttpGet("GetCourseScheduleByDate")]
-            public async Task<IActionResult> GetRoomsScheduleByDate([FromQuery] DateTime date)
+            [HttpGet("GetRoomsScheduleByDate")]
+            public async Task<IActionResult> GetRoomScheduleByDate([FromQuery] DateTime date)
             {
                 var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
                 if (schedule == null)
