@@ -50,8 +50,8 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     };
 
     return (
-        <div style={{ backgroundColor: '#FAFCFF', marginTop: "8px", minWidth: "94vw" }}>
-            <TableContainer component={Paper} sx={{ width: '100%', margin: 'auto', p: '8px' }}>
+        <div style={{ backgroundColor: '#FAFCFF', marginTop: "8px", minWidth: "91vw" }}>
+            <TableContainer component={Paper} elevation={0} sx={{ width: '100%', margin: 'auto', p: '8px' }}>
                 <Table sx={{ p: '35px 24px 10px 24px', borderRadius: '10px' }} aria-label="courses table">
                     <TableHead>
                         <TableRow>
@@ -124,6 +124,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                                 count={Math.ceil(totalCount / pageSize)}
                                 page={currentPage}
                                 sx={{
+                                    ml: 3,
                                     '& .MuiPaginationItem-root': { fontSize: 12 },
                                   }}
                                 />
