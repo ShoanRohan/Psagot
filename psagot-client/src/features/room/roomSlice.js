@@ -5,26 +5,31 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
-    filteredRooms: [], // רשימה לאחר סינון
+    filteredRooms: null, // רשימה לאחר סינון
     loading: false,
     error: null,
-      
 };
 
 const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        // setRoom: (state, action) => {
-        // },
+        setRoom: (state, action) => {
+
+        },
         filterRooms: (state, action) => {
-            const { roomName, capacity, equipment } = action.payload;
+            const { roomName, capacity, projector, speakers, computers } = action.payload;
             state.filteredRooms = state.rooms.filter(room =>
-              (roomName ? room.name.includes(roomName) : true) &&
-              (capacity ? room.capacity >= capacity : true) &&
-              (equipment ? room.equipment.includes(equipment) : true)
+                (roomName ? room.name.includes(roomName) : true) &&
+                (capacity ? room.capacity == capacity : true) &&
+                (projector ? room.projector : true) &&
+                (speakers ? room.speakers : true) &&
+                (computers ? room.computers : true)
             );
-          },
+        },
+        resetFilter: (state) => {
+            state.filteredRooms = null;
+        }
     },
     extraReducers: (builder) => {
         builder
