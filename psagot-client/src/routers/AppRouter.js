@@ -6,17 +6,21 @@ import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import RoomsPage from '../pages/RoomsPage';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
+import RoomSchedule from '../components/RoomsScheduleGrid';
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout/>}> 
-                <Route path='/' element={<RoomsPage/>}/>
+                {/* <Route path='/' element={<RoomsPage/>}/> */}
+                {/* <Route path='/' element={<RoomSchedule/>}/> */}
                 <Route path='/' element={<RoomsScheduleSearch/>}/>
             </Route> 
          
              <Route path='/home' element={<Layout/>}>
                 <Route index element={<HomePage/>}/> 
+                   
+           
                    
             </Route> 
                 
