@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from './roomActions';
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllRoomsBySearchWithPagination, 
+    fetchRoomsScheduleByDate  } from './roomActions';
 
 const initialState = {
     rooms: [],

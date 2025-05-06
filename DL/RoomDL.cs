@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,7 +69,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        public async Task<(List<RoomsScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
+        public async Task<(List<RoomScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
         {
             try
             {
@@ -87,7 +88,7 @@ namespace DL
                      && m.ScheduleForTopic.Topic.Course != null)
                 .Where(m => DateOnly.FromDateTime(dateTime) >= m.ScheduleForTopic.Topic.Course.StartDate
                      && (m.ScheduleForTopic.Topic.Course.EndDate == null || DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
-                .Select(m => new RoomsScheduleByDateDTO
+                .Select(m => new RoomScheduleByDateDTO
                 {
                     CourseName = m.ScheduleForTopic.Topic.Course.Name,
                     TopicName = m.ScheduleForTopic.Topic.Name,
