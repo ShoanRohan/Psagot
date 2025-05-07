@@ -23,21 +23,21 @@ namespace BL
         {
             var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(courseId);
             if (topics == null || !topics.Any()) return (null, errorMessage);
-            var topicDTOs = topics.Select(t => new TopicDTO
-            {
-                TopicId = t.TopicId,
-                CourseId = t.CourseId,
-                Name = t.Name,
-                TeacherName = t.Teacher?.Name, 
-                StartDate = t.StartDate,
-                EndDate = t.EndDate,
-                NumberOfMeetings = t.NumberOfMeetings,
-                Computers = t.Computers,
-                Projector = t.Projector,
-                Microphone = t.Microphone,
+            //var topicDTOs = topics.Select(t => new TopicDTO
+            //{
+            //    TopicId = t.TopicId,
+            //    CourseId = t.CourseId,
+            //    Name = t.Name,
+            //    TeacherName = t.Teacher?.Name, 
+            //    StartDate = t.StartDate,
+            //    EndDate = t.EndDate,
+            //    NumberOfMeetings = t.NumberOfMeetings,
+            //    Computers = t.Computers,
+            //    Projector = t.Projector,
+            //    Microphone = t.Microphone,
    
-            }).ToList();
-            return (topicDTOs.Select(t => _mapper.Map<TopicDTO>(t)).ToList(), null);
+            //}).ToList();
+            return (topics.Select(t => _mapper.Map<TopicDTO>(t)).ToList(), null);
         }
         public async Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO)
         {

@@ -32,6 +32,6 @@ namespace Entities.DTO
         public bool Microphone { get; set; }
         public int? StatusId { get; set; }
 
-        public virtual StatusTopic? Status { get; set; }
+        public string Status { get; set; }
     }
 }

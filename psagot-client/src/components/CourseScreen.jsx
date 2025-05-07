@@ -31,7 +31,7 @@ const CourseScreen = ({ courseId }) => {
           <Typography className="course-title">
             {course ? course.name : "טוען..."}
           </Typography>
-          <Typography className="course-status">סטטוס הקורס: פעיל</Typography>
+          <Typography className="course-status">סטטוס הקורס: {course ? course.status : "טוען..."}</Typography>
         </Box>
 
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}

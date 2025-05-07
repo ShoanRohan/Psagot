@@ -46,7 +46,8 @@ const TopicsSearch = ({ id }) => {
 
   const initialState = {
     topicName: "",
-    lecturerName: "",
+    teacherName: "",
+    statusName:"",
   };
 
   const [filters, setFilters] = useState(initialState);
@@ -102,15 +103,15 @@ const TopicsSearch = ({ id }) => {
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>שם מרצה</InputLabel>
           <Select
-            value={filters.lecturerName}
+            value={filters.teacherName}
             onChange={(e) =>
-              setFilters({ ...filters, lecturerName: e.target.value })
+              setFilters({ ...filters, teacherName: e.target.value })
             }
             sx={sharedStyles}
           >
-            {lecturers?.map((lecturer) => (
-              <MenuItem key={lecturer.id} value={lecturer.name}>
-                {lecturer.name}
+            {topics?.map((topic) => (
+              <MenuItem key={topic.id} value={topic.teacherName}>
+                {topic.teacherName}
               </MenuItem>
             ))}
           </Select>
@@ -118,15 +119,15 @@ const TopicsSearch = ({ id }) => {
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>סטאטוס</InputLabel>
           <Select
-            value={filters.lecturerName}
+            value={filters.statusName}
             onChange={(e) =>
-              setFilters({ ...filters, lecturerName: e.target.value })
+              setFilters({ ...filters, statusName: e.target.value })
             }
             sx={sharedStyles}
           >
-            {lecturers?.map((lecturer) => (
-              <MenuItem key={lecturer.id} value={lecturer.name}>
-                {lecturer.name}
+            {topics?.map((topic) => (
+              <MenuItem key={topic.id} value={topic.status}>
+                {topic.status}
               </MenuItem>
             ))}
           </Select>
@@ -151,6 +152,7 @@ const TopicsSearch = ({ id }) => {
           sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
           startIcon={<SearchIcon sx={{ marginLeft: 1 }}/>}
           disabled={true} // הכפתור מושבת
+          
         >
           חיפוש
         </Button>
