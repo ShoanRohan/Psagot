@@ -73,7 +73,7 @@ namespace Psagot.Controllers
             if (topics == null) return BadRequest(errorMessage);
 
             return Ok(topics);
-        }
+        }  
     }
 }
 

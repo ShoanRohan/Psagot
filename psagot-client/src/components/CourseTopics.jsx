@@ -1,13 +1,14 @@
 import React from "react";
 import TopicsSearch from "./TopicsSearch";
+import CourseTopicGrid from "./CourseTopicGrid";
 
-const CourseSubjects = () => {
+const CourseTopics = () => {
   return (
     <>
       <TopicsSearch />
-      <div>CourseSubjects</div>
-    </>
+      <CourseTopicGrid/>
+          </>
   );
 };
 
-export default CourseSubjects;
+export default CourseTopics;

@@ -16,6 +16,8 @@ namespace Entities.DTO
         public string Name { get; set; } = null!;
 
         public int TeacherId { get; set; }
+        
+        public string TeacherName { get; set; }
 
         public DateOnly StartDate { get; set; }
 
@@ -30,6 +32,6 @@ namespace Entities.DTO
         public bool Microphone { get; set; }
         public int? StatusId { get; set; }
 
-        public virtual StatusTopic? Status { get; set; }
+        public string Status { get; set; }
     }
 }
