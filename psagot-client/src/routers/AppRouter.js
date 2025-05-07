@@ -4,22 +4,20 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import CourseScreen from "../components/CourseScreen";
+import CoursePage from '../pages/CoursePage';
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/courses' element={<CoursePage/>} />
                 <Route path='/meetings' element={<span>page Meetings</span>} />
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<CalendarPage />} />
-            <Route path='/' element={<Layout/>}>
-            <Route path='/' element={<CourseScreen courseId={1}/>}/>
-            <Route path='/TopicsSearch' element={<TopicsSearch id={1}/>}/>
-                
-            </Route>
+                <Route path='/' element={<CourseScreen courseId={1}/>}/>
+              </Route>
         </Routes>
     );
 };

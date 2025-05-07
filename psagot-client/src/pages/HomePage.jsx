@@ -28,7 +28,6 @@ const HomePage = () => {
             <Typography variant="h5">😀hello psagot project😀</Typography>
             <Button onClick={handleClickButton}>Example of a function structure</Button>
             {/* mmm */}
-            <TopicsSearch />
         </Container>
     );
 }
