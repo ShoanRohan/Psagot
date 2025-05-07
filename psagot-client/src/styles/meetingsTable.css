@@ -10,8 +10,6 @@
   display: block;
   background-color: #F6F7F9; 
   border-radius:6px;
-
-
 }
 [data-testid="EditOutlinedIcon"] path {
   display: none; 
@@ -28,8 +26,6 @@
   display: block;
   background-color: #F6F7F9; 
   border-radius: 6px;
-
-
 }
 [data-testid="DeleteOutlineIcon"] path {
   display: none; 

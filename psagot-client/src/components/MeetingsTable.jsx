@@ -1,249 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllMeetings,fetchMeetingsByPage } from "../features/meeting/meetingActions";
+import {fetchMeetingsByPage } from "../features/meeting/meetingActions";
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Chip,
-    IconButton,
-    Button,
-    Snackbar,
-    Alert,
-    CircularProgress,
-    Box,
-    Typography,
-    Select,
-    MenuItem,
-    Pagination,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table"
+import TableBody from "@mui/material/TableBody";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Chip from "@mui/material/Chip";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import Pagination from "@mui/material/Pagination";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "../styles/meetingsTable.css"; 
+import { StyledTableCell, StyledTableRow } from "../styles/MeetingsTableStyle";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${TableCell.head}`]: {
-        textAlign: "center",
-        padding: theme.spacing(1, 2),
-    },
-    [`&.${TableCell.body}`]: {
-        textAlign: "center"
-    },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    "&:nth-of-type(odd)": {
-        backgroundColor: "#f9fbff",
-    },
-    "&:last-child td, &:last-child th": {
-        border: 0,
-    },
-}));
-
-const mockMeetings = [
-    {
-        id: 1,
-        meetingNumber: 1,
-        course: "React Basics",
-        subject: "Introduction to React",
-        lecturer: "John Doe",
-        day: "Monday",
-        date: "2025-02-20",
-        startTime: "10:00",
-        endTime: "12:00",
-        room: "Room 101",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 2,
-        meetingNumber: 2,
-        course: "Advanced JavaScript",
-        subject: "Async/Await",
-        lecturer: "Jane Smith",
-        day: "Wednesday",
-        date: "2025-02-22",
-        startTime: "14:00",
-        endTime: "16:00",
-        room: "Room 202",
-        valid: false,
-        inSystem: false,
-    },
-    {
-        id: 3,
-        meetingNumber: 3,
-        course: "React Basics",
-        subject: "React Components",
-        lecturer: "John Doe",
-        day: "Friday",
-        date: "2025-02-24",
-        startTime: "09:00",
-        endTime: "11:00",
-        room: "Room 101",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 4,
-        meetingNumber: 4,
-        course: "Node.js",
-        subject: "Express.js Basics",
-        lecturer: "Michael Green",
-        day: "Tuesday",
-        date: "2025-02-27",
-        startTime: "13:00",
-        endTime: "15:00",
-        room: "Room 303",
-        valid: true,
-        inSystem: false,
-    },
-    {
-        id: 5,
-        meetingNumber: 5,
-        course: "Database Management",
-        subject: "SQL Queries",
-        lecturer: "Emma Brown",
-        day: "Thursday",
-        date: "2025-02-29",
-        startTime: "15:00",
-        endTime: "17:00",
-        room: "Room 404",
-        valid: false,
-        inSystem: true,
-    },
-    {
-        id: 6,
-        meetingNumber: 6,
-        course: "React Basics",
-        subject: "State & Props",
-        lecturer: "John Doe",
-        day: "Monday",
-        date: "2025-03-04",
-        startTime: "10:00",
-        endTime: "12:00",
-        room: "Room 101",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 7,
-        meetingNumber: 7,
-        course: "Advanced JavaScript",
-        subject: "Closures",
-        lecturer: "Jane Smith",
-        day: "Wednesday",
-        date: "2025-03-06",
-        startTime: "14:00",
-        endTime: "16:00",
-        room: "Room 202",
-        valid: true,
-        inSystem: false,
-    },
-    {
-        id: 8,
-        meetingNumber: 8,
-        course: "Node.js",
-        subject: "Middleware in Express",
-        lecturer: "Michael Green",
-        day: "Friday",
-        date: "2025-03-08",
-        startTime: "09:00",
-        endTime: "11:00",
-        room: "Room 303",
-        valid: false,
-        inSystem: true,
-    },
-    {
-        id: 9,
-        meetingNumber: 9,
-        course: "Database Management",
-        subject: "NoSQL Databases",
-        lecturer: "Emma Brown",
-        day: "Tuesday",
-        date: "2025-03-11",
-        startTime: "13:00",
-        endTime: "15:00",
-        room: "Room 404",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 10,
-        meetingNumber: 10,
-        course: "React Basics",
-        subject: "Hooks in React",
-        lecturer: "John Doe",
-        day: "Thursday",
-        date: "2025-03-13",
-        startTime: "15:00",
-        endTime: "17:00",
-        room: "Room 101",
-        valid: false,
-        inSystem: false,
-    },
-    {
-        id: 11,
-        meetingNumber: 11,
-        course: "Advanced JavaScript",
-        subject: "ES6 Features",
-        lecturer: "Jane Smith",
-        day: "Monday",
-        date: "2025-03-17",
-        startTime: "10:00",
-        endTime: "12:00",
-        room: "Room 202",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 12,
-        meetingNumber: 12,
-        course: "Node.js",
-        subject: "REST API Design",
-        lecturer: "Michael Green",
-        day: "Wednesday",
-        date: "2025-03-19",
-        startTime: "14:00",
-        endTime: "16:00",
-        room: "Room 303",
-        valid: false,
-        inSystem: false,
-    },
-    {
-        id: 13,
-        meetingNumber: 13,
-        course: "Database Management",
-        subject: "Indexing & Optimization",
-        lecturer: "Emma Brown",
-        day: "Friday",
-        date: "2025-03-21",
-        startTime: "09:00",
-        endTime: "11:00",
-        room: "Room 404",
-        valid: true,
-        inSystem: true,
-    },
-    {
-        id: 14,
-        meetingNumber: 14,
-        course: "React Basics",
-        subject: "React Router",
-        lecturer: "John Doe",
-        day: "Tuesday",
-        date: "2025-03-25",
-        startTime: "13:00",
-        endTime: "15:00",
-        room: "Room 101",
-        valid: true,
-        inSystem: false,
-    },
-];
 
 export default function MeetingsTable() {
     const dispatch = useDispatch();
@@ -267,27 +46,22 @@ export default function MeetingsTable() {
         setSnackbar({ open: true, message: "מחיקת מפגש נכשלה", severity: "error" });
     };
    const handlePageChange = (event, value) => {
-    setPage(value); // מעדכן את ה-state של עמוד נבחר
-    setPageNumber(value); // ומעדכן גם את ה־pageNumber כדי לשלוף את המידע המתאים
-};
+    setPage(value); 
+    setPageNumber(value); 
+    };
     
     const handleRowsPerPageChange = (event) => {
         const newRowsPerPage = parseInt(event.target.value, 10);
-        setRowsPerPage(newRowsPerPage); // נעדכן רק את השורות
-        setPageNumber(1); // חוזרים לעמוד ראשון
+        setRowsPerPage(newRowsPerPage); 
+        setPageNumber(1); 
     };
-    
-    
-
 
     if (loading) return <CircularProgress />;
     if (error) return <Alert severity="error">{error}</Alert>;
 
-   // הנח שהשרת מחזיר רק את המפגשים של העמוד הנוכחי
    const displayedMeetings = Array.isArray(meetings) ? meetings : [];
-
-// ה-totalMeetings צריך להגיע מה-Redux (ראה הסבר למטה)
-const pageCount = Math.ceil(totalCount / rowsPerPage);
+   
+   const pageCount = Math.ceil(totalCount / rowsPerPage);
 
     return (
         <div >
@@ -344,34 +118,28 @@ const pageCount = Math.ceil(totalCount / rowsPerPage);
                     </Table>
                 </TableContainer>
 
-                <Box className="highlighted-box">
-   <Box className="flex-center">
-      <Typography className="ml-1">מספר שורות:</Typography>
-      <Select
-         value={rowsPerPage}
-         onChange={handleRowsPerPageChange}
-         size="small"
-         className="custom-select"
-         IconComponent={() => (
-            <Box className="icon-container">
-                <UnfoldMoreIcon/>
-            </Box>
-         )}
-      >
-         {[10, 25, 50].map((option) => (
-            <MenuItem key={option} value={option}>
-               {option}
-            </MenuItem>
-         ))}
-      </Select>
-   </Box>
-   <Pagination
-    count={pageCount}
-    page={page} // משנה את העמוד לפי ה-state
-    onChange={handlePageChange} // מעדכן את ה-state כאשר המשתמש משנה עמוד
-    className="pagination"
-/>
-</Box>
+            <Box className="highlighted-box">
+                <Box className="flex-center">
+                     <Typography className="ml-1">מספר שורות:</Typography>
+                     <Select
+                             value={rowsPerPage}
+                             onChange={handleRowsPerPageChange}
+                             size="small"
+                             className="custom-select"
+                             IconComponent={() => (
+                                <Box className="icon-container"> <UnfoldMoreIcon/> </Box>
+                              )}>
+                              {[10, 25, 50].map((option) => (
+                             <MenuItem key={option} value={option}>{option} </MenuItem> 
+                              ))}
+                     </Select>
+                 </Box>
+                <Pagination
+                 count={pageCount}
+                 page={page} 
+                 onChange={handlePageChange} 
+                 className="pagination" />
+             </Box>
 
             <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
                 <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
