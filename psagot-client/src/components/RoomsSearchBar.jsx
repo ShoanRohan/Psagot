@@ -11,21 +11,18 @@ const RoomsSearchBar = () => {
   const [equipment, setEquipment] = useState([]);
   const [capacity, setCapacity] = useState();
   const [find, setFind] = useState(true);
-  const [errors, setErrors] = useState({ roomName: "", capacity: "" });
+  const [capacityError, setCapacityError] = useState("");
 
   const dispatch = useDispatch();
+
   const validate = () => {
-    const newErrors = { roomName: "", capacity: "" };
     let isValid = true;
-    if (roomName && roomName.length < 2) {
-      newErrors.roomName = "שם החדר חייב להכיל לפחות 2 תווים";
-      isValid = false;
-    }
     if (capacity && (isNaN(capacity) || capacity <= 0)) {
-      newErrors.capacity = "מספר המקומות חייב להיות מספר חיובי";
+      setCapacityError("מספר המקומות חייב להיות מספר חיובי");
       isValid = false;
+    } else {
+      setCapacityError("");
     }
-    setErrors(newErrors);
     return isValid;
   };
   const handleReset = () => {
@@ -33,7 +30,6 @@ const RoomsSearchBar = () => {
     setCapacity("");
     setEquipment([]);
     setFind(true);
-    setErrors({ roomName: "", capacity: "" }); // איפוס הודעות שגיאה
     dispatch({ type: "room/resetFilter" }); // פעולה להבאת כל החדרים
   };
 
@@ -46,8 +42,6 @@ const RoomsSearchBar = () => {
         className="textField"
         value={roomName}
         onChange={(e) => { setRoomName(e.target.value); setFind(false) }}
-        error={!!errors.roomName}
-        helperText={errors.roomName}
       />
       <FormControl size="small" className="textField">
         <InputLabel id="equipment-label">ציוד</InputLabel>
@@ -74,8 +68,8 @@ const RoomsSearchBar = () => {
         className="textField"
         value={capacity}
         onChange={(e) => { setCapacity(e.target.value); setFind(false); }}
-        error={!!errors.capacity}
-        helperText={errors.capacity}
+        error={!!capacityError}
+        helperText={capacityError}
       />
       <Button
         variant="contained"
