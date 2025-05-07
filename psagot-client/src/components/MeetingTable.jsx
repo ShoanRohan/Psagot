@@ -290,4 +290,4 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   );
 };
 
-export default MeetingTable;
+export default MeetingTable;

@@ -113,4 +113,4 @@ const CustomTable = ({ columns, data, onEdit, onDelete, columnConfig = {}, keyMa
   );
 };
 
-export default CustomTable;
+export default CustomTable;
