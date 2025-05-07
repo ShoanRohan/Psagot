@@ -47,9 +47,14 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
 
-      .addCase(addUserAction.fulfilled, (state, action) => {
-        state.users.push(action.payload);
-      })
+       .addCase(addUserAction.fulfilled, (state, action) => {
+      state.status = 'succeeded';
+      state.users.push(action.payload);
+    })
+    .addCase(addUserAction.rejected, (state, action) => {
+      state.status = 'failed';
+      state.error = action.payload;
+    })
 
       .addCase(updateUserAction.fulfilled, (state, action) => {
         const index = state.users.findIndex(
@@ -64,3 +69,5 @@ const userSlice = createSlice({
 
 export const { setUser } = userSlice.actions;
 export default userSlice.reducer;
+
+
