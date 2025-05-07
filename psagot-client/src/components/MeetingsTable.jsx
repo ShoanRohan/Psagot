@@ -266,9 +266,10 @@ export default function MeetingsTable() {
     const handleDelete = (id) => {
         setSnackbar({ open: true, message: "מחיקת מפגש נכשלה", severity: "error" });
     };
-    const handlePageChange = (event, value) => {
-        setPageNumber(value); // נעדכן רק את ה-state
-    };
+   const handlePageChange = (event, value) => {
+    setPage(value); // מעדכן את ה-state של עמוד נבחר
+    setPageNumber(value); // ומעדכן גם את ה־pageNumber כדי לשלוף את המידע המתאים
+};
     
     const handleRowsPerPageChange = (event) => {
         const newRowsPerPage = parseInt(event.target.value, 10);
@@ -365,11 +366,11 @@ const pageCount = Math.ceil(totalCount / rowsPerPage);
       </Select>
    </Box>
    <Pagination
-      count={pageCount}
-      page={page}
-      onChange={handlePageChange}
-      className="pagination"
-   />
+    count={pageCount}
+    page={page} // משנה את העמוד לפי ה-state
+    onChange={handlePageChange} // מעדכן את ה-state כאשר המשתמש משנה עמוד
+    className="pagination"
+/>
 </Box>
 
             <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
