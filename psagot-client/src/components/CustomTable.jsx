@@ -3,7 +3,7 @@ import { Table, TableHead, TableRow, TableCell, TableBody, IconButton, Chip } fr
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const CustomTable = ({ columns, data, onEdit, onDelete }) => {
+const CustomTable = ({ columns, data, onEdit, onDelete, columnConfig = {}, keyMap = {} }) => {
   if (!columns || !Array.isArray(columns) || columns.length === 0) {
     console.error('Table component: columns prop must be a non-empty array');
     return <div>Error: Invalid columns configuration</div>;
@@ -17,6 +17,7 @@ const CustomTable = ({ columns, data, onEdit, onDelete }) => {
   // הוספת לוגים לבדיקה
   console.log('CustomTable props - columns:', columns);
   console.log('CustomTable props - data:', data);
+  console.log('CustomTable props - columnConfig:', columnConfig);
   
   // מציאת האינדקסים של העמודות הקבועות
   const deleteColumnIndex = columns.findIndex(col => col === 'מחיקה');
@@ -39,6 +40,15 @@ const CustomTable = ({ columns, data, onEdit, onDelete }) => {
         {data.map((row, i) => (
           <TableRow key={i}>
             {columns.map((col, colIndex) => {
+              // בדיקה אם יש קונפיגורציה מותאמת אישית לעמודה זו
+              if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
+                return (
+                  <TableCell key={colIndex} align="center">
+                    {columnConfig[col].render(row)}
+                  </TableCell>
+                );
+              }
+              
               // עמודת מחיקה
               if (colIndex === deleteColumnIndex) {
                 return (
@@ -87,25 +97,9 @@ const CustomTable = ({ columns, data, onEdit, onDelete }) => {
                 );
               }
               
-              // עמודות ריקות עבור שדות שאין להם נתונים עדיין
-              if (['שם קורס', 'נושא', 'שם מפגש', 'תיאור'].includes(col)) {
-                return <TableCell key={colIndex} align="center">-</TableCell>;
-              }
-              
               // עמודות דינמיות לפי המידע שקיים
-              const keyMap = {
-                'מזהה מפגש': 'meetingId',
-                'מזהה נושא': 'scheduleForTopicId',
-                'מספר מפגש': 'meetingNumberForTopic',
-                'חדר': 'roomId',  // מיפוי עמודת חדר ל-roomId
-                'מזהה חדר': 'roomId',
-                'יום': 'dayId',
-                'שעת התחלה': 'startTime',
-                'שעת סיום': 'endTime'
-              };
-              
-              const dataKey = keyMap[col];
-              if (dataKey && row[dataKey] !== undefined) {
+              const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
+              if (row[dataKey] !== undefined) {
                 return <TableCell key={colIndex} align="center">{row[dataKey]}</TableCell>;
               }
               
@@ -119,4 +113,4 @@ const CustomTable = ({ columns, data, onEdit, onDelete }) => {
   );
 };
 
-export default CustomTable;
+export default CustomTable;
