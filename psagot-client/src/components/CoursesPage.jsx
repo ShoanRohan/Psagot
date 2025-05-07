@@ -81,6 +81,8 @@ const CoursesPage = () => {
     const fileData = new Blob([excelBuffer], { type: "application/octet-stream" });
     saveAs(fileData, "courses.xlsx");
   };
+  console.log(filters);
+
 
   const handleSearch = async () => {
     const params = {
@@ -88,6 +90,9 @@ const CoursesPage = () => {
       pageNumber: currentPage,
       pageSize: pageSize,
     };
+
+    console.log(params)
+    
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
     setFilters(initialState);

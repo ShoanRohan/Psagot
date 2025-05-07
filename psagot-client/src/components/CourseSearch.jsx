@@ -34,7 +34,7 @@ const buttonStyles = {
 
 const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const dispatch = useDispatch();
-  const coordinators = useSelector((state) => state.user.coordinatorsCode);
+  const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
   const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
 
