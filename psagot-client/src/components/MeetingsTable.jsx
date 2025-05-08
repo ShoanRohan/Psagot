@@ -430,6 +430,8 @@ export default function MeetingsTable() {
 
     return (
         <div>
+            <Box className="box-center">
+
             <Button variant="contained" onClick={() => setView(view === "table" ? "calendar" : "table")} sx={{ mb: 2 }}>
                 {view === "table" ? "הצג לוח שנה" : "הצג טבלה"}
             </Button>
@@ -548,6 +550,7 @@ export default function MeetingsTable() {
             <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
                 <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
             </Snackbar>
+            </Box>
         </div>
     );
 }

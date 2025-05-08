@@ -35,8 +35,14 @@
   display: none; 
 }
 
+.box-center {
+  margin-left: 0;
+  margin-right: 200px; 
+}
+
 .table-container {
   width: 950px;
+  
 }
 
 /* טבלה */
