@@ -3,8 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import AddMeeting from '../pages/AddMeeting';
-import { ExportIconButton } from '../pages/ExcelButton';
+import { ExportIconButton } from '../pages/ExportIconButton';
 import MeetingTable from '../components/MeetingTable';
+import MeetingPage from '../pages/MeetingPage';
 
 const AppRouter = () => {
     return (
@@ -13,7 +14,7 @@ const AppRouter = () => {
                 <Route index element={<HomePage/>}/>
                 <Route path='add-meeting' element={<AddMeeting />} />
                 <Route path='export-excel' element={< ExportIconButton />} />
-                <Route path='/components/MeetingTable' element={<MeetingTable/>}/>
+                <Route path='pages/MeetingPage' element={<MeetingPage/>}/>
                 </Route>
 
         </Routes>

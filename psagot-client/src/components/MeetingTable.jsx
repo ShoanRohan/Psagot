@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { getAllMeetings } from '../utils/meetingUtil';
-import { ExportIconButton } from '../pages/ExcelButton'; 
+import React, { useEffect } from 'react';
 import {
   Paper,
   TableContainer,
@@ -17,11 +15,19 @@ import {
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllMeetings } from '../features/meeting/meetingActions';
 
 const MeetingTable = () => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const {meetings, status, error } = useSelector((state) => state.meeting);
+
+    useEffect(() => {
+        if (status === 'idle') {
+          dispatch(fetchAllMeetings());
+
+        }
+    }, [status, dispatch]);
 
   const columns = [
     'שם קורס',
@@ -40,23 +46,9 @@ const MeetingTable = () => {
     'מחיקה'
   ];
 
-  useEffect(() => {
-    const fetchMeetings = async () => {
-      try {
-        const meetingsData = await getAllMeetings();
-        setData(meetingsData);
-      } catch (err) {
-        setError('אירעה שגיאה בטעינת הנתונים');
-        setData([]);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchMeetings();
-  }, []);
 
-  if (loading) {
+  if (status=='loading') {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" mt={5}>
         <CircularProgress />
@@ -64,7 +56,7 @@ const MeetingTable = () => {
     );
   }
 
-  if (error) {
+  if (error!=null) {
     return (
       <Typography color="error" align="center">
         {error}
@@ -77,15 +69,8 @@ const MeetingTable = () => {
       <Typography variant="h5" align="center" gutterBottom>
         טבלת מפגשים
       </Typography>
-      
-       {/* כפתור ייצוא */}
-       <Box textAlign="left" mb={2}>
-        <ExportIconButton
-          data={data}
-          fileName="meetings"
-          sheetName="Meetings"
-        />
-      </Box>
+
+     
       <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
         <Table stickyHeader>
           <TableHead>
@@ -98,15 +83,15 @@ const MeetingTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row, i) => (
+            {meetings.map((row, i) => (
               <TableRow key={i}>
                 <TableCell align="center">{row.course_name}</TableCell>
                 <TableCell align="center">{row.topic_name}</TableCell>
                 <TableCell align="center">{row.meeting_number}</TableCell>
                 <TableCell align="center">{row.lecturer}</TableCell>
                 <TableCell align="center">{row.day}</TableCell>
-                <TableCell align="center">{row.start_time}</TableCell>
-                <TableCell align="center">{row.end_time}</TableCell>
+                <TableCell align="center">{row.startTime}</TableCell>
+                <TableCell align="center">{row.endTime}</TableCell>
                 <TableCell align="center">{row.date}</TableCell>
                 <TableCell align="center">{row.description}</TableCell>
                 <TableCell align="center">{row.room}</TableCell>

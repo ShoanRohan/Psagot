@@ -1,10 +1,8 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
-import MeetingButton from './MeetingButton';
-import { ExportIconButton } from "./ExcelButton";
-import MeetingTable from '../components/MeetingTable';
+
+
 const HomePage = () => {
     const dispatch = useDispatch();
     const { userTypes, status, error } = useSelector((state) => state.userType);
@@ -29,16 +27,6 @@ const HomePage = () => {
             <Typography variant="h5">😀 hello psagot project 😀</Typography>
             <Button onClick={handleClickButton}>Example of a function structure</Button>
 
-
-            {/* כפתור ייצוא לפגישות לדוגמה */}
-            <ExportIconButton
-                data={MeetingTable}
-                sheetName="פגישות"
-            />
-
-            {/* כפתור להוספת פגישה */}
-            <MeetingButton />
-            
 
         </Container>
     );

@@ -7,6 +7,7 @@ export const ExportMeetingsButton = () => {
   const dispatch = useDispatch();
  
   const { meetings, status } = useSelector((state) => state.meeting);
+  console.log("📦 meetings from Redux:", meetings);
 
 
   useEffect(() => {
@@ -17,6 +18,7 @@ export const ExportMeetingsButton = () => {
 
   if (status === 'loading') return <div>טוען...</div>;
   if (status === 'failed') return <div>שגיאה בטעינה</div>;
+  if (!meetings || meetings.length === 0) return <Typography>אין נתונים לייצוא</Typography>;
 
   
 
