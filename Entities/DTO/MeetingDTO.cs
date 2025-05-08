@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,25 @@ namespace Entities.DTO
         public TimeOnly? EndTime { get; set; }
 
         public bool IsPartOfSchedule { get; set; }
-        public bool IsPartOfRoom { get; set; }
+
+        public int? CourseId { get; set; }
+
+        public int? TopicId { get; set; }
+
+        public int? TeacherId { get; set; }
+
+        public DateOnly MeetingDate { get; set; }
+
+        public virtual CourseDTO? Course { get; set; }
+
+        public virtual DayDTO? Day { get; set; }
+
+        public virtual RoomDTO Room { get; set; } = null!;
+
+        public virtual ScheduleForTopicDTO? ScheduleForTopic { get; set; }
+
+        public virtual UserDTO? Teacher { get; set; }
+
+        public virtual TopicDTO? Topic { get; set; }
     }
 }
