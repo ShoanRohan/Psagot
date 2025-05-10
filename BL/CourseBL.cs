@@ -57,20 +57,31 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+        
         public async Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
-            int page, int pageSize,
+            int page,
+            int pageSize,
            int? courseId,
            string courseName,
            string coordinatorName,
            int? year)
+
         {
             var skip = (page - 1) * pageSize;
 
-            var (courses, totalCount, ErrorMessage) = await _courseDL.GetPaginatedFilteredCourses(skip, pageSize, courseId, courseName, coordinatorName, year);
+            var (courses,totalCount, ErrorMessage) = await _courseDL.GetPaginatedFilteredCourses(skip, pageSize, courseId, courseName, coordinatorName, year);
 
-            if (courses == null) return (null, 0, ErrorMessage);
+
+            if (courses == null) return (null,0, ErrorMessage);
+
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), totalCount, null);
+
         }
-    }
+
+       
+
+
+
+        }
 }
