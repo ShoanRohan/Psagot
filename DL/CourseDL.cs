@@ -1,5 +1,4 @@
-﻿
-using Entities.Contexts;
+﻿using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -43,13 +42,12 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
 
         {
             try
             {
-                var addcourse = await _context.Set<Course>().FindAsync(course);
-                return (course, null);
                 var addedCourse = await _context.Set<Course>().AddAsync(course);
                 await _context.SaveChangesAsync();
                 return (addedCourse.Entity, null);
@@ -60,8 +58,6 @@ namespace DL
             }
         }
 
-        
-    
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
@@ -76,6 +72,5 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
     }
 }
