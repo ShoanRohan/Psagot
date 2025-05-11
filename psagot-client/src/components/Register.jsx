@@ -100,8 +100,8 @@ const Register = () => {
         phone,
         password,
         isActive: true,
-        userTypeId: 5,
-        userTypeName: 'Standard User',
+        userTypeId: 1,
+        // userTypeName: 'Standard User',
       }));
       
       const result = resultAction.payload;

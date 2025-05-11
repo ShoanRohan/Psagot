@@ -5,7 +5,7 @@ import { saveAs } from "file-saver";
 import CourseGrid from "../components/CoursesGrid";
 import { useSelector } from "react-redux";
 import circlePlus from "../assets/icons/circle-plus.png";
-import exptExcel from "../assets/icons/image 6.png";
+import exptExcel from "../assets/icons/excelExport.png";
 
 const CoursesPage = () => {
   const Course = useSelector((state) => state.course?.course || []); 
@@ -50,7 +50,7 @@ const CoursesPage = () => {
           width: "9.48%",
           height: "4.35%",
           top: "7.5%",
-          left: "88%",
+          left: "95%",
           transform: "translateX(-50%)",
           fontFamily: "Rubik",
           fontWeight: 700,

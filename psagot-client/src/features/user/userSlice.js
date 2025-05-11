@@ -49,7 +49,9 @@ const userSlice = createSlice({
 
        .addCase(addUserAction.fulfilled, (state, action) => {
       state.status = 'succeeded';
-      state.users.push(action.payload);
+      // state.users.push(action.payload);
+      console.log(action.payload)
+      state.users.selectedUser = action.payload;
     })
     .addCase(addUserAction.rejected, (state, action) => {
       state.status = 'failed';

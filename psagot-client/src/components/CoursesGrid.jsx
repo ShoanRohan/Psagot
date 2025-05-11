@@ -43,7 +43,7 @@ const CourseGrid = () => {
       { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'endDate', headerName: 'תאריך סיום', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'meetings', headerName: 'מס מפגשים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-      { field: 'students', headerName: 'מס למידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },  
+      { field: 'students', headerName: 'מס ,תלמידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },  
     {
       field: "isActive",
       headerName: "סטטוס",
