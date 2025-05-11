@@ -20,14 +20,14 @@ const MeetingLocatorBar = () => {
                 id="lecturer-select"
                 onChange={(e) => e.target.value}
             >
-                <option value="">בחר מרצה</option>
+                <option value=""></option>
                 {users?.filter(user => user.userTypeId === 4)
                         .map((lecturer) => (
-                            <option key={`lecturer-${lecturer.id}`} value={lecturer.id}>
+                            <option key={lecturer.id} value={lecturer.id}>
                                 {lecturer.name}
                             </option>
                         ))
-                }
+                      }
             </select>
         </div>
     );
@@ -35,3 +35,4 @@ const MeetingLocatorBar = () => {
 
 
 export default MeetingLocatorBar;
+

@@ -1,10 +1,11 @@
-import React from "react";
+import React from "react";      
 import Section from "../components/Section";
 import { Box } from "@mui/material";
 import AddMeeting from "./AddMeeting";
 import MeetingButton from "./MeetingButton";
 import MeetingLocatorBar from "./MeetingLocatorBar";
 import Sidebar from "../components/Sidebar";
+import Footer from "../components/Footer";
 
 const Layout = () => {
     return (
@@ -14,7 +15,8 @@ const Layout = () => {
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             <MeetingButton />
             <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <Footer />
+           <footer />
+            
         </Box>
     );
 }
