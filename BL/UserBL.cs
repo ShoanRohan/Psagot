@@ -23,7 +23,7 @@ namespace BL
         {
             var userEntity = _mapper.Map<User>(userDTO);
 
-            //userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 
             if (addedUser == null) return (null, errorMessage);
@@ -75,13 +75,13 @@ namespace BL
             return (_mapper.Map<List<UserDTO>>(users), null);
         }
 
-        public async Task<(List<UserTableDTO> UsertableDto, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        public async Task<(List<UserTableDTO> UsertableDto, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
         {
-            var (users, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
-            if (users == null) return (null, errorMessage);
+            var (users, countUsers, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return (null, countUsers, errorMessage);
 
             var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
-            return (userDTOs, null);
+            return (userDTOs, countUsers, null);
         }
     }
 }

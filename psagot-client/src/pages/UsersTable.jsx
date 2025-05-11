@@ -1,59 +1,57 @@
 
-import { tableUsers } from "../utils/userUtil";
-import { Box, Button, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, MenuItem, FormControl, Select, FormHelperText} from '@mui/material';
+import { Box, Button, Typography, Paper, IconButton, MenuItem, FormControl, Select, TablePagination } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import { DeleteOutline, Route, Router, RouterSharp } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import DeleteOutline from "@mui/icons-material/DeleteOutline";
+import { useEffect } from "react";
 import '../styles/usersTable.css';
 import { Pagination } from '@mui/material';
-
+import { fetchUsersByPage } from "../features/user/userAction";
+import { useDispatch, useSelector } from "react-redux";
+import { setPageSize, setPageNumber } from '../features/user/userSlice';
+// import Editicone from '../assets/icons/Editicone.png';
+// import Deleteicone from '../assets/icons/Deleteicone.png';
 const UsersTable = () => {
-    const [users, setUsers] = useState([]);
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalUsers, setTotalUsers] = useState(0);
-    const [error, setError] = useState(null); // לטיפול בשגיאות
+    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
 
-    const handleChange = (event) => {
-        const value = Number(event.target.value); // עדכון ל-`event`
-        setPageSize(value); // עדכון `pageSize`
-        // setPage(value); // קריאה ל-`setPage`
-    };
+    const dispatch = useDispatch();
 
-    const handleChangepage = (event) => {
-        const value = Number(event.target.value); // עדכון ל-`event`
+    // const handleChange = (event) => {
+    //     const value = Number(event.target.value); // עדכון ל-`event`
+    //     setPageNumber(value); // עדכון `pageSize`
+    //     // setPage(value); // קריאה ל-`setPage`
+    // };
+
+    const handleChangePageSize = (event) => {
+        const size = Number(event.target.value); // עדכון ל-`event`
         // setPageSize(value); // עדכון `pageSize`
-        setPage(value); // קריאה ל-`setPage`
+        dispatch(setPageSize(size)); // קריאה ל-`setPage`
     };
 
-
-
-    // פונקציה לפיצול דפים
-    const getUserByPage = (users, page, pageSize) => {
-        const startIndex = (page - 1) * pageSize;
-        return users.slice(startIndex, startIndex + pageSize);
-    };
+    // // פונקציה לפיצול דפים
+    // const getUserByPageNum = (users, page, pageSize) => {
+    //     const startIndex = (page - 1) * pageSize;
+    //     return users.slice(startIndex, startIndex + pageSize);
+    // };
 
     // טוען את המשתמשים
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const usersData = await tableUsers(); // קבלת כל המשתמשים
-                const paginatedUsers = getUserByPage(usersData, page, pageSize); // חתוך את המידע לעמוד הנוכחי
-                setUsers(paginatedUsers);
-                setTotalUsers(usersData.length); // מספר כל המשתמשים
+                console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
+                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
+
             } catch (error) {
                 console.error("שגיאה בטעינת המשתמשים:", error);
-                setError("הייתה שגיאה בטעינת המשתמשים. אנא נסה שנית.");
             }
         };
         fetchUsers();
-    }, [page, pageSize]);
+    }, [pageNumber, pageSize, dispatch]);
 
     // שינוי דף
-    const handlePageChange = (newPage) => {
+    const handlePageNumberChange = (newPage) => {
         if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-            setPage(newPage);
+            dispatch(setPageNumber(newPage));
         }
     };
 
@@ -64,16 +62,16 @@ const UsersTable = () => {
     };
 
     return (
-        <div>
-            <Box sx={{ maxHeight:782,margin: "auto", paddingTop: 30,paddingRight:20,paddingBottom:10,paddingLeft:20 }}>
+        <Box>
+            <Box className="tablesize" >
                 <Typography variant="h4" component="h2">משתמשים</Typography>
-                {error && <div style={{ color: "red", marginBottom: 16 }}>{error}</div>}  {/* הצגת הודעת שגיאה אם יש */}
+                {error && <Box style={{ color: "red", marginBottom: 16 }}>{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
 
                 <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table sx={{ Width: 3000 ,height:682 }} aria-label="users table">
+                    <Table sx={{ Width: 3000, height: 682 }} aria-label="users table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className="tablecell" height={72}width={1442}>קוד משתמש</TableCell>
+                                <TableCell className="tablecell" height={72} width={1442}>קוד משתמש</TableCell>
                                 <TableCell className="tablecell">שם משתמש</TableCell>
                                 <TableCell className="tablecell">מייל</TableCell> {/* יישור הכותרת למרכז */}
                                 <TableCell className="tablecell">הרשאה</TableCell>
@@ -106,21 +104,30 @@ const UsersTable = () => {
                                             {user.isActive ? "פעיל" : "לא פעיל"}
                                         </Button>
                                     </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center' , height: '79px' }}>
+                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '79px' }}>
                                         <IconButton
                                             aria-label="delete"
                                             size="small"
                                             onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
                                         >
                                             <DeleteOutline fontSize="inherit" />
+                                            {/* <Deleteicone /> */}
                                         </IconButton>
                                         <IconButton
                                             aria-label="edit"
                                             size="small"
                                             onClick={() => alert(`עריכת משתמש ${user.userId}`)}
                                         >
+                                            {/* <Editicone /> */}
                                             <EditOutlinedIcon fontSize="inherit" />
                                         </IconButton>
+
+                                        {/* <Box
+            component="img"
+            src={myImage}
+            alt="Description of the image"
+            sx={{ width: '100%', height: 'auto' }} // You can customize styles using sx prop
+        /> */}
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -130,28 +137,31 @@ const UsersTable = () => {
 
                 {/* ניווט עמודים */}
                 <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
-    <Box sx={{ display: "flex", alignItems: "center" }}>
-        <label style={{ marginRight: 4 }}>מספר שורות:</label>
-        <FormControl sx={{ minWidth: 49, height: 26 }}>
-            <Select
-                value={pageSize}
-                onChange={handleChange}
-                displayEmpty
-            >
-                <MenuItem value={10}>10</MenuItem>
-                <MenuItem value={20}>20</MenuItem>
-                <MenuItem value={50}>50</MenuItem>
-            </Select>
-        </FormControl>
-    </Box>
-    <Pagination 
-        count={Math.ceil(totalUsers / pageSize)} 
-        page={page} 
-        onChange={handleChangepage} 
-    />
-</Box>
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <label style={{ marginRight: 4 }}>מספר שורות:</label>
+                        <FormControl sx={{ minWidth: '10px', height: '46px' }}>
+                            <Select
+                                value={pageSize}
+                                onChange={handleChangePageSize}
+                                displayEmpty
+                            >
+                                <MenuItem value={10}>10</MenuItem>
+                                <MenuItem value={20}>20</MenuItem>
+                                <MenuItem value={50}>50</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Box>
+                  
+                
+                    <Pagination
+                        count={Math.ceil(totalUsers / pageSize)}
+                        page={pageNumber}
+                        onChange={handlePageNumberChange}
+                        
+                    />
+                </Box>
             </Box>
-        </div>
+        </Box>
     );
 };
 

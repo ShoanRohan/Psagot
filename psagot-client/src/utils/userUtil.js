@@ -27,20 +27,19 @@ const getAllLecturersAndCoordinators = async ()=> {
     return response.data;
 };
 
-const tableUsers = async () =>{
-        const response = await api.get(`/User/GetUsersByPage?pageNumber=1&pageSize=10`);
-        return response.data;
-};
+// const tableUsers = async () =>{
+//         const response = await api.get(`/User/GetUsersByPage?pageNumber=1&pageSize=10`);
+//         return response.data;
+// };
 
-const getUserByPage = async (pageNumber, pageSize) => {
+const getUsersByPage = async (pageNumber, pageSize) => {
     const response = await api.get(`/User/GetUsersByPage?pageNumber=${pageNumber}&pageSize=${pageSize}`);
     return response.data;
 };
 
 
 
-
-export{getAllUsers, getUserById, addUser, updatedUser,getAllLecturersAndCoordinators,tableUsers,getUserByPage};
+export{getAllUsers, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getUsersByPage};
 
 
 

@@ -1,5 +1,4 @@
 ﻿using Entities.Contexts;
-using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -81,7 +80,7 @@ namespace DL
         {
             try
             {
-                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "רכזת")
                     .Include(user => user.UserType).ToListAsync();
                 return (users, null);
             }
@@ -91,7 +90,7 @@ namespace DL
             }
         }
 
-        public async Task<(List<User> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        public async Task<(List<User> Users,int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
         {
             try
             {
@@ -100,14 +99,14 @@ namespace DL
                     .Take(pageSize)  // הגבלת מספר השורות
                     .Include(user => user.UserType)
                     .ToListAsync();
-                return (users, null);
+
+                var countUsers = _context.Users.Count();
+                return (users, countUsers, null);
             }
             catch (Exception ex)
             {
-                return (null, ex.Message);
+                return (null,0, ex.Message);
             }
         }
     }
 }
-
-

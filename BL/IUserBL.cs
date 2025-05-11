@@ -15,7 +15,7 @@ namespace BL
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
         Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators();
-        Task<(List<UserTableDTO> UsertableDto, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
+        Task<(List<UserTableDTO> UsertableDto, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
     }
 }
 

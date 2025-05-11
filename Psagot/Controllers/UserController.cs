@@ -1,7 +1,5 @@
 ﻿using BL;
-using DL;
 using Entities.DTO;
-using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -108,10 +106,10 @@ namespace Psagot.Controllers
         [HttpGet("GetUsersByPage")]
         public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var (users, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
+            var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
             if (users == null) return BadRequest(errorMessage);
 
-            return Ok(users);
+            return Ok( new{users, countUsers });
         }
     }
 }

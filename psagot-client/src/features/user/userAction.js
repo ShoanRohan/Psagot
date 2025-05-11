@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators,tableUsers} from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators, getUsersByPage} from "../../utils/userUtil";
 
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
@@ -26,7 +26,8 @@ export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllL
     return data;
 });
 
-export const userTableAction =createAsyncThunk('user/userTableAction', async()=>{
-    const data = await tableUsers();
+export const fetchUsersByPage = createAsyncThunk('user/fetchUsersByPage', async({pageNumber, pageSize}) => {
+    console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
+    const data = await getUsersByPage(pageNumber, pageSize);
     return data;
 });

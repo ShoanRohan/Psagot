@@ -1,5 +1,4 @@
-﻿using Entities.DTO;
-using Entities.Models;
+﻿using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +15,6 @@ namespace DL
         Task<(User User, string ErrorMessage)> GetUserById(int id);
         Task<User> UserLoginAsync(string email, string password);
         Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
-        Task<(List<User> Users, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
+        Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
     }
 }
