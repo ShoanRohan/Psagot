@@ -40,8 +40,8 @@ namespace DL
                     query = query.Where(m => m.ScheduleForTopic.Topic.Name.Contains(subjectName));
 
                 
-                if (!string.IsNullOrEmpty(date) && DateTime.TryParse(date, out DateTime parsedDate))
-                    query = query.Where(m => m.me == parsedDate.Date);
+                if (!string.IsNullOrEmpty(date) && DateOnly.TryParse(date, out DateOnly parsedDate))
+                    query = query.Where(m => m.MeetingDate== parsedDate);
 
                 // סופרים כמה רשומות יש אחרי הסינון
                 int totalRecords = await query.CountAsync();

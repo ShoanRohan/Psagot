@@ -46,17 +46,7 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
-        public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
-        {
-            var (course, errorMessage) = await _courseDL.GetCourseById(id);
-            if (course == null) return (null, errorMessage);
-            var course = _mapper.Map<Course>(courseDTO);
-            var (updatedCourse, errorMessage) = await _courseDL.UpdateCourse(course);
-
-            if (updatedCourse == null) return (null, errorMessage);
-            return (_mapper.Map<CourseDTO>(updatedCourse), null);
-            return (_mapper.Map<CourseDTO>(course), null);
-        }
+      
 
 
         public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
