@@ -10,10 +10,6 @@ const Header = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           My App Psagot
         </Typography>
-        <Button color="inherit">Login</Button>
-        <Button color="inherit" onClick={() => {navigate('/Register')}}>Register</Button>
-        <Button color="inherit" onClick={() => {navigate('/CourseManagement')}}>Courses</Button>
-        <Button color="inherit" onClick={() => navigate('/login')}> 
           Login
         </Button>
       </Toolbar>
@@ -22,5 +18,3 @@ const Header = () => {
 };
 
 export default Header;
-
-
