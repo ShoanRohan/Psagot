@@ -3,6 +3,7 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Psagot.Controllers
 {
@@ -42,6 +43,16 @@ namespace Psagot.Controllers
             }
 
             return Ok(meeting);
+        }
+
+        [HttpGet("GetMeetings")]
+
+        public async Task<IActionResult> GetMeetings(string? UserName, string ?courseName, string ?subjectName, string? date, int page, int rows)
+        {
+            var (meetings,totalRecords, errorMessage) = await _meetingBL.GetMeetings( UserName, courseName,  subjectName, date,  page,rows);
+            if (meetings == null) return BadRequest(errorMessage);
+
+            return Ok( new { meetings, totalRecords });
         }
 
         [HttpGet("GetAllMeetings")]

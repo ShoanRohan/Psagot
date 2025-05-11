@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace BL
 {
+
     public class MeetingBL : IMeetingBL
     {
         private readonly IMeetingDL _meetingDL;
@@ -19,6 +20,16 @@ namespace BL
         {
             _meetingDL = meetingDL;
             _mapper = mapper;
+        }
+
+        public async Task<(IEnumerable<MeetingDTO> Meetings, int totalRecords, string ErrorMessage)> GetMeetings(
+        string UserName, string courseName, string subjectName, string date, int page, int rows)
+        {
+
+            var (meetings,totalRecords,  errorMessage) = await _meetingDL.GetMeetings(UserName,courseName, subjectName,date,page,  rows);
+            if (meetings == null) return (null,0, errorMessage);
+
+            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings),totalRecords, null);
         }
 
         public async Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO)
@@ -58,5 +69,7 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+
+       
     }
 }

@@ -26,6 +26,15 @@ namespace Psagot.Controllers
 
             return Ok(course);
         }
+
+        [HttpGet("GetAllCourses")]
+        public async Task<IActionResult> GetAllCourses()
+        {
+            var (courses, errorMessage) = await _courseBL.GetAllCourses();
+            if (courses == null) return BadRequest(errorMessage);
+
+            return Ok(courses);
+        }
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {

@@ -13,12 +13,55 @@ namespace DL
     {
         private readonly PsagotDbContext _context;
 
+
+
         public MeetingDL(PsagotDbContext context)
         {
             _context = context;
         }
 
-        public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
+        public async Task<(IEnumerable<Meeting> Meetings,int totalRecords, string ErrorMessage)> GetMeetings(
+          string UserName, string courseName, string subjectName, string date, int page, int rows)
+        {
+            try
+            {
+                var query = _context.Set<Meeting>().AsQueryable();
+
+                
+                if (!string.IsNullOrEmpty(UserName))
+                    query = query.Where(m => m.ScheduleForTopic.Topic.Teacher.Name.Contains(UserName));
+
+               
+                if (!string.IsNullOrEmpty(courseName))
+                    query = query.Where(m => m.ScheduleForTopic.Topic.Course.Name.Contains(courseName));
+
+                
+                if (!string.IsNullOrEmpty(subjectName))
+                    query = query.Where(m => m.ScheduleForTopic.Topic.Name.Contains(subjectName));
+
+                
+                if (!string.IsNullOrEmpty(date) && DateTime.TryParse(date, out DateTime parsedDate))
+                    query = query.Where(m => m.me == parsedDate.Date);
+
+                // סופרים כמה רשומות יש אחרי הסינון
+                int totalRecords = await query.CountAsync();
+
+                // מבצעים את הדפדוף לפי מספר עמוד ומספר שורות
+                var meetings = await query
+                    .Skip((page - 1) * rows)
+                    .Take(rows)
+                    .ToListAsync();
+
+                return (meetings, totalRecords, null);
+            }
+            catch (Exception ex)
+            {
+                return (null,0, $"Error fetching meetings: {ex.Message}");
+            }
+        }
+    
+
+public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
         {
             try
             {

@@ -18,10 +18,6 @@ namespace DL
         {
             _context = context;
         }
-<<<<<<< HEAD
-        public async Task<(Course Course, string ErrorMessage)> GetCourseById(int id)
-=======
-
         public async Task<(Course Course, string ErrorMessage)> GetCourseById(int id)
         {
             try
@@ -48,11 +44,11 @@ namespace DL
             }
         }
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
->>>>>>> mainJM
+
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(id);
+                var addcourse = await _context.Set<Course>().FindAsync(course);
                 return (course, null);
                 var addedCourse = await _context.Set<Course>().AddAsync(course);
                 await _context.SaveChangesAsync();
@@ -63,17 +59,9 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-<<<<<<< HEAD
+
         
-        public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
-        {
-            try
-            {
-                var addedCourse = await _context.Set<Course>().AddAsync(course);
-                return (course, null);
-                await _context.SaveChangesAsync();
-                return (addedCourse.Entity, null);
-=======
+    
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
@@ -81,16 +69,13 @@ namespace DL
                 _context.Set<Course>().Update(course);
                 await _context.SaveChangesAsync();
                 return (course, null);
->>>>>>> mainJM
+
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
             }
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> mainJM
     }
 }
