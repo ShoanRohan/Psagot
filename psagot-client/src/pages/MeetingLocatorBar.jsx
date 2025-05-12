@@ -20,7 +20,7 @@ const MeetingLocatorBar = () => {
         };
         fetchCourses();
     },[]);
-  
+    
     return(
         <div>
             <label htmlfor="course-select">בחר קורס:</label>
@@ -33,7 +33,7 @@ const MeetingLocatorBar = () => {
 {courses.map((course)=>(
     <option key={course.id}value={course.id}>
         {course.name}
-        </option>
+                            </option>
 ))}
             </select>
         </div>

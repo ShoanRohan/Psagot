@@ -37,7 +37,6 @@ namespace BL
             if (courses== null) return (null, errorMessage);
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
-
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);

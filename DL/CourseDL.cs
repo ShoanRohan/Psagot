@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class CourseDL:ICourseDL
+    public class CourseDL : ICourseDL
     {
         private readonly PsagotDbContext _context;
 

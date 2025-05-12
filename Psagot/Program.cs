@@ -1,8 +1,6 @@
 using BL;
 using DL;
 using Entities.Contexts;
-using Entities.DTO;
-using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Psagot
@@ -12,6 +10,7 @@ namespace Psagot
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             builder.Services.AddDbContext<PsagotDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
 

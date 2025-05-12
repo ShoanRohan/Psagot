@@ -2,7 +2,6 @@
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Psagot.Controllers
 {
@@ -41,14 +40,6 @@ namespace Psagot.Controllers
             var (addedCourse, errorMessage) = await _courseBL.AddCourse(courseDTO);
             if (addedCourse == null) return BadRequest(errorMessage);
             return Ok(addedCourse);
-        }
-        [HttpPut("UpdateCourse")]
-        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
-        {
-            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(courseDTO);
-            if (updatedCourse == null) return BadRequest(errorMessage);
-
-            return Ok(updatedCourse);
         }
 
     }

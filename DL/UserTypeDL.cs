@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Contexts;
-using Microsoft.EntityFrameworkCore;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace DL
 {
     public class UserTypeDL : IUserTypeDL

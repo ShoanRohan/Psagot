@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import {fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
 
 const initialState = {
     user: [],
@@ -13,6 +13,7 @@ const userSlice = createSlice({
     initialState,
     reducers:{
         setUser: (state, action) =>{
+            state.selectedUser = action.payload;
 
         }
     },
