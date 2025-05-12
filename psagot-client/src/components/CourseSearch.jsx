@@ -7,7 +7,7 @@ import { fetchCoordinators } from "../features/user/userAction";
 
 // סטייל לשדות בחירה
 const sharedStyles = {
-  width: "150px",
+  width: "100%",
   textAlign: "right",
   direction: "rtl",
   "& .MuiInputLabel-root": {
@@ -73,9 +73,10 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   return (
     <Box
       sx={{
-        width: "100%",
+        //width: "100%",
         margin: "auto",
         //position: "relative",
+        gap: 10,
         borderRadius: "4px",
         padding: "25px 24px",
         backgroundColor: "white",
