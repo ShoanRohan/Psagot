@@ -37,6 +37,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
   const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
+  
 
   useEffect(() => {
     dispatch(fetchCoordinators());
