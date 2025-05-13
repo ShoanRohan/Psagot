@@ -52,7 +52,15 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
   };
 
   return (
-    <Box sx={{ backgroundColor: '#FAFCFF', mt: 1, width: '100%' }}>
+    <Box
+      sx={{
+        backgroundColor: '#FAFCFF',
+        mt: 1,
+        width: '100%',
+        borderRadius: '4px',
+        overflow: 'hidden',
+      }}
+    >
       <TableContainer
         component={Paper}
         elevation={0}
@@ -62,10 +70,10 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
           boxShadow: 'none',
           p: 0,
           mx: 'auto',
-          borderRadius: '8px',
+          borderRadius: 0,
         }}
       >
-        <Table sx={{ width: '100%',borderRadius: '8px', tableLayout: 'auto' }} aria-label="courses table">
+        <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="courses table">
           <TableHead>
             <TableRow>
               {[
@@ -106,14 +114,14 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                         course?.statusName === 'פעיל'
                           ? '#DAF8E6'
                           : course?.statusName === 'ממתין'
-                          ? '#FEEBEB'
-                          : '#E5E7EB',
+                            ? '#FEEBEB'
+                            : '#E5E7EB',
                       color:
                         course?.statusName === 'פעיל'
                           ? '#1A8245'
                           : course?.statusName === 'ממתין'
-                          ? '#E10E0E'
-                          : '#494747',
+                            ? '#E10E0E'
+                            : '#494747',
                       borderRadius: '30px',
                       px: 2,
                       py: 0.5,
@@ -134,69 +142,80 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     sx={{ width: 20, height: 20, display: 'block', mt:"-4px" }}
   />
 </IconButton>
+                    >
+                      <img src={editSvg} alt="edit_icon" />
+                    </IconButton>
                   </Link>
                 </StyledTableCell>
               </StyledTableRow>
             ))}
           </TableBody>
         </Table>
-
-        {/* Pagination */}
-        <Box
-          sx={{
-            borderRadius: '8px',
-            bgcolor: 'white',
-            direction: 'ltr',
-            width: '100%',
-            mt: 2,
-            pb: 3, // קצת ריווח מלמטה
-          }}
-        >
-          <Grid container>
-            <Grid item xs={3}>
-              <Pagination
-                onChange={handlePageChange}
-                count={Math.ceil(totalCount / pageSize)}
-                page={currentPage}
-                sx={{
-                  ml: 3,
-                  '& .MuiPaginationItem-root': { fontSize: 12 },
-                }}
-              />
-            </Grid>
-            <Grid item xs={9} textAlign="right" margin="auto">
-              <Select
-                IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
-                displayEmpty
-                onChange={handleSelectChange}
-                value={selectSize}
-                sx={{
-                  height: '26px',
-                  width: '49px',
-                  borderRadius: '4px',
-                  borderWidth: '0.5px',
-                  borderColor: '#F0F1F3',
-                  p: '6px 10px',
-                  fontSize: '12px',
-                  mr: '15px',
-                }}
-              >
-                <MenuItem value={1}>1</MenuItem>
-                <MenuItem value={2}>2</MenuItem>
-                <MenuItem value={5}>5</MenuItem>
-              </Select>
-              <Typography
-                display="inline"
-                fontFamily="Rubik"
-                fontSize="14px"
-                sx={{ mr: 3 }}
-              >
-                :מספר שורות
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
       </TableContainer>
+
+      {/* Pagination Section */}
+      <Box
+        sx={{
+          px: 2,
+          py: 2,
+          width: '100%',
+          bgcolor: 'white',
+          direction: 'rtl',
+        }}
+      >
+        <Grid container alignItems="center" justifyContent="space-between">
+          <Grid item xs={6} display="flex" justifyContent="start" alignItems="center">
+            <Typography
+              display="inline"
+              fontFamily="Rubik"
+              fontSize="14px"
+              sx={{ ml: 1 }}
+            >
+              מספר שורות:
+            </Typography>
+            <Select
+  IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
+  displayEmpty
+  onChange={handleSelectChange}
+  value={selectSize}
+  sx={{
+    height: '26px',
+    width: '49px',
+    borderRadius: '4px',
+    borderWidth: '0.5px',
+    borderColor: '#F0F1F3',
+    pl: 0,
+    pr: 0,
+    fontSize: '12px',
+    ml: '8px',
+    textAlign: 'center',
+    '& .MuiSelect-select': {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  }}
+>
+  <MenuItem value={1} sx={{ justifyContent: 'center' }}>1</MenuItem>
+  <MenuItem value={2} sx={{ justifyContent: 'center' }}>2</MenuItem>
+  <MenuItem value={5} sx={{ justifyContent: 'center' }}>5</MenuItem>
+</Select>
+          </Grid>
+
+          <Grid item xs={6} display="flex" justifyContent="end">
+  <Pagination
+    onChange={handlePageChange}
+    count={Math.ceil(totalCount / pageSize)}
+    page={currentPage}
+    sx={{
+      direction: 'ltr',
+      ml: 2, // ריווח משמאל
+      '& .MuiPaginationItem-root': { fontSize: 12 },
+    }}
+  />
+</Grid>
+        </Grid>
+      </Box>
     </Box>
   );
 };
