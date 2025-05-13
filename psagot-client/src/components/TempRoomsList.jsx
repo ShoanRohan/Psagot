@@ -31,7 +31,7 @@ const TempRoomsList = () => {
 
   return (
     <Box mt={2}>
-      {displayRooms.map((room) => (
+      {displayRooms.map((room, i) => (
         <Paper key={room.id} style={{ margin: "10px 0", padding: 10 }}>
           <Typography variant="h6">{room.name}</Typography>
           <Typography>ציוד: {getRoomEquipment(room).join(", ")}</Typography>
