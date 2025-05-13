@@ -20,9 +20,10 @@ import * as Yup from "yup";
 import "../styles/AddUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
 
-const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
+
+const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit = false }) => {
   const { userTypes } = useSelector((state) => state.userType);
-  const IsEdit = user && user.userId ? true : false;
+  IsEdit = user && user.userId ? true : false;
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -161,8 +162,8 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave }) => {
           </Box>
         </DialogContent>
         <DialogActions className="modal-actions">
-          <Button  className="modal-button" variant="outlined" onClick={onClose}>ביטול</Button>
-          <Button  className="modal-button" variant="contained" color="primary" type="submit">שמור</Button>
+          <Button className="modal-button" variant="outlined" onClick={onClose}>ביטול</Button>
+          <Button className="modal-button" variant="contained" color="primary" type="submit">שמור</Button>
         </DialogActions>
       </Box>
     </Dialog>
