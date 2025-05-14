@@ -56,6 +56,25 @@ namespace Psagot.Controllers
 
                 return Ok(room);
             }
+            [HttpGet("GetRoomsScheduleByDate")]
+            public async Task<IActionResult> GetRoomScheduleByDate([FromQuery] DateTime date)
+            {
+                var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
+                if (schedule == null)
+                    return NotFound( errorMessage);
+
+                return Ok(schedule);
+            }
+            [HttpGet("GetAllRoomsBySearchWithPagination")]
+            public async Task<IActionResult> GetAllRoomsBySearchWithPagination(
+             [FromQuery] string? roomName, [FromQuery] bool mic, [FromQuery] bool projector, [FromQuery] bool computer, [FromQuery] int numOfSeats,
+             [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool searchStatus)
+            {
+                var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(roomName, mic, projector, computer, numOfSeats, pageNumber, pageSize, searchStatus);
+                if (rooms == null && totalCount == 0)
+                    return NotFound(errorMessage);
+                return Ok(new { rooms, totalCount });
+            }
         }
     }
     }
