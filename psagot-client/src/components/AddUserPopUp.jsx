@@ -20,7 +20,6 @@ import * as Yup from "yup";
 import "../styles/AddUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
 
-
 const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit = false }) => {
   const { userTypes } = useSelector((state) => state.userType);
   IsEdit = user && user.userId ? true : false;
@@ -33,11 +32,18 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
     phone: Yup.string()
       .matches(/^[0-9]{10}$/, "מספר טלפון חייב להכיל 10 ספרות")
       .required("שדה חובה"),
-    password: Yup.string()
-      .min(6, "הסיסמה חייבת להכיל לפחות 6 תווים")
-      .matches(/[A-Z]/, "הסיסמה חייבת לכלול לפחות אות גדולה אחת")
-      .matches(/[0-9]/, "הסיסמה חייבת לכלול לפחות מספר אחד")
-      .required("שדה חובה"),
+    ...(IsEdit
+      ? {}
+      : {
+          password: Yup.string()
+            .min(6, "הסיסמה חייבת להכיל לפחות 6 תווים")
+            .matches(/[A-Z]/, "הסיסמה חייבת לכלול לפחות אות גדולה אחת")
+            .matches(/[0-9]/, "הסיסמה חייבת לכלול לפחות מספר אחד")
+            .required("שדה חובה"),
+          confirmPassword: Yup.string()
+            .oneOf([Yup.ref("password"), null], "הסיסמאות אינן תואמות")
+            .required("יש לאמת את הסיסמה"),
+        }),
     status: Yup.string().required("שדה חובה"),
     permission: Yup.string().required("שדה חובה"),
   });
@@ -48,7 +54,12 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
       name: user?.name ?? "",
       email: user?.email ?? "",
       phone: user?.phone ?? "",
-      password: user?.password ?? "",
+      ...(IsEdit
+        ? {}
+        : {
+            password: "",
+            confirmPassword: "",
+          }),
       isActive: user?.isActive ?? false,
       userTypeId: user?.userTypeId ?? -1,
     },
@@ -112,19 +123,36 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
             </Box>
 
             <Box className="row">
-              <TextField
-                className="custom-input"
-                label="סיסמה"
-                name="password"
-                type="password"
-                variant="standard"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.password && Boolean(formik.errors.password)}
-                helperText={formik.touched.password && formik.errors.password}
-                fullWidth
-              />
+              {!IsEdit && (
+                <>
+                  <TextField
+                    className="custom-input"
+                    label="סיסמה"
+                    name="password"
+                    type="password"
+                    variant="standard"
+                    value={formik.values.password}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.password && Boolean(formik.errors.password)}
+                    helperText={formik.touched.password && formik.errors.password}
+                    fullWidth
+                  />
+                  <TextField
+                    className="custom-input"
+                    label="אימות סיסמה"
+                    name="confirmPassword"
+                    type="password"
+                    variant="standard"
+                    value={formik.values.confirmPassword}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    fullWidth
+                  />
+                </>
+              )}
 
               <FormControl variant="standard" fullWidth className="custom-input">
                 <InputLabel>הרשאה</InputLabel>
@@ -162,8 +190,12 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
           </Box>
         </DialogContent>
         <DialogActions className="modal-actions">
-          <Button className="modal-button" variant="outlined" onClick={onClose}>ביטול</Button>
-          <Button className="modal-button" variant="contained" color="primary" type="submit">שמור</Button>
+          <Button className="modal-button" variant="outlined" onClick={onClose}>
+            ביטול
+          </Button>
+          <Button className="modal-button" variant="contained" color="primary" type="submit">
+            שמור
+          </Button>
         </DialogActions>
       </Box>
     </Dialog>
