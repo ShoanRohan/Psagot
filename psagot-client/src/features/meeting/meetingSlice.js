@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById, fetchMeetingsByPage } from '../meeting/meetingActions';
 
 const initialState = {
   meetings: [],
   meeting: null,
-  status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+  status: 'idle', 
   error: null,
+  totalCount: 0, 
+
 };
 
 const meetingSlice = createSlice({
@@ -58,6 +60,19 @@ const meetingSlice = createSlice({
                 state.meeting = action.payload;
             })
             .addCase(fetchMeetingById.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchMeetingsByPage.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchMeetingsByPage.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.meetings = action.payload.meetings;
+                state.totalCount = action.payload.totalCount;
+                
+            })
+            .addCase(fetchMeetingsByPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             });

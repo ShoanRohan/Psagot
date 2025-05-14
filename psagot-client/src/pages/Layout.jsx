@@ -5,12 +5,13 @@ import { Box } from "@mui/material";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vh'}}>
-            <SideBar />
-            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <Section />
-            </Box>
+        <Box
+        sx={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden', }} >
+        <SideBar />
+        <Box sx={{display: 'flex',flexDirection: 'column',flexGrow: 1,overflow: 'auto',  }}>
+        <Section />
         </Box>
+    </Box>
     );
 }
 
