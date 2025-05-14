@@ -16,12 +16,42 @@ import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
 
 const menuItems = [
-  { path: "/", icon: <HomeIcon />, text: "מסך ראשי", exact: true },
-  { path: "/courses", icon: <PeopleIcon />, text: "קורסים", exact: true },
-  { path: "/meetings", icon: <EventIcon />, text: "מפגשים", exact: true },
-  { path: "/rooms", icon: <MeetingRoomIcon />, text: "חדרים", exact: true },
-  { path: "/calendar", icon: <CalendarMonthIcon />, text: "לוח שנה", exact: true },
-  { path: "/users", icon: <PersonIcon />, text: "משתמשים", exact: true }
+  {
+    path: "/",
+    icon: <HomeIcon />,
+    text: "מסך ראשי",
+    exact: true
+  },
+  {
+    path: "/courses",
+    icon: <PeopleIcon />,
+    text: "קורסים",
+    exact: true
+  },
+  {
+    path: "/meetings",
+    icon: <EventIcon />,
+    text: "מפגשים",
+    exact: true
+  },
+  {
+    path: "/rooms",
+    icon: <MeetingRoomIcon />,
+    text: "חדרים",
+    exact: true
+  },
+  {
+    path: "/calendar",
+    icon: <CalendarMonthIcon />,
+    text: "לוח שנה",
+    exact: true
+  },
+  {
+    path: "/users",
+    icon: <PersonIcon />,
+    text: "משתמשים",
+    exact: true
+  }
 ];
 
 const SideBar = () => {
