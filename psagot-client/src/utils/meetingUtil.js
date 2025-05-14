@@ -20,4 +20,32 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+// בקובץ meetingUtil.js בצד הקליינט
+const deleteMeetingById = async (meetingId) => {
+    try {
+      const response = await fetch(`/api/meetings/${meetingId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'שגיאה במחיקת המפגש');
+        } else {
+          throw new Error(`שגיאה במחיקת המפגש: ${response.status} ${response.statusText}`);
+        }
+      }
+  
+      return meetingId;
+    } catch (error) {
+      console.error('Error deleting meeting:', error);
+      throw error;
+    }
+  };
+  
+
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById,deleteMeetingById };

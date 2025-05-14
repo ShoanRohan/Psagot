@@ -1,28 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from './CustomTable';
-import { fetchAllMeetings, updateMeetingAction } from '../features/meeting/meetingActions';
-import { 
-  Chip, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  Button, 
-  TextField, 
-  IconButton, 
+import { fetchAllMeetings, updateMeetingAction, deleteMeetingAction } from '../features/meeting/meetingActions';
+import {
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  IconButton,
   Tooltip,
   CircularProgress,
-  Typography
+  Typography,
+  DialogContentText
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const MeetingTable = ({ onEdit, onDelete }) => {
+const MeetingTable = ({ onEdit }) => {
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
-  
+ 
   const [localMeetings, setLocalMeetings] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
@@ -30,6 +32,11 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   const [editedDescription, setEditedDescription] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // סטייטים לדיאלוג מחיקה
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [meetingToDelete, setMeetingToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -69,7 +76,6 @@ const MeetingTable = ({ onEdit, onDelete }) => {
         ...currentMeeting,
         description: editedDescription
       };
-
       dispatch(updateMeetingAction(updatedMeeting))
         .then(() => {
           // עדכון מקומי במקום שליחת fetchAllMeetings
@@ -77,13 +83,41 @@ const MeetingTable = ({ onEdit, onDelete }) => {
             m.meetingId === updatedMeeting.meetingId ? updatedMeeting : m
           );
           setLocalMeetings(updatedMeetings);
-
           setIsSaving(false);
           handleCloseDescriptionDialog();
         })
         .catch((error) => {
           console.error('Error updating description:', error);
           setIsSaving(false);
+        });
+    }
+  };
+
+  // פונקציות לטיפול במחיקה
+  const handleDeleteClick = (meeting) => {
+    setMeetingToDelete(meeting);
+    setOpenDeleteDialog(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    if (!isDeleting) {
+      setOpenDeleteDialog(false);
+      setMeetingToDelete(null);
+    }
+  };
+
+  const handleConfirmDelete = () => {
+    if (meetingToDelete) {
+      setIsDeleting(true);
+      dispatch(deleteMeetingAction(meetingToDelete.meetingId))
+        .then(() => {
+          // המחיקה מהסטייט המקומי תתבצע אוטומטית דרך הרדיוסר
+          setIsDeleting(false);
+          handleCloseDeleteDialog();
+        })
+        .catch((error) => {
+          console.error('Error deleting meeting:', error);
+          setIsDeleting(false);
         });
     }
   };
@@ -122,19 +156,19 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   const columnConfig = {
     'חלק מהמערכת?': {
       render: (row) => (
-        <Chip 
-          label={row.isPartOfSchedule ? 'כן' : 'לא'} 
-          color={row.isPartOfSchedule ? 'success' : 'default'} 
-          variant="outlined" 
+        <Chip
+          label={row.isPartOfSchedule ? 'כן' : 'לא'}
+          color={row.isPartOfSchedule ? 'success' : 'default'}
+          variant="outlined"
         />
       )
     },
     'האם השיבוץ תקין?': {
       render: (row) => (
-        <Chip 
-          label={row.isValid ? 'תקין' : 'שגוי'} 
-          color={row.isValid ? 'success' : 'error'} 
-          variant="outlined" 
+        <Chip
+          label={row.isValid ? 'תקין' : 'שגוי'}
+          color={row.isValid ? 'success' : 'error'}
+          variant="outlined"
         />
       )
     },
@@ -142,14 +176,14 @@ const MeetingTable = ({ onEdit, onDelete }) => {
       render: (row) => {
         if (row.description) {
           return (
-            <div 
+            <div
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '200px', cursor: 'pointer' }}
               onClick={() => handleOpenDescriptionDialog(row)}
             >
               <Tooltip title="לחץ לצפייה/עריכה">
-                <Typography 
-                  variant="body2" 
-                  sx={{ 
+                <Typography
+                  variant="body2"
+                  sx={{
                     textOverflow: 'ellipsis',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
@@ -170,8 +204,8 @@ const MeetingTable = ({ onEdit, onDelete }) => {
           return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Tooltip title="הוסף תיאור">
-                <IconButton 
-                  color="default" 
+                <IconButton
+                  color="default"
                   onClick={() => handleOpenDescriptionDialog(row)}
                   size="small"
                 >
@@ -182,6 +216,22 @@ const MeetingTable = ({ onEdit, onDelete }) => {
           );
         }
       }
+    },
+    // קונפיגורציה לעמודת מחיקה
+    'מחיקה': {
+      render: (row) => (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Tooltip title="מחק מפגש">
+            <IconButton
+              color="error"
+              onClick={() => handleDeleteClick(row)}
+              size="small"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
+      )
     }
   };
 
@@ -196,17 +246,17 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   return (
     <div>
       <h2>טבלת מפגשים</h2>
-      <CustomTable 
+      <CustomTable
         columns={columns}
         data={localMeetings}
         onEdit={onEdit}
-        onDelete={onDelete}
         columnConfig={columnConfig}
         keyMap={keyMap}
       />
-
-      <Dialog 
-        open={openDescriptionDialog} 
+      
+      {/* דיאלוג תיאור */}
+      <Dialog
+        open={openDescriptionDialog}
         onClose={handleCloseDescriptionDialog}
         maxWidth="md"
         fullWidth
@@ -235,10 +285,10 @@ const MeetingTable = ({ onEdit, onDelete }) => {
               disabled={isSaving}
             />
           ) : (
-            <div style={{ 
-              padding: '16px', 
-              minHeight: '100px', 
-              border: '1px solid #ddd', 
+            <div style={{
+              padding: '16px',
+              minHeight: '100px',
+              border: '1px solid #ddd',
               borderRadius: '4px',
               marginTop: '8px',
               whiteSpace: 'pre-wrap'
@@ -250,18 +300,18 @@ const MeetingTable = ({ onEdit, onDelete }) => {
         <DialogActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
           {isEditing ? (
             <>
-              <Button 
-                onClick={() => setIsEditing(false)} 
-                color="inherit" 
+              <Button
+                onClick={() => setIsEditing(false)}
+                color="inherit"
                 startIcon={<CloseIcon />}
                 disabled={isSaving}
               >
                 ביטול
               </Button>
-              <Button 
-                onClick={handleSaveDescription} 
-                color="primary" 
-                variant="contained" 
+              <Button
+                onClick={handleSaveDescription}
+                color="primary"
+                variant="contained"
                 startIcon={isSaving ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
                 disabled={isSaving}
               >
@@ -273,10 +323,10 @@ const MeetingTable = ({ onEdit, onDelete }) => {
               <Button onClick={handleCloseDescriptionDialog} color="inherit" disabled={isSaving}>
                 סגור
               </Button>
-              <Button 
-                onClick={handleEditDescription} 
-                color="primary" 
-                variant="contained" 
+              <Button
+                onClick={handleEditDescription}
+                color="primary"
+                variant="contained"
                 startIcon={<EditIcon />}
                 disabled={isSaving}
               >
@@ -286,8 +336,49 @@ const MeetingTable = ({ onEdit, onDelete }) => {
           )}
         </DialogActions>
       </Dialog>
+
+      {/* דיאלוג אישור מחיקה */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        dir="rtl"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"האם אתה בטוח שברצונך למחוק את המפגש?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            פעולה זו תמחק את המפגש לצמיתות ולא ניתן יהיה לשחזר אותו.
+            {meetingToDelete && (
+              <Typography variant="body2" sx={{ mt: 2, fontWeight: 'bold' }}>
+                מפגש: {meetingToDelete.meetingNumberForTopic} - {meetingToDelete.topicName}
+              </Typography>
+            )}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={handleCloseDeleteDialog} 
+            color="primary"
+            disabled={isDeleting}
+          >
+            ביטול
+          </Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            color="error" 
+            autoFocus
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={20} color="inherit" /> : <DeleteIcon />}
+          >
+            {isDeleting ? 'מוחק...' : 'מחק'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
 
-export default MeetingTable;
+export default MeetingTable;

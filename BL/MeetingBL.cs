@@ -58,5 +58,12 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        {
+            var (meeting, errorMessage) = await _meetingDL.DeleteMeeting(meetingId);
+            if (meeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(meeting), null);
+        }
     }
 }
