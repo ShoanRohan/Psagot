@@ -75,8 +75,8 @@ export default function CourseTopicGrid() {
 
 
     return (
-        <Box sx={{width: '100%', marginTop: '8px'}}>
-            <TableContainer component={Paper} sx={{ width: '100%', 
+        <Box sx={{width: '100%', marginTop: '8px',}}>
+            <TableContainer component={Paper} sx={{ width: '100%', borderRadius: '10px',
                p: "30px 20px 10px 20px" 
                 }}>
                 <Table>
@@ -132,11 +132,13 @@ export default function CourseTopicGrid() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
-                                        <img src={editSvg} alt='edit_icon' />
+                                    <IconButton sx={{ bgcolor: '#F4F4F4'}}>
+                                        <img src={editSvg} alt='edit_icon' style={{marginTop: '0px'}} />
                                     </IconButton>
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
-                                        <img src={deleteSvg} alt='delete_icon' />
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4'}}>
+                                        <img src={deleteSvg} alt='delete_icon' style={{marginTop: '0px'}} />
                                     </IconButton>
                                 </StyledTableCell>
                             </TableRow>
@@ -144,7 +146,7 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{  p: "30px 20px 10px 20px" , borderRadius: '8px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px auto' }}>
+            <Box component={Paper} sx={{  p: "30px 20px 10px 20px" , borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
                 <Grid2 container>
                     {/* עמודים */}
                     <Grid2 xs={3}>
@@ -178,7 +180,7 @@ export default function CourseTopicGrid() {
                             }}
                         >
                             <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={20}>20</MenuItem>
+                            <MenuItem value={2}>20</MenuItem>
                             <MenuItem value={50}>50</MenuItem>
                         </Select>
 
