@@ -26,12 +26,6 @@ const roomSlice = createSlice({
                 (speakers ? room.speakers : true) &&
                 (computers ? room.computers : true)
             );
-
-            // state.filteredRooms = state.rooms.filter(room =>
-            //     (roomName ? room.name.includes(roomName) : true) &&
-            //     (capacity ? room.capacity >= capacity : true) &&
-            //     (array.length > 0 ? array.includes(room.projector || room.speakers || room.computers) : true) 
-            // );
         },
         resetFilter: (state) => {
             state.filteredRooms = null;
