@@ -8,17 +8,15 @@ import UserManagement from '../pages/UserManagement';
 
 const AppRouter = () => {
     return (
-        
-        <Routes>  
-             <Route path='/' element={<Layout/>}>
-                <Route path='/home' element={<HomePage />} />  
-                <Route path='user' element={<UserManagement />}/>
-            </Route> 
-                
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
+        <Routes>
+            <Route path='/' element={<Layout />}>
+                <Route path='/' element={<LoginPage />} />
+                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/meetings' element={<span>page Meetings</span>} />
+                <Route path='/users' element={<UserManagement />} />
+                <Route path='/rooms' element={<span>page Rooms</span>} />
+                <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
-           
         </Routes>
     );
 };
