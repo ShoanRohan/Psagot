@@ -1,5 +1,5 @@
 
-import { Box, Button, Typography, Paper, IconButton, MenuItem, FormControl, Select, TablePagination } from '@mui/material';
+import { Box, Button, Typography, Paper, IconButton, MenuItem, FormControl, Select } from '@mui/material';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
@@ -60,6 +60,22 @@ const UsersTable = () => {
         console.log(`User ID: ${userId}, New Status: ${status}`);
         // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
     };
+
+//      useEffect(() => {
+//     const handleScroll = () => {
+//         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) { // Adjust the threshold as needed
+//             const nextPage = pageNumber + 1;
+//             if (nextPage <= Math.ceil(totalUsers / pageSize)) {
+//                 dispatch(setPageNumber(nextPage));
+//             }
+//         }
+//     };
+
+//     window.addEventListener('scroll', handleScroll);
+//     return () => {
+//         window.removeEventListener('scroll', handleScroll);
+//     };
+// }, [pageNumber, pageSize, totalUsers, dispatch]);
 
     return (
         <Box>

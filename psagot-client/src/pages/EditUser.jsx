@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
 import { getUserById, updatedUser } from "../utils/userUtil";
 import "../styles/editUser.css";
 
