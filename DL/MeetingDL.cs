@@ -1,6 +1,11 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 
 namespace DL
@@ -86,9 +91,6 @@ namespace DL
             }
         }
 
-
-
-
         public async Task<(IEnumerable<Meeting>, int)> GetMeetingsByPage(int page, int pageSize)
         {
             try
@@ -110,7 +112,5 @@ namespace DL
                 return (Enumerable.Empty<Meeting>(), 0);
             }
         }
-
-
     }
 }

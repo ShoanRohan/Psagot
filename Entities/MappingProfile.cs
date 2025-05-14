@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Entities.DTO;
 using Entities.Models;
-using System;
-
 
 public class MappingProfile : Profile
 {
