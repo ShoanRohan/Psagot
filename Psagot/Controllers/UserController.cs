@@ -71,6 +71,16 @@ namespace Psagot.Controllers
             return Ok(users);
         }
 
+        [HttpGet("GetCoordinators")]
+        public async Task<IActionResult> GetCoordinators()
+        {
+            var (coordinators, errorMessage) = await _userBL.GetCoordinators();
+            if (coordinators == null || !coordinators.Any())
+                return BadRequest(errorMessage);
+
+            return Ok(coordinators);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
@@ -93,6 +103,7 @@ namespace Psagot.Controllers
 
                 return StatusCode(500, "Internal server error");
             }
+
         }
 
         [HttpGet("GetAllCoordinators")]
