@@ -19,12 +19,10 @@ const getMeetingeById = async (id) => {
     const response = await api.get(`/Meeting/GetMeetingById/${id}`);
     return response.data;
 };
+
 const GetMeetingsByPage = async (page, pageSize) => {
-    const response = await api.get("/Meeting/GetMeetingsByPage", {
-        params: { page, pageSize }
-    });
+    const response = await api.get(`/Meeting/GetMeetingsByPage?page=${page}&pageSize=${pageSize}`);
     return response.data;
 };
 
-
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage};
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage };
