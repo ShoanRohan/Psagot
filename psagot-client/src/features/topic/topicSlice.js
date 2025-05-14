@@ -17,7 +17,14 @@ const topicSlice = createSlice({
         //write functions here - to save data to redux
         setTopic: (state, action) => {
             // state.topic = action.payload;
-        }
+        },
+        setFilterTopic: (state, action)=> {
+         const { topicName, teacherName, statusName} = action.payload; 
+            state.filtersTopics = state.topics.filter(course => {
+           return   ( !topicName || course.name.includes(topicName)) // התאמה לשם הנושא
+            && ( !teacherName || course.teacherName.includes(teacherName))// התאמה לשם המרצה
+             && ( !statusName || course.status === statusName) // התאמה לסטטוס
+              })}
     },
     extraReducers: (builder) => {
         builder
@@ -94,6 +101,6 @@ const topicSlice = createSlice({
 });
 
 export const selectFilteredTopics = state => state.topic.filtersTopics;
-export const { setTopic } = topicSlice.actions;
+export const { setTopic,setFilterTopic } = topicSlice.actions;
 export default topicSlice.reducer;
 

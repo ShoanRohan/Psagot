@@ -39,9 +39,10 @@ namespace DL
             {
                 var topics = await _context.Topics
                            .Include(t => t.Teacher)
+                           .Include(s => s.Status)
                            .Where(t => t.CourseId == courseId)
                            .ToListAsync();
-
+                    
                 return (topics, null);
             }
             catch (Exception ex)

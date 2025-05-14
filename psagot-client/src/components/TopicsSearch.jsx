@@ -12,6 +12,7 @@ import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
+import { setFilterTopic } from "../features/topic/topicSlice";
 
 const sharedStyles = {
   width: "150px",
@@ -46,16 +47,22 @@ const TopicsSearch = ({ id }) => {
 
   const initialState = {
     topicName: "",
-    lecturerName: "",
+    teacherName: "",
+    statusName:"",
   };
-
+ 
   const [filters, setFilters] = useState(initialState);
-
+  const [activeButton, setActiveButton] = useState(true);
   useEffect(() => {
     if (status === "idle" && id) {
       dispatch(fetchAllTopicForCourseByCourseId(id));
     }
   }, [status, dispatch, id]);
+
+  const handleFilterData =()=>{
+    dispatch(setFilterTopic(filters))
+    setActiveButton(true)
+  }
 
   return (
     <Box
@@ -86,9 +93,10 @@ const TopicsSearch = ({ id }) => {
           <InputLabel>נושא</InputLabel>
           <Select
             value={filters.topicName}
-            onChange={(e) =>
-              setFilters({ ...filters, topicName: e.target.value })
-            }
+            onChange={(e) =>{
+              setFilters({ ...filters, topicName: e.target.value });
+              setActiveButton (false);
+            }}
             sx={sharedStyles}
           >
             {topics?.map((topic) => (
@@ -102,15 +110,16 @@ const TopicsSearch = ({ id }) => {
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>שם מרצה</InputLabel>
           <Select
-            value={filters.lecturerName}
-            onChange={(e) =>
-              setFilters({ ...filters, lecturerName: e.target.value })
-            }
+            value={filters.teacherName}
+            onChange={(e) =>{
+              setFilters({ ...filters, teacherName: e.target.value })
+              setActiveButton (false);
+            }}
             sx={sharedStyles}
           >
-            {lecturers?.map((lecturer) => (
-              <MenuItem key={lecturer.id} value={lecturer.name}>
-                {lecturer.name}
+            {topics?.map((topic) => (
+              <MenuItem key={topic.id} value={topic.teacherName}>
+                {topic.teacherName}
               </MenuItem>
             ))}
           </Select>
@@ -118,15 +127,16 @@ const TopicsSearch = ({ id }) => {
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>סטאטוס</InputLabel>
           <Select
-            value={filters.lecturerName}
-            onChange={(e) =>
-              setFilters({ ...filters, lecturerName: e.target.value })
-            }
+            value={filters.statusName}
+            onChange={(e) =>{
+              setFilters({ ...filters, statusName: e.target.value })
+              setActiveButton (false);
+            }}
             sx={sharedStyles}
           >
-            {lecturers?.map((lecturer) => (
-              <MenuItem key={lecturer.id} value={lecturer.name}>
-                {lecturer.name}
+            {topics?.map((topic) => (
+              <MenuItem key={topic.id} value={topic.status}>
+                {topic.status}
               </MenuItem>
             ))}
           </Select>
@@ -140,7 +150,11 @@ const TopicsSearch = ({ id }) => {
           sx={buttonStyles}
           // startIcon={<FilterAltOffOutlinedIcon sx={{ marginLeft: 1 }}/>}
           // startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
-          onClick={() => setFilters(initialState)}
+          onClick={() => {setFilters(initialState)
+            dispatch(setFilterTopic(initialState));
+            setActiveButton (true)
+           
+          }}
         >
           ניקוי
         </Button>
@@ -150,7 +164,10 @@ const TopicsSearch = ({ id }) => {
           variant="contained"
           sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
           startIcon={<SearchIcon sx={{ marginLeft: 1 }}/>}
-          disabled={true} // הכפתור מושבת
+          disabled={activeButton} // הכפתור מושבת
+         onClick={()=>{
+          handleFilterData();
+         }}
         >
           חיפוש
         </Button>
