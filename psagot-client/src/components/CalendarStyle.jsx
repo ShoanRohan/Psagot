@@ -15,14 +15,12 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   // maxHeight:"85vh",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
-  backgroundColor: "red",
   boxSizing: "border-box",
   padding: "10px",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
   "& .fc": {
-
     width: "100%",
     height: "100%",
     backgroundColor: "#FFFFFF",

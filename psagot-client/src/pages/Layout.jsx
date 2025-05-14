@@ -8,9 +8,7 @@ const Layout = () => {
     return (
         <Box sx={{ display: 'flex', width: '100vw', height: '100vh' }}>
             <Box className="sideBarStyle"><SideBar/></Box>
-            {/* <Box className="mainContentStyle"><Section/></Box> */}
-            <Box className="mainContentStyle"><Outlet/></Box>
-
+            <Box className="mainContentStyle"><Section/></Box>
         </Box>
     );
 }

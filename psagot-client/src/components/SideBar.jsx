@@ -28,8 +28,6 @@ const SideBar = () => {
   const { selectedUser } = useSelector((state) => state.user);
 
   return (
-    // <Stack direction="column" spacing={0} className='sydeBarStyle'>
-    //   <Stack direction="column" spacing={0} className='mainContentStyle'>
     <Stack direction="column" spacing={0}>
       <Stack direction="column" spacing={0}>
         <img src="/assets/logo_psagot.png" alt="Logo" className="sidebar-logo" />
