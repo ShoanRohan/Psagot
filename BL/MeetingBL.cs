@@ -75,7 +75,6 @@ namespace BL
             }
         }
 
-
         public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount)> GetMeetingsByPage(int page, int pageSize)
         {
             var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
@@ -85,7 +84,5 @@ namespace BL
            
             return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount);
         }
-
-
     }
 }

@@ -15,6 +15,5 @@ namespace DL
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meetings, string ErrorMessage)> GetMeetingsByRange(DateOnly startDate, DateOnly endDate);
         Task<(IEnumerable<Meeting>, int)> GetMeetingsByPage(int page, int pageSize);
-
     }
 }

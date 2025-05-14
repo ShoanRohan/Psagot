@@ -2,6 +2,7 @@
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 
 namespace Psagot.Controllers
@@ -52,7 +53,6 @@ namespace Psagot.Controllers
 
             return Ok(meetings);
         }
-     
 
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
@@ -76,16 +76,11 @@ namespace Psagot.Controllers
             return Ok(events);
         }
 
-
         [HttpGet("GetMeetingsByPage")]
         public async Task<IActionResult> GetMeetingsByPage([FromQuery] int page, [FromQuery] int pageSize)
         {
-            Console.WriteLine($"Received page: {page}, pageSize: {pageSize}");
-
             var (meetings, totalCount) = await _meetingBL.GetMeetingsByPage(page, pageSize);
             return Ok(new{Meetings = meetings, TotalCount = totalCount });
         }
-
-
     }
 }
