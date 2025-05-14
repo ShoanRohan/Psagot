@@ -1,8 +1,10 @@
-.Stack1 {
+
+.sideBarStyle{
   background-color: #1A237E;
-  width: 240px;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
+  width: 145px;
+  height: 100vh;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
   padding: 16px;
   color: white;
   display: flex;
@@ -10,17 +12,17 @@
   justify-content: space-between;
 }
 
-.logo {
+.mainContentStyle{
+  flex-grow: 1;   
+  height: 100vh;
+  padding: 16px;  
+ }
+
+.sidebar-logo {
   width: 80%;
   max-height: 60px;
   object-fit: contain;
-  margin-top: 100px; 
-}
-
-.Stack2 {
-  text-decoration: none;
-  width: 100%;
-  margin-bottom: 10px; 
+  margin-top: 50px; 
 }
 
 .navItems{

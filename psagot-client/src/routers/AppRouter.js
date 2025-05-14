@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
-import MeetingsTable from '../components/MeetingsTable';
 
 const AppRouter = () => {
     return (
@@ -15,6 +14,8 @@ const AppRouter = () => {
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
+                <Route path="/roomsHeader" element={<RoomsHeader/>} />
             </Route>
         </Routes>
     );
