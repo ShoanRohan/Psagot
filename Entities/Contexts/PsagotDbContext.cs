@@ -104,13 +104,7 @@ public partial class PsagotDbContext : DbContext
                 .HasConstraintName("FK__ScheduleF__DayId__5BE2A6F2");
 
             entity.HasOne(d => d.Topic).WithMany(p => p.ScheduleForTopics)
-                .HasForeignKey(d => d.TopicId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ScheduleF__Topic__5AEE82B9");
-        });
-
-        modelBuilder.Entity<Topic>(entity =>
-        {
+                .HasForeignKey(d => d.TopicId)`
             entity.HasKey(e => e.TopicId).HasName("PK__Topics__022E0F5D0BC688FF");
 
             entity.Property(e => e.Name).HasMaxLength(50);

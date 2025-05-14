@@ -19,6 +19,9 @@ namespace Psagot
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
             builder.Services.AddScoped<IDaysForCourseDL,DaysForCourseDL>();
             builder.Services.AddScoped<IDaysForCourseBL, DaysForCourseBL>();
+            builder.Services.AddScoped<IMeetingDL, MeetingDL>();
+            builder.Services.AddScoped<IMeetingBL, MeetingBL>();
+
 
             builder.Services.AddControllers();
             builder.Services.AddCors();

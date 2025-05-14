@@ -28,4 +28,6 @@ public partial class Meeting
     public virtual Room Room { get; set; } = null!;
 
     public virtual ScheduleForTopic? ScheduleForTopic { get; set; }
+
+    public string? Notes { get; set; }
 }
