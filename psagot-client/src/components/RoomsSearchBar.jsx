@@ -17,38 +17,35 @@ import "../styles/RoomsSearchBar.css";
 const myEequipment = ["מקרן", "רמקולים", "מחשבים"]
 
 const RoomsSearchBar = () => {
-  const [roomName, setRoomName] = useState("");
-  const [equipment, setEquipment] = useState([]);
-  const [capacity, setCapacity] = useState();
+  const roomSearchEmpty = {
+    roomName: "",
+    equipment: [],
+    capacity: 0
+  };
   const [capacityError, setCapacityError] = useState("");
-  //האם מיותר?
-  const [roomSearch, setRoomeSearch] = useState();
+  const [roomSearch, setRoomeSearch] = useState(roomSearchEmpty);
+
   const dispatch = useDispatch();
   const validate = () => {
-    const isValid = !capacity || (!isNaN(capacity) && capacity > 0);
+    const isValid = !roomSearch?.capacity || (!isNaN(roomSearch?.capacity) && roomSearch?.capacity > 0);
     setCapacityError(isValid ? "" : "מספר המקומות חייב להיות מספר חיובי");
     return isValid;
   };
   const clean = () => {
-    setRoomName("");
-    setCapacity("");
-    setEquipment([]);
+    setRoomeSearch(roomSearchEmpty);
     dispatch(filterRooms({}));
   }
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
-    //האם מיותר?
     setRoomeSearch({ ...roomSearch, [name]: value });
-    if (name === "roomName") setRoomName(value);
   }
   const findRooms = () => {
     if (!validate()) return;
-    const projector = equipment.includes("מקרן");
-    const speakers = equipment.includes("רמקולים");
-    const computers = equipment.includes("מחשבים");
+    const projector = roomSearch.equipment.includes("מקרן");
+    const speakers = roomSearch.equipment.includes("רמקולים");
+    const computers = roomSearch.equipment.includes("מחשבים");
     dispatch(filterRooms({
-      roomName,
-      capacity,
+      ...roomSearch,
       projector,
       speakers,
       computers,
@@ -61,8 +58,8 @@ const RoomsSearchBar = () => {
           variant="outlined"
           size="small"
           className="textField"
-          value={roomName}
           name="roomName"
+          value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
         />
         <FormControl size="small" className="textField">
@@ -70,14 +67,14 @@ const RoomsSearchBar = () => {
           <Select
             labelId="equipment-label"
             multiple
-            value={equipment}
             name="equipment"
-            onChange={(e) => { setEquipment(e.target.value); }}
+            value={roomSearch?.equipment}
+            onChange={handleChangeRoomSearch}
             renderValue={(selected) => selected.join(', ')}
           >
             {myEequipment.map((item) => (
               <MenuItem key={item} value={item}>
-                <Checkbox checked={equipment.indexOf(item) > -1} />
+                <Checkbox checked={roomSearch?.equipment.indexOf(item) > -1} />
                 <ListItemText primary={item} />
               </MenuItem>
             ))}
@@ -89,8 +86,9 @@ const RoomsSearchBar = () => {
           size="small"
           type="number"
           className="textField"
-          value={capacity}
-          onChange={(e) => { setCapacity(e.target.value); }}
+          name="capacity"
+          value={roomSearch?.capacity}
+          onChange={handleChangeRoomSearch}
           error={!!capacityError}
           helperText={capacityError}
         />
@@ -98,7 +96,7 @@ const RoomsSearchBar = () => {
           variant="contained"
           color="primary"
           startIcon={<SearchIcon />}
-          disabled={!capacity?.length && !roomName?.length && !equipment?.length}
+          disabled={!roomSearch?.capacity?.length && !roomSearch?.roomName?.length && !roomSearch?.equipment?.length}
           onClick={() => findRooms()}
         >
           חיפוש
