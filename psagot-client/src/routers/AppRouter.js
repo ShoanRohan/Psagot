@@ -11,20 +11,14 @@ import RoomSchedule from '../components/RoomsScheduleGrid';
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' element={<Layout/>}> 
-                {/* <Route path='/' element={<RoomsPage/>}/> */}
-                {/* <Route path='/' element={<RoomSchedule/>}/> */}
-                <Route path='/' element={<RoomsScheduleSearch/>}/>
-            </Route> 
-         
-             <Route path='/home' element={<Layout/>}>
-                <Route index element={<HomePage/>}/>        
-            </Route> 
-                
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
+            <Route path='/' element={<Layout />}>
+                <Route path='/' element={<LoginPage />} />
+                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/meetings' element={<span>page Meetings</span>} />
+                <Route path='/users' element={<UserManagement />} />
+                <Route path='/rooms' element={<span>page Rooms</span>} />
+                <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
-           
         </Routes>
     );
 };
