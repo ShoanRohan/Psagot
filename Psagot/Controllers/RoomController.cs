@@ -61,7 +61,7 @@ namespace Psagot.Controllers
             {
                 var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
                 if (schedule == null)
-                    return NotFound( errorMessage);
+                    return NotFound(errorMessage);
 
                 return Ok(schedule);
             }
@@ -77,5 +77,5 @@ namespace Psagot.Controllers
             }
         }
     }
-    }
+}
 
