@@ -1,26 +1,32 @@
 import React from 'react';
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 import IconButton from '@mui/material/IconButton';
-import Box from '@mui/material/Box';
-import { saveAs } from 'file-saver'; // תיקון שגיאת כתיב מ־file-server ל־file-saver
 import '../styles/ExportToExcel.css';
-import xlsIcon from '../assets/icons/xls-icon.png'
+import xlsIcon from '../assets/icons/xls-icon.png';
 
-const ExportToExcel = ({ data, fileName = "data.xlsx", sheetName = "Sheet1" }) => {
+const ExportToExcel = ({ data, fileName = "document.xlsx", sheetName = "Sheet1" }) => {
   const handleExport = () => {
-    if (!data || data.length === 0) {
-      alert("אין נתונים לייצוא");
-      return;
-    }
+    if (!data || data.length === 0) return;
 
     const worksheet = XLSX.utils.json_to_sheet(data);
+
+  
     const workbook = XLSX.utils.book_new();
 
+  
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    workbook.Workbook = {
+      Views: [
+        {
+          RTL: true, 
+        },
+      ],
+    };
 
     const excelBuffer = XLSX.write(workbook, {
       bookType: 'xlsx',
-      type: 'array',
+      type: 'array'
     });
 
     const blob = new Blob([excelBuffer], {
@@ -31,15 +37,10 @@ const ExportToExcel = ({ data, fileName = "data.xlsx", sheetName = "Sheet1" }) =
   };
 
   return (
-    <IconButton disableRipple
-          onClick={handleExport}
-          className='xlsxButton' 
-    >
-          <img src={xlsIcon} alt="Excel Icon"    />
-          {/* width={44} height={44} */}
+    <IconButton disableRipple onClick={handleExport} className='xlsxButton'>
+      <img src={xlsIcon} alt="Excel Icon" />
     </IconButton>
-
-  )
+  );
 };
 
 export default ExportToExcel;
