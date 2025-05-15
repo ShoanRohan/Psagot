@@ -1,17 +1,18 @@
 import { Box, Button, Typography } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import UserGrid from '../components/UserGrid';
 import { useSelector } from 'react-redux';
 import circlePlus from '../assets/icons/circle-plus.png';
 import exptExsel from '../assets/icons/image 6.png';
+import AddUser from '../components/AddUser';
 
 
 const UserManagement = () => {
 
   const users = useSelector((state) => state.user.user); // קבלת הנתונים מה-Redux
-
+  const [open,setOpen]=useState(false);
   // פונקציה לייצוא הנתונים לאקסל
   const exportToExcel = () => {
     if (!users || users.length === 0) {
@@ -107,6 +108,7 @@ const UserManagement = () => {
           minWidth:'9.5rem',
           minHeight: 'rem'
         }}
+        onClick={()=>setOpen(true)}
       >
         <img
           src={circlePlus}
@@ -123,10 +125,13 @@ const UserManagement = () => {
             color: '#FFFFFF',
             textTransform: 'capitalize',
           }}
+
+
         >
           הוספת משתמש
         </Typography>
       </Button>
+      <AddUser open={open} onClose={() => setOpen(false)} />
 
       <UserGrid />
     </Box>
