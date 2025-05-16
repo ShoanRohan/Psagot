@@ -26,7 +26,6 @@ const HomePage = () => {
         <Container style={{ textAlign: 'center', padding: 10 }}>
             <Typography variant="h5">😀hello psagot project😀</Typography>
             <Button onClick={handleClickButton}>Example of a function structure</Button>
-            <RoomsScheduleGrid/>  
         </Container>
     );
 }

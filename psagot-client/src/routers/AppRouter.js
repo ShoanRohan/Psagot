@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
-import RoomsScheduleGrid from '../components/RoomsScheduleGrid'
+import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 
 const AppRouter = () => {
     return (
@@ -13,13 +13,14 @@ const AppRouter = () => {
              <Route path='/home' element={<Layout/>}>
                 <Route index element={<HomePage/>}/> 
             </Route>
-            {/* <Route path='/rooms' element={<Layout/>}>
-                <Route index element={<RoomsScheduleGrid/>}/> 
-            </Route>    */}
+            <Route path='/rooms' element={<Layout/>}>
+                <Route index element={<RoomsScheduleSearch/>}/> 
+            </Route>   
             <Route path='/' element={<LoginPage/>}> 
                 <Route path='login' element={<Login/>}/> 
             </Route>
         </Routes>
+       
     );
 };
 
