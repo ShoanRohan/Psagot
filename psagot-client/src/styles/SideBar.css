@@ -22,18 +22,13 @@ body {
 }
 
 .mainContentStyle {
-  /* flex-grow: 1;    */
+  box-sizing: border-box;
   width: 88%;
-
-  height: 100vh !important;
-  /* padding: 16px;   */
+  height: 100vh;
   padding: 16px;
   background-color: yellow;
-
-  overflow-y: auto;
-  /* אפשר גלילה אנכית כאן */
-  height: 100vh;
-  /* גובה מלא */
+  overflow: hidden;
+  display: block;
 }
 
 .sidebar-logo {
@@ -46,9 +41,6 @@ body {
 .navItems {
   padding-top: 25%;
 }
-
-
-
 
 .styledButton {
   justify-content: flex-start !important;

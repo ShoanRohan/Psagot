@@ -9,6 +9,9 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   },
 
   overflow: "hidden",
+height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה הכפתורים העליונים
+  overflow: "auto", // כדי לאפשר גלילה פנימית אם צריך
+
 
   width: "100%",
   // height: "100vh",
