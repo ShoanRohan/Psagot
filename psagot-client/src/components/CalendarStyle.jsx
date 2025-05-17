@@ -17,6 +17,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   fontFamily: "Rubik, sans-serif",
   boxSizing: "border-box",
   padding: "10px",
+  backgroundColor:"green",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
