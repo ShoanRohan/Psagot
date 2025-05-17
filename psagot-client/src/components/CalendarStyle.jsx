@@ -1,4 +1,4 @@
-import { styled } from '@mui/system';
+import { maxHeight, maxWidth, styled } from '@mui/system';
 import Box from "@mui/material/Box";
 import "@fontsource/rubik";
 
@@ -10,17 +10,12 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
 
   overflow: "hidden",
 height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה הכפתורים העליונים
-  overflow: "auto", // כדי לאפשר גלילה פנימית אם צריך
-
-
   width: "100%",
-  // height: "100vh",
-  // maxHeight:"85vh",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
   boxSizing: "border-box",
-  padding: "10px",
-  backgroundColor:"green",
+  padding: "10px 65px",
+  // backgroundColor:"green",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
@@ -28,8 +23,9 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
     width: "100%",
     height: "100%",
     backgroundColor: "#FFFFFF",
+    // backgroundColor:"orange",
     borderRadius: "10px",
-    padding: "12px",
+    // padding: "12px",
     boxShadow: "0px 0px 4px 0px #D7E6FC",
     flexShrink: "1",
     boxSizing: "border-box",
@@ -40,11 +36,14 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
     border: "none !important",
     gridTemplateColumns: "repeat(7, 1fr)", // 7 עמודות - יום לכל תא
     gridAutoRows: "120px", // כל שורה תהיה בגובה אחיד
+    
     width: "100%", // מבטיח שהתאים לא יתפרסו
     display: "flex",
 
     // gridAutoRows: "20px !important", // כמו ה-minHeight של תא
     // gridAutoRows: "100px",
+        // backgroundColor:"purple",
+
   },
 
   //, יש בצד שמאל איזה מקלון שלא הצלחי להעיף ריבוע כללי מסגרת של כל הלוח
@@ -109,13 +108,13 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
 
   //שבוע- שורה
   "& .fc-daygrid-body tr td": {
-    paddingTop: "10px",
+    paddingTop: "5px",
   },
 
   // יש רווח שמאלי לכל יום בשבוע
   "& .fc-daygrid-day": {
     border: "none",
-    paddingLeft: "10px",
+    paddingLeft: "5px",
     overflow: "hidden",
   },
 
@@ -126,8 +125,9 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
 
   //עיצוב תא
   "& .fc-daygrid-day-frame": {
-    // minHeight: "142px !important",
-    minHeight: "30px !important",
+    maxHeight:"45px !important",
+    maxWidth:"150px !important",
+    // minHeight: "30px !important",
 
     border: "0.5px solid #C6C6C6", // גבול על כל התא
     borderRadius: "10px",
@@ -138,7 +138,7 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
     alignItems: "center",
     justifyContent: "space-between",
     boxSizing: "border-box",
-    padding: "4px",
+    // padding: "4px",
   },
 
   "& .fc-day-today": {//ובתצוגה שבועית כותרת התאריך בתצוגה חודשית התאריך של היום
@@ -222,7 +222,7 @@ const dayInWeekHeaderStyle = {
   textAlign: "center",
   fontSize: "16px",
   fontWeight: "600",
-  padding: "8px",
+  padding: "6px",
   backgroundColor: "#F8F9FC",
   width: "65px", // רוחב קבוע לכל כותרת יום
 };
@@ -234,7 +234,7 @@ const dayCellStyle = {
   alignItems: "center !important",
   flexWrap: "nowrap !important",
   width: "100% !important",
-  padding: "6px !important",
+  // padding: "6px !important",
   boxSizing: "border-box !important",
 };
 
@@ -270,7 +270,7 @@ const StyledEventBox = styled(Box, {
   backgroundColor: color || "#ffccf3",
   fontFamily: "Rubik",
   color: "black",
-  padding: "6px",
+  padding: "3px",
   borderRadius: "5px",
   borderRight: `3px solid ${borderColor || "#ff00b4"}`,
   textAlign: "center",

@@ -9,6 +9,7 @@ import { HDate, gematriya } from "@hebcal/core";
 import "@fontsource/rubik";
 import { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox } from './CalendarStyle';
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 
 const handleDayHeaderContent = (args) => {
@@ -85,9 +86,23 @@ const handleEventContent = (eventInfo) => {
 
 const Calendar = ({ currentDate, view, events }) => {
   const navigate = useNavigate();
+    const [aspectRatio, setAspectRatio] = useState(1.5); // ברירת מחדל
+
+     useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight - 112; // הגובה שהגדרת
+      setAspectRatio(width / height);
+    };
+
+    handleResize(); // חישוב ראשוני
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <CalendarStyle>
-      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden'}}>
+      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden' ,  height: "calc(100vh - 112px)",}}>
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -98,8 +113,11 @@ const Calendar = ({ currentDate, view, events }) => {
           initialDate={currentDate.format("YYYY-MM-DD")}
 
           // aspectRatio={1.5} // לדוגמה: גובה קטן יותר מרוחב
-          height="86vh" // חשוב לוודא שזה מוגדר
-          contentHeight="100%" // הגדרת גובה לתוכן
+          // height="86vh" // חשוב לוודא שזה מוגדר
+
+          // height="calc(100vh - 112px)"
+
+  height="100%" // מתפרש לגובה של המכולה (Box)
           // eventHeight={10} // גובה האירוע יהיה 30px
 
       
