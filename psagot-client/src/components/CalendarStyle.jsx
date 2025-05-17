@@ -15,7 +15,7 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
   fontFamily: "Rubik, sans-serif",
   boxSizing: "border-box",
   padding: "10px 65px",
-  // backgroundColor:"green",
+  backgroundColor:"green",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
@@ -170,21 +170,29 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
 
   "& .fc-timegrid-slot": {//שורות הטבלה
     borderColor: "#C6C6C6",
-    height: "40px",
+    height: "15px",
+        // height: "40px",
+
     width: "100% !important",
   },
 
   //עמודת השעות
   "& .fc-timegrid-slot-label": {
     width: "120px !important",
-    height: "40px !important",
+    height: "15px !important",
+        // height: "40px !important",
+
     borderBottom: "1px solid #C6C6C6 !important",
     borderLeft: "1px solid #ffffff !important",
     textAlign: "center !important",
     fontFamily: "Rubik, sans-serif",
     fontWeight: "500 !important",
-    fontSize: "14px !important",
-    lineHeight: "16.59px !important",
+    // fontSize: "14px !important",
+        fontSize: "10px !important",
+
+    // lineHeight: "16.59px !important",
+        lineHeight: "6.5px !important",
+
     color: "#393939 !important",
     paddingTop: "10px !important",
     paddingBottom: "10px !important",

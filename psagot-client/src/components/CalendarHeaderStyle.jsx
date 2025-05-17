@@ -14,7 +14,7 @@ const HeaderContainer = styled(Box)({
   flexWrap: "nowrap",
   overflow: "hidden",
   minWidth: 0,
-  // backgroundColor:"pink",
+  backgroundColor:"pink",
 });
 
 const Title = styled(Typography)({
