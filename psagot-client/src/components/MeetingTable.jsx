@@ -49,6 +49,14 @@ const MeetingTable = ({ onEdit }) => {
     }
   }, [status, dispatch, meetings]);
 
+  useEffect(() => {
+    if (!openDeleteDialog) {
+     dispatch(fetchAllMeetings());
+    }
+  }, [openDeleteDialog, dispatch]);
+
+
+
   const handleOpenDescriptionDialog = (meeting) => {
     setCurrentMeeting(meeting);
     setEditedDescription(meeting.description || '');

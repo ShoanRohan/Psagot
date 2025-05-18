@@ -20,32 +20,37 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-// בקובץ meetingUtil.js בצד הקליינט
 const deleteMeetingById = async (meetingId) => {
-    try {
-      const response = await fetch(`/api/meetings/${meetingId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+    const response = await api.delete(`/Meeting/DeleteMeeting/${meetingId}`);
+    return response.data;
+};
+
+// // בקובץ meetingUtil.js בצד הקליינט
+// const deleteMeetingById = async (meetingId) => {
+//     try {
+//       const response = await fetch(`/api/meetings/${meetingId}`, {
+//         method: 'DELETE',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//       });
   
-      if (!response.ok) {
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'שגיאה במחיקת המפגש');
-        } else {
-          throw new Error(`שגיאה במחיקת המפגש: ${response.status} ${response.statusText}`);
-        }
-      }
+//       if (!response.ok) {
+//         const contentType = response.headers.get('content-type');
+//         if (contentType && contentType.includes('application/json')) {
+//           const errorData = await response.json();
+//           throw new Error(errorData.message || 'שגיאה במחיקת המפגש');
+//         } else {
+//           throw new Error(`שגיאה במחיקת המפגש: ${response.status} ${response.statusText}`);
+//         }
+//       }
   
-      return meetingId;
-    } catch (error) {
-      console.error('Error deleting meeting:', error);
-      throw error;
-    }
-  };
+//       return meetingId;
+//     } catch (error) {
+//       console.error('Error deleting meeting:', error);
+//       throw error;
+//     }
+//   };
   
 
 export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById,deleteMeetingById };

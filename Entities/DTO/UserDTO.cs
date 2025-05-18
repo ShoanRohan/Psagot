@@ -20,7 +20,5 @@ public class UserDTO
 
     public string? Role { get; set; }
 
-        public virtual UserTypeDTO UserType { get; set; } = null!;
-
-    public virtual UserTypesDTO UserTypes { get; set; } = null!;
+    public virtual UserTypeDTO UserType { get; set; } = null!;
 }

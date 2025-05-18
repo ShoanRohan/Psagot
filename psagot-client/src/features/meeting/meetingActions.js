@@ -35,6 +35,6 @@ export const deleteMeetingAction = createAsyncThunk(
     "meeting/deleteMeetingAction",
     async (meetingId) => {
         const data = await deleteMeetingById(meetingId);
-        return meetingId; // מחזיר את ה-ID של המפגש שנמחק
+        return data; // מחזיר את ה-ID של המפגש שנמחק
     }
 );

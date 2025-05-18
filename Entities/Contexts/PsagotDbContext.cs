@@ -32,7 +32,7 @@ public partial class PsagotDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserTypes> UserTypes { get; set; }
+    public virtual DbSet<UserType> UserTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -178,13 +178,13 @@ public partial class PsagotDbContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(100);
             entity.Property(e => e.Phone).HasMaxLength(20);
 
-            entity.HasOne(d => d.UserTypes).WithMany(p => p.Users)
+            entity.HasOne(d => d.UserType).WithMany(p => p.Users)
                 .HasForeignKey(d => d.UserTypesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Users__UserTypeI__412EB0B6");
         });
 
-        modelBuilder.Entity<UserTypes>(entity =>
+        modelBuilder.Entity<UserType>(entity =>
         {
             entity.HasKey(e => e.UserTypeId).HasName("PK__UserType__40D2D816D2FDE33B");
 
