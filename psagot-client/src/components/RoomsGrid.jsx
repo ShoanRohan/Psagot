@@ -9,15 +9,13 @@ import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/Edit';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms } from '../features/room/roomActions';
-import { useEffect, useState } from 'react';
-import { tableCellClasses } from '@mui/material/TableCell'; 
+import { useEffect } from 'react';
+import { tableCellClasses } from '@mui/material/TableCell';
+import { setPageNumber, setPageSize } from '../features/room/roomSlice';
 
 export default function RoomsGrid() {
   const dispatch = useDispatch();
-  const { status, rooms } = useSelector((state) => state.room);
-
-  const [rowsPerPage, setRowsPerPage] = useState(50);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { status, roomsWithPagination, pageNumber, pageSize, totalCount } = useSelector((state) => state.room);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -25,13 +23,12 @@ export default function RoomsGrid() {
     }
   }, [status, dispatch]);
 
-  const handleRowsPerPageChange = (event) => {
-    setRowsPerPage(event.target.value);
-    setCurrentPage(1); // כל שינוי כמות שורות מחזיר לעמוד ראשון
+  const handlePageSizeChange = (event) => {
+    dispatch(setPageSize(event.target.value));
   };
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
+  const handlePageNumberChange = (event, value) => {
+    dispatch(setPageNumber(value));
   };
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -55,15 +52,18 @@ export default function RoomsGrid() {
     },
   }));
 
-  // חישוב חיתוך נתונים לפי פאגינציה
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = rooms.slice(indexOfFirstRow, indexOfLastRow);
-  const totalPages = Math.ceil(rooms.length / rowsPerPage);
-
   return (
-    <Box dir="rtl">
-      <TableContainer component={Paper}>
+    <Box
+      dir="rtl"
+      sx={{
+        mt: 4,         // שוליים מלמעלה (32px)
+        mx: 'auto',    // מרכז אופקית
+        mb: 4,         // שוליים מלמטה
+        maxWidth: 1200,// מגביל רוחב
+        px: 3          // padding פנימי ימין ושמאל (24px)
+      }}
+    >
+      <TableContainer component={Paper} sx={{ boxShadow: 3 }}>
         <Table sx={{ minWidth: 1000 }} aria-label="customized table">
           <TableHead>
             <TableRow>
@@ -75,7 +75,7 @@ export default function RoomsGrid() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {currentRows.map((row) => (
+            {roomsWithPagination.map((row) => (
               <StyledTableRow key={row.roomId}>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.roomId}</StyledTableCell>
@@ -113,12 +113,12 @@ export default function RoomsGrid() {
         <Box display="flex" alignItems="center">
           <Typography variant="body2" sx={{ ml: 1 }}>מספר שורות:</Typography>
           <Select
-            value={rowsPerPage}
-            onChange={handleRowsPerPageChange}
+            value={pageSize}
+            onChange={handlePageSizeChange}
             size="small"
             sx={{ width: 80 }}
           >
-            {[50, 100, 150, 200, 250, 300, 350, 400, 450, 500].map((num) => (
+            {[10, 20, 50].map((num) => (
               <MenuItem key={num} value={num}>{num}</MenuItem>
             ))}
           </Select>
@@ -126,9 +126,9 @@ export default function RoomsGrid() {
 
         {/* פאגינציה */}
         <Pagination
-          count={totalPages}
-          page={currentPage}
-          onChange={handlePageChange}
+          count={Math.ceil(totalCount / pageSize)}
+          page={pageNumber}
+          onChange={handlePageNumberChange}
           color="primary"
           variant="outlined"
           shape="rounded"

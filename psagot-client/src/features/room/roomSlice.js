@@ -19,14 +19,27 @@ const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        
         setRoom: (state, action) => {
-            
+            // פעולה לא בשימוש כרגע
         },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
+        },
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload;
+            const start = (state.pageNumber - 1) * state.pageSize;
+            const end = start + state.pageSize;
+            state.roomsWithPagination = state.rooms.slice(start, end);
+        },
+        setPageSize: (state, action) => {
+            state.pageSize = action.payload;
+            state.pageNumber = 1; // חזרה לעמוד ראשון
+            const start = 0;
+            const end = start + state.pageSize;
+            state.roomsWithPagination = state.rooms.slice(start, end);
         }
     },
+    
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
@@ -35,6 +48,8 @@ const roomSlice = createSlice({
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.rooms = action.payload;
+                state.totalCount = action.payload.length;
+                state.roomsWithPagination = state.rooms.slice(state.pageSize*(state.pageNumber-1),state.pageSize*state.pageNumber);
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.status = 'failed';
@@ -88,5 +103,6 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setRoom, setRoomSchedule, setPageNumber, setPageSize } = roomSlice.actions;
 export default roomSlice.reducer;
+

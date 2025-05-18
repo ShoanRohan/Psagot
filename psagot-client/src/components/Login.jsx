@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
-import { AppProvider } from '@toolpad/core/AppProvider';
+// import { AppProvider } from '@toolpad/core/AppProvider';
 import {
 	Box,
 	Button,
@@ -11,7 +11,7 @@ import {
 	InputAdornment,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import '@fontsource/rubik';
+// import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 
@@ -85,7 +85,7 @@ export default function CredentialsSignInPage() {
 	};
 
 	return (
-		<AppProvider theme={theme}>
+		<div theme={theme}>
 			{/* BOX חיצוני שמכיל את כל הקומפוננטה */}
 			<Box
 				sx={{
@@ -306,6 +306,6 @@ export default function CredentialsSignInPage() {
 					</Box>
 				</Box>
 			</Box>
-		</AppProvider>
+		</div>
 	);
 }
