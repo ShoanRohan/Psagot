@@ -62,6 +62,8 @@ const courseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+
+
             .addCase(addCourseAction.fulfilled, (state, action) => {
                 state.courses.push(action.payload);
             })
@@ -71,6 +73,10 @@ const courseSlice = createSlice({
                     state.courses[index] = action.payload;
                 }
             });
+
+         
+
+
     },
 });
 
