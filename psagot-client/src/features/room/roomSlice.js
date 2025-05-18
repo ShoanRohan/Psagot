@@ -20,7 +20,6 @@ const roomSlice = createSlice({
             state.viewMode = action.payload;
         },
         
-    },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
         },
