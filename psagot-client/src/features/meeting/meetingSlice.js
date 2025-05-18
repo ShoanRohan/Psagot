@@ -1,11 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById,  fetchMeetings } from '../meeting/meetingActions';
 
 const initialState = {
   meetings: [],
   meeting: null,
   status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
   error: null,
+  totalRecords: 0, // Add totalRecords to track pagination info
+  pageNumber: 1, 
+  pageSize:10
+  
 };
 
 const meetingSlice = createSlice({
@@ -60,7 +64,20 @@ const meetingSlice = createSlice({
             .addCase(fetchMeetingById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            });
+            })
+           
+            .addCase(fetchMeetings.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchMeetings.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.meetings = action.payload.meetings;
+                state.totalRecords = action.payload.totalRecords;
+            })
+            .addCase(fetchMeetings.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
     },
 });
 

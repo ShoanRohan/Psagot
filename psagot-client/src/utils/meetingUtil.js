@@ -1,3 +1,4 @@
+import { use } from "react";
 import api from "./api"
 
 const getAllMeetings = async() => {
@@ -20,7 +21,12 @@ const getMeetingeById = async (id) => {
     return response.data;
 
 }
-
+const getMeetings = async ({ userName, courseName, subjectName,  date,  page, rows}) => {
+    const stringToSend = '/Meeting/GetMeetings/?UserName=' + userName + '&courseName=' + courseName + '&subjectName=' + subjectName + '&date=' + date + '&page=' + page + '&rows=' + rows
+    console.log(stringToSend);
+    const response = await api.get(stringToSend);   
+    return response.data;
+};
    
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,getMeetings};

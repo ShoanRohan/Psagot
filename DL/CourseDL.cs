@@ -58,7 +58,7 @@ namespace DL
             }
         }
 
-        public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
+        public async Task<(Course Course, string errorMessage)> UpdateCourse(Course course)
         {
             try
             {

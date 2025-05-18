@@ -7,7 +7,7 @@ import LocatorBar from '../components/LocatorBar';
 
 
 
-import MeetingLocatorBar from '../pages/MeetingLocatorBar';
+
 
 const AppRouter = () => {
     return (
@@ -22,9 +22,8 @@ const AppRouter = () => {
                 <Route path='MeetingLocatorBar' element={<MeetingLocatorBar/>}/>
             </Route> 
                 
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
-            </Route>
+          
+           
         </Routes>
     );
 };

@@ -47,9 +47,9 @@ namespace Psagot.Controllers
 
         [HttpGet("GetMeetings")]
 
-        public async Task<IActionResult> GetMeetings(string? UserName, string ?courseName, string ?subjectName, string? date, int page, int rows)
+        public async Task<IActionResult> GetMeetings(string? userName, string ?courseName, string ?subjectName, string? date, int page, int rows)
         {
-            var (meetings,totalRecords, errorMessage) = await _meetingBL.GetMeetings( UserName, courseName,  subjectName, date,  page,rows);
+            var (meetings,totalRecords, errorMessage) = await _meetingBL.GetMeetings( userName, courseName,  subjectName, date,  page,rows);
             if (meetings == null) return BadRequest(errorMessage);
 
             return Ok( new { meetings, totalRecords });

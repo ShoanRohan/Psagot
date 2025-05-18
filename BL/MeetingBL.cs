@@ -23,10 +23,10 @@ namespace BL
         }
 
         public async Task<(IEnumerable<MeetingDTO> Meetings, int totalRecords, string ErrorMessage)> GetMeetings(
-        string UserName, string courseName, string subjectName, string date, int page, int rows)
+        string userName, string courseName, string subjectName, string date, int page, int rows)
         {
 
-            var (meetings,totalRecords,  errorMessage) = await _meetingDL.GetMeetings(UserName,courseName, subjectName,date,page,  rows);
+            var (meetings,totalRecords,  errorMessage) = await _meetingDL.GetMeetings(userName,courseName, subjectName,date,page,  rows);
             if (meetings == null) return (null,0, errorMessage);
 
             return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings),totalRecords, null);

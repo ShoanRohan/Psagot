@@ -21,15 +21,15 @@ namespace DL
         }
 
         public async Task<(IEnumerable<Meeting> Meetings,int totalRecords, string ErrorMessage)> GetMeetings(
-          string UserName, string courseName, string subjectName, string date, int page, int rows)
+          string userName, string courseName, string subjectName, string date, int page, int rows)
         {
             try
             {
                 var query = _context.Set<Meeting>().AsQueryable();
 
                 
-                if (!string.IsNullOrEmpty(UserName))
-                    query = query.Where(m => m.ScheduleForTopic.Topic.Teacher.Name.Contains(UserName));
+                if (!string.IsNullOrEmpty(userName))
+                    query = query.Where(m => m.ScheduleForTopic.Topic.Teacher.Name.Contains(userName));
 
                
                 if (!string.IsNullOrEmpty(courseName))
