@@ -9,13 +9,13 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   },
 
   overflow: "hidden",
-height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה הכפתורים העליונים
+  height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה הכפתורים העליונים
   width: "100%",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
   boxSizing: "border-box",
   padding: "10px 65px",
-  backgroundColor:"green",
+  backgroundColor: "green",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
@@ -36,13 +36,13 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
     border: "none !important",
     gridTemplateColumns: "repeat(7, 1fr)", // 7 עמודות - יום לכל תא
     gridAutoRows: "120px", // כל שורה תהיה בגובה אחיד
-    
+
     width: "100%", // מבטיח שהתאים לא יתפרסו
     display: "flex",
 
     // gridAutoRows: "20px !important", // כמו ה-minHeight של תא
     // gridAutoRows: "100px",
-        // backgroundColor:"purple",
+    // backgroundColor:"purple",
 
   },
 
@@ -125,8 +125,8 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
 
   //עיצוב תא
   "& .fc-daygrid-day-frame": {
-    maxHeight:"45px !important",
-    maxWidth:"150px !important",
+    maxHeight: "45px !important",
+    maxWidth: "150px !important",
     // minHeight: "30px !important",
 
     border: "0.5px solid #C6C6C6", // גבול על כל התא
@@ -171,8 +171,6 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
   "& .fc-timegrid-slot": {//שורות הטבלה
     borderColor: "#C6C6C6",
     height: "15px",
-        // height: "40px",
-
     width: "100% !important",
   },
 
@@ -180,19 +178,13 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
   "& .fc-timegrid-slot-label": {
     width: "120px !important",
     height: "15px !important",
-        // height: "40px !important",
-
     borderBottom: "1px solid #C6C6C6 !important",
     borderLeft: "1px solid #ffffff !important",
     textAlign: "center !important",
     fontFamily: "Rubik, sans-serif",
     fontWeight: "500 !important",
-    // fontSize: "14px !important",
-        fontSize: "10px !important",
-
-    // lineHeight: "16.59px !important",
-        lineHeight: "6.5px !important",
-
+    fontSize: "10px !important",
+    lineHeight: "6.5px !important",
     color: "#393939 !important",
     paddingTop: "10px !important",
     paddingBottom: "10px !important",
@@ -200,10 +192,16 @@ height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה 
     paddingRight: "14px !important",
   },
 
+  //עמודת השעות בתצוגת יום
+  "& .fc-timeGridDay-view .fc-timegrid-slot-label": {
+    height: "10px !important",
+    lineHeight: "9px !important",
+  },
+
+
   //פסים לרוחב בתצוגות שבוע ויום
   "& .fc-timegrid .fc-timegrid-body td": {
     border: "1px solid #F0F1F3",
-
   },
 
   //אירוע
