@@ -106,13 +106,13 @@ namespace Psagot.Controllers
 
         }
 
-        [HttpGet("GetAllCoordinators")]
-        public async Task<IActionResult> GetAllCoordinators()
-        {
-            var (users, errorMessage) = await _userBL.GetAllCoordinators();
-            if (users == null) return BadRequest(errorMessage);
-            return Ok(users);
-        }
+        //[HttpGet("GetAllCoordinators")]
+        //public async Task<IActionResult> GetAllCoordinators()
+        //{
+        //    var (users, errorMessage) = await _userBL.GetAllCoordinators();
+        //    if (users == null) return BadRequest(errorMessage);
+        //    return Ok(users);
+        //}
 
         [HttpGet("GetCoordinatorsAndLecturers")]
         public async Task<IActionResult> GetCoordinatorsAndLecturers()

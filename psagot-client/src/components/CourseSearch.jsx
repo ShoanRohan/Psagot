@@ -7,7 +7,7 @@ import { fetchCoordinators } from "../features/user/userAction";
 
 // סטייל לשדות בחירה
 const sharedStyles = {
-  width: "150px",
+  width: "100%",
   textAlign: "right",
   direction: "rtl",
   "& .MuiInputLabel-root": {
@@ -34,8 +34,10 @@ const buttonStyles = {
 
 const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const dispatch = useDispatch();
-  const coordinators = useSelector((state) => state.user.coordinatorsCode);
+  const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
+  const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
+  
 
   useEffect(() => {
     dispatch(fetchCoordinators());
@@ -72,9 +74,10 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   return (
     <Box
       sx={{
-        width: "100%",
+        //width: "100%",
         margin: "auto",
         //position: "relative",
+        gap: 10,
         borderRadius: "4px",
         padding: "25px 24px",
         backgroundColor: "white",
@@ -157,11 +160,9 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           sx={{
             ...buttonStyles,
           }}
-          //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
-            dispatch(fetchCoordinators()); // טוען מחדש את הקורסים
-            //לבדוק שטעינת הקורסים מתבצעת דרך fetchCoordinators
+            dispatch(fetchCoordinators());
           }}
         >
           ניקוי

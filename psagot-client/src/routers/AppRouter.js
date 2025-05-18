@@ -16,8 +16,7 @@ const AppRouter = () => {
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<CalendarPage />} />
-                <Route path='/' element={<CourseScreen courseId={1}/>}/>
-              </Route>
+            </Route>
         </Routes>
     );
 };

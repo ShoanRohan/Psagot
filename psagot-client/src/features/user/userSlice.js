@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchAllCoordinators, fetchAllLecturersAndCoordinators } from './userAction';
+import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoordinators,fetchAllCoordinators, fetchAllLecturersAndCoordinators } from './userAction';
 
 const initialState = {
     coordinators:[],
@@ -49,29 +49,33 @@ const userSlice = createSlice({
             if (index !== -1) {
                 state.user[index]=action.payload;
             }
-        }).addCase(fetchAllLecturersAndCoordinators.pending, (state) =>{
-            state.status = 'loading';
-        })
-        .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) =>{
-            state.status ='succeeded';
-            state.user =action.payload;
-        })
-        .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        .addCase(fetchAllCoordinators.fulfilled, (state, action) =>{
-            state.status = 'succeeded';
-            state.coordinators = action.payload;
-        })
-        .addCase(fetchAllCoordinators.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        .addCase(fetchAllCoordinators.pending, (state) =>{
-            state.status ='loading';
+         })
 
-        });
+          .addCase(fetchCoordinators.fulfilled, (state, action) =>{
+         state.status = 'succeeded';
+          state.coordinators = action.payload;
+         })
+        .addCase(fetchCoordinators.rejected, (state, action) => {
+           state.status = 'failed';
+             state.error = action.error.message;
+         })
+       .addCase(fetchCoordinators.pending, (state) =>{
+           state.status ='loading';
+
+        })
+        
+        //  .addCase(fetchAllCoordinators.fulfilled, (state, action) =>{
+        //     state.status = 'succeeded';
+        //     state.coordinators = action.payload;
+        //  })
+        //  .addCase(fetchAllCoordinators.rejected, (state, action) => {
+        //     state.status = 'failed';
+        //     state.error = action.error.message;
+        //  })
+        //  .addCase(fetchAllCoordinators.pending, (state) =>{
+        //      state.status ='loading';
+
+        //  });
     },
 });
 
