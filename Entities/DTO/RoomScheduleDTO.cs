@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class RoomsScheduleByDateDTO
+    public class RoomScheduleByDateDTO
     {
         public string CourseName { get; set; }
         public string TopicName { get; set; }
