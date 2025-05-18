@@ -1,4 +1,4 @@
-import { maxHeight, maxWidth, styled } from '@mui/system';
+import { boxSizing, display, maxHeight, maxWidth, styled } from '@mui/system';
 import Box from "@mui/material/Box";
 import "@fontsource/rubik";
 
@@ -235,14 +235,12 @@ const dayInWeekHeaderStyle = {
   width: "65px", // רוחב קבוע לכל כותרת יום
 };
 
-const dayCellStyle = {
+const dayCellStyle = {//כל הקוביה שמכילה ריבוע תאריכים וריבוע מפגשים
   display: "flex !important",
   flexDirection: "row !important",
   justifyContent: "space-between !important",
-  alignItems: "center !important",
   flexWrap: "nowrap !important",
   width: "100% !important",
-  // padding: "6px !important",
   boxSizing: "border-box !important",
 };
 
@@ -250,11 +248,11 @@ const hebrewDateStyle = {
   color: "#393939 !important",
   textAlign: "right !important",
   fontFamily: "Rubik !important",
-  fontWeight: 500,
-  fontSize: "16px !important",
+  fontWeight: 300,
+  fontWeight: "bold",
+  fontSize: "10px !important",
   direction: "rtl !important",
   width: "auto !important",
-  marginLeft: "60px",
 };
 
 const gregorianDateStyle = {
@@ -262,11 +260,13 @@ const gregorianDateStyle = {
   textAlign: "left !important",
   fontFamily: "Rubik !important",
   fontWeight: 300,
-  fontSize: "16px !important",
+  fontSize: "10px !important",
   direction: "ltr !important",
   width: "auto !important",
-  marginRight: "60px",
+  marginRight: "80px",
 };
+
+
 
 
 
