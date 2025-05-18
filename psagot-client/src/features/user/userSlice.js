@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import {fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
 
 const initialState = {
     user: [],
@@ -32,7 +32,7 @@ const userSlice = createSlice({
             state.status ='loading';
 
         })
-        .addCase(fetchUserById. fulfilled, (state, action)=>{
+        .addCase(fetchUserById.fulfilled, (state, action)=>{
             state.status ='succeeded';
             state.selectedUser =action.payload;
         })

@@ -1,277 +1,201 @@
-import FullCalendar from "@fullcalendar/react";
-import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import { Box } from "@mui/material";
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
-import { useEffect } from 'react';
 
-export default function RoomSchedule() {
-  
-  function renderEventContent(eventInfo) {
-    return (
-      <div style={{ textAlign: "center", fontSize: "14px", fontWeight: "bold" }}>
-        <div>{eventInfo.event.title}</div>
-        <div style={{ fontSize: "12px", opacity: 0.8 }}>{eventInfo.event.extendedProps.secondTitle}</div>
-      </div>
-    );
-  }
-  const dispatch = useDispatch();
-  const { roomSchedule, status, error } = useSelector((state) => state.room);
-
-  useEffect(() => {
-      if (status === 'idle') {
-          dispatch(fetchRoomsScheduleByDate("2025-02-09"));
-      }
-  }, [status, dispatch]);
-  return (
-    <Box
-      sx={{
-        backgroundColor: "white",
-        padding: "30px,30px",
-        borderRadius: "10px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        overflowX: "auto",  
-        height:"950px", 
-        width:'1283px',
-
-        "& .fc": {
-          direction: "rtl",
-        },
-
-        "& .fc-view-harness": {
-          minHeight: "600px",
-        },
-        "& .fc-timegrid": {
-        backgroundColor: "white", // שינוי צבע רקע הטבלה ללבן
-        },
-        ".fc .fc-timegrid-axis-cushion, .fc .fc-timegrid-slot-label-cushion": {
-          padding: "15px 5px",
-          borderBottom: "3px solid #ddd",
-      },
-      "--fc-event-text-color":"black",
-        "& .fc-col-header-cell": {
-          backgroundColor: "#F6F7F9",
-          borderBottom: "3px solid #ddd",
-          boxSizing:'border-box',
-          padding: "20px 0px",
-          textAlign: "center",
-          fontWeight: "500",
-          whiteSpace: "nowrap", // כותרות בשורה אחת
-          fontSize: "14px", 
-         },
-        "& .fc-timegrid-slot": {
-          height: "40px", // מניעת שורה מיותרת
-          borderBottom: "1px solid #ddd", // הסרת השורה המיותרת
-          borderRight:"1px solid #ddd",
-        },
-        "& .fc-resource": {
-          textAlign: "center",
-        },
-        "& .fc-event": { 
-          borderRadius: "10px",
-          padding: "5px",
-          fontSize: "14px",
-          fontWeight: "bold",
-          textAlign: "center",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        },
-       
-        "& .fc-daygrid-day": {
-          display: "none", // הסרת שורת allday
-        },
-         "--fc-today-bg-color":"white"  ,
-         ".fc-direction-rtl .fc-timegrid-slot-label-frame" :{
-          textAlign: "center"
-      }     
-       
-      }}
-    >
-      <FullCalendar
-        eventContent={renderEventContent}
-        plugins={[resourceTimeGridPlugin, interactionPlugin]}
-        initialView="resourceTimeGridDay"
-        slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
-        headerToolbar={false}
-        slotMinTime="08:00:00"
-        slotMaxTime="23:00:00"
-        slotEventOverlap={false}
-        allDaySlot={false} // הסרת שורת allday
-        slotDuration="00:00"
-        resources={[
-          { id: "room1", title: "חדר סימולציה" },
-          { id: "room2", title: "חדר פגישות" },
-          { id: "room3", title: "חדר עבודה" },
-          { id: "room4", title: "אולם כנסים" },
-          { id: "room5", title: "חדר חדשנות"  },
-          { id: "room6", title: "מרכז מדיה" },
-          { id: "room7", title: "חדר סימולציה" },
-          { id: "room8", title: "פינת ישיבות" },
-          { id: "room9", title: "חדר סימולציה" },
-          { id: "room10", title: "אולם כניסה" },
-          
-        ]}
-        events={[
-          {
-            title: "קורס תכנות",
-            secondTitle:"HTML",
-            start: "2025-02-20T09:00:00",
-            end: "2025-02-20T10:00:00",
-            resourceId: "room1",
-            color: "#f17eb8",
-          },
-          {
-            title: "קורס עיצוב",
-            secondTitle:"טיפוגרפיה",
-            start: "2025-02-20T10:00:00",
-            end: "2025-02-20T11:00:00",
-            resourceId: "room3",
-            color: "#ffb3b3",
-          },
-          {
-            title: "קורס אדריכלות",
-            secondTitle:"תורת הבניה",
-            start: "2025-02-20T11:00:00",
-            end: "2025-02-20T13:00:00",
-            resourceId: "room10",
-            color: "#7fa3ff",
-          },
-        ]}
-        
-        locale="he"
-        direction="rtl"
-      />
-    </Box>
-  );
-}
+//קלוד
 // import FullCalendar from "@fullcalendar/react";
 // import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 // import interactionPlugin from "@fullcalendar/interaction";
 // import { Box } from "@mui/material";
 // import { useDispatch, useSelector } from 'react-redux';
-// import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
-// import { useEffect, useState } from 'react';
+// import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
+// import { useEffect, useRef } from 'react';
 
-// export default function RoomSchedule() {
+// const DATE = '2025-02-02';
 
+// export default function RoomsScheduleGrid() {
+//   const calendarRef = useRef(null);
 //   const dispatch = useDispatch();
-//   const { roomSchedule, status, error } = useSelector((state) => state.room);
 
-//   // תאריך לצפייה
-//   const [selectedDate, setSelectedDate] = useState("2025-02-09");
+//   const { roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
 
-//   // קריאת המידע מהשרת
 //   useEffect(() => {
-//     if (status === 'idle' || status === 'succeeded') {
-//       dispatch(fetchRoomsScheduleByDate(selectedDate));
+//     if (status === 'idle') {
+//       dispatch(fetchRoomsScheduleByDate(DATE));
 //     }
-//   }, [status, dispatch, selectedDate]);
+//     if (roomsStatus === 'idle') {
+//       dispatch(fetchAllRooms());
+//     }
+//   }, [status, roomsStatus, dispatch]);
 
-//   // רשימת החדרים
-//   const resources = [
-//     { id: "room1", title: "חדר סימולציה" },
-//     { id: "room2", title: "חדר פגישות" },
-//     { id: "room3", title: "חדר עבודה" },
-//     { id: "room4", title: "אולם כנסים" },
-//     { id: "room5", title: "חדר חדשנות" },
-//     { id: "room6", title: "מרכז מדיה" },
-//     { id: "room7", title: "חדר סימולציה" },
-//     { id: "room8", title: "פינת ישיבות" },
-//     { id: "room9", title: "חדר סימולציה" },
-//     { id: "room10", title: "אולם כניסה" },
-//   ];
-
-//   // פונקציה למציאת ה-id של החדר לפי שם
-//   function getRoomId(roomName) {
-//     const room = resources.find(r => r.title === roomName);
-//     return room ? room.id : null;
-//   }
-
-//   // יצירת אירועים לפולקלנדר
-//   const events = roomSchedule.map((item, index) => ({
-//     id: index,
-//     title: item.CourseName,
-//     secondTitle: item.TopicName,
-//     start: `${selectedDate}T${item.StartTime}`,
-//     end: `${selectedDate}T${item.EndTime}`,
-//     resourceId: getRoomId(item.RoomName),
-//     color: item.CourseColor,
+//   const allRooms = rooms.map(({ name }) => ({
+//     id: name?.trim(),
+//     title: name,
 //   }));
 
-//   // תוכן האירוע בתצוגה
-//   function renderEventContent(eventInfo) {
-//     return (
-//       <div style={{ textAlign: "center", fontSize: "14px", fontWeight: "bold" }}>
-//         <div>{eventInfo.event.title}</div>
-//         <div style={{ fontSize: "12px", opacity: 0.8 }}>{eventInfo.event.extendedProps.secondTitle}</div>
+//   // הגדרת פונקציה לבחירת צבע רקע בהיר לפי סוג הקורס
+//   const getEventColor = (courseName) => {
+//     // צבעים יותר בהירים עם רקע לבן יותר
+//     if (courseName.includes('JAVA')) return '#faf0f3'; // ורוד בהיר יותר
+//     if (courseName.includes('HTML')) return '#faf0f3'; // ורוד בהיר יותר
+//     if (courseName.includes('אלגוריתמיקה')) return '#f0f5fa'; // כחול בהיר יותר
+//     // לנושאים שקשורים להנדסת תוכנה
+//     if (courseName.includes('הנדסת')) return '#f0f5fa'; // כחול בהיר יותר
+//     // כברירת מחדל
+//     return '#f8f9fa'; // אפור בהיר מאוד, כמעט לבן
+//   };
+
+//   const events = roomSchedule.map(({ courseName, topicName, startTime, endTime, lecturer, roomName }) => ({
+//     title: courseName,
+//     secondTitle: topicName,
+//     start: `${DATE}T${startTime?.trim()}`,
+//     end: `${DATE}T${endTime?.trim()}`,
+//     lecturer,
+//     resourceId: roomName?.trim(),
+//     color: getEventColor(courseName),
+//     borderColor: 'transparent',
+//     textColor: '#393939',
+//   }));
+
+//   const renderEventContent = ({ event }) => (
+//     <div style={{ 
+//       textAlign: "center", 
+//       fontFamily: "Rubik", 
+//       fontSize: "12px", 
+//       fontWeight: "400", 
+//       color: '#666666',
+//       width: '100%', 
+//       height: '100%',
+//       padding: "4px 2px"
+//     }}>
+//       <div style={{ marginBottom: "2px" }}>{event.title}</div>
+//       <div style={{ fontSize: "10px", color: "#777777", lineHeight: "1.2" }}>
+//         {event.extendedProps.secondTitle}<br />
+//         {event.extendedProps.lecturer}
 //       </div>
-//     );
-//   }
+//     </div>
+//   );
 
 //   return (
 //     <Box
 //       sx={{
 //         backgroundColor: "white",
-//         padding: "30px,30px",
-//         borderRadius: "10px",
-//         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-//         overflowX: "auto",
-//         height: "950px",
-//         width: '1283px',
-//         "& .fc": { direction: "rtl" },
-//         "& .fc-view-harness": { minHeight: "600px" },
-//         "& .fc-timegrid": { backgroundColor: "white" },
-//         ".fc .fc-timegrid-axis-cushion, .fc .fc-timegrid-slot-label-cushion": {
-//           padding: "15px 5px",
-//           borderBottom: "3px solid #ddd",
+//         position: 'absolute',
+//         top: 150,
+//         right: 350,
+//         width: '1480px',
+//         padding: "25px",
+//         borderRadius: "15px",
+//         boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+//         height: 'fit-content',
+//         "& .fc": {
+//           direction: "rtl",
+//           border: "none !important",
 //         },
-//         "--fc-event-text-color": "black",
+        
+//         "& .fc-scrollgrid, & .fc-daygrid-body, & .fc-timegrid-body, & .fc-daygrid-body table, & .fc-timegrid-body table": {
+//           border: "none !important",
+//           borderRadius: "0 !important",
+//         },
+//         "& .fc-timegrid-axis-cushion, & .fc-timegrid-slot-label-cushion": {
+//           padding: "10px 15px",
+//           borderBottom: "1px solid #eaeaea",
+//           fontFamily: "Rubik",
+//           fontSize: '16px',
+//           color: "var(--Neutral-80, #393939)",
+//         },
 //         "& .fc-col-header-cell": {
 //           backgroundColor: "#F6F7F9",
-//           borderBottom: "3px solid #ddd",
-//           padding: "20px 0px",
-//           textAlign: "center",
+//           borderBottom: "1px solid #eaeaea",
+//           padding: "8px 0px",
 //           fontWeight: "500",
 //           whiteSpace: "nowrap",
-//           fontSize: "14px",
+//           color: "var(--Neutral-80, #393939)",
 //         },
-//         "& .fc-timegrid-slot": {
-//           height: "40px",
-//           borderBottom: "1px solid #ddd",
-//           borderRight: "1px solid #ddd",
-//         },
-//         "& .fc-resource": { textAlign: "center" },
+
 //         "& .fc-event": {
-//           borderRadius: "10px",
-//           padding: "5px",
-//           fontSize: "14px",
-//           fontWeight: "bold",
+//           width: "90%",
+//           margin: "0 5px",
+//           borderRadius: "4px",
+//           padding: "2px 4px",
+//           fontSize: "12px",
+//           fontWeight: "400",
 //           textAlign: "center",
-//           color: "#fff",
 //           display: "flex",
 //           alignItems: "center",
 //           justifyContent: "center",
+//           boxShadow: "none",
+//           border: "none !important",
+//           color: "#666666",
+//           backgroundColor: "#ffffff",
+//           borderLeft: "1px solid #eaeaea",
+//           borderRight: "1px solid #eaeaea",
+//           borderTop: "1px solid #eaeaea",
+//           borderBottom: "1px solid #eaeaea",
+//           minHeight: "50px",
+//         },
+//         "--fc-event-text-color": "#393939",
+
+//         "& .fc-timegrid": {
+//           backgroundColor: "white",
+//         },
+//         "& .fc-timegrid-slot": {
+//           height: "auto",
+//           borderBottom: "1px solid #eaeaea",
+//         },
+//         "& .fc-resource": { 
+//           textAlign: "center", 
+//           fontSize: '14px', 
+//           fontFamily: "Rubik",
+//           fontWeight: "500"
 //         },
 //         "& .fc-daygrid-day": { display: "none" },
 //         "--fc-today-bg-color": "white",
-//         ".fc-direction-rtl .fc-timegrid-slot-label-frame": { textAlign: "center" }
+//         ".fc-direction-rtl .fc-timegrid-slot-label-frame": { textAlign: "center" },
+//         "& .fc-timegrid-axis": {
+//           overflow: 'hidden',
+//         },
+//         "& .fc-scroller": {
+//           overflow: 'visible !important',
+//         },
+//         "& table": {
+//           borderCollapse: "separate",
+//           // borderSpacing: "3px", // מרווח קטן בין התאים
+//         },
+//         "& .fc-timegrid-cols table": {
+//           borderCollapse: "separate",
+//           // borderSpacing: "3px", // מרווח קטן בין התאים
+//         },
+//         "& .fc-timegrid-col": {
+//           borderRight: "none !important",
+//           padding: "0 1px",
+//         },
+//         "& .fc-timegrid-col-frame": {
+//           background: "transparent",
+//         },
+//         "& .fc-timegrid-now-indicator-line": {
+//           borderColor: "#dde2e7",
+//         },
+//         "& .fc-col-header-cell-cushion": {
+//           fontWeight: "500",
+//           fontSize: "14px",
+//         }
 //       }}
 //     >
 //       <FullCalendar
+//         ref={calendarRef}
 //         eventContent={renderEventContent}
 //         plugins={[resourceTimeGridPlugin, interactionPlugin]}
 //         initialView="resourceTimeGridDay"
+//         initialDate={DATE}
 //         slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
 //         headerToolbar={false}
 //         slotMinTime="08:00:00"
-//         slotMaxTime="23:00:00"
+//         slotMaxTime="22:00:00"
+//         contentHeight="auto"
+//         expandRows={true}
 //         slotEventOverlap={false}
 //         allDaySlot={false}
-//         slotDuration="00:00"
-//         resources={resources}
+//         slotDuration="01:00"
+//         slotHeight={60}
+//         resources={allRooms}
 //         events={events}
 //         locale="he"
 //         direction="rtl"
@@ -279,4 +203,154 @@ export default function RoomSchedule() {
 //     </Box>
 //   );
 // }
+import FullCalendar from "@fullcalendar/react";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import { Box } from "@mui/material";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
+import { useEffect, useRef } from 'react';
+import React from 'react';
 
+
+
+const DATE = '2025-02-02';
+
+export default function RoomsScheduleGrid() {
+  const calendarRef = useRef(null);
+  const dispatch = useDispatch();
+
+  const { roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
+
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchRoomsScheduleByDate(DATE));
+    }
+    if (roomsStatus === 'idle') {
+      dispatch(fetchAllRooms());
+    }
+  }, [status, roomsStatus, dispatch]);
+
+  const allRooms = rooms.map(({ name }) => ({
+    id: name?.trim(),
+    title: name,
+  }));
+
+  const events = roomSchedule.map(({ courseName, topicName, startTime, endTime, lecturer, roomName, courseColor }) => ({
+    title: courseName,
+    secondTitle: topicName,
+    start: `${DATE}T${startTime?.trim()}`,
+    end: `${DATE}T${endTime?.trim()}`,
+    lecturer,
+    resourceId: roomName?.trim(),
+    color: courseColor,
+  }));
+
+  const renderEventContent = ({ event }) => (
+    <div style={{ textAlign: "center", fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
+      <div>{event.title}</div>
+      <div style={{ fontSize: "10px", opacity: 0.8 }}>
+        {event.extendedProps.secondTitle}<br />
+        {event.extendedProps.lecturer}
+      </div>
+    </div>
+  );
+
+  return (
+    <Box
+      sx={{
+        backgroundColor: "white",
+        position: 'absolute',
+        top: 150,
+        right: 350,
+        width: '1480px',
+        padding: "25px",
+        borderRadius: "15px",
+
+        boxShadow: "0 8px 20px rgba(0, 0, 0, 0.1)",
+        //שניתי כדי שלא תהיה גלילה
+        height: 'fit-content',
+        "& .fc": {
+          direction: "rtl",
+          border: "none !important",
+        },
+
+        "& .fc-scrollgrid, & .fc-daygrid-body, & .fc-timegrid-body, & .fc-daygrid-body table, & .fc-timegrid-body table": {
+          border: "none !important",
+          borderRadius: "0 !important",
+        },
+        "& .fc-timegrid-axis-cushion, & .fc-timegrid-slot-label-cushion": {
+          padding: "10px 15px",
+          borderBottom: "1px solid #ddd",
+          fontFamily: "Rubik",
+          fontSize: '16px',
+          color: "var(--Neutral-80, #393939)",
+        },
+        "& .fc-col-header-cell": {
+          backgroundColor: "#F6F7F9",
+          borderBottom: "1px solid #ddd",
+          padding: "8px 0px",
+          fontWeight: "500",
+          whiteSpace: "nowrap",
+          color: "var(--Neutral-80, #393939)",
+        },
+
+        "& .fc-event": {
+          width: "100%",
+          borderRadius: "8px",
+          padding: "3px 8px",
+          fontSize: "12px",
+          fontWeight: "bold",
+          textAlign: "center",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
+          // border: "none !important",
+          color: "black",
+          // backgroundColor: "#e6e9f0",
+        },
+        "--fc-event-text-color": "black",
+
+        "& .fc-timegrid": {
+          backgroundColor: "white",
+        },
+        "& .fc-timegrid-slot": {
+          height: "auto",
+          borderBottom: "1px solid #ddd",
+        },
+        "& .fc-resource": { textAlign: "center", fontSize: '14px', fontFamily: "Rubik" },
+        "& .fc-daygrid-day": { display: "none" },
+        "--fc-today-bg-color": "white",
+        ".fc-direction-rtl .fc-timegrid-slot-label-frame": { textAlign: "center" },
+        "& .fc-timegrid-axis": {
+          overflow: 'hidden',
+        },
+        "& .fc-scroller": {
+          overflow: 'visible !important',
+        },
+      }}
+    >
+      <FullCalendar
+        ref={calendarRef}
+        eventContent={renderEventContent}
+        plugins={[resourceTimeGridPlugin, interactionPlugin]}
+        initialView="resourceTimeGridDay"
+        initialDate={DATE}
+        slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
+        headerToolbar={false}
+        slotMinTime="08:00:00"
+        slotMaxTime="22:00:00"
+        contentHeight="auto"
+        expandRows={true}
+        slotEventOverlap={false}
+        allDaySlot={false}
+        slotDuration="01:00"
+        resources={allRooms}
+        events={events}
+        locale="he"
+        direction="rtl"
+      />
+    </Box>
+  );
+}

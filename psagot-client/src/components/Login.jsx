@@ -10,7 +10,6 @@ import {
 	IconButton,
 	InputAdornment,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import '@fontsource/rubik';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
@@ -41,7 +40,7 @@ export default function CredentialsSignInPage() {
 	const [password, setPassword] = React.useState('');
 	const [emailError, setEmailError] = React.useState('');
 	const [passwordError, setPasswordError] = React.useState('');
-	const [formError, setFormError] = React.useState('');
+	const [setFormError] = React.useState('');
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
 
@@ -265,7 +264,6 @@ export default function CredentialsSignInPage() {
 								fontWeight: 'bold',
 								borderRadius: '25px',
 								py: 1,
-								fontSize: '14px',
 								width: '60%',
 								height: '48%',
 								fontSize: '12px',

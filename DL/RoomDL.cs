@@ -98,6 +98,7 @@ namespace DL
                     .Select(m => new RoomsScheduleByDateDTO
                     {
                         RoomName = m.Room.Name,
+                        Lecturer = m.Topic.Teacher.Name,
                         CourseName = m.ScheduleForTopic.Topic.Course.Name,
                         TopicName = m.ScheduleForTopic.Topic.Name,
                         CourseColor = m.ScheduleForTopic.Topic.Course.Color,
