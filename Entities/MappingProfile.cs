@@ -15,7 +15,6 @@ public class MappingProfile : Profile
         CreateMap<Meeting, MeetingDTO>().ReverseMap();
         CreateMap<DaysForCourse, DaysForCourseDTO>().ReverseMap();
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
-        CreateMap<ListOfMeetingsForTopic, ListOfMeetingsForTopicDTO>().ReverseMap();
         CreateMap<Topic, TopicDTO>().ReverseMap();
         CreateMap<Course,CourseDTO> ().ReverseMap();
     }

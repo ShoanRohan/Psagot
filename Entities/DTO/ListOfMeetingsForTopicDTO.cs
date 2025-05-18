@@ -11,7 +11,5 @@ namespace Entities.DTO
     {
         public List<MeetingDTO> Meetings { get; set; }
         public int TotalCount { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
     }
 }

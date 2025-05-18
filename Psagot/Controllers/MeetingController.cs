@@ -62,7 +62,7 @@ namespace Psagot.Controllers
             return Ok(addedMeeting);
         }
         [HttpGet("SearchMeetings")]
-        public async Task<ActionResult<ListOfMeetingsForTopicDTO>> SearchMeetings(int? courseId, int? topicId, string teacherName, DateOnly? date, int pageNumber = 1, int pageSize = 20)
+        public async Task<ActionResult> SearchMeetings(int? courseId, int? topicId, string? teacherName, string? date, int pageNumber, int pageSize)
         {
             var (result, errorMessage) = await _meetingBL.SearchMeetings(courseId, topicId, teacherName, date, pageNumber, pageSize);
 
