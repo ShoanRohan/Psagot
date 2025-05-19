@@ -144,7 +144,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
 </IconButton>
                     >
                       <img src={editSvg} alt="edit_icon" />
-                    </IconButton>
+                    
                   </Link>
                 </StyledTableCell>
               </StyledTableRow>
