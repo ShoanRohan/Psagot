@@ -2,10 +2,22 @@ import { Checkbox, Paper, Stack, TextField, Typography, MenuItem, Button, Box } 
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
-const CreateCourse = () => {
+const CreateCourse = (open=true, setOpen) => {
   const dispatch = useDispatch();
 
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const [formData, setFormData] = useState({
     coordinatorName: "",
     courseName: "",
@@ -35,6 +47,47 @@ const CreateCourse = () => {
   const statuses = ["פעיל", "לא פעיל", "ממתין"];
 
   return (
+    <>
+    <Dialog
+        open={open||true}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          },
+        }}
+      >
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Subscribe</Button>
+        </DialogActions>
+      </Dialog>
     <Paper
        elevation={0}
        dir="rtl"
@@ -278,6 +331,7 @@ const CreateCourse = () => {
   </Button>
 </Stack>
     </Paper>
+    </>
   );
 };
 

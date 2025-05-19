@@ -1,6 +1,6 @@
 import * as React from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
-import { AppProvider } from '@toolpad/core/AppProvider';
+import {AppProvider} from ''
 import {
 	Box,
 	Button,
