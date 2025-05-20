@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import 'dayjs/locale/he';
 
 import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 
 const RoomsScheduleSearch = () => {
   const dispatch = useDispatch();

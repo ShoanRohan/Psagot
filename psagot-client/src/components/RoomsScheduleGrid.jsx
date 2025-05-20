@@ -74,7 +74,7 @@ export default function RoomsScheduleGrid() {
     <Box
       sx={{
         position: 'absolute',
-        top: 160,
+        top: 130,
         right: 350,
         width: '1480px',
         padding: "25px",
