@@ -6,6 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import {fetchAllUsers} from "../features/user/userAction";
+
 import {
   GridRowModes,
   DataGrid,
@@ -19,6 +21,7 @@ import {
   randomId,
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import { useDispatch, useSelector } from 'react-redux';
 
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
@@ -88,8 +91,14 @@ function EditToolbar(props) {
 }
 
 export default function UserTable() {
+  const dispatch = useDispatch();
+  const users =useSelector((state)=>state.user.users)
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
+
+  React.useEffect(()=>{
+    dispatch(fetchAllUsers());
+  }, [dispatch]);
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
