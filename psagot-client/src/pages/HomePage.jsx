@@ -1,32 +1,54 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUserTypes } from "../features/userType/userTypeActions";
-import { Typography, Button, Container } from "@mui/material";
+import React, { useState } from 'react';
+import { Typography, Button, Container } from '@mui/material';
+import RoomForm from '../pages/RoomForm'; // ודא שהנתיב נכון
 
 const HomePage = () => {
-    const dispatch = useDispatch();
-    const { userTypes, status, error } = useSelector((state) => state.userType);
+  const [showForm, setShowForm] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState({});
 
-    useEffect(() => {
-        if (status === 'idle') {
-            // dispatch(fetchAllUserTypes());
-        }
-    }, [status, dispatch]);
+  const handleAddRoomClick = () => {
+    setIsEdit(false);
+    setSelectedRoom({});
+    setShowForm(true);
+  };
 
-    // Remark: all functions - start with **handle**
-    const handleClickButton = () => {
-        alert("handle click button - userTypes" + JSON.stringify(userTypes));
-    };
+  const handleRoomSubmit = (roomData) => {
+    console.log(isEdit ? 'Room edited:' : 'Room submitted:', roomData);
+    setShowForm(false);
+  };
 
-    if (status === 'loading') return <Typography>Loading...</Typography>;
-    if (status === 'failed') return <Typography>Error: {error}</Typography>;
+  return (
+    <Container style={{ textAlign: 'center', padding: 20 }}>
+      <Typography variant="h5" gutterBottom>
+        ברוכים הבאים למערכת פסגות
+      </Typography>
 
-    return (
-        <Container style={{ textAlign: 'center', padding: 10 }}>
-            <Typography variant="h5">😀hello psagot project😀</Typography>
-            <Button onClick={handleClickButton}>Example of a function structure</Button>
-        </Container>
-    );
-}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleAddRoomClick}
+        sx={{ mt: 3 }}
+      >
+        הוסף חדר
+      </Button>
+
+      <RoomForm
+        isEdit={isEdit}
+        initialData={selectedRoom}
+        onSave={handleRoomSubmit}
+        open={showForm}
+        onClose={() => setShowForm(false)}
+      />
+    </Container>
+  );
+};
 
 export default HomePage;
+
+
+
+
+
+
+

@@ -1,0 +1,124 @@
+.modal-container {
+  max-width: 600px;
+  width: 90%;
+  padding: 24px;
+  border-radius: 12px;
+  background: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  direction: rtl;
+  text-align: right;
+  font-family: inherit;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.custom-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.custom-input label {
+  font-size: 14px;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.custom-input input,
+.custom-input select {
+  padding: 8px 10px;
+  font-size: 14px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  border-radius: 0;
+  background: transparent;
+  text-align: right;
+  transition: border-color 0.3s ease;
+}
+
+.custom-input input:focus,
+.custom-input select:focus {
+  border-bottom-color: #007bff;
+  outline: none;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
+  margin-top: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.modal-button {
+  min-width: 100px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modal-button.save {
+  background-color: #005bff;
+  color: white;
+}
+
+.modal-button.save:hover {
+  background-color: #0044cc;
+}
+
+.modal-button.cancel {
+  background-color: white;
+  color: #005bff;
+  border: 2px solid #005bff;
+}
+
+.modal-button.cancel:hover {
+  background-color: #f0f8ff;
+}
+
+
+
+
+  
