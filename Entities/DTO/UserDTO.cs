@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Entities.DTO;
 
-namespace Entities.DTO
+public class UserDTO
 {
-    public class UserDTO
-    {
-        public int UserId { get; set; }
+    public int UserId { get; set; }
 
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public string Email { get; set; } = null!;
+    public string Email { get; set; } = null!;
 
-        public string Phone { get; set; } = null!;
+    public string Phone { get; set; } = null!;
 
-        public string Password { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
         public int UserTypeId { get; set; }
         
@@ -24,8 +18,7 @@ namespace Entities.DTO
 
         public bool IsActive { get; set; }
 
-        public string? Role { get; set; }
+    public string? Role { get; set; }
 
-
-    }
+    public virtual UserTypeDTO UserType { get; set; } = null!;
 }

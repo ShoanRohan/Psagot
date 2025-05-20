@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,getMeetings} from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, deleteMeetingById,getMeetings } from '../../utils/meetingUtil';
+
 
 export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
     const data = await getAllMeetings();
@@ -16,8 +17,7 @@ export const updateMeetingAction = createAsyncThunk(
         } catch (error) {
             console.log(error);
         }
-    }
-);
+    });
 
 export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", async (id) => {
     const data = await getMeetingeById(id);
@@ -29,8 +29,17 @@ export const addMeetingAction = createAsyncThunk(
     async (addNewMeeting) => {
         const data = await addMeeting(addNewMeeting);
         return data;
+    });
+
+// הוספת פעולה חדשה למחיקת מפגש
+export const deleteMeetingAction = createAsyncThunk(
+    "meeting/deleteMeetingAction",
+    async (meetingId) => {
+        const data = await deleteMeetingById(meetingId);
+        return data; // מחזיר את ה-ID של המפגש שנמחק
     }
 );
+
 export const fetchMeetings   = createAsyncThunk(
     "meeting/fetchMeetings",
     async ({userName, courseName, subjectName, date, page, rows }) => {

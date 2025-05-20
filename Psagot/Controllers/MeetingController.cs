@@ -28,6 +28,24 @@ namespace Psagot.Controllers
             return Ok(updatedMeeting);
         }
 
+        [HttpGet("GetAllMeetings")]
+        public async Task<IActionResult> GetAllMeetings()
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
+            if (meetings == null) return BadRequest(errorMessage);
+
+            return Ok(meetings);
+        }
+
+        [HttpPost("AddMeeting")]
+        public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
+        {
+            var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
+            if (addedMeeting == null) return BadRequest(errorMessage);
+
+            return Ok(addedMeeting);
+        }
+
         [HttpGet("GetMeetingById/{id}")]
         public async Task<IActionResult> GetMeetingById([FromRoute] int id)
         {
@@ -61,16 +79,22 @@ namespace Psagot.Controllers
             var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
             if (meetings == null) return BadRequest(errorMessage);
 
-            return Ok(meetings);
-        }
-
-        [HttpPost("AddMeeting")]
-        public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
+        [HttpDelete("DeleteMeeting/{id}")]
+        public async Task<IActionResult> DeleteMeeting([FromRoute] int id)
         {
-            var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
-            if (addedMeeting == null) return BadRequest(errorMessage);
+            if (id <= 0)
+            {
+                return BadRequest("Invalid meeting ID.");
+            }
 
-            return Ok(addedMeeting);
+            var (deletedMeeting, errorMessage) = await _meetingBL.DeleteMeeting(id);
+
+            if (deletedMeeting == null)
+            {
+                return NotFound(errorMessage ?? "Meeting not found.");
+            }
+
+            return Ok(deletedMeeting);
         }
     }
 }

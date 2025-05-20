@@ -20,6 +20,7 @@ const getMeetingeById = async (id) => {
     const response = await api.get(`/Meeting/GetMeetingById/${id}`);
     return response.data;
 
+
 }
 const getMeetings = async ({ userName, courseName, subjectName,  date,  page, rows}) => {
     const stringToSend = '/Meeting/GetMeetings/?UserName=' + userName + '&courseName=' + courseName + '&subjectName=' + subjectName + '&date=' + date + '&page=' + page + '&rows=' + rows
@@ -27,6 +28,11 @@ const getMeetings = async ({ userName, courseName, subjectName,  date,  page, ro
     const response = await api.get(stringToSend);   
     return response.data;
 };
+const deleteMeetingById = async (meetingId) => {
+    const response = await api.delete(`/Meeting/DeleteMeeting/${meetingId}`);
+    return response.data;
+};
    
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,getMeetings};
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,getMeetings ,deleteMeetingById };
+

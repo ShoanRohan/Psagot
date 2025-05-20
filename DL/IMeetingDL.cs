@@ -13,6 +13,11 @@ namespace DL
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
+        Task<(Meeting Meeting, string ErrorMessage)> DeleteMeeting(int meetingId);
+    
+
+
+}
         Task<(IEnumerable<Meeting> Meetings, int totalRecords, string ErrorMessage)> GetMeetings(
            string userName, string courseName, string subjectName, string date, int page, int rows);
 

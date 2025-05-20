@@ -16,5 +16,6 @@ namespace BL
         Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO);
         Task<(IEnumerable<MeetingDTO> Meetings, int totalRecords, string ErrorMessage)> GetMeetings(
          string userName, string courseName, string subjectName, string date, int page, int rows);
+        Task<(MeetingDTO Meeting, string ErrorMessage)> DeleteMeeting(int meetingId);
     }
 }

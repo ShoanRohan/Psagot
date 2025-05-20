@@ -15,7 +15,7 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int UserTypeId { get; set; }
+    public int UserTypesId { get; set; }
 
     public bool IsActive { get; set; }
 

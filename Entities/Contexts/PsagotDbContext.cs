@@ -179,7 +179,7 @@ public partial class PsagotDbContext : DbContext
             entity.Property(e => e.Phone).HasMaxLength(20);
 
             entity.HasOne(d => d.UserType).WithMany(p => p.Users)
-                .HasForeignKey(d => d.UserTypeId)
+                .HasForeignKey(d => d.UserTypesId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Users__UserTypeI__412EB0B6");
         });

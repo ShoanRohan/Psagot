@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById,  fetchMeetings } from '../meeting/meetingActions';
+
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById,  fetchMeetings , deleteMeetingAction} from '../meeting/meetingActions';
+
+
 
 const initialState = {
   meetings: [],
@@ -15,7 +18,7 @@ const initialState = {
 const meetingSlice = createSlice({
     name: 'meeting',
     initialState,
-    reducers: { 
+    reducers: {
     },
     extraReducers: (builder) => {
         builder
@@ -65,6 +68,7 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+
            
             .addCase(fetchMeetings.pending, (state) => {
                 state.status = 'loading';
@@ -78,6 +82,23 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+
+            // הוספת טיפול בפעולת מחיקה
+            .addCase(deleteMeetingAction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(deleteMeetingAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                // מסיר את המפגש שנמחק מהמערך
+                state.meetings = state.meetings.filter(
+                    meeting => meeting.meetingId !== action.payload
+                );
+            })
+            .addCase(deleteMeetingAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            });
+
     },
 });
 

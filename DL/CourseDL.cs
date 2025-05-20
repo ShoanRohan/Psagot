@@ -44,7 +44,6 @@ namespace DL
         }
 
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
-
         {
             try
             {
