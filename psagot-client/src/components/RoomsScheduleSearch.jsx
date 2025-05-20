@@ -151,7 +151,7 @@ const RoomsScheduleSearch = () => {
   היום
 </Button>
     </Box>
-     <RoomScheduleGrid/>
+     <RoomsScheduleGrid/>
      </>
 
   );

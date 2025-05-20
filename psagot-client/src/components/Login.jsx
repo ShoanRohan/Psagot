@@ -10,6 +10,8 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '@fontsource/rubik';
+import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 
 // הגדרת נושא עם תמיכה ב-RTL ועברית
@@ -48,6 +50,14 @@ export default function CredentialsSignInPage() {
   const [formError, setFormError] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+	const theme = useTheme();
+	const [email, setEmail] = React.useState('');
+	const [password, setPassword] = React.useState('');
+	const [emailError, setEmailError] = React.useState('');
+	const [passwordError, setPasswordError] = React.useState('');
+	const [setFormError] = React.useState('');
+	const [isSubmitting, setIsSubmitting] = React.useState(false);
+	const [showPassword, setShowPassword] = React.useState(false);
 
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -298,4 +308,198 @@ export default function CredentialsSignInPage() {
       </Box>
     </ThemeProvider>
   );
+				{/* BOX חיצוני שמכיל את כל שדות הטופס */}
+				<Box
+					component="form"
+					onSubmit={handleSubmit}
+					sx={{
+						display: 'flex',
+						flexDirection: 'column',
+						gap: 2,
+						width: '100%',
+						height: '100%',
+						fontFamily: 'Rubik',
+					}}
+				>
+					{/* BOX שמכיל את שם משתמש, סיסמה ושכחתי סיסמה */}
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							width: '100%',
+							height: '53%',
+							gap: 1,
+						}}
+					>
+						{/* BOX לשם משתמש וסיסמה */}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								gap: 2,
+							}}
+						>
+							<TextField
+								label="שם משתמש"
+								name="email"
+								variant="standard"
+								fullWidth
+								value={email}
+								onChange={(e) => setEmail(e.target.value)}
+								onBlur={() => setEmailError(validateEmail(email))}
+								error={!!emailError}
+								helperText={emailError}
+								InputLabelProps={{
+									style: {
+										textAlign: 'right',
+										width: '100%',
+										fontFamily: 'Rubik',
+										fontSize: '16px',
+									},
+								
+								}}
+							/>
+
+							<TextField
+								label="סיסמה"
+								name="password"
+								type={showPassword ? 'text' : 'password'}
+								variant="standard"
+								fullWidth
+								value={password}
+								onChange={(e) => setPassword(e.target.value)}
+								onBlur={() => setPasswordError(validatePassword(password))}
+								error={!!passwordError}
+								helperText={passwordError}
+								InputLabelProps={{
+									style: {
+										textAlign: 'right',
+										width: '100%',
+										fontFamily: 'Rubik',
+										fontSize: '16px',
+									},
+								}}
+								InputProps={{
+									endAdornment: (
+										<InputAdornment position="end">
+											<IconButton
+												aria-label="Toggle password visibility"
+												onClick={() => setShowPassword((prev) => !prev)}
+												edge="end"
+											>
+												{showPassword ? (
+													<img
+														src={EyeIcon}
+														alt="Eye Icon"
+														style={{ width: '20px', height: '20px' }}
+													/>
+												) : (
+													<img
+														src={EyeIcon}
+														alt="Eye Icon"
+														style={{ width: '20px', height: '20px' }}
+													/>
+												)}
+											</IconButton>
+										</InputAdornment>
+									),
+								}}
+							/>
+						</Box>
+
+						{/* BOX של שכחתי סיסמה */}
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								height: '4%',
+								justifyContent: 'center',
+							}}
+						>
+							<Link
+								href="/forgot-password"
+								sx={{
+									fontSize: '12px',
+									color: '#6F6F6F',
+									cursor: 'pointer',
+									textDecoration: 'none',
+									fontFamily: 'Rubik',
+								}}
+							>
+								שכחתי סיסמה
+							</Link>
+						</Box>
+					</Box>
+
+					{/* BOX של כפתור הכניסה וההרשמה */}
+					<Box
+						sx={{
+							display: 'flex',
+							flexDirection: 'column',
+							alignItems: 'center',
+							width: '99%',
+							height: '27%',
+							gap: 5,
+						}}
+					>
+						<Button
+							type="submit"
+							variant="contained"
+							disabled={
+								isSubmitting ||
+								!email ||
+								!password ||
+								emailError ||
+								passwordError
+							}
+							sx={{
+								backgroundColor: '#1976d2',
+								color: '#fff',
+								fontWeight: 'bold',
+								borderRadius: '25px',
+								py: 1,
+								width: '60%',
+								height: '48%',
+								fontSize: '12px',
+								fontFamily: 'Rubik',
+								'&:hover': {
+									backgroundColor: '#112B83',
+								},
+							}}
+						>
+							{isSubmitting ? 'מתחבר...' : ' כניסה למערכת'}
+						</Button>
+
+						<Box
+							sx={{
+								display: 'flex',
+								flexDirection: 'column',
+								width: '100%',
+								height: '4%',
+								justifyContent: 'center',
+								alignItems: 'center',
+							}}
+						>
+							<Button
+								variant="text"
+								sx={{
+									color: '#6F6F6F',
+									textDecoration: 'underline',
+									fontWeight: 'bold',
+									cursor: 'pointer',
+									fontFamily: 'Rubik',
+									fontSize: '12px',
+								}}
+								onClick={() => (window.location.href = '/register')}
+							>
+								אין לך חשבון? הירשם
+							</Button>
+						</Box>
+					</Box>
+				</Box>
+			</Box>
+		</AppProvider>
+	);
 }
