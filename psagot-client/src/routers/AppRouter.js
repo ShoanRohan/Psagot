@@ -2,9 +2,11 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import Login from '../components/Login';
+import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
-import UserManagement from '../pages/UserManagement';
+import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
+import RoomsPage from '../pages/RoomsPage';
+import RoomSchedule from '../components/RoomsScheduleGrid';
 
 const AppRouter = () => {
     return (
