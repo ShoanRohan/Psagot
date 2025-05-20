@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import MeetingsTable from '../components/MeetingsTable';
-
+import RoomTable from '../components/RoomTable';
 const AppRouter = () => {
     return (
         <Routes>
@@ -15,6 +15,7 @@ const AppRouter = () => {
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path='/RoomTable' element={<RoomTable />} />
             </Route>
         </Routes>
     );
