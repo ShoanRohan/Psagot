@@ -28,17 +28,17 @@ namespace DL
             }
         }
 
-        public async Task<(IEnumerable<StatusTopic> statusTopic, string ErrorMessage)> GetAllStatusTopics()
-        {
-            try
-            {
-                var statusTopic = await _context.Set<StatusTopic>().ToListAsync();
-                return (statusTopic, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
+        //public async Task<(IEnumerable<StatusTopic> statusTopic, string ErrorMessage)> GetAllStatusTopics()
+        //{
+        //    try
+        //    {
+        //        var statusTopic = await _context.Set<StatusTopic>().ToListAsync();
+        //        return (statusTopic, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex.Message);
+        //    }
+        //}
     }
 }
