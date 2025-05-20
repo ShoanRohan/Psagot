@@ -83,7 +83,7 @@ namespace Psagot.Controllers
                 if (user == null)
                     return Unauthorized("Invalid email or password");
                 return Ok(new
-                {
+                { 
                     user = user,
                 });
             }

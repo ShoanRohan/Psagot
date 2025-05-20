@@ -2,14 +2,20 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import UserSearch from '../components/UserSearch';
+import Login from '../components/Login';
+import LoginPage from '../pages/LoginPage';
+import UserManagement from '../pages/UserManagement';
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' element={<Layout/>}>
-                {/* <Route path='/' element={<HomePage/>}/> */}
-                <Route path='/' element={<UserSearch/>}/>
+            <Route path='/' element={<Layout />}>
+                <Route path='/' element={<LoginPage />} />
+                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/meetings' element={<span>page Meetings</span>} />
+                <Route path='/users' element={<UserManagement />} />
+                <Route path='/rooms' element={<span>page Rooms</span>} />
+                <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
         </Routes>
     );

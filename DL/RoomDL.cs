@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,5 +76,74 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(List<RoomScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
+        {
+            try
+            {
+                var dayOfWeek = (int)dateTime.DayOfWeek + 1;
+
+                await _context.SaveChangesAsync();
+                var schedule = _context.Meetings
+                .Include(m => m.Day)
+                .Include(m => m.ScheduleForTopic)
+                 .ThenInclude(sft => sft.Topic)
+                 .ThenInclude(t => t.Course)
+                .Where(m => m.IsValid)
+                .Where(m => m.DayId == dayOfWeek)
+                .Where(m => m.ScheduleForTopic != null
+                     && m.ScheduleForTopic.Topic != null
+                     && m.ScheduleForTopic.Topic.Course != null)
+                .Where(m => DateOnly.FromDateTime(dateTime) >= m.ScheduleForTopic.Topic.Course.StartDate
+                     && (m.ScheduleForTopic.Topic.Course.EndDate == null || DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
+                .Select(m => new RoomScheduleByDateDTO
+                {
+                    CourseName = m.ScheduleForTopic.Topic.Course.Name,
+                    TopicName = m.ScheduleForTopic.Topic.Name,
+                    CourseColor = m.ScheduleForTopic.Topic.Course.Color,
+                    StartTime = m.StartTime ?? TimeOnly.MinValue,
+                    EndTime = m.EndTime ?? TimeOnly.MaxValue
+                })
+             .ToList();
+
+                return (schedule, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+
+        }
+        public async Task<(List<Room> rooms, int totalCount, string ErrorMessage)> GetAllRoomsBySearchWithPagination(
+         string roomName, bool mic, bool projector, bool computer, int numOfSeats,
+         int pageNumber, int pageSize, bool searchStatus)
+        {
+            try
+            {
+                var query = _context.Rooms.AsQueryable(); 
+
+                if (searchStatus)
+                {
+                    query = query.Where(room =>
+                        (string.IsNullOrEmpty(roomName) || room.Name.Contains(roomName)) &&
+                        (room.Speakers == mic || mic==false)  &&
+                        (room.Projector == projector || projector == false) &&
+                        (room.Computers == computer || computer == false) &&
+                        (room.Capacity >= numOfSeats || numOfSeats == 0)); 
+                }
+
+                int totalCount = await query.CountAsync(); 
+
+                var rooms = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync(); 
+
+                return (rooms, totalCount, null);
+            }
+            catch (Exception ex)
+            {
+                return (new List<Room>(), 0, ex.Message);
+            }
+        }
     }
-}
+    }
