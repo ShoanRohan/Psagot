@@ -75,6 +75,14 @@ namespace DL
 
             return user;
         }
+        public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
+        {
+            return await _context.Users
+                                 .Where(u => u.UserTypeId == userTypeId)
+                                 .Select(u => u.Name)
+                                 .ToListAsync();
+        }
+
 
     }
 }
