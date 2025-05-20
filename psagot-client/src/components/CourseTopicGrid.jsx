@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
 import { fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
-import { fetchAllTopic} from '../features/topic/topicActions';
+import { fetchAllTopic } from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
@@ -29,7 +29,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         fontWeight: 'bold',
         fontFamily: 'Rubik',
     },
-    
+
     [`&.${tableCellClasses.body}`]: {
         fontFamily: 'Rubik'
     },
@@ -52,7 +52,7 @@ export default function CourseTopicGrid() {
     useEffect(() => {
         if (courseId) {
             dispatch(fetchAllTopicForCourseByCourseId(courseId));
-        }        
+        }
     }, [dispatch, courseId]);
 
     console.log("טופיקס:", topics)
@@ -67,18 +67,14 @@ export default function CourseTopicGrid() {
     const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
     const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
 
-
     const paginatedTopics = topics.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
 
-
     return (
-        <Box sx={{width: '100%', marginTop: '8px',}}>
-            <TableContainer component={Paper} sx={{ width: '100%', borderRadius: '10px',
-               p: "30px 20px 10px 20px" 
-                }}>
+        <Box sx={{ width: '100%', marginTop: '8px', }}>
+            <TableContainer component={Paper} sx={{width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -132,13 +128,13 @@ export default function CourseTopicGrid() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <IconButton sx={{ bgcolor: '#F4F4F4'}}>
-                                        <img src={editSvg} alt='edit_icon' style={{marginTop: '0px'}} />
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
+                                        <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                    <IconButton sx={{ bgcolor: '#F4F4F4'}}>
-                                        <img src={deleteSvg} alt='delete_icon' style={{marginTop: '0px'}} />
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
+                                        <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
                                 </StyledTableCell>
                             </TableRow>
@@ -146,7 +142,7 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{  p: "30px 20px 10px 20px" , borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
+            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
                 <Grid2 container>
                     {/* עמודים */}
                     <Grid2 xs={3}>
