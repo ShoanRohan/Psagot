@@ -20,5 +20,6 @@ export const addUserAction = createAsyncThunk('user/addUserAction', async (newUs
 });
 export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
     const data = await updatedUser(updateUser);
+
     return data;
 });

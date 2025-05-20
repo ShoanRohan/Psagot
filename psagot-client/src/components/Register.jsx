@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
-import { AppProvider } from '@toolpad/core/AppProvider';
 import {
   Box,
   Button,
@@ -10,7 +9,6 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import '@fontsource/rubik';
 import { signUp } from '../utils/api';
 import { useDispatch } from 'react-redux';
 import { addUserAction } from '../features/user/userAction';
@@ -100,7 +98,7 @@ const Register = () => {
         phone,
         password,
         isActive: true,
-        userTypeId: 1,
+        userTypeId: 5,
         // userTypeName: 'Standard User',
       }));
       
@@ -115,7 +113,7 @@ const Register = () => {
 };  
   
     return (
-        <AppProvider theme={theme}>
+        <>
             <Box
                 sx={{
                     display: 'flex',
@@ -397,7 +395,7 @@ const Register = () => {
                     </Box>
                 </Box>
             </Box>
-        </AppProvider>
+        </>
     );
 };
   
