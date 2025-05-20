@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById, fetchMeetingsByPage } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById, fetchMeetingsByPage,fetchMeetingsByRange} from '../meeting/meetingActions';
 
 const initialState = {
   meetings: [],
   meeting: null,
-  status: 'idle', 
+  status: 'idle',// state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל 
+  rangeStatus: 'idle',   // ← ✅ חדש: סטטוס ייעודי לקריאת פגישות לפי טווח תאריכים
   error: null,
   totalCount: 0, 
 
@@ -45,10 +46,10 @@ const meetingSlice = createSlice({
             .addCase(addMeetingAction.pending, (state) => {
                 state.status = "loading";
               })
-             .addCase(addMeetingAction.fulfilled, (state, action) => {
+            .addCase(addMeetingAction.fulfilled, (state, action) => {
                 state.meetings.push(action.payload)
               })
-              .addCase(addMeetingAction.rejected, (state, action) => {
+           .addCase(addMeetingAction.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
               })
@@ -75,9 +76,19 @@ const meetingSlice = createSlice({
             .addCase(fetchMeetingsByPage.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
+            })
+           .addCase(fetchMeetingsByRange.pending, (state) => {
+                state.rangeStatus = 'loading';  // ← ✅ במקום state.status
+               })
+            .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
+               state.rangeStatus = 'succeeded'; // ← ✅ במקום state.status
+               state.meetings = action.payload;
+             })
+            .addCase(fetchMeetingsByRange.rejected, (state, action) => {
+              state.rangeStatus = 'failed';   // ← ✅ במקום state.status
+              state.error = action.error.message;
             });
-    },
-});
-
+          },
+     });
 export const {} = meetingSlice.actions;
 export default meetingSlice.reducer;
