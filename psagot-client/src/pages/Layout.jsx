@@ -1,7 +1,9 @@
 import React from "react";
+import Header from "../components/Header";
 import Section from "../components/Section";
+import Footer from "../components/Footer";
 import { Box } from "@mui/material";
-import Sidebar from "../components/Sidebar";
+
 
 const Layout = () => {
     return (
