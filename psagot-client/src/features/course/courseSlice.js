@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllCourses, fetchCourseById, addCourseAction, updateCourseAction, fetchFilteredPaginatedCourses } from './courseActions';
 
 const initialState = {
-    //courses: [],
+    courses: [],
     filterPaginatedCourses: [],
     currentPage: 1,
     pageSize: 1,
@@ -28,18 +28,17 @@ const courseSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            // .addCase(fetchAllCourses.pending, (state) => {
-            //     state.status = 'loading';
-            // })
-            // .addCase(fetchAllCourses.fulfilled, (state, action) => {
-            //     state.status = 'succeeded';
-            //     state.courses = action.payload;
-            //     state.filtersCourses = action.payload
-            // })
-            // .addCase(fetchAllCourses.rejected, (state, action) => {
-            //     state.status = 'failed';
-            //     state.error = action.error.message;
-            // })
+            .addCase(fetchAllCourses.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchAllCourses.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.courses = action.payload;
+            })
+            .addCase(fetchAllCourses.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
             .addCase(fetchCourseById.pending, (state) => {
                 state.status = 'loading';
             })
@@ -63,6 +62,8 @@ const courseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+
+
             .addCase(addCourseAction.fulfilled, (state, action) => {
                 state.courses.push(action.payload);
             })
@@ -72,6 +73,10 @@ const courseSlice = createSlice({
                     state.courses[index] = action.payload;
                 }
             });
+
+         
+
+
     },
 });
 
