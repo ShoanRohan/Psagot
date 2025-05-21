@@ -2,7 +2,6 @@
 using DL;
 using Entities.DTO;
 using Entities.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
