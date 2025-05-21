@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button';
-import { FileDown } from 'lucide-react';
 import * as XLSX from 'xlsx';
-
+import excel from '../assets/icons/excel.png'
 export const ExportIconButton = ({
   data,
   fileName = "export",
@@ -23,10 +22,26 @@ export const ExportIconButton = ({
 
   return (
     <Button
+    
       onClick={handleExport}
       size="small"
-      startIcon={<FileDown size={30} />}
+      
+      style={{ width: '44.00000762939453px',
+        height: '44.00000762939453px',
+        left: '252px',
+        borderRadius: '6.88px',
+        justifyContent: 'space-between',
+        paddingTop: '6.88px',
+        paddingRight: '8px',
+        paddingBottom: '6.88px',
+        paddingLeft: '8px'
+         }}
+
+
+
     >
+      <img src= {excel} alt="ייצוא לאקסל" style={{height:'29px', width:'29px'}} />
     </Button>
   );
 };
+

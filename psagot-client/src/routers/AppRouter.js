@@ -6,6 +6,8 @@ import AddMeeting from '../pages/AddMeeting';
 import { ExportIconButton } from '../pages/ExportIconButton';
 import MeetingTable from '../components/MeetingTable';
 import MeetingPage from '../pages/MeetingPage';
+import EditMeeting from '../pages/EditMeeting';
+
 
 const AppRouter = () => {
     return (
@@ -15,6 +17,8 @@ const AppRouter = () => {
                 <Route path='add-meeting' element={<AddMeeting />} />
                 <Route path='export-excel' element={< ExportIconButton />} />
                 <Route path='pages/MeetingPage' element={<MeetingPage/>}/>
+                <Route path="edit-meeting/:meetingId" element={<EditMeeting />} />
+
                 </Route>
 
         </Routes>
