@@ -64,7 +64,6 @@ export default function MeetingsTable() {
   const displayedMeetings = Array.isArray(meetings) ? meetings : [];
 
   const pageCount = Math.ceil(totalCount / rowsPerPage);
-
   return (
     <div>
       <TableContainer component={Paper} className="table-container">
@@ -101,17 +100,17 @@ export default function MeetingsTable() {
           </TableHead>
           <TableBody>
             {displayedMeetings.map((meeting) => (
-              <StyledTableRow key={meeting.id}>
+              <StyledTableRow key={meeting.meetingId}>
                 <StyledTableCell>{meeting.meetingNumber}</StyledTableCell>
                 <StyledTableCell>{meeting.course}</StyledTableCell>
                 <StyledTableCell>{meeting.subject}</StyledTableCell>
-                <StyledTableCell>{meeting.lecturer}</StyledTableCell>
-                <StyledTableCell>{meeting.date}</StyledTableCell>
+                <StyledTableCell>{meeting.teacher}</StyledTableCell>
+                <StyledTableCell>{meeting.meetingDate}</StyledTableCell>
                 <StyledTableCell>{meeting.day}</StyledTableCell>
                 <StyledTableCell>{meeting.startTime}</StyledTableCell>
                 <StyledTableCell>{meeting.endTime}</StyledTableCell>
-                <StyledTableCell>{meeting.room}</StyledTableCell>
-                <StyledTableCell>{meeting.valid ? "V" : "X"}</StyledTableCell>
+                <StyledTableCell>{meeting.roomId}</StyledTableCell>
+                <StyledTableCell>{meeting.isValid ? "V" : "X"}</StyledTableCell>
                 <StyledTableCell>
                   <Chip
                     label={meeting.inSystem ? "פעיל" : "הסתיים"}
