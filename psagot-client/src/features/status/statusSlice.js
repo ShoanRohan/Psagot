@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllStatuses, fetchAllStatusesTopics } from "./statusCourseActions";
+import { fetchAllStatuses, fetchAllStatusesTopics } from "./statusActions";
 
 const initialState = {
   coursesStatuses: [], 
@@ -8,8 +8,8 @@ const initialState = {
   error: null,
 };
 
-const statusCourseSlice = createSlice({
-  name: "statusCourse",
+const statusSlice = createSlice({
+  name: "status",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -39,5 +39,5 @@ const statusCourseSlice = createSlice({
   },
 });
 
-export const selectStatuses = (state) => state.statusCourse.coursesStatuses;
-export default statusCourseSlice.reducer;
+export const selectStatuses = (state) => state.status.coursesStatuses;
+export default statusSlice.reducer;

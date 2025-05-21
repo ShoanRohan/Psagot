@@ -7,19 +7,19 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StatusCourseController : ControllerBase
+    public class StatusController : ControllerBase
     {
-        private readonly IStatusCourseBL _statusCourseBL;
+        private readonly IStatusBL _statusBL;
 
-        public StatusCourseController(IStatusCourseBL statusCourseBL)
+        public StatusController(IStatusBL statusBL)
         {
-            _statusCourseBL = statusCourseBL;
+            _statusBL = statusBL;
         }
 
         [HttpGet("GetAllStatusCourses")]
         public async Task<IActionResult> GetAllStatusCourses()
         {
-            var (statusCourses, errorMessage) = await _statusCourseBL.GetAllStatusCourses();
+            var (statusCourses, errorMessage) = await _statusBL.GetAllStatusCourses();
             if (statusCourses == null) return BadRequest(errorMessage);
 
             return Ok(statusCourses);
@@ -27,7 +27,7 @@ namespace API.Controllers
         [HttpGet("GetAllStatusTopics")]
         public async Task<IActionResult> GetAllStatusTopics()
         {
-            var (statusTopics, errorMessage) = await _statusCourseBL.GetAllStatusTopics();
+            var (statusTopics, errorMessage) = await _statusBL.GetAllStatusTopics();
             if (statusTopics == null) return BadRequest(errorMessage);
 
             return Ok(statusTopics);

@@ -3,8 +3,8 @@ import { Box, Button, Dialog, InputAdornment, MenuItem, Select, TextField, Typog
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCoordinators } from '../features/user/userAction';
 import { selectSelectedCourse } from '../features/course/courseSlice';
-import { fetchAllStatuses } from '../features/statusCourse/statusCourseActions';
-import { selectStatuses } from '../features/statusCourse/statusCourseSlice';
+import { fetchAllStatuses } from '../features/status/statusActions';
+import { selectStatuses } from '../features/status/statusSlice';
 import { selectDays } from '../features/day/daySlice';
 import { fetchDaysForCourseByCourseId } from '../features/daysForCourse/daysForCourseActions';
 import { fetchAllDays } from '../features/day/dayActions';

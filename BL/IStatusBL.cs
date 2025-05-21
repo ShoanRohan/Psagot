@@ -3,7 +3,7 @@
 namespace BL
 {
   
-    public interface IStatusCourseBL
+    public interface IStatusBL
     {
         Task<(IEnumerable<StatusCourseDTO> StatusCourses, string ErrorMessage)> GetAllStatusCourses();
         Task<(IEnumerable<StatusTopicDTO> StatusTopic, string ErrorMessage)> GetAllStatusTopics();
