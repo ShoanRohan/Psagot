@@ -42,10 +42,7 @@ const getUsersByPage = async (pageNumber, pageSize) => {
     return response.data;
 };
 
-export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators };
-
-
-export{getAllUsers, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getUsersByPage};
+export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getUsersByPage };
 
 
 

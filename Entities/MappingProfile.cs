@@ -21,8 +21,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name));
         CreateMap<CourseDTO, Course>();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
-
-        CreateMap<Course,CourseDTO> ().ReverseMap();
         CreateMap<User, UserTableDTO>().ForMember(dest => dest.UserTypeName,
                opt => opt.MapFrom(src => src.UserType.Name)).ReverseMap();
 

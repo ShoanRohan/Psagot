@@ -83,7 +83,6 @@ const userSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
-        })
         .addCase(fetchAllCoordinators.fulfilled, (state, action) =>{
             state.status = 'succeeded';
             state.coordinators = action.payload;

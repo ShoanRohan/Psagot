@@ -32,7 +32,6 @@ const UsersTable = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
                 dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
 
             } catch (error) {
@@ -51,8 +50,6 @@ const UsersTable = () => {
 
         // שינוי דף
     const handlePageNumberChange = (newPage) => {
-        console.log(newPage.target.value)
-        console.log(newPage.target.textContent)
         newPage = Number(newPage.target.textContent);
         if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
             dispatch(setPageNumber(newPage));
@@ -63,7 +60,6 @@ const UsersTable = () => {
     // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
          const newStatus = status ? "inactive" : "active";
-        console.log(`User ID: ${userId}, New Status: ${newStatus}`);
         // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
     };
 
@@ -95,7 +91,7 @@ const UsersTable = () => {
                                     <TableCell sx={{ textAlign: 'center' }}>
                                         <Button 
                                             variant="contained"
-                                            className='buttonActive'
+                                            // className='buttonActive'
                                             style={{
                                                 borderRadius: '20px',
                                                 backgroundColor: user.isActive ? '#DAF8E6' : '#E5E7EB',
@@ -103,6 +99,7 @@ const UsersTable = () => {
                                                 width: '97px',
                                                 height: '39px',
                                             }}
+                                            
                                             onClick={() => {
                                                 handleStatusChange(user.userId,user.isActive);
                                             }}

@@ -35,11 +35,20 @@
   
   }
 
-  .buttonActive{
-    
+.buttonActive {
+  border-radius: 20px;
+  background-color: #DAF8E6;
+  color: #1A8245;
+  width: 97px;
+  height: 39px;
+}
 
-
-  }
-  
+.buttonInactive {
+  border-radius: 20px;
+  background-color: #E5E7EB;
+  color: #374151;
+  width: 97px;
+  height: 39px;
+}
 
   
