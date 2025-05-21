@@ -25,5 +25,12 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<StatusCourseDTO>>(statusCourses), null);
         }
+        public async Task<(IEnumerable<StatusTopicDTO> StatusTopic, string ErrorMessage)> GetAllStatusTopics()
+        {
+            var (statusTopics, errorMessage) = await _statusCourseDL.GetAllStatusTopics();
+            if (statusTopics == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<StatusTopicDTO>>(statusTopics), null);
+        }
     }
 }

@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllStatuses } from "./statusCourseActions";
+import { fetchAllStatuses, fetchAllStatusesTopics } from "./statusCourseActions";
 
 const initialState = {
-  coursesStatuses: [],
+  coursesStatuses: [], 
+  topicsStatuses: [],
   status: "idle", // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
   error: null,
 };
@@ -21,6 +22,17 @@ const statusCourseSlice = createSlice({
         state.coursesStatuses = action.payload;
       })
       .addCase(fetchAllStatuses.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(fetchAllStatusesTopics.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllStatusesTopics.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.topicsStatuses = action.payload;
+      })
+      .addCase(fetchAllStatusesTopics.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

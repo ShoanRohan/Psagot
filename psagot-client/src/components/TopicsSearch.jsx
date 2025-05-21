@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
 import { setFilterTopic } from "../features/topic/topicSlice";
+import { fetchAllStatusesTopics } from "../features/statusCourse/statusCourseActions";
 
 const sharedStyles = {
   width: "150px",
@@ -44,7 +45,7 @@ const TopicsSearch = ({ id }) => {
   const dispatch = useDispatch();
   const { topics, status } = useSelector((state) => state.topic);
   const { lecturers } = useSelector((state) => state.user);
-
+  const { topicsStatuses } = useSelector((state) => state.statusCourse);
   const initialState = {
     topicName: "",
     teacherName: "",
@@ -58,6 +59,11 @@ const TopicsSearch = ({ id }) => {
       dispatch(fetchAllTopicForCourseByCourseId(id));
     }
   }, [status, dispatch, id]);
+   useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchAllStatusesTopics());
+    }
+  }, [status, dispatch]);
 
   const handleFilterData = () => {
     dispatch(setFilterTopic(filters))
@@ -128,9 +134,9 @@ const TopicsSearch = ({ id }) => {
               }}
               sx={sharedStyles}
             >
-              {topics?.map((topic) => (
-                <MenuItem key={topic.id} value={topic.status}>
-                  {topic.status}
+              {topicsStatuses?.map((topic) => (
+                <MenuItem key={topic.StatusTopicId} value={topic.name}>
+                  {topic.name}
                 </MenuItem>
               ))}
             </Select>

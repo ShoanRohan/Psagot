@@ -24,6 +24,14 @@ namespace API.Controllers
 
             return Ok(statusCourses);
         }
+        [HttpGet("GetAllStatusTopics")]
+        public async Task<IActionResult> GetAllStatusTopics()
+        {
+            var (statusTopics, errorMessage) = await _statusCourseBL.GetAllStatusTopics();
+            if (statusTopics == null) return BadRequest(errorMessage);
+
+            return Ok(statusTopics);
+        }
 
     }
 }
