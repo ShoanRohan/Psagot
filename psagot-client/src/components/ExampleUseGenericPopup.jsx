@@ -1,23 +1,47 @@
-import React, { useState } from "react";
-import { Button } from "@mui/material";
-import GenericPopup from "./GenericPopup";
+import React, { useState } from 'react';
+import GenericPopup from '../components/GenericPopup';
+import { Button } from '@mui/material';
 
-const App = () => {
-  const [open, setOpen] = useState(false);
+const ExampleUseGenericPopup = () => {
+    const [showCancel, setShowCancel] = useState(true); // מצב האם להראות כפתור ביטול
+    const [showSave, setShowSave] = useState(true); // מצב האם להראות כפתור שמור
+    const [open, setOpen] = useState(false);
 
-  return (
-    <div>
-      <Button variant="contained" onClick={() => setOpen(true)}>
-        פתח פופאפ
-      </Button>
-      <GenericPopup
-        open={open}
-        onClose={() => setOpen(false)}
-        onSave={() => alert("נשמר!")}
-        onCancel={() => setOpen(false)}
-      />
-    </div>
-  );
+    const handleOpenPopup = () => {
+        setOpen(true);
+    }
+
+    const handleClosePopup = () => {
+        setOpen(false);
+    }
+
+    const handleSave = () => {
+        alert("כפתור שמור נלחץ");
+        setOpen(false);
+    };
+
+    const handleCancel = () => {
+        setOpen(false);
+    };
+
+    return (
+        <React.Fragment>
+            {/* כפתור לפתיחת הפופ-אפ */}
+            <Button onClick={handleOpenPopup}>דוגמא לפופ-אפ</Button>
+            {/* שימוש בקומפוננטה של GenericPopup */}
+            <GenericPopup
+                open={open}
+                onClose={handleClosePopup}
+                title="כותרת הפופ-אפ"
+                onSave={handleSave}
+                onCancel={handleCancel}
+                showCancelButton={showCancel}
+                showSaveButton={showSave}
+            >
+                זהו תוכן הפופ-אפ!
+            </GenericPopup>
+        </React.Fragment>
+    );
 };
 
-export default App;
+export default ExampleUseGenericPopup;

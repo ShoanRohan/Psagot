@@ -52,6 +52,7 @@ namespace Psagot.Controllers
             return Ok(updatedUser);
         }
 
+
         [HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
@@ -68,6 +69,16 @@ namespace Psagot.Controllers
             if (users == null) return BadRequest(errorMessage);
 
             return Ok(users);
+        }
+
+        [HttpGet("GetCoordinators")]
+        public async Task<IActionResult> GetCoordinators()
+        {
+            var (coordinators, errorMessage) = await _userBL.GetCoordinators();
+            if (coordinators == null || !coordinators.Any())
+                return BadRequest(errorMessage);
+
+            return Ok(coordinators);
         }
 
         [HttpPost("login")]
@@ -92,6 +103,23 @@ namespace Psagot.Controllers
 
                 return StatusCode(500, "Internal server error");
             }
+
+        }
+
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (users == null) return BadRequest(errorMessage);
+            return Ok(users);
+        }
+
+        [HttpGet("GetCoordinatorsAndLecturers")]
+        public async Task<IActionResult> GetCoordinatorsAndLecturers()
+        {
+            var (users, errorMessage) = await _userBL.GetCoordinatorsAndLecturers();
+            if (users == null) return BadRequest(errorMessage);
+            return Ok(users);
         }
     }
 }
