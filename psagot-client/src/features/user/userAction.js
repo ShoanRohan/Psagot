@@ -27,7 +27,6 @@ export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllL
 });
 
 export const fetchUsersByPage = createAsyncThunk('user/fetchUsersByPage', async({pageNumber, pageSize}) => {
-    console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
     const data = await getUsersByPage(pageNumber, pageSize);
     return data;
 });

@@ -16,13 +16,22 @@ const UsersTable = () => {
 
     const dispatch = useDispatch();
 
-    // const handleChange = (event) => {
-    //     const value = Number(event.target.value); // עדכון ל-`event`
-    //     setPageNumber(value); // עדכון `pageSize`
-    //     // setPage(value); // קריאה ל-`setPage`
-    // };
+       // טוען את המשתמשים
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
+                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
 
-    const handleChangePageSize = (event) => {
+            } catch (error) {
+                console.error("שגיאה בטעינת המשתמשים:", error);
+            }
+        };
+        fetchUsers();
+    }, [pageNumber, pageSize, dispatch]);
+
+
+     const handleChangePageSize = (event) => {
         const size = Number(event.target.value); // עדכון ל-`event`
         // setPageSize(value); // עדכון `pageSize`
         dispatch(setPageSize(size)); // קריאה ל-`setPage`
@@ -38,49 +47,12 @@ const UsersTable = () => {
         }
     };
 
-    // // פונקציה לפיצול דפים
-    // const getUserByPageNum = (users, page, pageSize) => {
-    //     const startIndex = (page - 1) * pageSize;
-    //     return users.slice(startIndex, startIndex + pageSize);
-    // };
-
-    // טוען את המשתמשים
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                console.log("Fetching users with pageNumber:", pageNumber, "and pageSize:", pageSize);
-                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
-
-            } catch (error) {
-                console.error("שגיאה בטעינת המשתמשים:", error);
-            }
-        };
-        fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
-
-
-
+ 
     // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
         console.log(`User ID: ${userId}, New Status: ${status}`);
         // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
     };
-
-//      useEffect(() => {
-//     const handleScroll = () => {
-//         if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) { // Adjust the threshold as needed
-//             const nextPage = pageNumber + 1;
-//             if (nextPage <= Math.ceil(totalUsers / pageSize)) {
-//                 dispatch(setPageNumber(nextPage));
-//             }
-//         }
-//     };
-
-//     window.addEventListener('scroll', handleScroll);
-//     return () => {
-//         window.removeEventListener('scroll', handleScroll);
-//     };
-// }, [pageNumber, pageSize, totalUsers, dispatch]);
 
     return (
         <Box>
@@ -142,13 +114,6 @@ const UsersTable = () => {
                                             {/* <Editicone /> */}
                                             <EditOutlinedIcon fontSize="inherit" />
                                         </IconButton>
-
-                                        {/* <Box
-            component="img"
-            src={myImage}
-            alt="Description of the image"
-            sx={{ width: '100%', height: 'auto' }} // You can customize styles using sx prop
-        /> */}
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -172,13 +137,10 @@ const UsersTable = () => {
                             </Select>
                         </FormControl>
                     </Box>
-                  
-                
                     <Pagination
                         count={Math.ceil(totalUsers / pageSize)}
                         page={pageNumber}
                         onChange={handlePageNumberChange}
-                        
                     />
                 </Box>
             </Box>
