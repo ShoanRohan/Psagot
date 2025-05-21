@@ -91,7 +91,7 @@ namespace DL
                         (m.ScheduleForTopic.Topic.Course.EndDate == null ||
                          DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
                     .Where(m => m.MeetingDate == DateOnly.FromDateTime(dateTime))
-                    .Select(m => new RoomsScheduleByDateDTO
+                    .Select(m => new RoomScheduleByDateDTO
                     {
                         RoomName = m.Room.Name,
                         Lecturer = m.Topic.Teacher.Name,

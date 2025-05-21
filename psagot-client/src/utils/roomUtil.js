@@ -23,7 +23,7 @@ const getRoomById = async (id) => {
 };
 
 const getRoomsScheduleByDate = async (dateTime) => {
-    const response = await api.get(`/Room/GetCourseScheduleByDate`, {
+    const response = await api.get(`/Room/getRoomsScheduleByDate`, {
       params: { date: dateTime }
     });
     return response.data;

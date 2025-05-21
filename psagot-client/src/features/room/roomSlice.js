@@ -9,6 +9,7 @@ const initialState = {
     roomSchedule: [],
     viewMode: 'rooms',
     displayDate:new Date().toLocaleDateString('en-GB'),
+    // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
