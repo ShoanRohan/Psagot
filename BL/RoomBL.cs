@@ -49,13 +49,13 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<RoomDTO>>(rooms), null);
         }
-        public async Task<(List<RoomsScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
+        public async Task<(List<RoomScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
         {
             var (schedule, errorMessage) = await _roomDL.GetRoomsScheduleByDate(dateTime);
           
             if (schedule == null) return (null, errorMessage);
 
-            return (_mapper.Map<List<RoomsScheduleByDateDTO>>(schedule), null);
+            return (_mapper.Map<List<RoomScheduleByDateDTO>>(schedule), null);
         }
         public async Task<(List<RoomDTO> rooms, int totalCount, string ErrorMessage)> GetAllRoomsBySearchWithPagination(
          string roomName, bool mic, bool projector, bool computer, int numOfSeats,

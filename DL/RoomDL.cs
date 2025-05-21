@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Entities.Contexts;
 using Entities.DTO;
-using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace DL
@@ -23,8 +20,7 @@ namespace DL
 
         public async Task<(IEnumerable<Room> Rooms, string ErrorMessage)> GetAllRooms()
         {
-            try
-            {
+            try {
                 var rooms = await _context.Set<Room>().ToListAsync();
                 return (rooms, null);
             }
@@ -73,7 +69,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-        public async Task<(List<RoomsScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
+        public async Task<(List<RoomScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
         {
             try
             {
@@ -95,7 +91,7 @@ namespace DL
                         (m.ScheduleForTopic.Topic.Course.EndDate == null ||
                          DateOnly.FromDateTime(dateTime) <= m.ScheduleForTopic.Topic.Course.EndDate))
                     .Where(m => m.MeetingDate == DateOnly.FromDateTime(dateTime))
-                    .Select(m => new RoomsScheduleByDateDTO
+                    .Select(m => new RoomScheduleByDateDTO
                     {
                         RoomName = m.Room.Name,
                         Lecturer = m.Topic.Teacher.Name,
