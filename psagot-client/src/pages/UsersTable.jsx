@@ -28,6 +28,16 @@ const UsersTable = () => {
         dispatch(setPageSize(size)); // קריאה ל-`setPage`
     };
 
+        // שינוי דף
+    const handlePageNumberChange = (newPage) => {
+        console.log(newPage.target.value)
+        console.log(newPage.target.textContent)
+        newPage = Number(newPage.target.textContent);
+        if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
+            dispatch(setPageNumber(newPage));
+        }
+    };
+
     // // פונקציה לפיצול דפים
     // const getUserByPageNum = (users, page, pageSize) => {
     //     const startIndex = (page - 1) * pageSize;
@@ -48,12 +58,7 @@ const UsersTable = () => {
         fetchUsers();
     }, [pageNumber, pageSize, dispatch]);
 
-    // שינוי דף
-    const handlePageNumberChange = (newPage) => {
-        if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-            dispatch(setPageNumber(newPage));
-        }
-    };
+
 
     // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
@@ -87,12 +92,12 @@ const UsersTable = () => {
                     <Table sx={{ Width: 3000, height: 682 }} aria-label="users table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className="tablecell" height={72} width={1442}>קוד משתמש</TableCell>
-                                <TableCell className="tablecell">שם משתמש</TableCell>
-                                <TableCell className="tablecell">מייל</TableCell> {/* יישור הכותרת למרכז */}
-                                <TableCell className="tablecell">הרשאה</TableCell>
-                                <TableCell className="tablecell">סטטוס</TableCell>
-                                <TableCell className="tablecell">עריכה</TableCell>
+                                <TableCell className="bigtable" height={72} width={1442}>קוד משתמש</TableCell>
+                                <TableCell className="bigtable">שם משתמש</TableCell>
+                                <TableCell className="bigtable">מייל</TableCell> {/* יישור הכותרת למרכז */}
+                                <TableCell className="bigtable">הרשאה</TableCell>
+                                <TableCell className="bigtable">סטטוס</TableCell>
+                                <TableCell className="bigtable">עריכה</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -120,7 +125,7 @@ const UsersTable = () => {
                                             {user.isActive ? "פעיל" : "לא פעיל"}
                                         </Button>
                                     </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '79px' }}>
+                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '55%' }}>
                                         <IconButton
                                             aria-label="delete"
                                             size="small"
