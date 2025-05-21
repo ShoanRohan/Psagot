@@ -6,8 +6,8 @@ const CourseTopics = () => {
   return (
     <>
       <TopicsSearch />
-      <CourseTopicGrid/>
-          </>
+      <CourseTopicGrid />
+    </>
   );
 };
 

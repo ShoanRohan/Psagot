@@ -27,17 +27,17 @@ const CourseScreen = ({ courseId }) => {
     <Box className="course-container">
       {/* כותרת הקורס */}
       <Box className="course-header" sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-  
-          <Typography className="course-title">
-            {course ? course.name : "טוען..."}
-          </Typography>
-          {/* <Typography className="course-status">סטטוס הקורס: {course ? course.status : "טוען..."}</Typography> */}
-       
+
+        <Typography className="course-title">
+          {course ? course.name : "טוען..."}
+        </Typography>
+        {/* <Typography className="course-status">סטטוס הקורס: {course ? course.status : "טוען..."}</Typography> */}
+
 
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
-        <Box className="course-actions" sx={{ display: "flex",justifyContent:"center", gap: "10px" }}>
+        <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
           <IconButton>
-            <img src={exlIcon} alt="הורדת אקסל" style={{width:"24px", height:"24px", marginTop:"0px"}}/>
+            <img src={exlIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
           </IconButton>
           <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
             הוספת נושא
@@ -45,20 +45,20 @@ const CourseScreen = ({ courseId }) => {
         </Box>
       </Box>
       <Typography className="course-status">סטטוס הקורס: {course ? course.statusName : "טוען..."}</Typography>
-{/* 
-      <Box 
-      className="helpBox"
-  component="section"
-  sx={{
-    position: "relative",
-    left: "50%",
-    right: "50%",
-    marginLeft: "-50vw",
-    marginRight: "-50vw",
-    width: "100vw",
-    pt: 2,     // אם תרצה קצת ריווח למעלה
-  }}
-> */}
+
+      {/* <Box
+        className="helpBox"
+        component="section"
+        sx={{
+          position: "relative",
+          left: "50%",
+          right: "50%",
+          marginLeft: "-50vw",
+          marginRight: "-50vw",
+          width: "100vw",
+          pt: 2,     // אם תרצה קצת ריווח למעלה
+        }}
+      > */}
 
       {/* בר ניווט */}
       <Tabs value={tabIndex} onChange={handleTabChange} className="course-tabs">
