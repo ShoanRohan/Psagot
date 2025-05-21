@@ -5,6 +5,8 @@ import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import MeetingsTable from '../components/MeetingsTable';
 import RoomTable from '../components/RoomTable';
+import RoomsHeader from '../components/RoomsHeader';
+
 const AppRouter = () => {
     return (
         <Routes>
@@ -15,6 +17,8 @@ const AppRouter = () => {
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<RoomTable />} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
+                <Route path="/roomsHeader" element={<RoomsHeader/>} />
             </Route>
         </Routes>
     );
