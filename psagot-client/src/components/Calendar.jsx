@@ -102,7 +102,7 @@ const Calendar = ({ currentDate, view, events }) => {
 
   return (
     <CalendarStyle>
-      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden', height: "calc(100vh - 112px)", }}>
+      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden', height: "calc(100vh - 112px)", }} id="calendar-container">
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
