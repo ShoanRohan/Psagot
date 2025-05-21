@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
@@ -6,7 +7,6 @@ import { Typography, Button, Container } from "@mui/material";
 const HomePage = () => {
     const dispatch = useDispatch();
     const { userTypes, status, error } = useSelector((state) => state.userType);
-
 
     useEffect(() => {
         if (status === 'idle') {

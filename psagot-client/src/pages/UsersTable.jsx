@@ -1,6 +1,18 @@
 
-import { Box, Button, Typography, Paper, IconButton, MenuItem, FormControl, Select } from '@mui/material';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import { useEffect } from "react";
@@ -50,7 +62,8 @@ const UsersTable = () => {
  
     // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
-        console.log(`User ID: ${userId}, New Status: ${status}`);
+         const newStatus = status ? "inactive" : "active";
+        console.log(`User ID: ${userId}, New Status: ${newStatus}`);
         // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
     };
 
@@ -80,8 +93,9 @@ const UsersTable = () => {
                                     <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button
+                                        <Button 
                                             variant="contained"
+                                            className='buttonActive'
                                             style={{
                                                 borderRadius: '20px',
                                                 backgroundColor: user.isActive ? '#DAF8E6' : '#E5E7EB',
@@ -90,8 +104,7 @@ const UsersTable = () => {
                                                 height: '39px',
                                             }}
                                             onClick={() => {
-                                                const newStatus = user.isActive ? "inactive" : "active";
-                                                handleStatusChange(user.userId, newStatus);
+                                                handleStatusChange(user.userId,user.isActive);
                                             }}
                                         >
                                             {user.isActive ? "פעיל" : "לא פעיל"}
