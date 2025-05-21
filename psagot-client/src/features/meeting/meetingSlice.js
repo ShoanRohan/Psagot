@@ -5,7 +5,7 @@ const initialState = {
   meetings: [],
   meeting: null,
   status: 'idle',// state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל 
-  rangeStatus: 'idle',   // ← ✅ חדש: סטטוס ייעודי לקריאת פגישות לפי טווח תאריכים
+  rangeStatus: 'idle',
   error: null,
   totalCount: 0, 
 
@@ -78,14 +78,14 @@ const meetingSlice = createSlice({
                 state.error = action.error.message;
             })
            .addCase(fetchMeetingsByRange.pending, (state) => {
-                state.rangeStatus = 'loading';  // ← ✅ במקום state.status
+                state.rangeStatus = 'loading';  
                })
             .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
-               state.rangeStatus = 'succeeded'; // ← ✅ במקום state.status
+               state.rangeStatus = 'succeeded';
                state.meetings = action.payload;
              })
             .addCase(fetchMeetingsByRange.rejected, (state, action) => {
-              state.rangeStatus = 'failed';   // ← ✅ במקום state.status
+              state.rangeStatus = 'failed'; 
               state.error = action.error.message;
             });
           },

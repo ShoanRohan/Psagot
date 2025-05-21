@@ -23,27 +23,20 @@ const generateTimes = (startHour, endHour) => {
   }
   return times;
 };
-
 const times = generateTimes(8, 23);
 
 export default function RoomTable() {
   const dispatch = useDispatch();
-  
   const [isLoading, setIsLoading] = useState(true);
+  const { rooms, status: roomsStatus, error: roomsError } = useSelector(state => state.room);
+  const { meetings, status: meetingsStatus, error: meetingsError } = useSelector(state => state.meeting);
 
-  const rooms = useSelector((state) => state.room.rooms);
-  const roomsStatus = useSelector((state) => state.room.status);
-  const roomsError = useSelector((state) => state.room.error);
-
-  const meetings = useSelector((state) => state.meeting.meetings);
-  const meetingsStatus = useSelector((state) => state.meeting.status);
-  const meetingsError = useSelector((state) => state.meeting.error);
   useEffect(() => {
     const today = new Date().toISOString().slice(0, 10);
     const loadData = async () => {
       try {
-        await dispatch(fetchAllRooms()).unwrap();
-        await dispatch(fetchMeetingsByRange({ startDate: today, endDate: today })).unwrap();
+        await dispatch(fetchAllRooms());
+        await dispatch(fetchMeetingsByRange({ startDate: today, endDate: today }));
       } catch (err) {
         console.error('Error loading data:', err);
       } finally {
@@ -90,9 +83,7 @@ export default function RoomTable() {
           <TableBody>
             {times.map((time, rowIndex) => (
               <TableRow key={rowIndex} hover>
-                <TableCell
-                  className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}
-                >
+                <TableCell className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}>
                   {time}
                 </TableCell>
 
@@ -121,11 +112,7 @@ export default function RoomTable() {
                       <TableCell key={cellKey} rowSpan={rowSpan} className="room-cell meeting-cell">
                         <div
                           className="meeting-box"
-                          style={{
-                            '--meeting-color': baseColor,
-                            '--meeting-bg-color': bgColor,
-                          }}
-                        >
+                          style={{'--meeting-color': baseColor,'--meeting-bg-color': bgColor,}} >
                           <div className="meeting-title">{meeting.title}</div>
                           <div className="meeting-subtitle">{meeting.extendedProps.description || ''}</div>
                         </div>
@@ -133,12 +120,7 @@ export default function RoomTable() {
                     );
                   } else {
                     return (
-                      <TableCell
-                        key={cellKey}
-                        className={`room-cell ${
-                          time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'
-                        }`}
-                      />
+                      <TableCell key={cellKey}className={`room-cell ${time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'}`}/>
                     );
                   }
                 })}
