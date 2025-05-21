@@ -28,6 +28,7 @@ const times = generateTimes(8, 23);
 
 export default function RoomTable() {
   const dispatch = useDispatch();
+  
   const [isLoading, setIsLoading] = useState(true);
 
   const rooms = useSelector((state) => state.room.rooms);
@@ -37,7 +38,6 @@ export default function RoomTable() {
   const meetings = useSelector((state) => state.meeting.meetings);
   const meetingsStatus = useSelector((state) => state.meeting.status);
   const meetingsError = useSelector((state) => state.meeting.error);
-
   useEffect(() => {
     const today = new Date().toISOString().slice(0, 10);
     const loadData = async () => {

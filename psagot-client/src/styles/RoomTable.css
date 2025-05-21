@@ -16,7 +16,7 @@
   border: none; 
   border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; /* חשוב לקבוע רוחב עמודות אחיד */
+  table-layout: fixed; 
 }
 
 .room-table thead .room-header {
@@ -63,7 +63,7 @@
   box-sizing: border-box;
 }
 
-.room-cell.meeting-cell {
+/* .room-cell.meeting-cell {
   padding: 8px;
   border-radius: 8px;
   color: #333;
@@ -71,11 +71,11 @@
   flex-direction: column;
   justify-content: center;
   cursor: pointer;
-  height: 100%;        /* גובה מלא בתוך השורה */
-  max-height: 40px;    /* שומר על גובה שורה אחיד */
+  height: 100%;      
+  max-height: 40px;  
   overflow: hidden;
   box-sizing: border-box;
-}
+} */
 
 /* תיבת מפגש עם פס צבע */
 .meeting-box {
@@ -104,8 +104,8 @@
 /* טקסטים בתוך מפגש */
 .meeting-title, .meeting-subtitle {
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
   line-height: 1.2;
 }
 

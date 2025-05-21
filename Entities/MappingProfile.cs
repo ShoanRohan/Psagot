@@ -18,7 +18,6 @@ public class MappingProfile : Profile
         CreateMap<Topic, TopicDTO>().ReverseMap();
         CreateMap<Course, CourseDTO>().ReverseMap();
 
-        // ✅ מיפוי EventDTO בלי כפילויות
         CreateMap<Meeting, EventDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MeetingId))
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src =>
