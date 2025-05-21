@@ -17,7 +17,7 @@ const AppRouter = () => {
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path='/MeetingsTable' element={<MeetingsTable />} />
-                <Route path='/RoomTable' element={<RoomTable />} />
+                 <Route path='/RoomTable' element={<RoomTable />} />
             </Route>
         </Routes>
     );

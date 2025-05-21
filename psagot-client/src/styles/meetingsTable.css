@@ -10,8 +10,6 @@
   display: block;
   background-color: #F6F7F9; 
   border-radius:6px;
-
-
 }
 [data-testid="EditOutlinedIcon"] path {
   display: none; 
@@ -28,8 +26,6 @@
   display: block;
   background-color: #F6F7F9; 
   border-radius: 6px;
-
-
 }
 [data-testid="DeleteOutlineIcon"] path {
   display: none; 
@@ -42,7 +38,7 @@
 
 .table-container {
   width: 950px;
-  
+  margin-top:30px;
 }
 
 /* טבלה */
@@ -119,6 +115,62 @@ padding:10px;
 margin-top:20px;
 width: 1120px;
 
+}
+
+.highlighted-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.ml-1 {
+  margin-left: 1rem;
+}
+
+.custom-select {
+  height: 28px;
+  min-width: 50px;
+  font-size: 0.5rem;
+  padding: 2px 8px;
+}
+
+.custom-select .MuiSelect-icon {
+  display: none;
+}
+
+.icon-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pagination {
+  direction: ltr;
+}
+
+.pagination .MuiPaginationItem-root {
+  border-radius: 0; /* מבטל את המעוגלות של הפינות */
+  background-color: transparent; /* צבע רקע שקוף */
+  color: #333; /* צבע טקסט אפור כהה */
+}
+
+.pagination .MuiPaginationItem-root.Mui-selected {
+  background-color: #f0f0f0; /* רקע אפור בהיר לעמוד הנבחר */
+  color: #000; /* צבע טקסט שחור */
+  font-weight: bold; /* הדגשה של הטקסט */
+}
+
+.pagination .MuiPaginationItem-root:hover {
+  background-color: #e0e0e0; /* רקע אפור כהה יותר בהעברת עכבר */
+  cursor: pointer;
 }
 
 

@@ -1,5 +1,6 @@
 import api from "./api"
 
+
 const getAllMeetings = async() => {
     const response = await api.get('/Meeting/GetAllMeetings');
     return response.data;
@@ -26,4 +27,14 @@ const GetMeetingsByPage = async (page, pageSize) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage};
+const getMeetingsByRange = async (startDate, endDate) => {
+    const response = await api.get('/meeting/GetMeetingsByRange', {
+        params: {
+            startDate,
+            endDate
+        }
+    });
+    return response.data;
+};
+
+export { getMeetingsByRange, getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage};

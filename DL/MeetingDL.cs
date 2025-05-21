@@ -1,12 +1,7 @@
 ﻿using Entities.Contexts;
-using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DL
 {
@@ -99,11 +94,13 @@ namespace DL
             try
             {
                 var query = _context.Meetings.AsQueryable();
+
                 int totalCount = await query.CountAsync();
+              
                 List<Meeting> meetings = await query
-                    .OrderBy(m => m.MeetingDate)
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .OrderBy(m => m.MeetingDate) 
+                    .Skip((page - 1) * pageSize) 
+                    .Take(pageSize) 
                     .ToListAsync();
 
                 return (meetings, totalCount);
