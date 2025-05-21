@@ -9,13 +9,12 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   },
 
   overflow: "hidden",
-  height: "calc(100vh - 90px)", // או גובה מתאים - תלוי בגובה הכפתורים העליונים
+  height: "calc(100vh - 90px)",
   width: "100%",
   borderRadius: "10px",
   fontFamily: "Rubik, sans-serif",
   boxSizing: "border-box",
   padding: "10px 65px",
-  backgroundColor: "green",
 
 
   //מסגרת של כל הלוח כולל הימים- לבן עם צל כחול
@@ -23,12 +22,14 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     width: "100%",
     height: "100%",
     backgroundColor: "#FFFFFF",
-    // backgroundColor:"orange",
     borderRadius: "10px",
-    // padding: "12px",
-    boxShadow: "0px 0px 4px 0px #D7E6FC",
+    padding: "12px",
+    boxShadow: "0px 4px 20px rgba(0, 0, 255, 0.4) !important",
+    position: "relative",
+    zIndex: 1,
     flexShrink: "1",
     boxSizing: "border-box",
+    overflow: "visible",
   },
 
   //טבלת התאריכים- ריבוע אחד גדול
@@ -36,13 +37,8 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     border: "none !important",
     gridTemplateColumns: "repeat(7, 1fr)", // 7 עמודות - יום לכל תא
     gridAutoRows: "120px", // כל שורה תהיה בגובה אחיד
-
     width: "100%", // מבטיח שהתאים לא יתפרסו
     display: "flex",
-
-    // gridAutoRows: "20px !important", // כמו ה-minHeight של תא
-    // gridAutoRows: "100px",
-    // backgroundColor:"purple",
 
   },
 
@@ -184,7 +180,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     fontFamily: "Rubik, sans-serif",
     fontWeight: "500 !important",
     fontSize: "10px !important",
-    lineHeight: "6.5px !important",
+    lineHeight: "5.2px !important",
     color: "#393939 !important",
     paddingTop: "10px !important",
     paddingBottom: "10px !important",
@@ -195,7 +191,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
   //עמודת השעות בתצוגת יום
   "& .fc-timeGridDay-view .fc-timegrid-slot-label": {
     height: "10px !important",
-    lineHeight: "9px !important",
+    lineHeight: "7.5px !important",
   },
 
 

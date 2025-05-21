@@ -86,9 +86,9 @@ const handleEventContent = (eventInfo) => {
 
 const Calendar = ({ currentDate, view, events }) => {
   const navigate = useNavigate();
-    const [aspectRatio, setAspectRatio] = useState(1.5); // ברירת מחדל
+  const [aspectRatio, setAspectRatio] = useState(1.5); // ברירת מחדל
 
-     useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight - 112; // הגובה שהגדרת
@@ -102,7 +102,7 @@ const Calendar = ({ currentDate, view, events }) => {
 
   return (
     <CalendarStyle>
-      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden' ,  height: "calc(100vh - 112px)",}}>
+      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden', height: "calc(100vh - 112px)", }}>
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -111,20 +111,7 @@ const Calendar = ({ currentDate, view, events }) => {
           direction="rtl"
           headerToolbar={false}
           initialDate={currentDate.format("YYYY-MM-DD")}
-
-          // aspectRatio={1.5} // לדוגמה: גובה קטן יותר מרוחב
-          // height="86vh" // חשוב לוודא שזה מוגדר
-
-          // height="calc(100vh - 112px)"
-
-  height="100%" // מתפרש לגובה של המכולה (Box)
-          // eventHeight={10} // גובה האירוע יהיה 30px
-
-      
-        
-
-
-          // hiddenDays={["dayGridMonth", "timeGridWeek"].includes(view) ? [6] : []}//להסתיר את שבת בתצוגה שבועית וחודשית
+          height="100%" // מתפרש לגובה של המכולה (Box)
           slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
           slotDuration="01:00:00" // שורה אחת לכל שעה
           slotMinTime="08:00:00" // השעה הראשונה בתצוגת שבוע ויום

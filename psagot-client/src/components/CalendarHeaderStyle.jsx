@@ -9,12 +9,10 @@ const HeaderContainer = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  // padding: "10px",
   gap: "8px",
   flexWrap: "nowrap",
   overflow: "hidden",
   minWidth: 0,
-  backgroundColor:"pink",
 });
 
 const Title = styled(Typography)({
@@ -69,7 +67,6 @@ const ViewButton = styled(Button, {
   fontSize: "16px",
   fontWeight: 400,
   borderRadius: "50px !important",
-  // padding: "10px 24px",
   borderColor: "#326DEF !important",
   color: isActive ? "#FFFFFF" : "#326DEF",
   background: isActive ? "#1E53CB" : "#FFFFFF",

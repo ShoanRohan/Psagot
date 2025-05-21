@@ -4,7 +4,6 @@ body {
   padding: 0;
   height: 100%;
   overflow: hidden;
-  /* למנוע גלילה כללית */
 }
 
 .sideBarStyle {
@@ -26,7 +25,6 @@ body {
   width: 88%;
   height: 100vh;
   padding: 16px;
-  background-color: yellow;
   overflow: hidden;
   display: block;
 }
@@ -83,8 +81,6 @@ img {
 .user-profile-container {
   display: flex;
   align-items: center;
-  /* padding: 6px; */
-  /* margin-top: auto; */
   padding-top: 80px;
   flex-direction: row-reverse;
   justify-content: flex-end;
