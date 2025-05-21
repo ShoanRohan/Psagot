@@ -24,5 +24,9 @@ const GetMeetingsByPage = async (page, pageSize) => {
     const response = await api.get(`/Meeting/GetMeetingsByPage?page=${page}&pageSize=${pageSize}`);
     return response.data;
 };
+const getMeetingsByRange = async (startDate, endDate) => {
+  const response = await api.get(`/Meeting/GetMeetingsByRange?startDate=${startDate}&endDate=${endDate}`);
+  return response.data;
+};
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage };
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage, getMeetingsByRange};
