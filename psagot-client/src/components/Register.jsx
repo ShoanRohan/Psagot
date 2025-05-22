@@ -13,6 +13,7 @@ import { signUp } from '../utils/api';
 import { useDispatch } from 'react-redux';
 import { addUserAction } from '../features/user/userAction';
 import { useNavigate } from 'react-router-dom';
+import { setUser } from '../features/user/userSlice';
 
 const Register = () => {
   const theme = useTheme();
@@ -91,26 +92,38 @@ const Register = () => {
       setIsSubmitting(false);
       return;
     }
-  
-    const resultAction = await dispatch(addUserAction({
-        name,
-        email,
-        phone,
-        password,
-        isActive: true,
-        userTypeId: 5,
-        // userTypeName: 'Standard User',
-      }));
-      
-      const result = resultAction.payload;
-      console.log(result);
-      if (result?.success) {
-        alert("נרשמת בהצלחה!");
-        navigate('/');
-      } else {
-        alert("אירעה שגיאה בהרשמה. נסי שוב.");
-      }
-};  
+  try {
+  const resultAction = await dispatch(addUserAction({
+    name,
+    email,
+    phone,
+    password,
+    isActive: true,
+    userTypeId: 5,
+  }));
+console.log('Result action:', resultAction);
+const registeredUser = resultAction.payload.user;
+  if (addUserAction.fulfilled.match(resultAction)) {
+  const userId = registeredUser?.userId || registeredUser?.id;
+  if (userId) {
+    localStorage.setItem('userId', userId);
+  dispatch(setUser(registeredUser));
+  alert("נרשמת בהצלחה!");
+  navigate('/');}
+} else {
+  const error = resultAction.payload;
+  if (error?.errorCode === 'EMAIL_PHONE_EXISTS') {
+    alert("כבר קיים משתמש עם האימייל והטלפון שהזנת.");
+  } else {
+    alert("אירעה שגיאה בהרשמה. נסי שוב.");
+  }}
+} catch (error) {
+  console.error('שגיאה בלתי צפויה:', error);
+  alert("שגיאה בלתי צפויה. נסי שוב.");
+} finally {
+  setIsSubmitting(false);
+}
+};
   
     return (
         <>

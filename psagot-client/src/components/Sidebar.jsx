@@ -125,7 +125,7 @@ const Sidebar = () => {
                         lineHeight: "20px",
                     }}
                 >
-                    {user?.userTypeDescription || "שם משתמש"}
+                    {user?.userTypeName  || "סוג משתמש"}
                 </Typography>
                 </div>
             </Box>

@@ -31,6 +31,13 @@ namespace DL
             }
         }
 
+        public async Task<User> GetUserByEmailAndPhone(string email, string phone)
+{
+    return await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == email && u.Phone == phone);
+}
+
+
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
         {
             try
