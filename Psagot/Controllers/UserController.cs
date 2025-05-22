@@ -102,10 +102,6 @@ namespace Psagot.Controllers
                 return NotFound("No users found with the specified user type.");
 
             return Ok(userNames);
-        }
-
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        }     
     }
 }

@@ -88,13 +88,6 @@ namespace DL
 
             return user;
         }
-        public async Task<User> UserLoginAsync(string email, string password)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email);
-
-            return user;
-        }
         public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
         {
             return await _context.Users

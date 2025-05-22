@@ -11,8 +11,8 @@ import { fetchAllCourses } from "../features/course/courseActions";
 
 const CourseGrid = () => {
   const dispatch = useDispatch();
-  const Courses = useSelector((state) => state.course.course);
-  
+  const Courses = useSelector((state) => state.course.courses);
+  const activeCourses = Courses?.filter(course => course.statusId === 1);
 
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -25,7 +25,7 @@ const CourseGrid = () => {
     console.log("Courses in Component:", Courses);
     if (Courses && Courses.length > 0) {
       console.log("Courses data", Courses);
-      setRows(Courses);
+      setRows(activeCourses);
     }
   }, [Courses]);
 
@@ -35,15 +35,15 @@ const CourseGrid = () => {
 
 
     const columns = [
-      { field: 'courseCode', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-      { field: 'courseName', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+      { field: 'courseId', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+      { field: 'name', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'coordinator', headerName: 'שם רכזת', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'lecturer', headerName: 'שם מרצה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'year', headerName: 'שנה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
       { field: 'endDate', headerName: 'תאריך סיום', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-      { field: 'meetings', headerName: 'מס מפגשים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-      { field: 'students', headerName: 'מס ,תלמידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },  
+      { field: 'numberOfMeetings', headerName: 'מס מפגשים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+      { field: 'numberOfStudents', headerName: 'מס ,תלמידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },  
     {
       field: "isActive",
       headerName: "סטטוס",
@@ -81,7 +81,7 @@ const CourseGrid = () => {
     
         return (
           <div style={{ ...cellStyle, ...(isActive ? activeStyle : inactiveStyle) }}>
-            {isActive ? "פעיל" : "לא פעיל"}
+            {isActive ? "לא פעיל" : "פעיל"}
           </div>
         );
       },
@@ -221,9 +221,9 @@ const CourseGrid = () => {
               borderRadius: "8px",
             },
           }}
-          rows={Courses}
+          rows={activeCourses}
           columns={columns}
-          getRowId={(row) => row.CourseId}
+          getRowId={(row) => row.courseId}
           rowModesModel={rowModesModel}
           hideFooter={true}
 
