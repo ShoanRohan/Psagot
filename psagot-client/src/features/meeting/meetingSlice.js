@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from './meetingActions';
 
 const initialState = {
   meetings: [],
   meeting: null,
-  status: 'idle', // state connected: idle - ξφα δϊημϊι, loading- αθςιπδ, succeeded - δφμηδ, failed - πλωμ
+  status: 'idle', // state connected: idle - ΧΧ¦Χ‘ Χ”ΧªΧ—ΧΧªΧ™, loading- Χ‘ΧΧΆΧ™Χ Χ”, succeeded - Χ”Χ¦ΧΧ—Χ”, failed - Χ Χ›Χ©Χ
   error: null,
 };
 

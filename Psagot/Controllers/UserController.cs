@@ -104,5 +104,8 @@ namespace Psagot.Controllers
             return Ok(userNames);
         }
 
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

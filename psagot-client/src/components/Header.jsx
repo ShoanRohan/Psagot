@@ -10,9 +10,6 @@ const Header = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           My App Psagot
         </Typography>
-        <Button color="inherit" onClick={() => navigate('/login')}> 
-          Login
-        </Button>
       </Toolbar>
     </AppBar>
   );

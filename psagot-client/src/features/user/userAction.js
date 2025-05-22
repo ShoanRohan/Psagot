@@ -12,12 +12,16 @@ export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) =
     return data;
 });
 
-export const addUserAction = createAsyncThunk('user/addUserAction' , async(newUser)=>{
-    const data = await addUser(newUser);
-    return data;
-}) ;
+export const addUserAction = createAsyncThunk('user/addUserAction', async (newUser) => {
+  const data = await addUser(newUser);
+  return {
+    success: true,
+    user: data.user,
+  };
+});
 export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
     const data = await updatedUser(updateUser);
+
     return data;
 });
 
