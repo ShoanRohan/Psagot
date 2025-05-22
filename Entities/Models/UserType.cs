@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Entities.Models;
 
-public partial class UserTypes
+public partial class UserType
 {
     public int UserTypeId { get; set; }
 

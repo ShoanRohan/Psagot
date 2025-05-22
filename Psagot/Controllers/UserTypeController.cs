@@ -17,7 +17,7 @@ namespace Psagot.Controllers
         }
 
         [HttpPost("AddUserType")]
-        public async Task<IActionResult> AddUserType([FromBody] UserTypesDTO userTypeDTO)
+        public async Task<IActionResult> AddUserType([FromBody] UserTypeDTO userTypeDTO)
         {
             var (addedUserType, errorMessage) = await _userTypeBL.AddUserType(userTypeDTO);
             if (addedUserType == null) return BadRequest(errorMessage);
@@ -26,7 +26,7 @@ namespace Psagot.Controllers
         }
 
         [HttpPut("UpdateUserType")]
-        public async Task<IActionResult> UpdateUserType([FromBody] UserTypesDTO userTypeDTO)
+        public async Task<IActionResult> UpdateUserType([FromBody] UserTypeDTO userTypeDTO)
         {
             var (updatedUserType, errorMessage) = await _userTypeBL.UpdateUserType(userTypeDTO);
             if (updatedUserType == null) return BadRequest(errorMessage);

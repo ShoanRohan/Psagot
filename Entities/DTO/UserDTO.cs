@@ -14,12 +14,12 @@ public class UserDTO
 
         public int UserTypeId { get; set; }
         
-        public string UserTypeName { get; set; } = null!;
+        public string? UserTypeName { get; set; }
 
         public bool IsActive { get; set; }
 
     public string? Role { get; set; }
 
 
-    public virtual UserTypesDTO UserTypes { get; set; } = null!;
+    public virtual UserTypeDTO UserTypes { get; set; } = null!;
 }

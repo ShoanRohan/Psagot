@@ -4,9 +4,9 @@ namespace DL
 {
     public interface IUserTypeDL
     {
-        Task<(UserTypes UserType, string ErrorMessage)> AddUserType(UserTypes userType);
-        Task<(IEnumerable<UserTypes> UserTypes, string ErrorMessage)> GetAllUserTypes();
-        Task<(UserTypes UserType, string ErrorMessage)> GetUserTypeById(int id);
-        Task<(UserTypes UserType, string ErrorMessage)> UpdateUserType(UserTypes userType);
+        Task<(UserType UserType, string ErrorMessage)> AddUserType(UserType userType);
+        Task<(IEnumerable<UserType> UserTypes, string ErrorMessage)> GetAllUserTypes();
+        Task<(UserType UserType, string ErrorMessage)> GetUserTypeById(int id);
+        Task<(UserType UserType, string ErrorMessage)> UpdateUserType(UserType userType);
     }
 }
