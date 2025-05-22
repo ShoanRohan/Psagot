@@ -50,7 +50,7 @@ namespace DL
             {
                 // הוספנו את ה-`Include` כדי לכלול את ה-UserType בשאילתא
                 var user = await _context.Set<User>()
-                    .Include(u => u.UserType)  // כאן עושים את ה-include
+                    .Include(u => u.UserTypes)  // כאן עושים את ה-include
                     .FirstOrDefaultAsync(u => u.UserId == id);
 
                 if (user == null)
@@ -70,7 +70,7 @@ namespace DL
             {
                 // הוספנו את ה-`Include` כדי לכלול את ה-UserType בשאילתא
                 var users = await _context.Set<User>()
-                    .Include(u => u.UserType)  // כאן עושים את ה-include
+                    .Include(u => u.UserTypes)  // כאן עושים את ה-include
                     .ToListAsync();
 
                 return (users, null);
