@@ -9,6 +9,11 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchCoordinators } from '../features/user/userAction';
+
+
 
 const statuses = ['פעיל', 'לא פעיל'];
 const years = Array.from({ length: 2050 - 2016 + 1 }, (_, i) => 2016 + i);
@@ -24,6 +29,13 @@ const defaultFilters = {
 };
 
 const CourseSearch = () => {
+const dispatch = useDispatch();
+const coordinators = useSelector((state) => state.user.coordinators);
+
+useEffect(() => {
+  dispatch(fetchCoordinators());
+}, [dispatch]);
+
   const [filters, setFilters] = useState(defaultFilters);
   const [lastSearchedFilters, setLastSearchedFilters] = useState(defaultFilters);
 
@@ -85,7 +97,8 @@ const CourseSearch = () => {
           input: { fontFamily: 'Rubik' },
         }}
       />
-      <TextField
+     <TextField
+        select
         variant="standard"
         placeholder="רכזת"
         value={filters.coordinator}
@@ -93,9 +106,15 @@ const CourseSearch = () => {
         sx={{
           width: 200,
           borderBottom: '1px solid #C6C6C6',
-          input: { fontFamily: 'Rubik' },
+          '.MuiSelect-select': { fontFamily: 'Rubik' },
         }}
-      />
+      >
+        {coordinators.map((coordinator) => (
+          <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik' }}>
+            {coordinator}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField
         variant="standard"
         select

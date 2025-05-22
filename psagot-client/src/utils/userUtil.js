@@ -20,8 +20,10 @@ const updatedUser = async (updateUser) => {
   return response.data;
 };
 
+const getCoordinators = async (userTypeId = 3) => {
+  const response = await api.get(`/User/GetUserNamesByUserTypeId/${userTypeId}`);
+  return response.data;
+};
 
-
-export { getAllUsers, getUserById, addUser, updatedUser };
-
+export { getAllUsers, getUserById, addUser, updatedUser, getCoordinators };
 
