@@ -4,7 +4,7 @@ import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingBy
 const initialState = {
   meetings: [],
   meeting: null,
-  status: 'idle', // state connected: idle - ΧΧ¦Χ‘ Χ”ΧªΧ—ΧΧªΧ™, loading- Χ‘ΧΧΆΧ™Χ Χ”, succeeded - Χ”Χ¦ΧΧ—Χ”, failed - Χ Χ›Χ©Χ
+  status: 'idle', // state connected: idle - ξφα δϊημϊι, loading- αθςιπδ, succeeded - δφμηδ, failed - πλωμ
   error: null,
 };
 
