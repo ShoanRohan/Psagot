@@ -132,7 +132,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           >
             {coordinators && coordinators?.map((coordinator) => (
               <MenuItem key={coordinator.userId} value={coordinator.userId}>
-                {coordinator.name}
+                {coordinator.userId}
               </MenuItem>
             ))}
           </Select>
