@@ -3,6 +3,7 @@ import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingBy
 
 const initialState = {
   meetings: [],
+  meetingsByRange:[],
   meeting: null,
   status: 'idle',// state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל 
   rangeStatus: 'idle',
@@ -82,7 +83,7 @@ const meetingSlice = createSlice({
                })
             .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
                state.rangeStatus = 'succeeded';
-               state.meetings = action.payload;
+               state.meetingsByRange = action.payload;
              })
             .addCase(fetchMeetingsByRange.rejected, (state, action) => {
               state.rangeStatus = 'failed'; 
