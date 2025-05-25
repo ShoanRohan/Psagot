@@ -18,25 +18,25 @@ namespace Psagot.Controllers
                 _roomBL = roomBL;
             }
 
-            [HttpPost("search")]
-            public async Task<IActionResult> SearchRooms([FromBody] RoomDTO searchParams)
-            {
-                var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(
-                    searchParams.RoomName,
-                    searchParams.Mic,
-                    searchParams.Projector,
-                    searchParams.Computer,
-                    searchParams.NumOfSeats,
-                    searchParams.PageNumber,
-                    searchParams.PageSize,
-                    true
-                );
+            //[HttpPost("search")]
+            //public async Task<IActionResult> SearchRooms([FromBody] RoomDTO searchParams)
+            //{
+            //    var (rooms, totalCount, errorMessage) = await _roomBL.GetAllRoomsBySearchWithPagination(
+            //        searchParams.RoomName,
+            //        searchParams.Mic,
+            //        searchParams.Projector,
+            //        searchParams.Computer,
+            //        searchParams.NumOfSeats,
+            //        searchParams.PageNumber,
+            //        searchParams.PageSize,
+            //        true
+            //    );
 
-                if (rooms == null && totalCount == 0)
-                    return NotFound(errorMessage);
+            //    if (rooms == null && totalCount == 0)
+            //        return NotFound(errorMessage);
 
-                return Ok(new { rooms, totalCount });
-            }
+            //    return Ok(new { rooms, totalCount });
+            //}
 
             [HttpPost("AddRoom")]
             public async Task<IActionResult> AddRoom([FromBody] RoomDTO roomDTO)

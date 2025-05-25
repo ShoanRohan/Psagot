@@ -22,7 +22,7 @@ const RoomsSearch = () => {
   const [selectedEquipment, setSelectedEquipment] = useState([]);
   const [numSeats, setNumSeats] = useState('');
   const dispatch = useDispatch();
-  const searchStatus = useSelector((state) => state.room.searchStatus);
+  const {searchStatus,pageNumber,pageSize,searchRoom} = useSelector((state) => state.room);
 
   const handleClear = () => {
     setRoomName('');
@@ -31,37 +31,38 @@ const RoomsSearch = () => {
     dispatch(clearSearchRoom());
     dispatch(
       fetchAllRoomsBySearchWithPagination({
-        pageNumber: 1,
-        pageSize: 10,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
         roomName: '',
         mic: false,
         projector: false,
         computer: false,
         numOfSeats: 0,
+        searchStatus:searchStatus
       })
     );
   };
 
   const handleSearch = () => {
     const searchParams = {
-      RoomName: roomName,
-      Mic: selectedEquipment.includes('רמקול'),
-      Projector: selectedEquipment.includes('מקרן'),
-      Computer: selectedEquipment.includes('מחשב'),
-      NumOfSeats: parseInt(numSeats) || 0,
-      PageNumber: 1,
-      PageSize: 10,
+      roomName: roomName,
+      mic: selectedEquipment.includes('רמקול'),
+      projector: selectedEquipment.includes('מקרן'),
+      computer: selectedEquipment.includes('מחשב'),
+      numOfSeats: parseInt(numSeats) || 0,
     };
 
     dispatch(setSearchRoom(searchParams));
     dispatch(
       fetchAllRoomsBySearchWithPagination({
-        pageNumber: 1,
-        pageSize: 10,
-        ...searchParams,
+        searchRoom,
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        searchStatus:searchStatus,
       })
     );
   };
+
 
   const handleEquipmentChange = (event) => {
     const { value } = event.target;

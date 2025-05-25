@@ -2,7 +2,7 @@
 {
     public class RoomDTO
     {
-        public string? RoomName { get; set; }
+        public string? Name { get; set; }
         public bool Mic { get; set; }
         public bool Projector { get; set; }
         public bool Computer { get; set; }
