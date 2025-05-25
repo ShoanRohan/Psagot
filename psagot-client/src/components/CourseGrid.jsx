@@ -134,14 +134,17 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <Link onClick={() => selectCourse(course?.courseId)}>
-                    <IconButton sx={{ width: 32, height: 32, p: 0, bgcolor: '#F4F4F4', borderRadius: '5px', mt: "-4px",}}>
-                      <Box
-                        component="img"
-                        src={editSvg}
-                        alt="edit_icon"
-                        sx={{ width: 20, height: 20, display: 'block',mt:'-4px' }}
-                      />
-                    </IconButton>
+                  <IconButton sx={{ width: 32, height: 32, p: 0, bgcolor: '#F4F4F4', borderRadius: '5px' }}>
+  <Box
+    component="img"
+    src={editSvg}
+    alt="edit_icon"
+    sx={{ width: 20, height: 20, display: 'block', mt:"-4px" }}
+  />
+</IconButton>
+                    >
+                      <img src={editSvg} alt="edit_icon" />
+                    
                   </Link>
                 </StyledTableCell>
               </StyledTableRow>

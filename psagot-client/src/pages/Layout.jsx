@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vh'}}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%'}}>
             <SideBar />
             <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
                 <Section />
