@@ -5,7 +5,7 @@ import Layout from '../pages/Layout';
 import Login from '../components/Login';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
-import CoursesPage from '../pages/CoursesPage';
+import CoursPage from '../pages/CoursPage';
 
 const AppRouter = () => {
     return (
@@ -17,7 +17,7 @@ const AppRouter = () => {
             <Route path="/home" element={<Layout />}>
                 <Route index element={<HomePage />} />
                 <Route path="user" element={<UserManagement />} />
-                <Route path="courses/:id" element={<CoursesPage />} />
+                <Route path="cours/:id" element={<CoursPage />} />
             </Route>
 
             {/* עמוד התחברות */}
