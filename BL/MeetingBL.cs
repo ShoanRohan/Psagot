@@ -58,5 +58,17 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+
+        public async Task<(IEnumerable<ListOfMeetingsForTopicDTO> MeetingsForTopicById, string Lecturer, int Page, string ErrorMessage)> GetMeetingsByTopicId(string topicName, string lecturer, int page)
+        {
+            var (MeetingsForTopicById, lecturerFromDL, pageFromDL, errorMessage) = await _meetingDL.GetMeetingsByTopicId(topicName, lecturer, page);
+
+            if (MeetingsForTopicById == null)
+            {
+                return (null, lecturerFromDL, pageFromDL, errorMessage);
+            }
+
+            return (_mapper.Map<IEnumerable<ListOfMeetingsForTopicDTO>>(MeetingsForTopicById), lecturerFromDL, pageFromDL, null);
+        }
     }
 }

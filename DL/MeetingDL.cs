@@ -71,5 +71,25 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(IEnumerable<ListOfMeetingsForTopic> MeetingsForTopicById, string Lecturer, int Page, string ErrorMessage)> GetMeetingsByTopicId(string topicName, string lecturer, int page)
+        {
+            try
+            {
+                var topic = await _context.Set<Topic>().FirstOrDefaultAsync(t => t.Name == topicName);
+                if (topic == null)
+                {
+                    return (null, lecturer, page, "Topic not found");
+                }
+                var TopicId = topic.TopicId;
+                var meetingsForTopicById = await _context.Set<ListOfMeetingsForTopic>().Where(m => m.TopicId == TopicId).ToListAsync();
+                var countMeetingsForTopicById = topic.NumberOfMeetings;
+                return (meetingsForTopicById, lecturer, page, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, lecturer, page, ex.Message);
+            }
+        }
     }
 }
