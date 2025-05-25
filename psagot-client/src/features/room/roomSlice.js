@@ -1,18 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction, fetchRoomsScheduleByDate,fetchAllRoomsBySearchWithPagination } from './roomActions';
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllRoomsBySearchWithPagination, 
+    fetchRoomsScheduleByDate  } from './roomActions';
 
 const initialState = {
     rooms: [],
+    roomsStatus:'idle',
     selectedRoom: null,
     roomSchedule: [],
+    viewMode: 'rooms',
+    displayDate:new Date().toLocaleDateString('en-GB'),
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
-    searchRoom:{roomName:'',mic:'false',projector:'false',computer:'false',numOfSeats:0},
-    roomsWithPagination:[],
-    pageNumber:1,
-    pageSize:10,
-    totalCount:0,
-    searchStatus:'false'
 };
 
 const roomSlice = createSlice({
@@ -23,21 +21,28 @@ const roomSlice = createSlice({
         setRoom: (state, action) => {
             
         },
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
+        },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
+        },
+        setViewMode: (state, action) => {
+            state.viewMode = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
-                state.status = 'loading';
+                state.roomsStatus = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                console.log(action.payload)
+                state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
-                state.status = 'failed';
+                state.roomsStatus = 'failed';
                 state.error = action.error.message;
             })
             .addCase(fetchRoomById.pending, (state) => {
@@ -55,6 +60,7 @@ const roomSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchRoomsScheduleByDate.fulfilled, (state, action) => {
+                // console.log('payload:', action.payload);
                 state.status = 'succeeded';
                 state.roomSchedule = action.payload;
             })
@@ -83,10 +89,9 @@ const roomSlice = createSlice({
                 if (index !== -1) {
                     state.rooms[index] = action.payload;
                 }
-                
             });
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setDisplayDate,setRoom ,setViewMode } = roomSlice.actions;
 export default roomSlice.reducer;
