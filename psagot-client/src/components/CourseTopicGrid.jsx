@@ -21,7 +21,7 @@ import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
-
+import TopicDialog from './TopicDialog';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -72,6 +72,25 @@ export default function CourseTopicGrid() {
         currentPage * pageSize
     );
 
+    const [dialogOpen, setDialogOpen] = React.useState(false);
+const [selectedTopic, setSelectedTopic] = React.useState(null);
+
+const handleEditClick = (topic) => {
+  setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
+  setDialogOpen(true);     // פותחים את הדיאלוג
+};
+
+const handleDialogClose = () => {
+  setDialogOpen(false);
+  setSelectedTopic(null);
+};
+
+const handleDialogSubmit = (formData) => {
+  console.log("נתוני עריכה:", formData);
+  setDialogOpen(false);
+  setSelectedTopic(null);
+};
+
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
             <TableContainer component={Paper} sx={{width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
@@ -87,7 +106,7 @@ export default function CourseTopicGrid() {
                             <StyledTableCell align='center'>ציוד</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Box>
-                                    <>סטטוס</>
+                                    סטטוס
                                     <IconButton sx={{ width: '20px', height: '20px' }}>
                                         <UnfoldMoreOutlinedIcon sx={{ height: '20px' }} />
                                     </IconButton>
@@ -128,10 +147,10 @@ export default function CourseTopicGrid() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
-                                        <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
-                                    </IconButton>
-                                </StyledTableCell>
+  <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
+    <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
+  </IconButton>
+</StyledTableCell>
                                 <StyledTableCell>
                                     <IconButton sx={{ bgcolor: '#F4F4F4' }}>
                                         <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
@@ -185,7 +204,12 @@ export default function CourseTopicGrid() {
                     </Grid2>
                 </Grid2>
             </Box>
-
+            <TopicDialog
+  open={dialogOpen}
+  onClose={handleDialogClose}
+  onSubmit={handleDialogSubmit}
+  initialData={selectedTopic}
+/>
         </Box>
     );
 }

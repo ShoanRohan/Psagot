@@ -19,7 +19,7 @@ import {
   setPageSize,
 } from "../features/course/courseSlice";
 import CourseGrid from "./CourseGrid";
-import AddTopicDialog from "./AddTopicDialog";
+import TopicDialog from "./TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -209,7 +209,7 @@ const CoursesPage = () => {
         onPageSizeChange={handlePageSizeChange}
       />
 
-      <AddTopicDialog
+      <TopicDialog
         open={openDialog}
         onClose={() => setOpenDialog(false)}
         onSubmit={handleAddCourse}
