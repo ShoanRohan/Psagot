@@ -4,8 +4,8 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
-import RoomDetails from '../components/RoomDetails';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
+import RoomEdit from '../components/RoomEdit';
 
 const AppRouter = () => {
     return (
@@ -13,7 +13,7 @@ const AppRouter = () => {
         <Routes>  
              <Route path='/' element={<Layout/>}>
                 <Route index element={<HomePage/>}/> 
-                <Route path='/room' element={<RoomDetails />} />
+                <Route path='/room' element={<RoomEdit />} />
                 <Route path='/roomSearch' element={<RoomsScheduleSearch />} />   
             </Route> 
                 
