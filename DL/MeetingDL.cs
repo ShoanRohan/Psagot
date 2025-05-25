@@ -1,21 +1,29 @@
-﻿using Entities.Contexts;
+﻿using AutoMapper;
+using AutoMapper.Internal;
+using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace DL
 {
     public class MeetingDL : IMeetingDL
     {
         private readonly PsagotDbContext _context;
+        private readonly IMapper _mapper;
 
-        public MeetingDL(PsagotDbContext context)
+        public MeetingDL(PsagotDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
@@ -71,24 +79,51 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-        public async Task<(IEnumerable<ListOfMeetingsForTopic> MeetingsForTopicById, string Lecturer, int Page, string ErrorMessage)> GetMeetingsByTopicId(string topicName, string lecturer, int page)
+        public async Task<(List<Meeting> Meetings, int TotalCount, string ErrorMessage)> SearchMeetings(int? courseId, int? topicId, string teacherName, string? date, int pageNumber, int pageSize)
         {
             try
             {
-                var topic = await _context.Set<Topic>().FirstOrDefaultAsync(t => t.Name == topicName);
-                if (topic == null)
+                var query = _context.Meetings.AsQueryable();
+
+                // קבע את התאריך לסינון. אם לא סופק, השתמש בתאריך היום כברירת מחדל.
+                DateOnly filterDate = !string.IsNullOrEmpty(date) ? DateOnly.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture) : DateOnly.FromDateTime(DateTime.Today);
+                // סנן לפי התאריך (בין אם הוא סופק או ברירת מחדל)
+                query = query.Where(m => m.MeetingDate == filterDate);
+
+                // סנן לפי הפרמטרים האחרים שסופקו
+                if (courseId.HasValue)
                 {
-                    return (null, lecturer, page, "Topic not found");
+                    query = query.Where(m => m.CourseId == courseId.Value);
                 }
-                var TopicId = topic.TopicId;
-                var meetingsForTopicById = await _context.Set<ListOfMeetingsForTopic>().Where(m => m.TopicId == TopicId).ToListAsync();
-                var countMeetingsForTopicById = topic.NumberOfMeetings;
-                return (meetingsForTopicById, lecturer, page, null);
+
+                if (topicId.HasValue)
+                {
+                    query = query.Where(m => m.TopicId == topicId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(teacherName))
+                {
+                    var teacher = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Name == teacherName && u.UserTypeId == 2);
+
+                    if (teacher != null)
+                    {
+                        query = query.Where(m => m.TeacherId == teacher.UserId);
+                    }
+                }
+
+                int totalCount = await query.CountAsync();
+
+                var meetings = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (meetings, totalCount, null);
             }
             catch (Exception ex)
             {
-                return (null, lecturer, page, ex.Message);
+                return (null, 0, ex.Message);
             }
         }
     }

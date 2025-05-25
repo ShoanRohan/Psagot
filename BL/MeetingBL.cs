@@ -58,17 +58,30 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
-
-        public async Task<(IEnumerable<ListOfMeetingsForTopicDTO> MeetingsForTopicById, string Lecturer, int Page, string ErrorMessage)> GetMeetingsByTopicId(string topicName, string lecturer, int page)
+        public async Task<(ListOfMeetingsForTopicDTO Result, string ErrorMessage)> SearchMeetings(int? courseId, int? topicId, string teacherName, string? date, int pageNumber, int pageSize)
         {
-            var (MeetingsForTopicById, lecturerFromDL, pageFromDL, errorMessage) = await _meetingDL.GetMeetingsByTopicId(topicName, lecturer, page);
-
-            if (MeetingsForTopicById == null)
+            try
             {
-                return (null, lecturerFromDL, pageFromDL, errorMessage);
-            }
+                var (meetings, totalCount, errorMessage) = await _meetingDL.SearchMeetings(courseId, topicId, teacherName, date, pageNumber, pageSize);
 
-            return (_mapper.Map<IEnumerable<ListOfMeetingsForTopicDTO>>(MeetingsForTopicById), lecturerFromDL, pageFromDL, null);
+                if (meetings == null)
+                {
+                    return (null, errorMessage ?? "Search results were null.");
+                }
+                var meetingsDtoList = _mapper.Map<List<MeetingDTO>>(meetings);
+
+                var result = new ListOfMeetingsForTopicDTO
+                {
+                    Meetings = meetingsDtoList,
+                    TotalCount = totalCount
+                };
+
+                return (result, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
         }
     }
 }

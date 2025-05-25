@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById } from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,getAllMeetingsBySubject} from '../../utils/meetingUtil';
 
 export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
     const data = await getAllMeetings();
@@ -31,3 +31,8 @@ export const addMeetingAction = createAsyncThunk(
         return data;
     }
 );
+
+export const fetchAllMeetingsBySubject = createAsyncThunk('meeting/fetchAllMeetingsBySubject', async(subject) => {
+    const data = await getAllMeetingsBySubject(subject);
+    return data;
+});
