@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import Login from '../components/Login';
@@ -10,16 +10,19 @@ import CoursesPage from '../pages/CoursesPage';
 const AppRouter = () => {
     return (
         <Routes>  
-            <Route path='/' element={<Layout />}>
-                <Route path='/home' element={<HomePage />} />  
-                <Route path='user' element={<UserManagement />} />
-                
-                
-                <Route path='courses/:id' element={<CoursesPage />} />
-            </Route> 
+            {/* ניווט ברירת מחדל ישירות ל-login */}
+            <Route path="/" element={<Navigate to="/login" />} />
 
-            <Route path='/' element={<LoginPage />}> 
-                <Route path='login' element={<Login />} /> 
+            {/* עמודי אפליקציה אחרי התחברות */}
+            <Route path="/home" element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="user" element={<UserManagement />} />
+                <Route path="courses/:id" element={<CoursesPage />} />
+            </Route>
+
+            {/* עמוד התחברות */}
+            <Route path="/login" element={<LoginPage />}>
+                <Route index element={<Login />} />
             </Route>
         </Routes>
     );
