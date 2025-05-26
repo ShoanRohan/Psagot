@@ -1,6 +1,11 @@
-import React, { useState } from "react";
-import { Box, Typography, Button, Tabs, Tab } from "@mui/material";
-import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם למיקום הקובץ אצלך
+import { Box, Button, Typography } from "@mui/material";
+import React from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import CourseGrid from "../components/CoursesGrid";
+import { useSelector } from "react-redux";
+import circlePlus from "../assets/icons/circle-plus.png";
+import exptExcel from "../assets/icons/excelExport.png";
 
 const CoursPage = () => { 
   const [tabValue, setTabValue] = useState(0);
@@ -10,8 +15,24 @@ const CoursPage = () => {
     name: "קורס ארכיטקטורה",
   };
 
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
+  const exportToExcel = () => {
+    if (!Course || Course.length === 0) {
+      alert("אין נתונים לייצוא!");
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(Course);
+
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Course");
+
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+
+
+    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+    saveAs(data, "Course.xlsx");
   };
 
   return (
@@ -19,56 +40,90 @@ const CoursPage = () => {
       {/* שורת כותרת עם שם הקורס והכפתורים */}
       <Box
         sx={{
+        width: "100%",
+        height: "100vh",
           display: "flex",
-          justifyContent: "space-between",
+        flexDirection: "column",
           alignItems: "center",
-          mb: 3,
+        backgroundColor: "#FFFFFF",
+        position: "relative",
         }}
       >
-        {/* כותרת: שם הקורס */}
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: "bold", color: "#0b2d72" }}>
-            {selectedCourse.name}
+      <Typography
+        variant="h1"
+        sx={{
+          position: "absolute",
+          width: "9.48%",
+          height: "4.35%",
+          top: "7.5%",
+          left: "95%",
+          transform: "translateX(-50%)",
+          fontFamily: "Rubik",
+          fontWeight: 700,
+          fontSize: "4.5vh",
+          lineHeight: "100%",
+          textAlign: "right",
+          color: "#112B83",
+          textTransform: "capitalize",
+        }}
+      >
+        קורסים
           </Typography>
-          <Typography variant="body2" color="text.secondary">
-            פרטי קורס
-          </Typography>
-        </Box>
 
-        {/* כפתורים */}
-        <Box sx={{ display: "flex", gap: 1 }}>
           <Button
-            variant="contained"
-            color="primary"
+        onClick={exportToExcel}
             sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
+          position: "absolute",
+          width: "2.5rem",
+          height: "2.5rem",
+          top: "7.78%",
+          left: "16%",
+          borderRadius: "0.68vh",
+          padding: "0.2rem",
+          backgroundColor: "#F0F1F3",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minWidth: "2.5rem",
+          minHeight: "2.5rem",
             }}
           >
-            שמור
+        <img src={exptExcel} alt="אייקון ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
           </Button>
+
           <Button
-            variant="outlined"
-            color="primary"
+        variant="contained"
+        sx={{
+          position: "absolute",
+          width: "9.5rem",
+          height: "2.5rem",
+          top: "7.78%",
+          left: "1.5%",
+          borderRadius: "50vh",
+          padding: "0 1.3%",
+          gap: "0.5vw",
+          backgroundColor: "#326DEF",
+          display: "flex",
+          alignItems: "center",
+          minWidth: "9.5rem",
+          minHeight: "2.5rem",
+        }}
+      >
+        <img src={circlePlus} alt="אייקון הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
+        <Typography
             sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
+            fontFamily: "Rubik",
+            fontWeight: 400,
+            fontSize: "1.8vh",
+            lineHeight: "100%",
+            textAlign: "center",
+            color: "#FFFFFF",
+            textTransform: "capitalize",
             }}
           >
-            ביטול
+          הוספת קורס
+        </Typography>
           </Button>
-        </Box>
-      </Box>
-
-      {/* טאבים */}
-      <Tabs value={tabValue} onChange={handleTabChange}>
-        <Tab label="פרטי קורס" />
-        <Tab label="נושאי קורס" />
-      </Tabs>
 
       {/* תוכן לפי טאב */}
       <Box sx={{ mt: 2 }}>

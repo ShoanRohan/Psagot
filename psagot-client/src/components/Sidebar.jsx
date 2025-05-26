@@ -30,7 +30,7 @@ const Sidebar = () => {
     return (
         <Box
             sx={{
-                width: 280,
+                width: 220,
                 backgroundColor: "#0d1783",
                 display: "flex",
                 flexDirection: "column",
@@ -125,7 +125,7 @@ const Sidebar = () => {
                         lineHeight: "20px",
                     }}
                 >
-                    {user?.userTypeDescription || "שם משתמש"}
+                    {user?.userTypeName  || "סוג משתמש"}
                 </Typography>
                 </div>
             </Box>
