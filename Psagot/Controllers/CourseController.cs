@@ -1,4 +1,4 @@
-﻿using BL;
+using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +36,7 @@ namespace Psagot.Controllers
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {
+            Console.WriteLine(courseDTO);
             var (addedCourse, errorMessage) = await _courseBL.AddCourse(courseDTO);
             if (addedCourse == null) return BadRequest(errorMessage);
 

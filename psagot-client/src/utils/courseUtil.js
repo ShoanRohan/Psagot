@@ -11,6 +11,7 @@ const getAllCourses = async () => {
 };
 
 const addCourse = async (courseDTO) => {
+    console.log(courseDTO)
     const response = await api.post('/Course/AddCourse', courseDTO);
     return response.data;
 };

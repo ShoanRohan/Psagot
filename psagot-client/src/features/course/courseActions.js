@@ -12,6 +12,7 @@ export const fetchCourseById = createAsyncThunk('course/fetchCourseById', async 
 });
 
 export const addCourseAction = createAsyncThunk('course/addCourseAction', async (newCourse) => {
+  console.log('actions', newCourse)
   const data = await addCourse(newCourse);
   return data;
 });

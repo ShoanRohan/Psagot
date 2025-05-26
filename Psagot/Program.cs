@@ -1,10 +1,11 @@
 using BL;
 using DL;
-
 using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Psagot.Converters;
+
 
 namespace Psagot
 {
@@ -33,12 +34,17 @@ namespace Psagot
             builder.Services.AddScoped<ITopicBL, TopicBL>();
             builder.Services.AddScoped<IScheduleForTopicDL,ScheduleForTopicDL >();
             builder.Services.AddScoped<ITopicDL, TopicDL>();
-
-
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
+<<<<<<< HEAD
 
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+            });
+=======
             builder.Services.AddControllers();
+>>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

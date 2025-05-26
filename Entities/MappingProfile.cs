@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Entities.DTO;
 using Entities.Models;
 
@@ -17,5 +17,7 @@ public class MappingProfile : Profile
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
         CreateMap<Topic, TopicDTO>().ReverseMap();
         CreateMap<Course,CourseDTO> ().ReverseMap();
+        CreateMap<StatusCourse, StatusCourseDTO>();
+
     }
 }

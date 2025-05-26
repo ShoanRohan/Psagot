@@ -1,40 +1,118 @@
-import { Checkbox, Paper, Stack, TextField, Typography, MenuItem, Button, Box } from "@mui/material";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { Paper, Stack, TextField, Typography, MenuItem, Button, Box } from "@mui/material";
+import { React,  useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
+<<<<<<< HEAD
+import { fetchCourseStatuses } from "../features/statusCourse/statusCourseActions";
+=======
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+>>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
 
-const CreateCourse = () => {
+const CreateCourse = (open=true, setOpen) => {
   const dispatch = useDispatch();
+  const statuses = useSelector((state) => state.statusCourse.statuses);
 
+  // const handleClickOpen = () => {
+  //   setOpen(true);
+  // };
+  const handleClose = () => {
+    setOpen(false);
+  };
   const [formData, setFormData] = useState({
-    coordinatorName: "",
-    courseName: "",
-    courseCode: "",
-    startDate: "",
-    endDate: "",
-    year: "",
-    meetingsCount: "",
-    studentsCount: "",
-    notes: "",
-    status: "",
-    color: false,
+    courseName: '',
+    coordinatorName: '',
+    courseCode: '',
+    startDate: '',
+    endDate: '',
+    year: '',
+    meetingsCount: '',
+    studentsCount: '',
+    notes: '',
+    status: '',
+    color: '#000000',
   });
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: value,
     }));
   };
 
+//   const getStatusId = (statusText) => {
+//     return statuses[statusText] ?? null;
+// };
+
   const handleSubmit = () => {
-    dispatch(addCourseAction(formData));
+      const dtoToSend = {
+     Name: formData.courseName,
+  Year: parseInt(formData.year),
+  Color: formData.color,
+  StartDate: formData.startDate, // לוודא שהוא בפורמט yyyy-MM-dd
+  EndDate: formData.endDate || null,
+  NumberOfMeetings: formData.meetingsCount ? parseInt(formData.meetingsCount) : null,
+  NumberOfStudents: parseInt(formData.studentsCount),
+  Notes: formData.notes || null,
+ // StatusId: getStatusId(formData.status) // פונקציה שתמיר טקסט למספר סטטוס
+  };
+    dispatch(addCourseAction(dtoToSend));
   };
 
-  const statuses = ["פעיל", "לא פעיל", "ממתין"];
+  useEffect(() => {
+  dispatch(fetchCourseStatuses());
+  }, [dispatch]);
+  
 
   return (
+    <>
+<<<<<<< HEAD
+=======
+    <Dialog
+        open={open||true}
+        onClose={handleClose}
+        slotProps={{
+          paper: {
+            component: 'form',
+            onSubmit: (event) => {
+              event.preventDefault();
+              const formData = new FormData(event.currentTarget);
+              const formJson = Object.fromEntries(formData.entries());
+              const email = formJson.email;
+              console.log(email);
+              handleClose();
+            },
+          },
+        }}
+      >
+        <DialogTitle>Subscribe</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText>
+            To subscribe to this website, please enter your email address here. We
+            will send updates occasionally.
+          </DialogContentText> */}
+          <TextField
+            autoFocus
+            required
+            margin="dense"
+            id="name"
+            name="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button type="submit">Subscribe</Button>
+        </DialogActions>
+      </Dialog>
     <Paper
        elevation={0}
        dir="rtl"
@@ -53,6 +131,7 @@ const CreateCourse = () => {
         height: { xs: 'auto', sm: 'auto', md: 'auto', lg: '68vh'},
       }}
     >
+>>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
       <Typography variant='body1' fontWeight='bold'
       sx={{
         textAlign: "right",
@@ -69,14 +148,67 @@ const CreateCourse = () => {
       }}>
         הוספת קורס
       </Typography>
-      
+      <Button
+    variant="outlined"
+    onClick={() => {/* למשל: navigate(-1) */}}
+    sx={{
+      height: '44px',
+      padding: '0px 24px',
+      borderRadius: '50px',
+      border: '1px solid #326DEF',
+      color: '#326DEF',
+      fontWeight: 500,
+    }}
+  >
+    ביטול
+  </Button>
+
+  <Button
+    variant="contained"
+    onClick={handleSubmit}
+    sx={{
+      height: '44px',
+      padding: '0px 24px',
+      borderRadius: '50px',
+      background: '#326DEF',
+      color: '#fff',
+      fontWeight: 500,
+      '&:hover': {
+        background: '#285ac0',
+      },
+    }}
+  >
+    שמור
+  </Button>
+    <Paper
+       elevation={0}
+       dir="rtl"
+  sx={{
+    width: { xs: '90vw', sm: '85vw', md: '76%' },
+    maxWidth: '1476px',
+    height: { xs: 'auto', md: '26.4vw' }, // 507 / 1920 * 100
+    top: { xs: 0, md: '12.08vw' }, // 232 / 1920 * 100
+    left: { xs: 0, md: '4.375vw' }, // 84 / 1920 * 100
+    paddingTop: { xs: '1rem', md: '1.25rem' },
+    paddingRight: { xs: '1rem', md: '1.875rem' },
+    paddingBottom: { xs: '2rem', md: '2.5rem' },
+    paddingLeft: { xs: '1rem', md: '1.875rem' },
+    borderRadius: '0.625rem',
+    gap: { xs: 2, md: '2rem' },
+    background: '#FFFFFF',
+    boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    }}
+    >      
       {/* Top Row */}
       <Stack
       direction="row"
       justifyContent="flex-end"
       alignItems="center"
       >
-        <TextField
+       <TextField
         name="courseCode"
         label="קוד קורס"
         variant="standard"
@@ -112,9 +244,6 @@ const CreateCourse = () => {
   />
   </Box>
 </Stack>
-
-
-
       {/* Middle Row */}
 <Stack direction="row" justifyContent="flex-end" alignItems="center">
   <TextField
@@ -225,15 +354,25 @@ const CreateCourse = () => {
           
         </TextField>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Checkbox
-            checked={formData.color}
-            name="color"
-            onChange={handleChange}
-          />
-          <Typography variant="body2" sx={{ textAlign: "right" }}>
-            צבע לטבלה
-          </Typography>
-        </Stack>
+  <input
+    type="color"
+    name="color"
+    value={formData.color}
+    onChange={handleChange}
+    style={{
+      width: 40,
+      height: 40,
+      border: "none",
+      padding: 0,
+      background: "none",
+      cursor: "pointer"
+    }}
+  />
+  <Typography variant="body2" sx={{ textAlign: "right" }}>
+    צבע לטבלה
+  </Typography>
+</Stack>
+
       </Stack>
       <Stack
   direction="row"
@@ -244,40 +383,36 @@ const CreateCourse = () => {
    // mt: 4,
   }}
 >
-  <Button
-    variant="outlined"
-    onClick={() => {/* למשל: navigate(-1) */}}
-    sx={{
-      height: '44px',
-      padding: '0px 24px',
-      borderRadius: '50px',
-      border: '1px solid #326DEF',
-      color: '#326DEF',
-      fontWeight: 500,
-    }}
-  >
-    ביטול
-  </Button>
-
-  <Button
-    variant="contained"
-    onClick={handleSubmit}
-    sx={{
-      height: '44px',
-      padding: '0px 24px',
-      borderRadius: '50px',
-      background: '#326DEF',
-      color: '#fff',
-      fontWeight: 500,
-      '&:hover': {
-        background: '#285ac0',
-      },
-    }}
-  >
-    שמור
-  </Button>
 </Stack>
     </Paper>
+<<<<<<< HEAD
+    <Paper
+           elevation={0}
+       dir="rtl"
+  sx={{
+    width: { xs: '90vw', sm: '85vw', md: '70vw' },
+    maxWidth: '1476px',
+    height: { xs: 'auto', md: '10vw' }, // 507 / 1920 * 100
+    top: { xs: 0, md: '12.08vw' }, // 232 / 1920 * 100
+    left: { xs: 0, md: '4.375vw' }, // 84 / 1920 * 100
+    paddingTop: { xs: '1rem', md: '1.25rem' },
+    paddingRight: { xs: '1rem', md: '1.875rem' },
+    paddingBottom: { xs: '2rem', md: '2.5rem' },
+    paddingLeft: { xs: '1rem', md: '1.875rem' },
+    borderRadius: '0.625rem',
+    gap: { xs: 2, md: '2rem' },
+    background: '#FFFFFF',
+    boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    }}
+    >
+
+    </Paper>
+=======
+>>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
+    </>
   );
 };
 
