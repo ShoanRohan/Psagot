@@ -16,10 +16,10 @@ const AppRouter = () => {
             <Route path="/" element={<Navigate to="/login" />} />
 
             {/* עמודי אפליקציה אחרי התחברות */}
-            <Route path="/home" element={<Layout />}>
+            <Route path="/" element={<Layout />}>
                 <Route index element={<HomePage />} />
-                <Route path="user" element={<UserManagement />} />
-                <Route path="courses" element={<CoursesPage />} />
+                <Route path="/user" element={<UserManagement />} />
+                <Route path="/courses" element={<CoursesPage />} />
             </Route>
 
             {/* עמוד התחברות */}
