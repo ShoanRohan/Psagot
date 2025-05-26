@@ -5,7 +5,8 @@ import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import CourseScreen from "../components/CourseScreen";
 import Rooms from '../components/Rooms';
-import UsersTable from '../pages/UsersTable';
+import UsersPage from '../pages/UsersPage';
+
 
 const AppRouter = () => {
     return (
@@ -14,8 +15,7 @@ const AppRouter = () => {
                 <Route path='/' element={<HomePage />} />
                 <Route path='/courses' element={<span>page Courses</span>} />
                 <Route path='/meetings' element={<span>page Meetings</span>} />
-                <Route path='/users' element={<UsersTable />} />
-                {/* <Route path='/usersPage' element={<UsersTable />} /> */}
+                <Route path='/users' element={<UsersPage />} />
                 <Route path='/rooms' element={<Rooms />} />
                 <Route path="/calendar" element={<CalendarPage />} />
             </Route>

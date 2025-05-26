@@ -13,27 +13,25 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import { useEffect } from "react";
-import '../styles/usersTable.css';
+import '../styles/usersPage.css';
 import { Pagination } from '@mui/material';
 import { fetchUsersByPage } from "../features/user/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import { setPageSize, setPageNumber } from '../features/user/userSlice';
-// import Editicone from '../assets/icons/Editicone.png';
-// import Deleteicone from '../assets/icons/Deleteicone.png';
-const UsersTable = () => {
+import Editicone from '../assets/icons/Editicone.png';
+import Deleteicone from '../assets/icons/Deleteicone.png';
+
+const UsersPage = () => {
     const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
-       // טוען את המשתמשים
+    // טוען את המשתמשים
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
-
             } catch (error) {
                 console.error("שגיאה בטעינת המשתמשים:", error);
             }
@@ -41,14 +39,12 @@ const UsersTable = () => {
         fetchUsers();
     }, [pageNumber, pageSize, dispatch]);
 
-
-     const handleChangePageSize = (event) => {
+    const handleChangePageSize = (event) => {
         const size = Number(event.target.value); // עדכון ל-`event`
-        // setPageSize(value); // עדכון `pageSize`
         dispatch(setPageSize(size)); // קריאה ל-`setPage`
     };
 
-        // שינוי דף
+    // שינוי דף
     const handlePageNumberChange = (newPage) => {
         newPage = Number(newPage.target.textContent);
         if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
@@ -56,24 +52,22 @@ const UsersTable = () => {
         }
     };
 
- 
     // שינוי סטטוס של משתמש
     const handleStatusChange = (userId, status) => {
-         const newStatus = status ? "inactive" : "active";
+        const newStatus = status ? "inactive" : "active";
         // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
     };
 
     return (
         <Box>
             <Box className="tablesize" >
-                <Typography variant="h4" component="h2">משתמשים</Typography>
-                {error && <Box style={{ color: "red", marginBottom: 16 }}>{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-
+                <Typography className="titleRow" variant="h4" component="h2" >משתמשים</Typography>
+                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
                 <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table sx={{ Width: 3000, height: 682 }} aria-label="users table">
+                    <Table >
                         <TableHead>
                             <TableRow>
-                                <TableCell className="bigtable" height={72} width={1442}>קוד משתמש</TableCell>
+                                <TableCell className="bigtable">קוד משתמש</TableCell>
                                 <TableCell className="bigtable">שם משתמש</TableCell>
                                 <TableCell className="bigtable">מייל</TableCell> {/* יישור הכותרת למרכז */}
                                 <TableCell className="bigtable">הרשאה</TableCell>
@@ -89,40 +83,25 @@ const UsersTable = () => {
                                     <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
                                     <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button 
+                                        <Button
                                             variant="contained"
-                                            // className='buttonActive'
-                                            style={{
-                                                borderRadius: '20px',
-                                                backgroundColor: user.isActive ? '#DAF8E6' : '#E5E7EB',
-                                                color: user.isActive ? '#1A8245' : '#374151',
-                                                width: '97px',
-                                                height: '39px',
-                                            }}
-                                            
+                                            className={user.isActive ? 'buttonActive' : 'buttonInactive'}
                                             onClick={() => {
-                                                handleStatusChange(user.userId,user.isActive);
+                                                handleStatusChange(user.userId, user.isActive);
                                             }}
                                         >
                                             {user.isActive ? "פעיל" : "לא פעיל"}
                                         </Button>
                                     </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '55%' }}>
+                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
                                         <IconButton
-                                            aria-label="delete"
-                                            size="small"
                                             onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
                                         >
-                                            <DeleteOutline fontSize="inherit" />
-                                            {/* <Deleteicone /> */}
+                                            <img src={Deleteicone} alt="delelte" className='deleteIcon' />
                                         </IconButton>
                                         <IconButton
-                                            aria-label="edit"
-                                            size="small"
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}
-                                        >
-                                            {/* <Editicone /> */}
-                                            <EditOutlinedIcon fontSize="inherit" />
+                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
+                                            <img src={Editicone} alt="edit" className='editIcon' />
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
@@ -132,9 +111,11 @@ const UsersTable = () => {
                 </TableContainer>
 
                 {/* ניווט עמודים */}
-                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 2 }}>
+                <Box className="boxStyle">
                     <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <label style={{ marginRight: 4 }}>מספר שורות:</label>
+                        <Typography className='flexCenter'>
+                            מספר שורות:
+                        </Typography>
                         <FormControl sx={{ minWidth: '10px', height: '46px' }}>
                             <Select
                                 value={pageSize}
@@ -158,4 +139,4 @@ const UsersTable = () => {
     );
 };
 
-export default UsersTable;
+export default UsersPage;
