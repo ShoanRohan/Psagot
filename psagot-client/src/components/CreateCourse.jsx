@@ -314,8 +314,6 @@ const CreateCourse = (open=true, setOpen) => {
 </Stack>
     </Paper>
     </>
-
-    </>
   );
 };
 
