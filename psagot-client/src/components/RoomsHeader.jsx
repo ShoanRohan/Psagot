@@ -11,11 +11,11 @@ import RoomTable from "./RoomTable";
 
 
 const RoomsHeader = () => {
-    const [currentDate, setCurrentDate] = useState(dayjs()); // התאריך הנוכחי
-    const [view, setView] = useState("timeGridDay"); // ברירת מחדל: תצוגת יום
+    const [currentDate, setCurrentDate] = useState(dayjs()); 
+    const [view, setView] = useState("timeGridDay");
 
     const handleExportToPDF = () => {
-        const input = document.getElementById("calendar-container");/////מי שעושה את עיצוב הטבלה עצמה לשנות פה כדי שהייצוא לPDF יתפוס את כל הטבלה
+        const input = document.getElementById("calendar-container");
         html2canvas(input, {
             scale: 3,
             useCORS: true,

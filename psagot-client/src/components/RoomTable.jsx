@@ -32,7 +32,7 @@ export default function RoomTable({ date }) {
   const { meetings, status: meetingsStatus, error: meetingsError } = useSelector(state => state.meeting);
 
  useEffect(() => {
-  const selectedDate = date || new Date().toISOString().slice(0, 10); // ברירת מחדל אם לא נשלח פרופס
+  const selectedDate = date || new Date().toISOString().slice(0, 10); 
 
   const loadData = async () => {
     try {
@@ -83,9 +83,10 @@ export default function RoomTable({ date }) {
             </TableRow>
           </TableHead>
           <TableBody>
+            
             {times.map((time, rowIndex) => (
-              <TableRow key={rowIndex} hover>
-                <TableCell className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}>
+              <TableRow key={rowIndex} hover className={time === '15:00-16:00' ? 'highlight-row' : ''} >
+               <TableCell className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}>
                   {time}
                 </TableCell>
 
@@ -115,14 +116,16 @@ export default function RoomTable({ date }) {
                         <div
                           className="meeting-box"
                           style={{'--meeting-color': baseColor,'--meeting-bg-color': bgColor,}} >
-                          <div className="meeting-title">{meeting.title}</div>
-                          <div className="meeting-subtitle">{meeting.extendedProps.description || ''}</div>
+                          <div className="meeting-title"> {meeting.title.split(' - ')[0] } </div>
+                          <div className="meeting-subtitle">{meeting.title.split(' - ')[1] || ''}</div>
                         </div>
                       </TableCell>
                     );
                   } else {
                     return (
-                      <TableCell key={cellKey}className={`room-cell ${time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'}`}/>
+                     <TableCell key={cellKey} 
+                     className={`room-cell ${time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'} ${colIndex === 0 ? 'no-right-border' : ''}`}
+                     />
                     );
                   }
                 })}
