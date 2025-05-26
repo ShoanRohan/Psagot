@@ -7,6 +7,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import RoomTable from "./RoomTable"; 
+
 
 const RoomsHeader = () => {
     const [currentDate, setCurrentDate] = useState(dayjs()); // התאריך הנוכחי
@@ -29,6 +31,7 @@ const RoomsHeader = () => {
     };
 
     return (
+        <div>
         <HeaderContainer>
             <Title component="h1">חדרים</Title>
             <NavigationBar
@@ -44,13 +47,15 @@ const RoomsHeader = () => {
                 <ListViewButton variant="outlined">
                     <CalendarTodayIcon sx={{ fontSize: "1rem !important" }} /> תצוגת רשימה
                 </ListViewButton>
-
                 <AddRoomButton variant="contained">
                     <AddCircleOutlineIcon sx={{ fontSize: "1rem !important" }} /> הוספת חדר
                 </AddRoomButton>
-
             </ButtonsWrapper>
         </HeaderContainer>
+     
+     <RoomTable date={currentDate.format('YYYY-MM-DD')} />
+       
+       </div>
     );
 };
 

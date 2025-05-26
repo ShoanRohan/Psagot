@@ -25,26 +25,28 @@ const generateTimes = (startHour, endHour) => {
 };
 const times = generateTimes(8, 23);
 
-export default function RoomTable() {
+export default function RoomTable({ date }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const { rooms, status: roomsStatus, error: roomsError } = useSelector(state => state.room);
   const { meetings, status: meetingsStatus, error: meetingsError } = useSelector(state => state.meeting);
 
-  useEffect(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    const loadData = async () => {
-      try {
-        await dispatch(fetchAllRooms());
-        await dispatch(fetchMeetingsByRange({ startDate: today, endDate: today }));
-      } catch (err) {
-        console.error('Error loading data:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadData();
-  }, [dispatch]);
+ useEffect(() => {
+  const selectedDate = date || new Date().toISOString().slice(0, 10); // ברירת מחדל אם לא נשלח פרופס
+
+  const loadData = async () => {
+    try {
+      await dispatch(fetchAllRooms());
+      await dispatch(fetchMeetingsByRange({ startDate: selectedDate, endDate: selectedDate }));
+    } catch (err) {
+      console.error('Error loading data:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  loadData();
+}, [dispatch, date]); 
 
   if (isLoading) {
     return (
