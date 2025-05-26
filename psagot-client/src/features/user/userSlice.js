@@ -12,21 +12,25 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers:{
-        setUser: (state, action) =>{
-
-        }
+        setUser: (state, action) => {
+        state.selectedUser = action.payload;
+    },
+    clearUser: (state) => {
+        state.selectedUser = null;
+    }
     },
     extraReducers: (builder) =>{
         builder.addCase(fetchAllUsers.pending, (state) =>{
             state.status = 'loading';
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) =>{
-            console.log("Users from API:", action.payload);
+            console.error("fetchUserById failed:", action.payload || action.error);
             state.status ='succeeded';
             state.user =action.payload;
         })
         .addCase(fetchAllUsers.rejected, (state, action) => {
             state.status = 'failed';
+            console.log("fetchUserById fulfilled with:", action.payload);
             state.error = action.error.message;
         })
         .addCase(fetchUserById.pending, (state) =>{
@@ -35,14 +39,15 @@ const userSlice = createSlice({
         })
         .addCase(fetchUserById.fulfilled, (state, action)=>{
             state.status ='succeeded';
-            state.selectedUser =action.payload;
+            state.selectedUser = action.payload;
         })
         .addCase(fetchUserById.rejected, (state, action) => {
             state.status =' failed';
             state.error =action.error.message;
         })
         .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.puse(action.payload);
+            state.user.push(action.payload);
+            state.selectedUser =action.payload;
         })
         .addCase(updateUserAction.fulfilled, (state, action)=> {
             const index = state.user.findIndex((user)=> user.id===action.payload.id);
@@ -54,5 +59,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, clearUser } = userSlice.actions;
 export default userSlice.reducer;

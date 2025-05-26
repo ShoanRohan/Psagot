@@ -1,17 +1,20 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userTypeReducer from '../features/userType/userTypeSlice';
-import roomReducer from '../features/room/roomSlice';
+import userTypeReducer from './userType/userTypeSlice';
+import dayReducer from './day/daySlice';
+import roomReducer from './room/roomSlice';
 import userReduser from './user/userSlice';
-import scheduleForTopicReducer from '../features/scheduleForTopic/scheduleForTopicSlice';
-import meetingReducer from '../features/meeting/meetingSlice';
-import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
-import topicReducer from '../features/topic/topicSlice';
+import scheduleForTopicReducer from './scheduleForTopic/scheduleForTopicSlice';
+import meetingReducer from './meeting/meetingSlice';
+import daysForCourseReducer from './daysForCourse/daysForCourseSlice';
+import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
 import statusCourseReducer from '../features/statusCourse/statusCourseSlice';
+import CoursesGrid from '../components/CoursesGrid';
+import CoursesPage from '../pages/CoursesPage';
 
 const store = configureStore({
   reducer: {
-    userType: userTypeReducer, //Slice of userType
+    userType: userTypeReducer, 
     room: roomReducer,
     user: userReduser, 
     course: courseReducer,
@@ -20,9 +23,14 @@ const store = configureStore({
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
     topic:topicReducer,
     statusCourse: statusCourseReducer,
+    CoursesPage: courseReducer,
+    scheduleForTopic: scheduleForTopicReducer, 
+    meeting: meetingReducer, 
+    daysForCourse: daysForCourseReducer, 
+    topic: topicReducer,
   },
-  
 });
 
-
 export default store;
+
+
