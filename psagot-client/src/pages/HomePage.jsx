@@ -13,7 +13,6 @@ const HomePage = () => {
         }
     }, [status, dispatch]);
 
-    // Remark: all functions - start with **handle**
     const handleClickButton = () => {
         alert("handle click button - userTypes" + JSON.stringify(userTypes));
     };
