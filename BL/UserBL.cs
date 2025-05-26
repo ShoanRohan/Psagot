@@ -20,13 +20,24 @@ namespace BL
 
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
-            var user = _mapper.Map<User>(userDTO);
-            var (addedUser, errorMessage) = await _userDL.AddUser(user);
+            if (string.IsNullOrWhiteSpace(userDTO.Email) || string.IsNullOrWhiteSpace(userDTO.Phone))
+                return (null, "Email and phone are required");
+            
+            var existingUser = await _userDL.GetUserByEmailAndPhone(userDTO.Email, userDTO.Phone);
+            if (existingUser != null)
+                return (null, "User with this email and phone already exists");
 
+            
+            var userEntity = _mapper.Map<User>(userDTO);
+            userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+
+            var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
             if (addedUser == null) return (null, errorMessage);
 
             return (_mapper.Map<UserDTO>(addedUser), null);
         }
+
+
 
         public async Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO)
         {
@@ -36,6 +47,16 @@ namespace BL
             if (updatedUser == null) return (null, errorMessage);
 
             return (_mapper.Map<UserDTO>(updatedUser), null);
+        }
+        public async Task<UserDTO> UserLoginAsync(string email, string password)
+        {
+            var user = await _userDL.UserLoginAsync(email, password);
+
+            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
+            {
+                return _mapper.Map<UserDTO>(user);
+            }
+            return null;
         }
 
         public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)

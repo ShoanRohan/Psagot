@@ -13,6 +13,9 @@ namespace DL
         Task<(User User, string ErrorMessage)> UpdateUser(User user);
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
+        Task<User> UserLoginAsync(string email, string password);
+        Task<User> GetUserByEmailAndPhone(string email, string phone);
+
 
     }
 }

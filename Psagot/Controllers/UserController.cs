@@ -2,6 +2,10 @@
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Psagot.Controllers
 {
@@ -19,11 +23,50 @@ namespace Psagot.Controllers
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
-            var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
-            if (addedUser == null) return BadRequest(errorMessage);
+            if (userDTO == null)
+                return BadRequest(new { success = false, message = "Invalid user data" });
 
-            return Ok(addedUser);
+            try
+            {
+                var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
+
+                if (addedUser == null)
+                {
+                    if (errorMessage.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return BadRequest(new
+                        {
+                            success = false,
+                            errorCode = "EMAIL_PHONE_EXISTS",
+                            message = errorMessage
+                        });
+                    }
+
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = errorMessage ?? "Unknown error occurred"
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    user = addedUser
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Internal server error",
+                    details = ex.Message
+                });
+            }
         }
+
+
 
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDTO)
@@ -52,6 +95,28 @@ namespace Psagot.Controllers
             return Ok(users);
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult> Login([FromBody] LoginDTO login)
+        {
+            if (login == null)
+                return BadRequest("Invalid login request");
 
+            try
+            {
+                var user = await _userBL.UserLoginAsync(login.Email, login.Password);
+
+                if (user == null)
+                    return Unauthorized("Invalid email or password");
+                return Ok(new
+                { 
+                    user = user,
+                });
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
