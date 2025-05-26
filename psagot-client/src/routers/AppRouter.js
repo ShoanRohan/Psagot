@@ -7,6 +7,7 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import MeetingTable from '../components/MeetingTable';
 
 const AppRouter = () => {
     return (
@@ -14,7 +15,7 @@ const AppRouter = () => {
             <Route path='/' element={<Layout />}>
                 <Route index element={<HomePage />} />
                 <Route path='courses' element={<CoursesPage />} />
-                {/* <Route path='meetings' element={<MeetingsPage />} /> */}
+                 <Route path='meetings' element={<MeetingTable />} /> 
             </Route>
 
             <Route path='' element={<LoginPage />}>
@@ -25,6 +26,8 @@ const AppRouter = () => {
                 <Route path='Register' element={<Register />} />
 
             </Route>
+         
+           
 {/* 
             <Route path='add-meeting' element={<AddMeeting />} />
             <Route path="edit-meeting/:meetingId" element={<EditMeeting />} /> */}

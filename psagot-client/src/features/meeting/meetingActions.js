@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById } from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById,deleteMeeting } from '../../utils/meetingUtil';
 
 export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
     const data = await getAllMeetings();
@@ -31,3 +31,14 @@ export const addMeetingAction = createAsyncThunk(
         return data;
     }
 );
+
+export const deleteMeetingAction = createAsyncThunk(
+  'meeting/deleteMeeting',
+  async (meetingId) => {
+    // הפונקציה deleteMeeting כבר מוחקת ומחזירה את כל המפגשים המעודכנים
+    const data = await deleteMeeting(meetingId);
+    return data; // מחזיר את כל המפגשים שנשארו
+  }
+);
+
+

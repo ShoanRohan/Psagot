@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from './CustomTable';
-import { fetchAllMeetings, updateMeetingAction } from '../features/meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, deleteMeetingAction } from '../features/meeting/meetingActions';
 import {
   Chip,
   Dialog,
@@ -13,40 +13,40 @@ import {
   IconButton,
   Tooltip,
   CircularProgress,
-  Typography
+  Typography,
+  DialogContentText
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const MeetingTable = ({ onEdit, onDelete }) => {
+const MeetingTable = ({ onEdit }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { meetings, status, error } = useSelector((state) => state.meeting);
-
-  const [localMeetings, setLocalMeetings] = useState([]);
+  
+  // הסרנו את localMeetings - נשתמש רק ב-meetings מה-Redux
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
   const [currentMeeting, setCurrentMeeting] = useState(null);
   const [editedDescription, setEditedDescription] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // סטייטים לדיאלוג מחיקה
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [meetingToDelete, setMeetingToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchAllMeetings());
     } else if (status === 'succeeded') {
-      setLocalMeetings(meetings);
       setIsInitialLoading(false);
     } else if (status === 'failed') {
       setIsInitialLoading(false);
     }
-  }, [status, dispatch, meetings]);
-
-  const handleEditMeeting = (meetingId) => {
-    navigate(`/edit-meeting/${meetingId}`);
-  };
+  }, [status, dispatch]);
 
   const handleOpenDescriptionDialog = (meeting) => {
     setCurrentMeeting(meeting);
@@ -68,28 +68,56 @@ const MeetingTable = ({ onEdit, onDelete }) => {
     setIsEditing(true);
   };
 
-  const handleSaveDescription = () => {
+  const handleSaveDescription = async () => {
     if (currentMeeting) {
       setIsSaving(true);
       const updatedMeeting = {
         ...currentMeeting,
         description: editedDescription
       };
+      
+      try {
+        await dispatch(updateMeetingAction(updatedMeeting)).unwrap();
+        setIsSaving(false);
+        handleCloseDescriptionDialog();
+      } catch (error) {
+        console.error('Error updating description:', error);
+        setIsSaving(false);
+      }
+    }
+  };
 
-      dispatch(updateMeetingAction(updatedMeeting))
-        .then(() => {
-          const updatedMeetings = localMeetings.map((m) =>
-            m.meetingId === updatedMeeting.meetingId ? updatedMeeting : m
-          );
-          setLocalMeetings(updatedMeetings);
+  // פונקציות לטיפול במחיקה
+  const handleDeleteClick = (meeting) => {
+    setMeetingToDelete(meeting);
+    setOpenDeleteDialog(true);
+  };
 
-          setIsSaving(false);
-          handleCloseDescriptionDialog();
-        })
-        .catch((error) => {
-          console.error('Error updating description:', error);
-          setIsSaving(false);
-        });
+  const handleCloseDeleteDialog = () => {
+    if (!isDeleting) {
+      setOpenDeleteDialog(false);
+      setMeetingToDelete(null);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (meetingToDelete) {
+      setIsDeleting(true);
+      
+      try {
+        // מוחק מהשרת ומקבל את כל המפגשים המעודכנים
+        await dispatch(deleteMeetingAction(meetingToDelete.meetingId)).unwrap();
+        
+        setIsDeleting(false);
+        handleCloseDeleteDialog();
+        
+      } catch (error) {
+        console.error('Error deleting meeting:', error);
+        setIsDeleting(false);
+        
+        // הצגת הודעת שגיאה למשתמש
+        alert('שגיאה במחיקת המפגש. אנא נסה שוב.');
+      }
     }
   };
 
@@ -144,67 +172,112 @@ const MeetingTable = ({ onEdit, onDelete }) => {
       )
     },
     'תיאור': {
-      render: (row) => (
-        <div
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '200px', cursor: 'pointer' }}
-          onClick={() => handleOpenDescriptionDialog(row)}
-        >
-          <Tooltip title="לחץ לצפייה/עריכה">
-            <Typography
-              variant="body2"
-              sx={{
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                maxWidth: '180px',
-                textAlign: 'right',
-                direction: 'rtl'
+      render: (row) => {
+        if (row.description && row.description.trim() !== '') {
+          return (
+            <div
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'space-between', 
+                maxWidth: '200px', 
+                cursor: 'pointer' 
               }}
+              onClick={() => handleOpenDescriptionDialog(row)}
             >
-              {row.description || '—'}
-            </Typography>
-          </Tooltip>
-          <IconButton size="small" color="primary" sx={{ ml: 1 }}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </div>
-      )
+              <Tooltip title="לחץ לצפייה/עריכה">
+                <Typography
+                  variant="body2"
+                  sx={{
+                    textOverflow: 'ellipsis',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    maxWidth: '180px',
+                    textAlign: 'right',
+                    direction: 'rtl'
+                  }}
+                >
+                  {row.description}
+                </Typography>
+              </Tooltip>
+              <IconButton size="small" color="primary" sx={{ ml: 1 }}>
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </div>
+          );
+        } else {
+          return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <Tooltip title="הוסף תיאור">
+                <IconButton
+                  color="default"
+                  onClick={() => handleOpenDescriptionDialog(row)}
+                  size="small"
+                >
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+          );
+        }
+      }
     },
-    'עריכה': {
+    'מחיקה': {
       render: (row) => (
-        <Tooltip title="עריכת מפגש">
-          <IconButton
-            color="primary"
-            onClick={() => handleEditMeeting(row.meetingId)}
-            size="small"
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Tooltip title="מחק מפגש">
+            <IconButton
+              color="error"
+              onClick={() => handleDeleteClick(row)}
+              size="small"
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </div>
       )
     }
   };
 
   if (isInitialLoading) {
-    return <div>טוען נתונים...</div>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+        <CircularProgress />
+        <Typography sx={{ ml: 2 }}>טוען נתונים...</Typography>
+      </div>
+    );
   }
 
   if (status === 'failed') {
-    return <div>שגיאה: {error}</div>;
+    return (
+      <div style={{ textAlign: 'center', padding: '20px' }}>
+        <Typography color="error">שגיאה בטעינת הנתונים: {error}</Typography>
+        <Button 
+          variant="contained" 
+          onClick={() => dispatch(fetchAllMeetings())}
+          sx={{ mt: 2 }}
+        >
+          נסה שוב
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div>
-      <h2>טבלת מפגשים</h2>
+      <Typography variant="h4" component="h2" sx={{ mb: 3, textAlign: 'center' }}>
+        טבלת מפגשים
+      </Typography>
+      
       <CustomTable
         columns={columns}
-        data={localMeetings}
+        data={meetings} // שימוש ישיר ב-meetings מה-Redux
         onEdit={onEdit}
-        onDelete={onDelete}
         columnConfig={columnConfig}
         keyMap={keyMap}
       />
-
+      
+      {/* דיאלוג תיאור */}
       <Dialog
         open={openDescriptionDialog}
         onClose={handleCloseDescriptionDialog}
@@ -241,7 +314,8 @@ const MeetingTable = ({ onEdit, onDelete }) => {
               border: '1px solid #ddd',
               borderRadius: '4px',
               marginTop: '8px',
-              whiteSpace: 'pre-wrap'
+              whiteSpace: 'pre-wrap',
+              direction: 'rtl'
             }}>
               {currentMeeting?.description || 'אין תיאור למפגש זה.'}
             </div>
@@ -284,6 +358,50 @@ const MeetingTable = ({ onEdit, onDelete }) => {
               </Button>
             </>
           )}
+        </DialogActions>
+      </Dialog>
+
+      {/* דיאלוג אישור מחיקה */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        dir="rtl"
+      >
+        <DialogTitle id="alert-dialog-title">
+          אישור מחיקת מפגש
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            האם אתה בטוח שברצונך למחוק את המפגש הזה?
+            <br />
+            <strong>קורס:</strong> {meetingToDelete?.courseName}
+            <br />
+            <strong>נושא:</strong> {meetingToDelete?.topicName}
+            <br />
+            <strong>מספר מפגש:</strong> {meetingToDelete?.meetingNumberForTopic}
+            <br />
+            <strong>מרצה:</strong> {meetingToDelete?.lecturerName}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'space-between', padding: '16px' }}>
+          <Button 
+            onClick={handleCloseDeleteDialog} 
+            color="inherit"
+            disabled={isDeleting}
+          >
+            ביטול
+          </Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            color="error" 
+            variant="contained"
+            disabled={isDeleting}
+            startIcon={isDeleting ? <CircularProgress size={20} color="inherit" /> : <DeleteIcon />}
+          >
+            {isDeleting ? 'מוחק...' : 'מחק'}
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

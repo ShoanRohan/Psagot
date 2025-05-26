@@ -37,9 +37,9 @@ const CustomTable = ({ columns, data, onEdit, onDelete, columnConfig = {}, keyMa
         </TableRow>
       </TableHead>
       <TableBody>
-        {data.map((row, i) => (
-          <TableRow key={i}>
-            {columns.map((col, colIndex) => {
+  {data.map((row, i) => (
+    <TableRow key={row.meetingId || row.id || i}> {/* key יציב יותר */}
+      {columns.map((col, colIndex) => {
               // בדיקה אם יש קונפיגורציה מותאמת אישית לעמודה זו
               if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
                 return (
