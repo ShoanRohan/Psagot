@@ -2,16 +2,7 @@ import { Paper, Stack, TextField, Typography, MenuItem, Button, Box } from "@mui
 import { React,  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
-<<<<<<< HEAD
 import { fetchCourseStatuses } from "../features/statusCourse/statusCourseActions";
-=======
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
->>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
 
 const CreateCourse = (open=true, setOpen) => {
   const dispatch = useDispatch();
@@ -71,67 +62,7 @@ const CreateCourse = (open=true, setOpen) => {
 
   return (
     <>
-<<<<<<< HEAD
-=======
-    <Dialog
-        open={open||true}
-        onClose={handleClose}
-        slotProps={{
-          paper: {
-            component: 'form',
-            onSubmit: (event) => {
-              event.preventDefault();
-              const formData = new FormData(event.currentTarget);
-              const formJson = Object.fromEntries(formData.entries());
-              const email = formJson.email;
-              console.log(email);
-              handleClose();
-            },
-          },
-        }}
-      >
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText> */}
-          <TextField
-            autoFocus
-            required
-            margin="dense"
-            id="name"
-            name="email"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Subscribe</Button>
-        </DialogActions>
-      </Dialog>
-    <Paper
-       elevation={0}
-       dir="rtl"
-       sx={{
-        display: 'inline-flex',
-        padding: '40px',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-        gap: '1.25rem',
-        borderRadius: '10px',
-        border: '1px solid #C6C6C6',
-        background: '#FFF',
-        boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
-        width: { xs: 'auto', sm: 'auto', md: 'auto', lg: '70vw'},
-        height: { xs: 'auto', sm: 'auto', md: 'auto', lg: '68vh'},
-      }}
-    >
->>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
+
       <Typography variant='body1' fontWeight='bold'
       sx={{
         textAlign: "right",
@@ -385,33 +316,7 @@ const CreateCourse = (open=true, setOpen) => {
 >
 </Stack>
     </Paper>
-<<<<<<< HEAD
-    <Paper
-           elevation={0}
-       dir="rtl"
-  sx={{
-    width: { xs: '90vw', sm: '85vw', md: '70vw' },
-    maxWidth: '1476px',
-    height: { xs: 'auto', md: '10vw' }, // 507 / 1920 * 100
-    top: { xs: 0, md: '12.08vw' }, // 232 / 1920 * 100
-    left: { xs: 0, md: '4.375vw' }, // 84 / 1920 * 100
-    paddingTop: { xs: '1rem', md: '1.25rem' },
-    paddingRight: { xs: '1rem', md: '1.875rem' },
-    paddingBottom: { xs: '2rem', md: '2.5rem' },
-    paddingLeft: { xs: '1rem', md: '1.875rem' },
-    borderRadius: '0.625rem',
-    gap: { xs: 2, md: '2rem' },
-    background: '#FFFFFF',
-    boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    }}
-    >
 
-    </Paper>
-=======
->>>>>>> 8e4470ec4483865de9a9e2e68546b381ed2197a9
     </>
   );
 };
