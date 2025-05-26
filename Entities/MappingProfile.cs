@@ -28,7 +28,7 @@ public class MappingProfile : Profile
                 new ExtendedProps
                 {
                     Location = (src.Room != null ? src.Room.Name : "לא ידוע"),
-                    Color = (src.Course != null && src.Course.Color != null ? src.Course.Color : "grey")
+                    Color = (src.Course != null && src.Course.Color != null ? src.Course.Color : "gray")
                 }));
     }
 
