@@ -9,6 +9,9 @@
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5174"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5174"
     },
     "https": {
       "commandName": "Project",

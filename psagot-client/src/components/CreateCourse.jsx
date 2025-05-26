@@ -214,8 +214,6 @@ const CreateCourse = (open=true, setOpen) => {
     />
   </Box>
 </Stack>
-
-
      {/* Third Row */}
 <Stack direction="row" justifyContent="flex-end" alignItems="center">
   <TextField
@@ -243,7 +241,6 @@ const CreateCourse = (open=true, setOpen) => {
     />
   </Box>
 </Stack>
-
       {/* Notes */}
       <TextField
         name="notes"
@@ -311,11 +308,12 @@ const CreateCourse = (open=true, setOpen) => {
   justifyContent="center"
   sx={{
     width: '100%',
-   // mt: 4,
+
   }}
 >
 </Stack>
     </Paper>
+    </>
 
     </>
   );
