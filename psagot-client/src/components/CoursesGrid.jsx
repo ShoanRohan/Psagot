@@ -13,6 +13,7 @@ const CourseGrid = () => {
   const dispatch = useDispatch();
   const Courses = useSelector((state) => state.course.courses);
   const activeCourses = Courses?.filter(course => course.statusId === 1);
+  
 
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});

@@ -35,17 +35,17 @@ const CoursesPage = () => {
   };
 
   return (
-    <Box
-      sx={{
+      <Box
+        sx={{
         width: "100%",
         height: "100vh",
-        display: "flex",
+          display: "flex",
         flexDirection: "column",
-        alignItems: "center",
+          alignItems: "center",
         backgroundColor: "#FFFFFF",
         position: "relative",
-      }}
-    >
+        }}
+      >
       <Typography
         variant="h1"
         sx={{
@@ -65,11 +65,11 @@ const CoursesPage = () => {
         }}
       >
         קורסים
-      </Typography>
+          </Typography>
 
-      <Button
+          <Button
         onClick={exportToExcel}
-        sx={{
+            sx={{
           position: "absolute",
           width: "2.5rem",
           height: "2.5rem",
@@ -83,12 +83,12 @@ const CoursesPage = () => {
           justifyContent: "center",
           minWidth: "2.5rem",
           minHeight: "2.5rem",
-        }}
-      >
+            }}
+          >
         <img src={exptExcel} alt="אייקון ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
-      </Button>
+          </Button>
 
-      <Button
+          <Button
         variant="contained"
         sx={{
           position: "absolute",
@@ -108,7 +108,7 @@ const CoursesPage = () => {
       >
         <img src={circlePlus} alt="אייקון הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
         <Typography
-          sx={{
+            sx={{
             fontFamily: "Rubik",
             fontWeight: 400,
             fontSize: "1.8vh",
@@ -116,11 +116,11 @@ const CoursesPage = () => {
             textAlign: "center",
             color: "#FFFFFF",
             textTransform: "capitalize",
-          }}
-        >
+            }}
+          >
           הוספת קורס
         </Typography>
-      </Button>
+          </Button>
 
       <CourseGrid />
     </Box>

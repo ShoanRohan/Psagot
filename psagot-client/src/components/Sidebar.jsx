@@ -109,7 +109,7 @@ const Sidebar = () => {
                 <Avatar
                  src={user?.avatarUrl}
                  sx={{ bgcolor: "#B2CC53", margin: "0 1.265rem" }}
-                 />
+>
                 <Avatar sx={{ bgcolor: "#B2CC53" }}>
                 {user?.name?.charAt(0)}
                 </Avatar>
@@ -136,7 +136,7 @@ const Sidebar = () => {
                         lineHeight: "20px",
                     }}
                 >
-                    {user?.userTypeDescription || "שם משתמש"}
+                    {user?.userTypeName  || "סוג משתמש"}
                 </Typography>
                 </div>
             </Box>
