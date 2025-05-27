@@ -119,13 +119,14 @@ namespace Psagot.Controllers
             }
         }
 
-        [HttpGet("GetCoordinators")]
-        public async Task<IActionResult> GetCoordinators()
+        [HttpGet("GetUserNamesByUserTypeId/{userTypeId}")]
+        public async Task<IActionResult> GetUserNamesByUserTypeId(int userTypeId)
         {
-            var (coordinators, errorMessage) = await _userBL.GetCoordinators();
-            if (coordinators == null) return BadRequest(errorMessage);
+            var userNames = await _userBL.GetUserNamesByUserTypeId(userTypeId);
+            if (userNames == null || !userNames.Any())
+                return NotFound("No users found with the specified user type.");
 
-            return Ok(coordinators);
+            return Ok(userNames);
         }
     }
 }
