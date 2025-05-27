@@ -9,7 +9,7 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
         {/* <AppRouter /> */}
-        <CourseSearch></CourseSearch>
+        <CourseSearch/>
       </BrowserRouter>
     </Provider>
   );
