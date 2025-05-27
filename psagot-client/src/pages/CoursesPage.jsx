@@ -6,6 +6,7 @@ import CourseGrid from "../components/CoursesGrid";
 import { useSelector } from "react-redux";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
+import CourseSearch from "../components/CourseSearch";
 
 const CoursesPage = () => {
 

@@ -36,3 +36,7 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
 
     return data;
 });
+export const fetchCoordinators = createAsyncThunk('user/fetchCoordinators', async (userTypeId = 3) => {
+  const data = await getCoordinators(userTypeId);
+  return data;
+});
