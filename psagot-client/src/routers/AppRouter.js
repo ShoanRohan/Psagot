@@ -5,12 +5,12 @@ import Layout from '../pages/Layout';
 import Login from '../components/Login';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
-
+import UserSearch from '../components/UserSearch';
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
-                <Route path='/' element={<LoginPage />} />
+                <Route path='/' element={<UserSearch />} />
                 <Route path='/courses' element={<span>page Courses</span>} />
                 <Route path='/meetings' element={<span>page Meetings</span>} />
                 <Route path='/users' element={<UserManagement />} />
