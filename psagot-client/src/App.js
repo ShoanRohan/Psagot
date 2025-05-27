@@ -10,8 +10,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        {/* <AppRouter /> */}
-        <CoursesPage/>
+        <AppRouter />
       </BrowserRouter>
     </Provider>
   );
