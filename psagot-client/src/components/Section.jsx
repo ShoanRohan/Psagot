@@ -7,7 +7,7 @@ const Section = () => {
 		<Box sx={{ flexGrow: 1 }}>
 			<Container
 				component="main"
-				disableGutters
+				// disableGutters
 			>
 				<Outlet />
 			</Container>

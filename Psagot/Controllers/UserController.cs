@@ -24,24 +24,49 @@ namespace Psagot.Controllers
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
             if (userDTO == null)
-                return BadRequest("Invalid user data");
+                return BadRequest(new { success = false, message = "Invalid user data" });
+
             try
             {
                 var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
-                if (addedUser == null)
-                    return BadRequest(errorMessage);
 
-                return CreatedAtAction(nameof(AddUser), new { id = addedUser.UserId }, new
+                if (addedUser == null)
                 {
-                    User = addedUser
+                    if (errorMessage.Contains("already exists", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return BadRequest(new
+                        {
+                            success = false,
+                            errorCode = "EMAIL_PHONE_EXISTS",
+                            message = errorMessage
+                        });
+                    }
+
+                    return BadRequest(new
+                    {
+                        success = false,
+                        message = errorMessage ?? "Unknown error occurred"
+                    });
+                }
+
+                return Ok(new
+                {
+                    success = true,
+                    user = addedUser
                 });
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Internal server error",
+                    details = ex.Message
+                });
             }
         }
+
+
 
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser([FromBody] UserDTO userDTO)
