@@ -8,7 +8,8 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
-        <AppRouter />
+        {/* <AppRouter /> */}
+        <CourseSearch></CourseSearch>
       </BrowserRouter>
     </Provider>
   );
