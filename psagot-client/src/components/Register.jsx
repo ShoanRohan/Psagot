@@ -113,7 +113,7 @@ const registeredUser = resultAction.payload.user;
 } else {
   const error = resultAction.payload;
   if (error?.errorCode === 'EMAIL_PHONE_EXISTS') {
-    alert("כבר קיים משתמש עם האימייל והטלפון שהזנת.");
+    alert("כבר קיים משתמש עם האימייל והטלפון שהזנו.");
   } else {
     alert("אירעה שגיאה בהרשמה. נסי שוב.");
   }}
