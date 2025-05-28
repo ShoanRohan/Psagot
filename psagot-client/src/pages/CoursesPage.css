@@ -1,0 +1,72 @@
+.courses-page-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 2rem;
+  box-sizing: border-box;
+  direction: rtl;
+}
+
+.courses-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 4.5vh;
+  line-height: 100%;
+  text-align: right;
+  color: #112b83;
+  text-transform: capitalize;
+  margin-bottom: 1.5rem;
+}
+
+.buttons-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.add-course-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 9.5rem;
+  height: 2.5rem;
+  border-radius: 50vh;
+  background-color: #326def;
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+  text-transform: capitalize;
+}
+
+.add-course-button:hover {
+  background-color: #2a5ed9;
+}
+
+.export-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.68vh;
+  background-color: #f0f1f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+}
+
+.button-icon {
+  width: 75%;
+  height: 80%;
+}
+
+.button-text {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 1.8vh;
+  line-height: 100%;
+  text-align: center;
+  color: #ffffff;
+}
