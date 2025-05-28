@@ -131,8 +131,8 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
             sx={sharedStyles}
           >
             {coordinators && coordinators?.map((coordinator) => (
-              <MenuItem key={coordinator.userId} value={coordinator.userId}>
-                {coordinator.userId}
+              <MenuItem key={coordinator.userId} value={coordinator.name}>
+                {coordinator.name}
               </MenuItem>
             ))}
           </Select>

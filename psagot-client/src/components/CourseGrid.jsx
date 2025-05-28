@@ -142,8 +142,8 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     sx={{ width: 20, height: 20, display: 'block', mt:"-4px" }}
   />
 </IconButton>
-                    >
-                      <img src={editSvg} alt="edit_icon" />
+                
+             {/* <img src={editSvg} alt="edit_icon" /> */}
                     
                   </Link>
                 </StyledTableCell>
