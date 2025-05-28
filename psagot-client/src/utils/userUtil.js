@@ -1,6 +1,6 @@
 import api from "./api"
 
-const getAllUsers = async ()=> {
+const getAllUsers = async () => {
     const response = await api.get('/User/GetAllUsers');
     return response.data;
 };
@@ -13,7 +13,7 @@ const getUserById = async (id) => {
     }
 
     try {
-        const response = await api.get(`/User/GetUserById/${id}`);  
+        const response = await api.get(`/User/GetUserById/${id}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching user by ID:", error);
@@ -30,16 +30,29 @@ const addUser = async (newUser) => {
         if (error.response && error.response.data) {
             return error.response.data;
         }
-        throw error; 
+        throw error;
     }
 };
 
 
 const updatedUser = async (updateUser) => {
-    const response = await api.put('/User/UpdateUser',updateUser);
+    const response = await api.put('/User/UpdateUser', updateUser);
     return response.data;
+};
+
+const getCoordinators = async (userTypeId = 3) => {
+    try {
+        const response = await api.get(`/User/GetUserNamesByUserTypeId/${userTypeId}`);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.data) {
+            return error.response.data;
+        }
+        throw error;
+    }
 };
 
 
 
-export { getAllUsers, getUserById, addUser, updatedUser };
+
+export { getAllUsers, getUserById, addUser, updatedUser, getCoordinators };

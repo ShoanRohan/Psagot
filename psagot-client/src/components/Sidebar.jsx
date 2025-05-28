@@ -10,6 +10,7 @@ import networkWired from "../assets/icons/networkWired.svg";
 import userIcon from "../assets/icons/userIcon.svg";
 import courses from "../assets/icons/courses.svg";
 
+
 const Sidebar = () => {
     const user = useSelector((state) => state.user.selectedUser);
     const isAdmin = user?.role === "admin";
@@ -74,6 +75,7 @@ const Sidebar = () => {
                                 fontWeight: 400,
                                 fontSize: "22px",
                                 lineHeight: "33px",
+                                        letterSpacing: "0%",
                                 textAlign: "right"
                             }}
                         >
@@ -93,13 +95,22 @@ const Sidebar = () => {
                     borderTop: "1px solid #ffffff55",
                     display: "flex",
                     alignItems: "center",
+                    gap: 1,
+                    mt: 3,
+                    width: 50,
+                    height: 160,
+                    position: "relative",
+                    top: 250,
+                    flexDirection: "column",
+                    justifyContent: "center"
                 }}
                 onClick={() => navigate("/profile")}
             >
                 <Avatar
                  src={user?.avatarUrl}
                  sx={{ bgcolor: "#B2CC53", margin: "0 1.265rem" }}
->
+/>
+                <Avatar sx={{ bgcolor: "#B2CC53" }}>
                 {user?.name?.charAt(0)}
                 </Avatar>
                 <div>
@@ -129,6 +140,7 @@ const Sidebar = () => {
                 </Typography>
                 </div>
             </Box>
+
         </Box>
     );
 };

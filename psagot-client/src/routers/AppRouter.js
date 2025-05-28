@@ -1,31 +1,34 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CoursesPage from '../pages/CoursesPage';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
+import UserManagement from '../pages/UserManagement';
 import RegisterPage from '../pages/RegisterPage';
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' element={<Layout />}>
+            {/* ניווט ברירת מחדל ישירות ל-login */}
+            <Route path="/" element={<Navigate to="/login" />} />
+
+            {/* עמודי אפליקציה אחרי התחברות */}
+            <Route path="/" element={<Layout />}>
                 <Route index element={<HomePage />} />
-                <Route path='courses' element={<CoursesPage />} />
-                {/* <Route path='meetings' element={<MeetingsPage />} /> */}
+                <Route path="/user" element={<UserManagement />} />
+                <Route path="/courses" element={<CoursesPage />} />
             </Route>
 
-            <Route path='' element={<LoginPage />}>
-                <Route path='login' element={<Login />} />
-
+            {/* עמוד התחברות */}
+            <Route path="/login" element={<LoginPage />}>
+                <Route index element={<Login />} />
             </Route>
-            <Route path='' element={<RegisterPage />}>
-                <Route path='Register' element={<Register />} />
-
+            <Route path='/register' element={<RegisterPage />}>
+                <Route index element={<Register />} />
             </Route>
-
         </Routes>
     );
 };

@@ -17,12 +17,19 @@ const CourseGrid = () => {
     dispatch(fetchAllCourses());
   }, [dispatch]);
   useEffect(() => {
-    console.log("Courses in Component:", Courses);
     if (Courses && Courses.length > 0) {
-      console.log("Courses data", Courses);
-      setRows(Courses);
+      const filtered = Courses
+        .filter(course => course.statusId === 1)
+        .map(course => ({
+          ...course,
+          isActive: true,
+        }));
+      setRows(filtered);
     }
   }, [Courses]);
+
+
+
   const handleEditClick = (id) => () => {
   };
   const formatDayMonthFromParts = (params) => {
@@ -116,6 +123,20 @@ const CourseGrid = () => {
       sortable: false,
       align: "center",
       getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+            />,
+
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+            />,
+          ];
+        }
         return [
           <GridActionsCellItem
             icon={<img
