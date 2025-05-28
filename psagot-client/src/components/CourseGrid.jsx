@@ -134,16 +134,13 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   <Link onClick={() => selectCourse(course?.courseId)}>
-                  <IconButton sx={{ width: 32, height: 32, p: 0, bgcolor: '#F4F4F4', borderRadius: '5px' }}>
-  <Box
-    component="img"
-    src={editSvg}
-    alt="edit_icon"
-    sx={{ width: 20, height: 20, display: 'block', mt:"-4px" }}
-  />
-</IconButton>
-                    >
-                      <img src={editSvg} alt="edit_icon" />
+                    <IconButton sx={{ width: 32, height: 32, p: 0, bgcolor: '#F4F4F4', borderRadius: '5px' }}>
+                      <Box
+                        component="img"
+                        src={editSvg}
+                        alt="edit_icon"
+                        sx={{ width: 20, height: 20, display: 'block', mt: "-4px" }}
+                      />
                     </IconButton>
                   </Link>
                 </StyledTableCell>
@@ -174,49 +171,49 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
               מספר שורות:
             </Typography>
             <Select
-  IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
-  displayEmpty
-  onChange={handleSelectChange}
-  value={selectSize}
-  sx={{
-    height: '26px',
-    width: '49px',
-    borderRadius: '4px',
-    borderWidth: '0.5px',
-    borderColor: '#F0F1F3',
-    pl: 0,
-    pr: 0,
-    fontSize: '12px',
-    ml: '8px',
-    textAlign: 'center',
-    '& .MuiSelect-select': {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  }}
->
-  <MenuItem value={1} sx={{ justifyContent: 'center' }}>1</MenuItem>
-  <MenuItem value={2} sx={{ justifyContent: 'center' }}>2</MenuItem>
-  <MenuItem value={5} sx={{ justifyContent: 'center' }}>5</MenuItem>
-</Select>
+              IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
+              displayEmpty
+              onChange={handleSelectChange}
+              value={selectSize}
+              sx={{
+                height: '26px',
+                width: '49px',
+                borderRadius: '4px',
+                borderWidth: '0.5px',
+                borderColor: '#F0F1F3',
+                pl: 0,
+                pr: 0,
+                fontSize: '12px',
+                ml: '8px',
+                textAlign: 'center',
+                '& .MuiSelect-select': {
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                },
+              }}
+            >
+              <MenuItem value={1} sx={{ justifyContent: 'center' }}>1</MenuItem>
+              <MenuItem value={2} sx={{ justifyContent: 'center' }}>2</MenuItem>
+              <MenuItem value={5} sx={{ justifyContent: 'center' }}>5</MenuItem>
+            </Select>
           </Grid>
 
           <Grid item xs={6} display="flex" justifyContent="end">
-  <Pagination
-    onChange={handlePageChange}
-    count={Math.ceil(totalCount / pageSize)}
-    page={currentPage}
-    sx={{
-      direction: 'ltr',
-      ml: 2, // ריווח משמאל
-      '& .MuiPaginationItem-root': { fontSize: 12 },
-    }}
-  />
-</Grid>
+            <Pagination
+              onChange={handlePageChange}
+              count={Math.ceil(totalCount / pageSize)}
+              page={currentPage}
+              sx={{
+                direction: 'ltr',
+                ml: 2, // ריווח משמאל
+                '& .MuiPaginationItem-root': { fontSize: 12 },
+              }}
+            />
+          </Grid>
         </Grid>
       </Box>
-    </Box>
+    </Box >
   );
 };
 
