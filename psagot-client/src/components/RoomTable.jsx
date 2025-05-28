@@ -106,16 +106,20 @@ export default function RoomTable({ date }) {
 
                     for (let i = 1; i < rowSpan; i++) {
                       occupiedCells[`${rowIndex + i}-${colIndex}`] = true;
-                    }
+                    } 
 
                     const baseColor = meeting.extendedProps.color || '#2196F3';
-                    const bgColor = lightenColor(baseColor, 0.8);
+                    const meetingEndTime = new Date(meeting.end);
+                    const now = new Date();
+                    const isPastMeeting = meetingEndTime < now;
+                    const bgColor = isPastMeeting? lightenColor(baseColor,0.95) : lightenColor(baseColor,0.8);
+                    const bgColorLine = isPastMeeting ? lightenColor(baseColor,0.8) : lightenColor(baseColor,0);
 
                     return (
                       <TableCell key={cellKey} rowSpan={rowSpan} className="room-cell meeting-cell">
                         <div
                           className="meeting-box"
-                          style={{'--meeting-color': baseColor,'--meeting-bg-color': bgColor,}} >
+                          style={{'--meeting-color': bgColorLine,'--meeting-bg-color':bgColor,}} >
                           <div className="meeting-title"> {meeting.title.split(' - ')[0] } </div>
                           <div className="meeting-subtitle">{meeting.title.split(' - ')[1] || ''}</div>
                         </div>
