@@ -42,7 +42,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
 
   const selectCourse = async (courseId) => {
     await dispatch(fetchCourseById(courseId));
-    navigate(`/course/:${courseId}`);
+    navigate(`/course/${courseId}`);
   };
 
   const handleSelectChange = (event) => {
