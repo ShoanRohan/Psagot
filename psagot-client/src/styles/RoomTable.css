@@ -1,76 +1,81 @@
 .room-table-container {
   flex: 1;
-  overflow: hidden; 
-  max-height: calc(150vh - 140px);
+  overflow: hidden;
+  max-height: calc(100vh - 140px); 
 }
 
 .room-table-paper {
-  padding: 16px;
+  padding: 12px;
   border-radius: 8px;
-  min-height: 90vh;
   background-color: #ffffff;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 4px 0px #DCE2ECCC;
+ margin-left: 60px;
+ margin-right: 60px;
 }
 
 .room-table {
-  border: none; 
-  border-collapse: collapse;
   width: 100%;
-  table-layout: fixed; 
+  border-collapse: collapse;
+  table-layout: fixed;
 }
 
 .room-table thead .room-header {
   background-color: #F6F7F9;
-  color: #393939;
+  color: rgba(57, 57, 57, 0.8);
   font-weight: bold;
-  height: 50px;
-  font-size: small;
-  padding: 1px;
+  height: 36px;
+  font-size: 14px;
   text-align: center;
-  border-right: 1px solid #e0e0e0;
+  border-width: 0 0 1px 0.4px;
+  border-style: solid;
+  border-color: #C6C6C6;
   font-family: 'Rubik', sans-serif;
 }
+
 
 .room-table .time-cell {
-  height: 12px; 
-  color: #393939;
+  height: 24px;
+  padding: 6px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(57, 57, 57, 0.8); 
   border-bottom: 1px solid #C6C6C6;
-  font-family: 'Rubik', sans-serif;
-  font-weight: bold;
-  font-size: 12px;
-  width: 90px;
   text-align: center;
-  padding: 10px;
+ font-family: 'Rubik', sans-serif;
+  white-space: nowrap;   
+  overflow: visible;         
+  text-overflow: unset;      
+
 }
 
+
 .room-table tbody tr {
-  height: 40px;       
-  max-height: 40px;   
-  overflow: hidden; 
+  height: 28px;
+  max-height: 28px;
 }
 
 .room-table tbody tr:hover {
   background-color: #e0f7fa;
 }
 
-.room-table tbody .room-cell {
-  padding: 1px;
-  height: 40px;      
-  max-height: 40px;  
+.room-table .room-cell {
+  padding: 2px;
+  height: 28px;
   text-align: center;
   border-right: 1px solid #ddd;
-  overflow: hidden;  
   box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap; 
 }
 
 .meeting-box {
   position: relative;
-  border-radius: 8px;
-  padding: 8px 12px;
+  border-radius: 6px;
+  padding: 4px 6px;
   height: 100%;
   box-sizing: border-box;
-  overflow: hidden;
   background-color: var(--meeting-bg-color);
+  overflow: hidden;
 }
 
 .meeting-box::after {
@@ -78,25 +83,43 @@
   position: absolute;
   top: 0;
   right: 0;
-  width: 8px;
+  width: 6px;
   height: 100%;
   background-color: var(--meeting-color);
-  border-top-right-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-
-.meeting-title, .meeting-subtitle {
-  white-space: nowrap;
-  line-height: 1.2;
+  border-top-right-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .meeting-title {
-  font-weight: bold;
-  font-size: 1rem;
-  margin-bottom: 4px;
+  padding-right: 8px;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;       
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: right;
+  text-transform: capitalize;
+  white-space: nowrap;
+  margin-bottom: 2px;
 }
 
 .meeting-subtitle {
-  font-size: 0.85rem;
+  padding-right: 8px;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;  
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: right;
+  text-transform: capitalize;
+  white-space: nowrap;
   color: #555;
+}
+
+.highlight-row {
+  background-color: #FAFCFF;
+}
+
+.room-cell.no-right-border {
+  border-right: none !important;
 }

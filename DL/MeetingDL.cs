@@ -100,22 +100,30 @@ namespace DL
         {
             try
             {
-                var query = _context.Meetings.AsQueryable();
+                var query = _context.Meetings
+                    .Include(m => m.Course)
+                    .Include(m => m.Topic)
+                    .Include(m => m.Room)
+                    .Include(m => m.Teacher).ThenInclude(t => t.UserType) 
+                    .Include(m => m.Day)
+                    .Include(m => m.ScheduleForTopic)
+                    .AsQueryable();
 
                 int totalCount = await query.CountAsync();
-              
+
                 List<Meeting> meetings = await query
-                    .OrderBy(m => m.MeetingDate) 
-                    .Skip((page - 1) * pageSize) 
-                    .Take(pageSize) 
+                    .OrderBy(m => m.MeetingDate)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .ToListAsync();
 
                 return (meetings, totalCount);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return (Enumerable.Empty<Meeting>(), 0);
             }
         }
+
     }
 }

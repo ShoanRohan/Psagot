@@ -101,25 +101,29 @@ export default function MeetingsTable() {
           <TableBody>
             {displayedMeetings.map((meeting) => (
               <StyledTableRow key={meeting.meetingId}>
-                <StyledTableCell>{meeting.meetingNumber}</StyledTableCell>
-                <StyledTableCell>{meeting.course}</StyledTableCell>
-                <StyledTableCell>{meeting.subject}</StyledTableCell>
-                <StyledTableCell>{meeting.teacher}</StyledTableCell>
+                <StyledTableCell>{meeting.meetingNumberForTopic}</StyledTableCell>
+                <StyledTableCell>{meeting.course?.name || "-"}</StyledTableCell>
+                <StyledTableCell>{meeting.topic?.name || "-"}</StyledTableCell>
+                <StyledTableCell>{meeting.teacher?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.meetingDate}</StyledTableCell>
-                <StyledTableCell>{meeting.day}</StyledTableCell>
+                <StyledTableCell>{meeting.day?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.startTime}</StyledTableCell>
                 <StyledTableCell>{meeting.endTime}</StyledTableCell>
-                <StyledTableCell>{meeting.roomId}</StyledTableCell>
+                <StyledTableCell>{meeting.room?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.isValid ? "V" : "X"}</StyledTableCell>
                 <StyledTableCell>
-                  <Chip
-                    label={meeting.inSystem ? "פעיל" : "הסתיים"}
-                    className={
-                      meeting.inSystem
-                        ? "status-chip active"
-                        : "status-chip inactive"
-                    }
-                  />
+                 {(() => {
+                   const meetingDate = new Date(meeting.meetingDate);
+                   const today = new Date();
+                   today.setHours(0, 0, 0, 0);
+                      return (
+                               <Chip
+                                 label={meetingDate >= today ? "פעיל" : "הסתיים"}
+                                 className={meetingDate >= today ? "status-chip active" : "status-chip inactive"}
+                               />
+                             );
+                         }
+                   )()}
                 </StyledTableCell>
                 <StyledTableCell>
                   <Box className="icon-buttons">

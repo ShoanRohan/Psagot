@@ -25,26 +25,28 @@ const generateTimes = (startHour, endHour) => {
 };
 const times = generateTimes(8, 23);
 
-export default function RoomTable() {
+export default function RoomTable({ date }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const { rooms, status: roomsStatus, error: roomsError } = useSelector(state => state.room);
   const { meetings, status: meetingsStatus, error: meetingsError } = useSelector(state => state.meeting);
 
-  useEffect(() => {
-    const today = new Date().toISOString().slice(0, 10);
-    const loadData = async () => {
-      try {
-        await dispatch(fetchAllRooms());
-        await dispatch(fetchMeetingsByRange({ startDate: today, endDate: today }));
-      } catch (err) {
-        console.error('Error loading data:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    loadData();
-  }, [dispatch]);
+ useEffect(() => {
+  const selectedDate = date || new Date().toISOString().slice(0, 10); 
+
+  const loadData = async () => {
+    try {
+      await dispatch(fetchAllRooms());
+      await dispatch(fetchMeetingsByRange({ startDate: selectedDate, endDate: selectedDate }));
+    } catch (err) {
+      console.error('Error loading data:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  loadData();
+}, [dispatch, date]); 
 
   if (isLoading) {
     return (
@@ -81,9 +83,10 @@ export default function RoomTable() {
             </TableRow>
           </TableHead>
           <TableBody>
+            
             {times.map((time, rowIndex) => (
-              <TableRow key={rowIndex} hover>
-                <TableCell className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}>
+              <TableRow key={rowIndex} hover className={time === '15:00-16:00' ? 'highlight-row' : ''} >
+               <TableCell className={`time-cell ${time.startsWith('15') ? 'time-cell-highlight' : ''}`}>
                   {time}
                 </TableCell>
 
@@ -103,24 +106,30 @@ export default function RoomTable() {
 
                     for (let i = 1; i < rowSpan; i++) {
                       occupiedCells[`${rowIndex + i}-${colIndex}`] = true;
-                    }
+                    } 
 
                     const baseColor = meeting.extendedProps.color || '#2196F3';
-                    const bgColor = lightenColor(baseColor, 0.8);
+                    const meetingEndTime = new Date(meeting.end);
+                    const now = new Date();
+                    const isPastMeeting = meetingEndTime < now;
+                    const bgColor = isPastMeeting? lightenColor(baseColor,0.95) : lightenColor(baseColor,0.8);
+                    const bgColorLine = isPastMeeting ? lightenColor(baseColor,0.8) : lightenColor(baseColor,0);
 
                     return (
                       <TableCell key={cellKey} rowSpan={rowSpan} className="room-cell meeting-cell">
                         <div
                           className="meeting-box"
-                          style={{'--meeting-color': baseColor,'--meeting-bg-color': bgColor,}} >
-                          <div className="meeting-title">{meeting.title}</div>
-                          <div className="meeting-subtitle">{meeting.extendedProps.description || ''}</div>
+                          style={{'--meeting-color': bgColorLine,'--meeting-bg-color':bgColor,}} >
+                          <div className="meeting-title"> {meeting.title.split(' - ')[0] } </div>
+                          <div className="meeting-subtitle">{meeting.title.split(' - ')[1] || ''}</div>
                         </div>
                       </TableCell>
                     );
                   } else {
                     return (
-                      <TableCell key={cellKey}className={`room-cell ${time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'}`}/>
+                     <TableCell key={cellKey} 
+                     className={`room-cell ${time.startsWith('15') ? 'room-cell-highlight' : 'room-cell-normal'} ${colIndex === 0 ? 'no-right-border' : ''}`}
+                     />
                     );
                   }
                 })}
