@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser} from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser, getCoordinators} from "../../utils/userUtil";
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
     const data = await getAllUsers();
@@ -36,7 +36,12 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
 
     return data;
 });
-export const fetchCoordinators = createAsyncThunk('user/fetchCoordinators', async (userTypeId = 3) => {
-  const data = await getCoordinators(userTypeId);
-  return data;
-});
+export const fetchCoordinators = createAsyncThunk( 'user/fetchCoordinators', async (userTypeId = 3, thunkAPI) => {
+    try {
+      const data = await getCoordinators(userTypeId);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);

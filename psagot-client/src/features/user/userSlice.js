@@ -4,6 +4,7 @@ import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoo
 const initialState = {
     user: [],
     selectedUser: null,
+    coordinators: [],
     status: 'idle',
     error: null,
 };
