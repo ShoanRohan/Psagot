@@ -76,5 +76,5 @@ const daysForCourseSlice = createSlice({
     },
 });
 
-export const {} = daysForCourseSlice.actions;
+// export const {} = daysForCourseSlice.actions;
 export default daysForCourseSlice.reducer;

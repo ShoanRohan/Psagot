@@ -6,9 +6,8 @@ import Login from '../components/Login';
 import LoginPage from '../pages/LoginPage';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import RoomsPage from '../pages/RoomsPage';
-import RoomSchedule from '../components/RoomsScheduleGrid';
-import UserManagement from '../pages/UserManagement';
-
+import RoomsSchedule from '../components/RoomsScheduleGrid';
+import UserManagement from'../pages/UserManagement'
 
 const AppRouter = () => {
     return (
@@ -22,6 +21,7 @@ const AppRouter = () => {
                 <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
         </Routes>
+       
     );
 };
 

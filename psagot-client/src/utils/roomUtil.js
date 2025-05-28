@@ -12,7 +12,8 @@ const updateRoom = async (room) => {
 };
 
 const getAllRooms = async () => {
-    const response = await api.get('/Room/GetAllRooms');
+    const response = await api.get('/Room/GetAllRooms');   
+     console.log(response.data)
     return response.data;
 };
 
@@ -20,10 +21,14 @@ const getRoomById = async (id) => {
     const response = await api.get(`/Room/GetRoomById/${id}`);
     return response.data;
 };
-const getRoomsScheduleByDate = async (dateTime) =>{
-    const response = await api.get(`/Room/GetRoomsScheduleByDate`,dateTime);
+
+const getRoomsScheduleByDate = async (dateTime) => {
+    const response = await api.get(`/Room/GetCourseScheduleByDate`, {
+      params: { date: dateTime }
+    });
     return response.data;
-}
+};
+
 const getAllRoomsBySearchWithPagination = async (searchRoom, pageNumber, pageSize, searchStatus) => {
     let params = new URLSearchParams();
 
