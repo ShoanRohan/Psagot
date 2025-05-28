@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setViewMode } from '../features/room/roomSlice';
-import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import RoomSchedule from '../components/RoomsScheduleGrid';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
+import ExcelIcon from '../assets/icons/excelIcon.svg';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
@@ -18,9 +18,12 @@ const RoomsPage = () => {
     alert("הוספת חדר - פעולה לא מוגדרת עדיין");
   };
 
+  const handleExportToExcel = () => {
+    alert("ייצוא לאקסל - פעולה לא מוגדרת עדיין");
+  };
+
   return (
     <Box>
-      {/* Header with buttons */}
       <Box
         sx={{
           display: 'flex',
@@ -28,11 +31,52 @@ const RoomsPage = () => {
           alignItems: 'center',
           mb: 2,
           mt: 4,
+          flexWrap: 'wrap',
+          gap: 2,
         }}
       >
-        <h2 style={{ margin: 0 }}>חדרים</h2>
+        <Typography
+          sx={{
+            fontSize: '2.2rem',
+            color: '#0D47A1',
+            fontWeight: 'bold',
+            margin: 0,
+          }}
+        >
+          חדרים
+        </Typography>
 
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        {/* פס חיפוש ממורכז */}
+        {viewMode === 'schedule' && (
+  <Box
+    sx={{
+      position: 'relative',
+      right: '20px', // מזיז ימינה
+      top: '-8px',   // מעלה מעט
+      flex: 1,
+      display: 'flex',
+      justifyContent: 'center',
+    }}
+  >
+    <RoomsScheduleSearch />
+  </Box>
+)}
+
+
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Tooltip title="ייצוא לאקסל">
+            <IconButton onClick={handleExportToExcel}>
+              <img src={ExcelIcon} alt="Excel" style={{ width: 32, height: 32 }} />
+            </IconButton>
+          </Tooltip>
+
           <Button
             variant="outlined"
             onClick={toggleView}
@@ -66,26 +110,16 @@ const RoomsPage = () => {
         </Box>
       </Box>
 
-      {/* Search bar for schedule mode */}
-      {viewMode === 'schedule' && (
-        <Box sx={{ mb: 2 }}>
-          <RoomsScheduleSearch />
-        </Box>
-      )}
-
-      {/* Main content container */}
       <Box sx={{ position: 'relative', minHeight: '400px' }}>
-        {/* Room List */}
         <Box
           sx={{
             display: viewMode === 'rooms' ? 'block' : 'none',
             transition: 'all 0.3s ease',
           }}
         >
-          {/* תצוגת רשימה (כשתרצה להוסיף את הרכיבים הרלוונטיים) */}
+          {/* תצוגת רשימה */}
         </Box>
 
-        {/* Schedule View */}
         <Box
           sx={{
             display: viewMode === 'schedule' ? 'block' : 'none',

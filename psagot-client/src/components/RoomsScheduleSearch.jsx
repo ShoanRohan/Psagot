@@ -51,9 +51,9 @@ const RoomsScheduleSearch = () => {
     <>
       <Box
         sx={{
-          // mt: 3,
-          mb: 1,
-          mx: 'auto',
+          mt: 3,
+          // mb: 1,
+          // mx: 'auto',
           width: '100%',
           display: 'flex',
           alignItems: 'center',
@@ -156,7 +156,7 @@ const RoomsScheduleSearch = () => {
         </Button>
       </Box>
 
-      {/* <RoomScheduleGrid /> */}
+    
     </>
   );
 };
