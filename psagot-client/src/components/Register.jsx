@@ -100,6 +100,7 @@ const Register = () => {
     password,
     isActive: true,
     userTypeId: 5,
+        // userTypeName: 'Standard User',
   }));
 console.log('Result action:', resultAction);
 const registeredUser = resultAction.payload.user;

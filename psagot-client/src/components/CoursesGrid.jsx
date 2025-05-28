@@ -11,6 +11,9 @@ import { fetchAllCourses } from "../features/course/courseActions";
 const CourseGrid = () => {
   const dispatch = useDispatch();
   const Courses = useSelector((state) => state.course.courses);
+  const activeCourses = Courses?.filter(course => course.statusId === 1);
+  
+
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   useEffect(() => {
@@ -25,6 +28,8 @@ const CourseGrid = () => {
           isActive: true,
         }));
       setRows(filtered);
+      console.log("Courses data", Courses);
+      setRows(activeCourses);
     }
   }, [Courses]);
 

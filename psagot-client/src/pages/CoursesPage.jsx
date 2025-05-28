@@ -8,6 +8,8 @@ import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
 import { styled } from "@mui/system";
 import CourseSearch from "../components/CourseSearch";
+import { fetchAllCourses } from "../features/course/courseActions";
+
 
 const CoursesPage = () => {
   const Course = useSelector((state) => state.course?.courses || []); 

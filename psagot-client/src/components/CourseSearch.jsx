@@ -36,7 +36,6 @@ useEffect(() => {
   dispatch(fetchCoordinators());
 }, [dispatch]);
 
-
   const [filters, setFilters] = useState(defaultFilters);
   const [lastSearchedFilters, setLastSearchedFilters] = useState(defaultFilters);
 
