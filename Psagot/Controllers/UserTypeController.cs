@@ -1,4 +1,4 @@
-﻿using BL;
+using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -51,7 +51,6 @@ namespace API.Controllers
 
             return Ok(userTypes);
         }
-        //
-        //הוספתי עוד שורה
+
     }
 }
