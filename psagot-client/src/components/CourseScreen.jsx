@@ -7,8 +7,13 @@ import CourseDetails from "./CourseDetails";
 import CourseTopics from "./CourseTopics";
 import "./CourseScreen.css";
 import exlIcon from "../assets/icons/exl.svg";
+import { useParams } from 'react-router-dom';
 
-const CourseScreen = ({ courseId }) => {
+
+
+
+const CourseScreen = () => {
+  const { courseId } = useParams();
   const dispatch = useDispatch();
   const course = useSelector((state) => state.course.selectedCourse);
   const [tabIndex, setTabIndex] = React.useState(0);

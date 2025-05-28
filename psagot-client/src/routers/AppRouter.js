@@ -5,6 +5,7 @@ import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import CoursesPage from "../components/CoursesPage";
 import CoursePage from '../pages/CoursePage';
+import CourseScreen from '../components/CourseScreen';
 
 const AppRouter = () => {
     return (
@@ -12,6 +13,7 @@ const AppRouter = () => {
             <Route path='/' element={<Layout />}>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/courses' element={<CoursesPage/>} />
+                <Route path='/course/:id' element={<CourseScreen/>} />  
                 <Route path='/meetings' element={<span>page Meetings</span>} />
                 <Route path='/users' element={<span>page Users</span>} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
