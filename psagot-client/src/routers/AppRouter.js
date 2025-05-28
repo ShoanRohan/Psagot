@@ -14,60 +14,25 @@ const AppRouter = () => {
 	return (
 		<Routes>
 			{/* עמוד התחברות – ברירת מחדל בנתיב '/' */}
-			<Route
-				path="/"
-				element={<LoginPage />}
-			>
-				<Route
-					index
-					element={<Login />}
-				/>
+			<Route path="/" element={<LoginPage />}>
+				<Route index element={<Login />} />
 			</Route>
 
 			{/* עמודים אחרי התחברות */}
-			<Route
-				path="/"
-				element={<Layout />}
-			>
-				<Route
-					path="home"
-					element={<HomePage />}
-				/>
-				<Route
-					path="cours/:id"
-					element={<CoursPage />}
-				/>
-				<Route
-					path="user"
-					element={<UserManagement />}
-				/>
-				<Route
-					path="courses"
-					element={<CoursesPage />}
-				/>
+			<Route path="/" element={<Layout />}>
+				<Route path="home" element={<HomePage />} />
+				<Route path="cours/:id" element={<CoursPage />} />
+				<Route path="user" element={<UserManagement />} />
+				<Route path="courses" element={<CoursesPage />} />
 			</Route>
 
 			{/* עמוד הרשמה */}
-			<Route
-				path="/register"
-				element={<RegisterPage />}
-			>
-				<Route
-					index
-					element={<Register />}
-				/>
+			<Route path="/register" element={<RegisterPage />}>
+				<Route index element={<Register />} />
 			</Route>
 
 			{/* ניווט שגוי ל'/' */}
-			<Route
-				path="*"
-				element={
-					<Navigate
-						to="/"
-						replace
-					/>
-				}
-			/>
+			<Route path="*" element={<Navigate to="/" replace />} />
 		</Routes>
 	);
 };
