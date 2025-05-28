@@ -13,6 +13,7 @@ const initialState = {
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
+    console.log(initialState.displayDate)
 
 const roomSlice = createSlice({
     name: 'room',

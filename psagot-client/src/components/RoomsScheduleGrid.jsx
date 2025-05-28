@@ -15,15 +15,24 @@ export default function RoomsScheduleGrid() {
     const calendarRef = useRef(null);
     const dispatch = useDispatch();
 
-    const { roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
-    // const displayDate = useSelector((state) => state.room.displayDate);
+    const { displayDate,roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
 
     const [currentPage, setCurrentPage] = useState(0); 
     const roomsPerPage = 10; 
 
-    useEffect(() => {
-          // if (!displayDate) return null; // או Loader זמני
+    // const [day, month, year] = displayDate.split('/');
+    // const d= `${year}-${month}-${day}`;
+    // console.log("day",day)
 
+    // console.log("month",month)
+
+    // console.log("year",year)
+
+    //     console.log("d",d)
+
+    useEffect(() => {
+      
+              
         if (status === 'idle') {
             dispatch(fetchRoomsScheduleByDate(DATE));
         }
@@ -107,61 +116,92 @@ export default function RoomsScheduleGrid() {
     const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
     return (
     <Box
-        sx={{
-            position: 'absolute',
-            top: 130,
-            right: 350,
-            width: '1480px', 
-            padding: "10px",
-            borderRadius: "7px",
-            boxShadow: [
-                "2px 0 5px rgba(0.1, 0.1, 0.1, 0.1)",
-                "-2px 0 5px rgba(0.1, 0.1, 0.1, 0.1)",
-                "0 2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
-                "0 -2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
-            ],
-            height: 'fit-content',
-            display: 'flex', 
-            flexDirection: 'row', 
-            alignItems: 'center', 
-            justifyContent: 'space-between', 
+    sx={{
+      //הגדרות כלליות לטבלה
+      position: 'absolute',
+      top: 130,
+      right: 350,
+      width: '1480px',
+      padding: "10px",
+      borderRadius: "7px",
+      boxShadow: [
+        "2px 0 5px rgba(0.1, 0.1, 0.1, 0.1)",
+        "-2px 0 5px rgba(0.1, 0.1, 0.1, 0.1)",
+        "0 2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
+        "0 -2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
+      ],
+      height: 'fit-content',
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
 
-            "& .fc-timegrid-axis-cushion, & .fc-timegrid-slot-label-cushion": {
-                padding: "10px 15px",
-                borderBottom: "2px solid #ddd",
-                fontFamily: "Rubik",
-                fontSize: '16px',
-                color: "var(--Neutral-80, #393939)",
-            },
-            "& .fc-col-header-cell": {
-                backgroundColor: "#F6F7F9",
-                borderBottom: "2px solid #ddd",
-                padding: "20px 0px",
-                fontWeight: "500",
-                textAlign: "center",
-                whiteSpace: "nowrap",
-                height: "58px",
-                color: "var(--Neutral-80, #393939)",
-            },
-            "& .fc-event": {
-                width: "100%",
-                borderRadius: "15px",
-                padding: "3px 8px",
-                fontSize: "12px",
-                fontWeight: "bold",
-                display: "flex",
-                alignItems: "center",
-                border: 'none',
-                justifyContent: "right",
-                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
-                color: "black",
-            },
-            ".fc-theme-standard td, .fc-theme-standard th": {
-                borderRight: "none",
-            },
-        }}
-    >
-
+      //הורדת גבול עליון ושמאלי לטבלה
+      "& table": {
+        border: 'none !important',
+      },
+      //הגדרות על שורת החדרים
+      "& th": {
+        borderTop: 'none !important',
+        borderRight: 'none !important',
+        borderBottom: '1px solid #ddd !important', 
+        textAlign: 'center',
+      },
+      //גבול מסביב לשעות
+      "& td": {
+        border: 'none !important',
+      },
+      //שורות הטבלה
+      "& .fc-timegrid-slot": { 
+        borderBottom: '1px solid #eee !important',
+      },
+      //עמודות הטבלה
+      "& .fc-timegrid-col": { 
+        borderLeft: '1px solid #eee !important',
+      },
+      //גבול שמאלי לשעות
+      "& .fc-timegrid-col:first-child": {
+        borderLeft: 'none !important', 
+      },
+      //גבול שמאלי לשעות
+      "& .fc-timegrid-slot:first-child": {
+        borderLeft: 'none !important', 
+      },
+      //הגדרות לטור השעות
+      "& .fc-timegrid-axis-cushion, & .fc-timegrid-slot-label-cushion": {
+        padding: "10px 15px",
+        borderBottom: "2px solid #ddd",
+        fontFamily: "Rubik",
+        fontSize: '16px',
+        color: "var(--Neutral-80, #393939)",
+      },
+      //הגדרות לשורת החדרים
+      "& .fc-col-header-cell": {
+        backgroundColor: "#F6F7F9",
+        borderBottom: "2px solid #ddd",
+        padding: "20px 0px",
+        fontWeight: "500",
+        textAlign: "center",
+        whiteSpace: "nowrap",
+        height: "58px",
+        color: "var(--Neutral-80, #393939)",
+      },
+      //אירועים eventהגדרות ל
+      "& .fc-event": {
+        width: "100%",
+        borderRadius: "15px",
+        padding: "3px 8px",
+        fontSize: "12px",
+        fontWeight: "bold",
+        display: "flex",
+        alignItems: "center",
+        border: 'none',
+        justifyContent: "right",
+        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
+        color: "black",
+      }, 
+    }}
+  >
         <IconButton onClick={handlePrevRooms} disabled={currentPage === 0} sx={{ mr: 1, p: 2 }}>
             <ArrowForwardIosIcon />
         </IconButton>
