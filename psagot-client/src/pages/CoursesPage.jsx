@@ -33,16 +33,20 @@ const CoursesPage = () => {
         קורסים
       </Typography>
       <Box className="buttons-container">
+        <Button onClick={exportToExcel} className="export-button">
+          <img src={exptExcel} alt="אייקון ייצוא לאקסל" className="button-icon" />
+        </Button>
         <Button className="add-course-button">
-          <img src={circlePlus} alt="הוספת קורס" className="button-icon" />
+          <img src={circlePlus} alt="אייקון הוספת קורס" className="button-icon add-course-icon" />
           <Typography className="button-text">הוספת קורס</Typography>
         </Button>
-        <Button onClick={exportToExcel} className="export-button">
-          <img src={exptExcel} alt="ייצוא לאקסל" className="button-icon" />
-        </Button>
       </Box>
-      <CourseSearch />
-      <CourseGrid />
+      <Box className="search-container">
+        <CourseSearch />
+      </Box>
+      <Box className="grid-container">
+        <CourseGrid />
+      </Box>
     </Box>
   );
 };
