@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
-  Dialog, DialogContent, DialogActions,
+  Dialog, DialogContent,
   TextField, Button, Select, MenuItem,
   FormControl, InputLabel, Box, Typography,
   Checkbox, IconButton, FormControlLabel
@@ -24,7 +24,7 @@ const sharedStyles = {
 
 const buttonStyles = {
   height: "44px",
-  padding: "0px 16",
+  padding: "0px 16px",
   borderRadius: "50px",
   fontFamily: "Rubik",
   fontWeight: 400,
@@ -32,7 +32,57 @@ const buttonStyles = {
   lineHeight: "18.96px",
 };
 
-const AddTopicDialog = ({ open, onClose, onSubmit }) => {
+const cancelButtonStyle = {
+  ...buttonStyles,
+  color: "#1976d2",
+  border: "1px solid #1976d2",
+  backgroundColor: "transparent",
+  textTransform: "none",
+  "&:hover": {
+    backgroundColor: "rgba(25, 118, 210, 0.1)",
+    borderColor: "#115293",
+  },
+};
+
+const saveButtonStyle = {
+  ...buttonStyles,
+  backgroundColor: "#1976d2",
+  color: "#fff",
+  textTransform: "none",
+  "&:hover": {
+    backgroundColor: "#115293",
+  },
+};
+
+const disabledSaveButtonStyle = {
+  ...buttonStyles,
+  backgroundColor: "#C6C6C6",
+  color: "#fff", 
+  textTransform: "none",
+  cursor: "default",
+  pointerEvents: "none",
+  //"&.Mui-disabled": {
+  //  color: "#fff",  // חובה כאן לכתוב במפורש את הצבע הלבן במצב disabled
+  //  opacity: 1,     // לבטל את השקיפות שה-MUI מוסיף כברירת מחדל
+  //},
+};
+
+const addDayButtonStyle = {
+  fontSize: "16px",
+  fontWeight: "500",
+  lineHeight: "18.96px",
+  color: "#fff", 
+  backgroundColor: "transparent",
+  textTransform: "none",
+  display: "flex",
+  alignItems: "center",
+  mt: 1,
+  mb: 1,
+  padding: 0,
+  minWidth: "auto",
+};
+
+const TopicDialog = ({ open, onClose, onSubmit }) => {
   const [formData, setFormData] = useState({
     topic: "",
     lecturerName: "",
@@ -50,8 +100,26 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
   const [startDateType, setStartDateType] = useState("text");
   const [endDateType, setEndDateType] = useState("text");
   const [courseDays, setCourseDays] = useState([
-    { day: "", startHour: "", endHour: "" }
+    { day: "", startHour: "", endHour: "", saved: false },
   ]);
+
+  const [mainSaved, setMainSaved] = useState(false);
+
+  // אם משתנה כלשהו בטופס הראשי - מבטל את מצב השמירה (אפשר לערוך)
+  useEffect(() => {
+    if (mainSaved) {
+      setMainSaved(false);
+    }
+  }, [formData]);
+
+  // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
+  useEffect(() => {
+    // רק נבדוק אם יש ימים שלא שמורים
+    if (courseDays.some(day => day.saved)) {
+      // אם יש לפחות אחד עם saved=true, נשאיר
+      // אך אם השתנה משהו מחוץ לשמירה צריך להגדיר מה לעשות - כאן אנחנו לא עושים שינוי כי saved מתעדכן בלולאה למטה
+    }
+  }, [courseDays]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -69,21 +137,41 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
         [name]: type === "checkbox" ? checked : value,
       }));
     }
+    // ביטול מצב שמור ראשי כשיש שינוי
+    if (mainSaved) {
+      setMainSaved(false);
+    }
   };
 
   const handleAddDay = () => {
-    setCourseDays([...courseDays, { day: "", startHour: "", endHour: "" }]);
+    setCourseDays([...courseDays, { day: "", startHour: "", endHour: "", saved: false }]);
   };
 
   const handleDayChange = (index, field, value) => {
     const updatedDays = [...courseDays];
     updatedDays[index][field] = value;
+    // ביטול מצב שמור לאותו יום כשמשנים אותו
+    updatedDays[index].saved = false;
     setCourseDays(updatedDays);
+  };
+
+  const handleDeleteDay = (index) => {
+    if (courseDays.length > 1) {
+      const updatedDays = [...courseDays];
+      updatedDays.splice(index, 1);
+      setCourseDays(updatedDays);
+    }
   };
 
   const handleSave = () => {
     onSubmit({ ...formData, courseDays });
-    onClose();
+    setMainSaved(true);
+  };
+
+  const handleSaveDay = (index) => {
+    const updatedDays = [...courseDays];
+    updatedDays[index].saved = true;
+    setCourseDays(updatedDays);
   };
 
   return (
@@ -144,8 +232,15 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
           <Box display="flex" justifyContent="space-between" alignItems="center" mt={-1} mb={1}>
             <Typography fontWeight="bold">פרטים טכניים</Typography>
             <Box display="flex" gap={1}>
-              <Button onClick={onClose} variant="outlined" sx={buttonStyles}>ביטול</Button>
-              <Button onClick={handleSave} variant="contained" sx={buttonStyles}>שמור</Button>
+              <Button onClick={onClose} variant="outlined" sx={cancelButtonStyle}>ביטול</Button>
+              <Button
+                onClick={handleSave}
+                variant="contained"
+                sx={mainSaved ? disabledSaveButtonStyle : saveButtonStyle}
+                disabled={mainSaved}
+              >
+                שמור
+              </Button>
             </Box>
           </Box>
 
@@ -157,7 +252,7 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
             }}
           >
             <TextField label="נושא" name="topic" value={formData.topic} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
-            <TextField label="שם מרצה" name="lecturerName" value={formData.lecturerName} onChange={handleChange} variant="standard"   sx={{ ...sharedStyles, mr: -17 }}/>
+            <TextField label="שם מרצה" name="lecturerName" value={formData.lecturerName} onChange={handleChange} variant="standard" sx={{ ...sharedStyles, mr: -17 }} />
             <TextField label="מספר מפגשים" name="numberOfStudents" value={formData.numberOfStudents} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
 
             <TextField
@@ -255,6 +350,7 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
                 flexWrap: "wrap",
                 gap: 2,
                 mb: 2,
+                ml: 1,
               }}
             >
               <Box sx={{ display: "flex", columnGap: "24px", flexWrap: "wrap" }}>
@@ -298,39 +394,57 @@ const AddTopicDialog = ({ open, onClose, onSubmit }) => {
                   </Select>
                 </FormControl>
               </Box>
-              <Button variant="contained" sx={{ ...buttonStyles, height: "36px", fontSize: "14px", padding: "0px 16px", whiteSpace: "nowrap", ml: 1 }}>
-                שמור
-              </Button>
+
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Button
+                  onClick={() => handleDeleteDay(index)}
+                  variant="outlined"
+                  sx={{
+                    ...cancelButtonStyle,
+                    cursor: courseDays.length === 1 ? "not-allowed" : "pointer",
+                  }}
+                  disabled={courseDays.length === 1}
+                >
+                  ביטול
+                </Button>
+
+                <Button
+                  onClick={() => handleSaveDay(index)}
+                  variant="contained"
+                  sx={dayItem.saved ? disabledSaveButtonStyle : saveButtonStyle}
+                  disabled={dayItem.saved}
+                >
+                   שמור
+                </Button>
+              </Box>
             </Box>
           ))}
 
-          <Box sx={{ display: "flex", justifyContent: "flex-start", mt: 2 }}>
-            <Button
-              onClick={handleAddDay}
-              startIcon={<AddCircleOutlineIcon sx={{ color: "#393939", fontSize: 18, ml: 1 }} />}
-              disableRipple
-              disableElevation
-              sx={{
-                fontSize: "14px",
-                textTransform: "none",
-                fontFamily: "Rubik",
-                fontWeight: 400,
-                color: "#393939",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                px: 0,
-                minWidth: "auto",
-                mr: -1,
-              }}
-            >
-              הוספת יום
-            </Button>
-          </Box>
+          <Button
+            onClick={handleAddDay}
+            startIcon={<AddCircleOutlineIcon sx={{ color: "#393939", fontSize: 18, ml: 1 }} />}
+            disableRipple
+            disableElevation
+            sx={{
+              fontSize: "14px",
+              textTransform: "none",
+              fontFamily: "Rubik",
+              fontWeight: 400,
+              color: "#393939", // אפור כהה, כמו הטקסט בשדות
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              px: 0,
+              minWidth: "auto",
+              mr: -1,
+            }}
+          >
+            הוספת יום
+          </Button>
         </Box>
       </DialogContent>
     </Dialog>
   );
 };
 
-export default AddTopicDialog;
+export default TopicDialog;

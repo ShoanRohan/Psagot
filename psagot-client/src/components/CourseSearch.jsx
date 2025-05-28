@@ -77,8 +77,8 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
         //width: "100%",
         margin: "auto",
         //position: "relative",
-        gap: 10,
-        borderRadius: "4px",
+        gap: 20,
+        borderRadius: "10px",
         padding: "25px 24px",
         backgroundColor: "white",
         display: "flex",
@@ -91,6 +91,10 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
         lineHeight: "18.96px",
         textAlign: "right",
         direction: "rtl",
+
+      WebkitBackdropFilter: "blur(4px)", // תמיכה ב-Safari
+      boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
+
       }}
     >
       <Box

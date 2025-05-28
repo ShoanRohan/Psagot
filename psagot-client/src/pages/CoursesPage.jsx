@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CourseSearch from "./CourseSearch";
+import CourseSearch from "../components/CourseSearch";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,8 +18,8 @@ import {
   setCurrentPage,
   setPageSize,
 } from "../features/course/courseSlice";
-import CourseGrid from "./CourseGrid";
-import TopicDialog from "./TopicDialog";
+import CourseGrid from "../components/CourseGrid";
+import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -52,7 +52,7 @@ const CoursesPage = () => {
     courseCode: "",
     courseName: "",
     courseCoordinator: "",
-    year: "",
+    year: 2025,
   };
 
   const [filters, setFilters] = useState(initialState);
@@ -61,10 +61,13 @@ const CoursesPage = () => {
   const pageSize = useSelector(selectPageSize);
   const totalCount = useSelector(selectTotalCount);
   const courses = useSelector(selectCourses);
+  
 
   const changePage = async (page) => {
     await dispatch(setCurrentPage(page));
   };
+
+  
 
   const handleExportToExcel = () => {
     if (!courses || courses.length === 0) {
@@ -99,6 +102,8 @@ const CoursesPage = () => {
     saveAs(fileData, "courses.xlsx");
   };
 
+
+
   const handleSearch = async () => {
     const params = {
       ...filters,
@@ -106,10 +111,13 @@ const CoursesPage = () => {
       pageSize: pageSize,
     };
 
+   
+
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
-    setFilters(initialState);
+    // setFilters(initialState);
   };
+
 
   const handlePageSizeChange = (newPageSize) => {
     dispatch(setCurrentPage(1));
@@ -163,6 +171,7 @@ const CoursesPage = () => {
           <Button
             variant="contained"
             sx={buttonStyles}
+            backgroundColor="#326DEF"
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => setOpenDialog(true)}
           >
