@@ -74,6 +74,11 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
+        public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
+        {
+            return await _userDL.GetUserNamesByUserTypeId(userTypeId);
+        }
+
 
     }
 }

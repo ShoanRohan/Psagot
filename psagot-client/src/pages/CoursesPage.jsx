@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
 import { styled } from "@mui/system";
+import { fetchAllCourses } from "../features/course/courseActions";
+
 
 const CoursesPage = () => {
   const Course = useSelector((state) => state.course?.courses || []); 
@@ -71,9 +73,9 @@ const NoPaddingBox = styled(Box)({
   קורסים
 </Typography>
 
-      <Button
+          <Button
         onClick={exportToExcel}
-        sx={{
+            sx={{
           position: "absolute",
           width: "2.5rem",
           height: "2.5rem",
@@ -87,12 +89,12 @@ const NoPaddingBox = styled(Box)({
           justifyContent: "center",
           minWidth: "2.5rem",
           minHeight: "2.5rem",
-        }}
-      >
+            }}
+          >
         <img src={exptExcel} alt="אייקון ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
-      </Button>
+          </Button>
 
-      <Button
+          <Button
         variant="contained"
         sx={{
           position: "absolute",
@@ -112,7 +114,7 @@ const NoPaddingBox = styled(Box)({
       >
         <img src={circlePlus} alt="אייקון הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
         <Typography
-          sx={{
+            sx={{
             fontFamily: "Rubik",
             fontWeight: 400,
             fontSize: "1.8vh",
@@ -120,11 +122,11 @@ const NoPaddingBox = styled(Box)({
             textAlign: "center",
             color: "#FFFFFF",
             textTransform: "capitalize",
-          }}
-        >
+            }}
+          >
           הוספת קורס
         </Typography>
-      </Button>
+          </Button>
 
       <Box
   sx={{

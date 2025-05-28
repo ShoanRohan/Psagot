@@ -11,6 +11,9 @@ import { fetchAllCourses } from "../features/course/courseActions";
 const CourseGrid = () => {
   const dispatch = useDispatch();
   const Courses = useSelector((state) => state.course.courses);
+  const activeCourses = Courses?.filter(course => course.statusId === 1);
+  
+
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   useEffect(() => {
@@ -20,7 +23,7 @@ const CourseGrid = () => {
     console.log("Courses in Component:", Courses);
     if (Courses && Courses.length > 0) {
       console.log("Courses data", Courses);
-      setRows(Courses);
+      setRows(activeCourses);
     }
   }, [Courses]);
   const handleEditClick = (id) => () => {
@@ -141,49 +144,99 @@ const CourseGrid = () => {
         top: '25%',
       }}
     >
-      <DataGrid
-        sx={{
-          "& .MuiDataGrid-columnHeaders": {
-            display: "grid",
-            gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
-            backgroundColor: "#F0F0F0",
-            fontWeight: "bold",
-            borderBottom: "none",
-            fontWeight: 700,
-            fontSize: "0.86rem",
-            height: "40px",
-            marginBottom: "1.2%",
-          },
-          "& .MuiDataGrid-columnSeparator": {
-            display: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            border: "none",
-            whiteSpace: "normal",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            padding: "10px 8px",
-            fontSize: "0.75rem",
-            fontFamily: "Rubik",
-          },
-          "& .MuiDataGrid-row": {
-            width: '100%',
-            height: '7%',
-            justifyContent: 'space-between',
-            borderBottom: "1px solid #D7E6FCCC",
-            "&:nth-of-type(even)": { backgroundColor: "#FAFCFF" },
-            "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" },
-          },
+        <DataGrid
+          sx={{
+             width: '100%',
+             height:'100%',
+             background: "#FFFFFF",
+             boxShadow: "0px 0px 4px 0px #D7E6FCCC",
+             borderRadius: "10px",
+
+            
+             "& .MuiDataGrid-virtualScroller": {   
+              width: '100%',
+              height: '89%',      
+               paddingTop: "2.8%",
+               paddingRight: "1%",
+               paddingBottom: "1%",
+               paddingLeft: "1%",
+               borderRadius: "10px",
+               background: "#FFFFFF",
+               boxShadow: "0px 0px 4px 0px #D7E6FCCC",
+             },
+             "& .MuiDataGrid-columnHeaders": {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "100%",
+              height: "5%",
+              borderBottom: "1px solid #C6C6C6",
+              backgroundColor: "#f0f0f0",
+              fontWeight: "bold",
+              fontSize: "0.1rem",
+            },
+            "& .MuiDataGrid-columnHeadersInner": {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: 'center',
+              width: "100%",
+            },
+            "& .MuiDataGrid-columnHeader": {
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              flex: 1,
+              fontWeight: 'bold',
+              fontSize: '0.86rem',
           
-        }}
-        rows={Courses}
-        columns={columns}
-        getRowId={(row) => row.courseId}
-        rowModesModel={rowModesModel}
-        hideFooter={true}
-      />
+            },
+            
+            "& .MuiDataGrid-columnHeaderTitle": {
+              overflow: "visible",
+              whiteSpace: "normal",
+              textOverflow: "clip",
+              
+            },
+
+            "& .MuiDataGrid-columnSeparator": {
+              display: "none",
+            },
+
+            "& .MuiDataGrid-cell": {
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              padding: "10px",
+             },
+
+            "& .MuiDataGrid-cellContent": {
+              justifyContent: 'right'
+            },
+
+            "& .MuiDataGrid-row": {
+              width: '100%',
+              height: '7%',
+              justifyContent: 'space-between',
+              borderBottom: "1px solid #D7E6FCCC",
+              "&:nth-of-type(even)": { backgroundColor: "#FAFCFF" },
+              "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" },
+            },
+
+            "& .MuiDataGrid-footerContainer": {
+              background: "#FFFFFF",
+              boxShadow: "0px 0px 4px 0px #D7E6FCCC",
+              borderRadius: "8px",
+            },
+          }}
+          rows={Courses}
+          columns={columns}
+          getRowId={(row) => row.CourseId}
+          rowModesModel={rowModesModel}
+          hideFooter={true}
+
+        />
     </Box>
   );
 };

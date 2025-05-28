@@ -118,5 +118,15 @@ namespace Psagot.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
+        [HttpGet("GetUserNamesByUserTypeId/{userTypeId}")]
+        public async Task<IActionResult> GetUserNamesByUserTypeId(int userTypeId)
+        {
+            var userNames = await _userBL.GetUserNamesByUserTypeId(userTypeId);
+            if (userNames == null || !userNames.Any())
+                return NotFound("No users found with the specified user type.");
+
+            return Ok(userNames);
+        }     
     }
 }
