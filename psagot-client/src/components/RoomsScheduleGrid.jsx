@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import { useEffect } from 'react';
 
-export default function RoomSchedule() {
+export default function RoomScheduleGrid() {
   
   function renderEventContent(eventInfo) {
     return (

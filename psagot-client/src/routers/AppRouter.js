@@ -7,6 +7,8 @@ import LoginPage from '../pages/LoginPage';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import RoomsPage from '../pages/RoomsPage';
 import RoomSchedule from '../components/RoomsScheduleGrid';
+import UserManagement from '../pages/UserManagement';
+
 
 const AppRouter = () => {
     return (
@@ -16,7 +18,7 @@ const AppRouter = () => {
                 <Route path='/courses' element={<span>page Courses</span>} />
                 <Route path='/meetings' element={<span>page Meetings</span>} />
                 <Route path='/users' element={<UserManagement />} />
-                <Route path='/rooms' element={<span>page Rooms</span>} />
+                <Route path='/rooms' element={<RoomsPage/>} />
                 <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
         </Routes>

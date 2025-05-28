@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Box, Typography, Button, IconButton, Popover } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setDisplayDate } from '../features/room/roomSlice';
 import { fetchRoomScheduleByDate, fetchRoomsScheduleByDate } from '../features/room/roomActions';
@@ -13,7 +14,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useEffect, useState } from 'react';
 import 'dayjs/locale/he';
 
-import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+import RoomScheduleGrid from "../components/RoomsScheduleGrid";
 
 const RoomsScheduleSearch = () => {
   const dispatch = useDispatch();
@@ -48,112 +49,115 @@ const RoomsScheduleSearch = () => {
 
   return (
     <>
-    <Box
-      sx={{
-        mt: 3,
-        mb: 1,
-        mx: 'auto',
-        width: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexWrap: 'wrap',
-        gap: 1,
-      }}
-    >
-      <IconButton
-        onClick={() => handleDateChange('prev')}
+      <Box
         sx={{
-          padding: '4px',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          color: 'black',
-          '&:hover': {
-            backgroundColor: '#f5f5f5',
-            borderColor: 'black',
-          },
-        }}
-      >
-        <ArrowForwardIosIcon fontSize="small" />
-      </IconButton>
-
-      {/* הטקסט שמחליף את שדה התאריך עם אייקון לוח שנה */}
-      <Typography
-        variant="body2"
-        onClick={(e) => setAnchorEl(e.currentTarget)}
-        sx={{
-          fontSize: '0.9rem',
-          cursor: 'pointer',
-        
-          userSelect: 'none',
+          // mt: 3,
+          mb: 1,
+          mx: 'auto',
+          width: '100%',
           display: 'flex',
           alignItems: 'center',
-          gap: 0.5,
+          justifyContent: 'center',
+          flexWrap: 'wrap',
+          gap: 1,
         }}
       >
-        <CalendarMonthIcon fontSize="small" />
-        {`יום ${dayjs(currentDisplayDate).locale('he').format('dddd DD [ב]MMMM')}`}
-      </Typography>
+        <IconButton
+          onClick={() => handleDateChange('prev')}
+          sx={{
+            padding: '4px',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            color: 'black',
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+              borderColor: 'black',
+            },
+          }}
+        >
+          <ArrowForwardIosIcon fontSize="small" />
+        </IconButton>
 
-      <Popover
-        open={open}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he">
-          <DateCalendar
-            value={dayjs(currentDisplayDate)}
-            onChange={(newValue) => {
-              handleDateChange(null, newValue);
-              setAnchorEl(null);
-            }}
-          />
-        </LocalizationProvider>
-      </Popover>
+        <Typography
+          variant="body2"
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          sx={{
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            userSelect: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 0.5,
+          }}
+        >
+          <CalendarMonthIcon fontSize="small" />
+          {`יום ${dayjs(currentDisplayDate).locale('he').format('dddd DD [ב]MMMM')}`}
+        </Typography>
 
-      <IconButton
-        onClick={() => handleDateChange('next')}
-        sx={{
-          padding: '4px',
-          border: '1px solid #ccc',
-          borderRadius: '8px',
-          color: 'black',
-          '&:hover': {
-            backgroundColor: '#f5f5f5',
-            borderColor: 'black',
-          },
-        }}
-      >
-        <ArrowBackIosNewIcon fontSize="small" />
-      </IconButton>
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he">
+            <StaticDatePicker
+              displayStaticWrapperAs="desktop"
+              value={dayjs(currentDisplayDate)}
+              onChange={(newValue) => {
+                handleDateChange(null, newValue);
+                setAnchorEl(null);
+              }}
+              showDaysOutsideCurrentMonth
+              slotProps={{
+                actionBar: { actions: [] },
+              }}
+            />
+          </LocalizationProvider>
+        </Popover>
 
-      <Button
-  onClick={() => handleDateChange('today')}
-  sx={{
-    minWidth: 'unset',
-    width: 46,
-    height: 30,
-    padding: 0,
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    color: 'black',
-    fontSize: '0.75rem',
-    '&:hover': {
-      backgroundColor: '#f5f5f5',
-      borderColor: '#999',
-    },
-  }}
->
-  היום
-</Button>
-    </Box>
-     <RoomScheduleGrid/>
-     </>
+        <IconButton
+          onClick={() => handleDateChange('next')}
+          sx={{
+            padding: '4px',
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            color: 'black',
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+              borderColor: 'black',
+            },
+          }}
+        >
+          <ArrowBackIosNewIcon fontSize="small" />
+        </IconButton>
 
+        <Button
+          onClick={() => handleDateChange('today')}
+          sx={{
+            minWidth: 'unset',
+            width: 46,
+            height: 30,
+            padding: 0,
+            border: '1px solid #ccc',
+            borderRadius: '8px',
+            color: 'black',
+            fontSize: '0.75rem',
+            '&:hover': {
+              backgroundColor: '#f5f5f5',
+              borderColor: '#999',
+            },
+          }}
+        >
+          היום
+        </Button>
+      </Box>
+
+      {/* <RoomScheduleGrid /> */}
+    </>
   );
 };
 
