@@ -25,7 +25,7 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
     const data = await updatedUser(updateUser);
     return data;
 });
-export const loginAction = createAsyncThunc('user/login', async(loginUser)=>{
+export const loginAction = createAsyncThunk('user/login', async(loginUser)=>{
     const data = await login(loginUser);
     return data;
 })

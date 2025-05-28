@@ -39,6 +39,6 @@ const login = async (loginUser) =>{
     return response;
 }
 
-export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators };
+export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, login };
 
 
