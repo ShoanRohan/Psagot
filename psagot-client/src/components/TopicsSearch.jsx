@@ -14,6 +14,7 @@ import { useState, useEffect } from "react";
 import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
 import { setFilterTopic } from "../features/topic/topicSlice";
 import { fetchAllStatusesTopics } from "../features/status/statusActions";
+import { fetchTeachers } from "../features/user/userAction";
 
 const sharedStyles = {
   width: "150px",
@@ -44,7 +45,7 @@ const buttonStyles = {
 const TopicsSearch = ({ id }) => {
   const dispatch = useDispatch();
   const { topics, status } = useSelector((state) => state.topic);
-  const { lecturers } = useSelector((state) => state.user);
+  const { teachers } = useSelector((state) => state.user);
   const { topicsStatuses } = useSelector((state) => state.status);
   const initialState = {
     topicName: "",
@@ -62,6 +63,7 @@ const TopicsSearch = ({ id }) => {
    useEffect(() => {
     if (status === "idle") {
       dispatch(fetchAllStatusesTopics());
+      dispatch(fetchTeachers());
     }
   }, [status, dispatch]);
 
@@ -117,9 +119,9 @@ const TopicsSearch = ({ id }) => {
               }}
               sx={sharedStyles}
             >
-              {topics?.map((topic) => (
-                <MenuItem key={topic.id} value={topic.teacherName}>
-                  {topic.teacherName}
+              {teachers?.map((teacher) => (
+                <MenuItem key={teacher.id} value={teacher.name}>
+                  {teacher.name}
                 </MenuItem>
               ))}
             </Select>

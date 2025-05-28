@@ -33,8 +33,11 @@ const getCoordinators = async () => {
     const response = await api.get('/User/GetCoordinators');
     return response.data;
 };
+const getTeachers = async () => {
+    const response = await api.get('/User/GetTeachers');
+    return response.data;
+};
 
-
-export { getAllUsers, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators };
+export { getAllUsers, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getTeachers };
 
 
