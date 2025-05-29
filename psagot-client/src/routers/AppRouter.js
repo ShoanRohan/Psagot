@@ -8,6 +8,7 @@ import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
 import RegisterPage from '../pages/RegisterPage';
+import UserSearch from '../components/UserSearch';
 
 const AppRouter = () => {
     return (
@@ -17,7 +18,7 @@ const AppRouter = () => {
 
             {/* עמודי אפליקציה אחרי התחברות */}
             <Route path="/" element={<Layout />}>
-                <Route index element={<HomePage />} />
+                <Route index element={<UserSearch />} />
                 <Route path="/user" element={<UserManagement />} />
                 <Route path="/courses" element={<CoursesPage />} />
             </Route>
