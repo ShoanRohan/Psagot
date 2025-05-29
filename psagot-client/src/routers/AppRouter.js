@@ -2,21 +2,29 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import MeetingButton from '../pages/MeetingButton';
-
-
+//import Login from '../components/Login'; 
+//import LoginPage from '../pages/LoginPage';
 
 const AppRouter = () => {
-    return (
-        <Routes>
+    return (         
+        <Routes>  
             <Route path='/' element={<Layout/>}>
-           
-            <Route path='/' element={<HomePage/>}/>           
+            <Route path='/' element={<HomePage/>}/>
+            
             </Route>
+           
         </Routes>
     );
 };
 
 export default AppRouter;
 
-// <Route path='/' element={<HomePage/>}/>
+/*
+<Route path='/home' element={<Layout/>}>
+                <Route index element={<HomePage/>}/>    
+            </Route> 
+            <Route path='/' element={<LoginPage/>}> 
+                <Route path='login' element={<Login/>}/> 
+            </Route>
+
+*/
