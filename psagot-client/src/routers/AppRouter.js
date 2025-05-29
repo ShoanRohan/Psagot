@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
-import CoursesPage from "../components/CoursesPage";
+import CoursesPage from "../pages/CoursesPage";
 import CoursePage from '../pages/CoursePage';
 import CourseScreen from '../components/CourseScreen';
 

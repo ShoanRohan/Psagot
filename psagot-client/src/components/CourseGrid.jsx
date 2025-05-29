@@ -57,7 +57,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
         backgroundColor: '#FAFCFF',
         mt: 1,
         width: '100%',
-        borderRadius: '4px',
+        borderRadius: '10px',
         overflow: 'hidden',
       }}
     >
@@ -178,7 +178,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
               sx={{
                 height: '26px',
                 width: '49px',
-                borderRadius: '4px',
+                borderRadius: '10px',
                 borderWidth: '0.5px',
                 borderColor: '#F0F1F3',
                 pl: 0,
