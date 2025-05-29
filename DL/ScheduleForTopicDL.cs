@@ -1,4 +1,4 @@
-﻿using Entities.Contexts;
+using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -73,5 +73,6 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
     }
 }
