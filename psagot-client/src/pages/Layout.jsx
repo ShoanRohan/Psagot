@@ -16,7 +16,7 @@ const dispatch = useDispatch();
   }, [dispatch, userId]);
 
     return (
-         <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', maxWidth: '100vw' }}>
+         <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', maxWidth: '100vw', backgroundColor: '#f5f7fa' }}>
             <Sidebar sx={{flexGrow: 0}}/>
             <Section sx={{flexGrow: 1}}/>
         </Box>

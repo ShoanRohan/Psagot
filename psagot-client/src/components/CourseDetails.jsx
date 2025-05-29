@@ -1,18 +1,27 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import {
 	Box,
 	TextField,
-	MenuItem,
 	Typography,
-	Select,
+	Paper,
 	FormControl,
 	InputLabel,
-	Checkbox,
-	FormControlLabel,
-	Paper,
+	Select,
+	MenuItem,
 } from '@mui/material';
 
 const CourseDetails = () => {
+	const { id } = useParams(); // קבלת CourseId מה URL
+	const course = useSelector(state => state.course && state.course.course
+  ? state.course.course.find(c => c.CourseId === id)
+  : null
+);
+
+
+	if (!course) return <Typography>טעינת פרטי הקורס...</Typography>;
+
 	const currentYear = new Date().getFullYear();
 	const years = Array.from({ length: 25 }, (_, i) => currentYear - 20 + i);
 
@@ -37,137 +46,84 @@ const CourseDetails = () => {
 						פרטים טכניים
 					</Typography>
 
-					{/* קבוצה 1 */}
 					<Box sx={{ display: 'flex', mb: 1, gap: 1 }}>
 						<TextField
 							fullWidth
 							label="קוד קורס"
 							variant="standard"
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.courseCode}
+							InputProps={{ readOnly: true }}
 						/>
 						<TextField
 							fullWidth
 							label="שם קורס"
 							variant="standard"
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.courseName}
+							InputProps={{ readOnly: true }}
 						/>
 						<TextField
 							fullWidth
 							label="שם רכזת"
 							variant="standard"
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.coordinator}
+							InputProps={{ readOnly: true }}
 						/>
 					</Box>
 
-					{/* קבוצה 2 */}
 					<Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
 						<FormControl
 							fullWidth
 							variant="standard"
 							sx={{ direction: 'rtl' }}
 						>
-							<InputLabel sx={{ right: 0, left: 'unset', fontSize: '14px' }}>
-								שנה
-							</InputLabel>
+							<InputLabel>שנה</InputLabel>
 							<Select
-								defaultValue=""
-								inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
-								sx={{
-									textAlign: 'right',
-									'& .MuiSelect-icon': {
-										left: 7,
-										right: 'unset',
-									},
-								}}
+								value={course.year}
+								readOnly
 							>
 								{years.map((year) => (
-									<MenuItem key={year} value={year} sx={{ fontSize: '13px' }}>
+									<MenuItem
+										key={year}
+										value={year}
+									>
 										{year}
 									</MenuItem>
 								))}
 							</Select>
 						</FormControl>
-
 						<TextField
 							fullWidth
 							label="תאריך התחלה"
 							variant="standard"
-							type="date"
-							InputLabelProps={{
-								shrink: true,
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
+							value={course.startDate}
+							InputProps={{ readOnly: true }}
 						/>
-
 						<TextField
 							fullWidth
 							label="תאריך סיום"
 							variant="standard"
-							type="date"
-							InputLabelProps={{
-								shrink: true,
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
+							value={course.endDate}
+							InputProps={{ readOnly: true }}
 						/>
 					</Box>
 
-					{/* קבוצה 3 */}
 					<Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
 						<TextField
 							fullWidth
 							label="מספר תלמידים"
 							variant="standard"
-							sx={{ width: '30%' }}
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.students}
+							InputProps={{ readOnly: true }}
 						/>
 						<TextField
 							fullWidth
 							label="מספר מפגשים"
 							variant="standard"
-							sx={{ width: '30%' }}
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.meetings}
+							InputProps={{ readOnly: true }}
 						/>
 					</Box>
 
-					{/* קבוצה 4 */}
 					<Box sx={{ mb: 1, display: 'flex', gap: 1 }}>
 						<TextField
 							fullWidth
@@ -175,73 +131,25 @@ const CourseDetails = () => {
 							minRows={2}
 							label="הערות"
 							variant="standard"
-							sx={{ width: '60%' }}
-							inputProps={{
-								dir: 'rtl',
-								style: { textAlign: 'right', fontSize: '14px' },
-							}}
-							InputLabelProps={{
-								sx: { right: 0, left: 'unset', fontSize: '14px' },
-							}}
+							value={course.notes || ''}
+							InputProps={{ readOnly: true }}
 						/>
 					</Box>
 
-					{/* קבוצה 5 */}
 					<Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
 						<FormControl
 							fullWidth
 							variant="standard"
-							sx={{ direction: 'rtl', width: '30%' }}
 						>
-							<InputLabel
-								sx={{
-									display: 'flex',
-									right: 0,
-									left: 'unset',
-									fontSize: '14px',
-									width: '150px',
-									height: '45px',
-								}}
-							>
-								סטטוס
-							</InputLabel>
+							<InputLabel>סטטוס</InputLabel>
 							<Select
-								defaultValue=""
-								inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
-								sx={{
-									textAlign: 'right',
-									'& .MuiSelect-icon': {
-										left: 7,
-										right: 'unset',
-									},
-								}}
+								value={course.isActive ? 'פעיל' : 'לא פעיל'}
+								readOnly
 							>
-								<MenuItem value="active">פעיל</MenuItem>
-								<MenuItem value="inactive">לא פעיל</MenuItem>
+								<MenuItem value="פעיל">פעיל</MenuItem>
+								<MenuItem value="לא פעיל">לא פעיל</MenuItem>
 							</Select>
 						</FormControl>
-
-						<Box
-							sx={{
-								display: 'flex',
-								alignItems: 'center',
-								gap: 1,
-								width: '30%',
-							}}
-						>
-							<Typography sx={{ fontSize: '14px' }}>צבע לטבלה</Typography>
-							<input
-								type="color"
-								defaultValue="#000000"
-								style={{
-									border: 'none',
-									width: '30px',
-									height: '30px',
-									cursor: 'pointer',
-									background: 'none',
-								}}
-							/>
-						</Box>
 					</Box>
 				</Box>
 			</Box>

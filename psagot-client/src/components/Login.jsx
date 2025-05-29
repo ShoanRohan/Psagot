@@ -4,27 +4,42 @@ import { Box, Button, Typography, TextField, Link, IconButton, InputAdornment } 
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 
-const signIn = async (formData, setError) => {
-  try {
-    const response = await api.post('/auth/login', {
-      email: formData.get('email'),
-      password: formData.get('password'),
+const signIn = async (email,password, setError) => {
+  try {console.log('email:', email,'password:', password);
+    const response = await api.post('/User/login', {
+      email: email,
+      password: password,
     });
 
-    if (response.data.token) {
+    console.log('Login response:', response);
+
+    if (response.data?.token) {
       localStorage.setItem('token', response.data.token);
-      return { success: true };
+      localStorage.setItem('userId', response.data.user?.id || response.data.user?.userId);
+      return { success: true, user: response.data.user };
     } else {
       setError('התחברות נכשלה, אנא בדוק את הפרטים.');
       return { success: false };
     }
   } catch (error) {
-    setError('אירעה שגיאה, נסה שוב מאוחר יותר.');
+    if (error.response && error.response.status === 401) {
+      setError('שם משתמש או סיסמה שגויים');
+      const confirmRegister = window.confirm('לא נמצא משתמש במערכת. האם ברצונך להירשם?');
+      if (confirmRegister) {
+        window.location.href = '/register';
+      }
+    } else {
+      console.error('שגיאה בלתי צפויה:', error);
+      setError('שגיאה בלתי צפויה. נסה שוב מאוחר יותר.');
+    }
     return { success: false };
+    
   }
+  
 };
 
-export default function CredentialsSignInPage() {
+
+export default function Login(){
   const theme = useTheme();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -48,6 +63,7 @@ export default function CredentialsSignInPage() {
   };
 
   const handleSubmit = async (e) => {
+    console.log('Submitting form with email:', email, 'and password):', password);
     e.preventDefault();
     setFormError('');
     setIsSubmitting(true);
@@ -63,11 +79,8 @@ export default function CredentialsSignInPage() {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('email', email);
-    formData.append('password', password);
 
-    const result = await signIn(formData, setFormError);
+    const result = await signIn(email,password, setFormError);
     if (!result.success) {
       setIsSubmitting(false);
     }
@@ -288,4 +301,4 @@ export default function CredentialsSignInPage() {
       </Box>
     </Box>
   );
-}
+} 
