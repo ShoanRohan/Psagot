@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
 import { setFilterTopic } from "../features/topic/topicSlice";
+import { fetchAllStatusesTopics } from "../features/status/statusActions";
+import { fetchTeachers } from "../features/user/userAction";
 
 const sharedStyles = {
   width: "150px",
@@ -43,8 +45,8 @@ const buttonStyles = {
 const TopicsSearch = ({ id }) => {
   const dispatch = useDispatch();
   const { topics, status } = useSelector((state) => state.topic);
-  const { lecturers } = useSelector((state) => state.user);
-
+  const { teachers } = useSelector((state) => state.user);
+  const { topicsStatuses } = useSelector((state) => state.status);
   const initialState = {
     topicName: "",
     teacherName: "",
@@ -58,12 +60,18 @@ const TopicsSearch = ({ id }) => {
       dispatch(fetchAllTopicForCourseByCourseId(id));
     }
   }, [status, dispatch, id]);
+   useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchAllStatusesTopics());
+      dispatch(fetchTeachers());
+    }
+  }, [status, dispatch]);
 
   const handleFilterData = () => {
     dispatch(setFilterTopic(filters))
     setActiveButton(true)
   }
-
+  
   return (
     <Box sx={{ width: "100%" }}>
       <Box
@@ -111,9 +119,9 @@ const TopicsSearch = ({ id }) => {
               }}
               sx={sharedStyles}
             >
-              {topics?.map((topic) => (
-                <MenuItem key={topic.id} value={topic.teacherName}>
-                  {topic.teacherName}
+              {teachers?.map((teacher) => (
+                <MenuItem key={teacher.id} value={teacher.name}>
+                  {teacher.name}
                 </MenuItem>
               ))}
             </Select>
@@ -128,9 +136,9 @@ const TopicsSearch = ({ id }) => {
               }}
               sx={sharedStyles}
             >
-              {topics?.map((topic) => (
-                <MenuItem key={topic.id} value={topic.status}>
-                  {topic.status}
+              {topicsStatuses?.map((topic) => (
+                <MenuItem key={topic.StatusTopicId} value={topic.name}>
+                  {topic.name}
                 </MenuItem>
               ))}
             </Select>

@@ -81,6 +81,16 @@ namespace Psagot.Controllers
             return Ok(coordinators);
         }
 
+        [HttpGet("GetTeachers")]
+        public async Task<IActionResult> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userBL.GetTeachers();
+            if (teachers == null || !teachers.Any())
+                return BadRequest(errorMessage);
+
+            return Ok(teachers);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
@@ -121,5 +131,6 @@ namespace Psagot.Controllers
             if (users == null) return BadRequest(errorMessage);
             return Ok(users);
         }
+
     }
 }

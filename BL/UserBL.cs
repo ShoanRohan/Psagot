@@ -89,6 +89,12 @@ namespace BL
 
             return (coordinators, null); ;
         }
-        
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userDL.GetTeachers();
+            if (teachers == null) return (null, errorMessage);
+
+            return (teachers, null); ;
+        }
     }
 }

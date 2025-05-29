@@ -44,6 +44,7 @@ namespace Psagot.Controllers
 
             return Ok(topics);
         }
+
         [HttpPut("UpdateTopic")]
         public async Task<IActionResult> UpdateTopic([FromBody] TopicDTO topicDTO)
         {
@@ -52,6 +53,7 @@ namespace Psagot.Controllers
 
             return Ok(updatedTopic);
         }
+
         [HttpDelete("DeleteTopic/{id}")]
         public async Task<IActionResult> DeleteTopic([FromRoute] int id)
         {
