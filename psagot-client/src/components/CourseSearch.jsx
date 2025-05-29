@@ -12,6 +12,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchCoordinators } from '../features/user/userAction';
+import { filterCourses } from '../features/course/courseActions';
+import { fetchAllCourses } from "../features/course/courseActions";
+
+
 
 
 
@@ -49,13 +53,26 @@ useEffect(() => {
     setFilters({ ...filters, [field]: date });
   };
 
-  const handleSearch = () => {
-    console.log('Search with filters:', filters);
-    setLastSearchedFilters(filters);
+ const handleSearch = () => {
+  const filterDto = {
+    name: filters.courseName || null,
+    year: filters.year ? parseInt(filters.year) : null,
+    startDate: filters.startDate ? filters.startDate.toISOString() : null,
+    endDate: filters.endDate ? filters.endDate.toISOString() : null,
+    coordinatorId: filters.coordinator ? parseInt(filters.coordinator) : null,
+    statusId: filters.status === 'פעיל' ? 1 : filters.status === 'לא פעיל' ? 2 : null,
   };
+
+  console.log('Sending Filter DTO:', filterDto);
+
+  dispatch(filterCourses(filterDto));
+  setLastSearchedFilters(filters);
+};
+
 
   const handleReset = () => {
     setFilters(defaultFilters);
+    dispatch(fetchAllCourses());
   };
 
   return (

@@ -1,17 +1,22 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import CourseGrid from "../components/CoursesGrid";
-import { useSelector } from "react-redux";
+import CourseSearch from "../components/CourseSearch";
+import { fetchAllCourses } from "../features/course/courseActions";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
-import CourseSearch from "../components/CourseSearch";
 
 const CoursesPage = () => {
+  const dispatch = useDispatch();
 
   const Course = useSelector((state) => state.course?.course || []);
 
+  useEffect(() => {
+    dispatch(fetchAllCourses());
+  }, [dispatch]);
 
   const exportToExcel = () => {
     if (!Course || Course.length === 0) {
@@ -20,16 +25,13 @@ const CoursesPage = () => {
     }
 
     const worksheet = XLSX.utils.json_to_sheet(Course);
-
-
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Course");
 
-
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-
-
-    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
     saveAs(data, "Course.xlsx");
   };
 
@@ -120,6 +122,7 @@ const CoursesPage = () => {
           הוספת קורס
         </Typography>
       </Button>
+
       <CourseSearch />
       <CourseGrid />
     </Box>

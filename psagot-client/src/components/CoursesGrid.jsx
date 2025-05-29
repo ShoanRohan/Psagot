@@ -15,9 +15,9 @@ const CourseGrid = () => {
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
-  useEffect(() => {
-    dispatch(fetchAllCourses());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAllCourses());
+  // }, [dispatch]);
 
   useEffect(() => {
     if (Courses && Courses.length > 0) {
