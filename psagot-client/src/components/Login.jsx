@@ -79,9 +79,6 @@ export default function Login(){
       return;
     }
 
-    // const formData = new FormData();
-    // formData.append('email', email);
-    // formData.append('password', password);
 
     const result = await signIn(email,password, setFormError);
     if (!result.success) {
