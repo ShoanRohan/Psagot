@@ -5,12 +5,13 @@ import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import CourseScreen from "../components/CourseScreen";
 import CoursePage from '../pages/CoursePage';
+import AddTopic from '../components/AddTopic';
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
-                <Route path='/' element={<HomePage />} />
+                <Route path='/' element={<AddTopic />} />
                 <Route path='/courses' element={<CoursePage/>} />
                 <Route path='/meetings' element={<span>page Meetings</span>} />
                 <Route path='/users' element={<span>page Users</span>} />
