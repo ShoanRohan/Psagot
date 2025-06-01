@@ -123,3 +123,14 @@
 .room-cell.no-right-border {
   border-right: none !important;
 }
+.no-meetings-alert {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  border: 1px solid #ffeeba;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+}

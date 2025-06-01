@@ -27,9 +27,11 @@ const times = generateTimes(8, 23);
 
 export default function RoomTable({ date }) {
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState(true);
   const { rooms, status: roomsStatus, error: roomsError } = useSelector(state => state.room);
-  const { meetings, status: meetingsStatus, error: meetingsError } = useSelector(state => state.meeting);
+  const { status: rangeStatus, error: meetingsError } = useSelector(state => state.meeting);
+  const meetings = useSelector(state => state.meeting.rangedMeetings);
+  const isLoading = roomsStatus === 'loading' || rangeStatus === 'loading';
+
 
  useEffect(() => {
   const selectedDate = date || new Date().toISOString().slice(0, 10); 
@@ -40,9 +42,7 @@ export default function RoomTable({ date }) {
       await dispatch(fetchMeetingsByRange({ startDate: selectedDate, endDate: selectedDate }));
     } catch (err) {
       console.error('Error loading data:', err);
-    } finally {
-      setIsLoading(false);
-    }
+    } 
   };
 
   loadData();
@@ -57,7 +57,7 @@ export default function RoomTable({ date }) {
   }
 
   if (roomsStatus === 'failed') return <div>שגיאה בטעינת חדרים: {roomsError}</div>;
-  if (meetingsStatus === 'failed') return <div>שגיאה בטעינת מפגשים: {meetingsError}</div>;
+  if (rangeStatus === 'failed') return <div>שגיאה בטעינת מפגשים: {meetingsError}</div>;
 
   const occupiedCells = {};
 
@@ -67,8 +67,15 @@ export default function RoomTable({ date }) {
     const diff = endHour - startHour;
     return diff > 0 ? diff : 1;
   };
+ 
+  const isNoMeetings = meetings.length === 0;
 
   return (
+    <>
+      {isNoMeetings && (
+        <Box className="no-meetings-alert" role="alert"> אין מפגשים ביום זה</Box>
+      )}
+
     <Paper className="room-table-paper">
       <TableContainer className="room-table-container">
         <Table size="small" stickyHeader className="room-table">
@@ -139,5 +146,7 @@ export default function RoomTable({ date }) {
         </Table>
       </TableContainer>
     </Paper>
+     </>
+  
   );
 }

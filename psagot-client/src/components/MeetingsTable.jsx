@@ -25,7 +25,7 @@ import { StyledTableCell, StyledTableRow } from "../styles/MeetingsTableStyle";
 
 export default function MeetingsTable() {
   const dispatch = useDispatch();
-  const { meetings, loading, error, totalCount } = useSelector(
+  const { meetings, status, error, totalCount } = useSelector(
     (state) => state.meeting
   );
   const [page, setPage] = useState(1);
@@ -58,7 +58,7 @@ export default function MeetingsTable() {
     setPageNumber(1);
   };
 
-  if (loading) return <CircularProgress />;
+  if (status === 'loading') return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 
   const displayedMeetings = Array.isArray(meetings) ? meetings : [];
