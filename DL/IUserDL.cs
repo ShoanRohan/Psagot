@@ -16,8 +16,5 @@ namespace DL
         Task<User> UserLoginAsync(string email, string password);
         Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId);
         Task<User> GetUserByEmailAndPhone(string email, string phone);
-        Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId);
-
-
     }
 }

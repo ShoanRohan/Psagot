@@ -12,7 +12,7 @@ import { fetchAllCourses } from "../features/course/courseActions";
 
 
 const CoursesPage = () => {
-  const Course = useSelector((state) => state.course?.courses || []); 
+  const Course = useSelector((state) => state.course?.courses || []);
 
 
   const exportToExcel = () => {
@@ -34,45 +34,45 @@ const CoursesPage = () => {
     const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
     saveAs(data, "Course.xlsx");
   };
-  
-const NoPaddingBox = styled(Box)({
-  padding: '0 !important',
-  margin: '0 !important',
-});
+
+  const NoPaddingBox = styled(Box)({
+    padding: '0 !important',
+    margin: '0 !important',
+  });
 
   return (
     <NoPaddingBox
-    sx={{
-    maxWidth: "none !important",
-    width: "100%",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "#FFFFFF",
-    position: "relative",
-    margin: 0,
+      sx={{
+        maxWidth: "none !important",
+        width: "100%",
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#FFFFFF",
+        position: "relative",
+        margin: 0,
 
-  }}      
+      }}
     >
- <Typography
-  variant="h1"
-  sx={{
-    position: "absolute",
-    height: "4.35%",
-    top: "7.5%",
-    transform: "translateX(-50%)",
-    fontFamily: "Rubik",
-    fontWeight: 700,
-    fontSize: "4.5vh", 
-    lineHeight: "normal", 
-    textAlign: "right",
-    color: "var(--Brand-90, #0D1783)",
-    textTransform: "capitalize",
-    fontStyle: "normal", 
-  }}
->
-  קורסים
-</Typography>
+      <Typography
+        variant="h1"
+        sx={{
+          position: "absolute",
+          height: "4.35%",
+          top: "7.5%",
+          transform: "translateX(-50%)",
+          fontFamily: "Rubik",
+          fontWeight: 700,
+          fontSize: "4.5vh",
+          lineHeight: "normal",
+          textAlign: "right",
+          color: "var(--Brand-90, #0D1783)",
+          textTransform: "capitalize",
+          fontStyle: "normal",
+        }}
+      >
+        קורסים
+      </Typography>
 
       <Button
         onClick={exportToExcel}
@@ -130,26 +130,8 @@ const NoPaddingBox = styled(Box)({
       </Button>
       <CourseSearch />
       <CourseGrid />
-    </Box>
+    </NoPaddingBox >
 
-      <Box
-  sx={{
-    display: "flex",
-    flexDirection: "column",
-    padding: "35px 24px 10px 24px",
-    alignItems: "center",
-    alignSelf: "stretch",
-    borderRadius: "10px",
-    background: "#FFF",
-    boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
-    marginTop: "15vh",
-    marginX: "2rem",
-  }}
->
-  <CourseGrid />
-</Box>
-
-    </NoPaddingBox>
   );
 };
 
