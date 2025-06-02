@@ -41,7 +41,7 @@ const Sidebar = () => {
             }}
         >
             {/* לוגו */}
-            <Box sx={{ width: 193, height: 60, mb: 9.5,mt:6 }}>
+            <Box sx={{ width: 193, height: 60, mb: 9.5, mt: 6 }}>
                 <img
                     src={logoWhite}
                     alt="Logo"
@@ -75,7 +75,7 @@ const Sidebar = () => {
                                 fontWeight: 400,
                                 fontSize: "22px",
                                 lineHeight: "33px",
-                                        letterSpacing: "0%",
+                                letterSpacing: "0%",
                                 textAlign: "right"
                             }}
                         >
@@ -85,8 +85,8 @@ const Sidebar = () => {
                 ))}
             </Box>
 
-            {/* משתמש מחובר */}
-            <Box 
+           {/* משתמש מחובר */}
+           <Box 
                 sx={{
                     width: "100%",
                     textAlign: "center",
@@ -95,22 +95,13 @@ const Sidebar = () => {
                     borderTop: "1px solid #ffffff55",
                     display: "flex",
                     alignItems: "center",
-                    gap: 1,
-                    mt: 3,
-                    width: 50,
-                    height: 160,
-                    position: "relative",
-                    top: 250,
-                    flexDirection: "column",
-                    justifyContent: "center"
                 }}
                 onClick={() => navigate("/profile")}
             >
                 <Avatar
                  src={user?.avatarUrl}
                  sx={{ bgcolor: "#B2CC53", margin: "0 1.265rem" }}
-/>
-                <Avatar sx={{ bgcolor: "#B2CC53" }}>
+>
                 {user?.name?.charAt(0)}
                 </Avatar>
                 <div>

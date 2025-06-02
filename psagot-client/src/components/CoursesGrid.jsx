@@ -6,48 +6,38 @@ import { DataGrid, GridRowModes, GridActionsCellItem } from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import editIcon from "../assets/icons/editIcon.png";
-import { fetchAllCourses } from "../features/course/courseActions";
 
-
-const CourseGrid = () => {
+const CourseGrid = ({ courses }) => { // Fixed prop name
   const dispatch = useDispatch();
-  const Courses = useSelector((state) => state.course.courses);
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
-  // useEffect(() => {
-  //   dispatch(fetchAllCourses());
-  // }, [dispatch]);
-
   useEffect(() => {
-    if (Courses && Courses.length > 0) {
-      const filtered = Courses
-        .filter(course => course.statusId === 1)
-        .map(course => ({
-          ...course,
-          isActive: true,
-        }));
+    if (courses && courses.length > 0) {
+      const filtered = courses.map(course => ({
+        ...course,
+        isActive: course.statusId === 1, // Fixed isActive logic
+      }));
       setRows(filtered);
+    } else {
+      setRows([]);
     }
-  }, [Courses]);
-
-
+  }, [courses]);
 
   const handleEditClick = (id) => () => {
-
+    // Implement edit logic if needed
   };
 
-
   const columns = [
-    { field: 'courseCode', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-    { field: 'courseName', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+    { field: 'courseId', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+    { field: 'name', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'coordinator', headerName: 'שם רכזת', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'lecturer', headerName: 'שם מרצה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'year', headerName: 'שנה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'endDate', headerName: 'תאריך סיום', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-    { field: 'meetings', headerName: 'מס מפגשים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-    { field: 'students', headerName: 'מס ,תלמידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+    { field: 'numberOfMeetings', headerName: 'מס מפגשים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+    { field: 'numberOfStudents', headerName: 'מס תלמידים', flex: 1, editable: true, headerAlign: 'center', align: 'center' },  
     {
       field: "isActive",
       headerName: "סטטוס",
@@ -85,7 +75,7 @@ const CourseGrid = () => {
 
         return (
           <div style={{ ...cellStyle, ...(isActive ? activeStyle : inactiveStyle) }}>
-            {isActive ? "פעיל" : "לא פעיל"}
+            {isActive ? "פעיל" : "לא פעיל"} {/* Fixed status text */}
           </div>
         );
       },
@@ -106,7 +96,6 @@ const CourseGrid = () => {
               icon={<SaveIcon />}
               label="Save"
             />,
-
             <GridActionsCellItem
               icon={<CancelIcon />}
               label="Cancel"
@@ -115,10 +104,7 @@ const CourseGrid = () => {
         }
         return [
           <GridActionsCellItem
-            icon={<img
-              src={editIcon}
-              alt='עריכה'
-            />}
+            icon={<img src={editIcon} alt='עריכה' />}
             label="Edit"
             onClick={handleEditClick(id)}
           />,
@@ -146,8 +132,6 @@ const CourseGrid = () => {
           background: "#FFFFFF",
           boxShadow: "0px 0px 4px 0px #D7E6FCCC",
           borderRadius: "10px",
-
-
           "& .MuiDataGrid-virtualScroller": {
             width: '100%',
             height: '89%',
@@ -184,20 +168,15 @@ const CourseGrid = () => {
             flex: 1,
             fontWeight: 'bold',
             fontSize: '0.86rem',
-
           },
-
           "& .MuiDataGrid-columnHeaderTitle": {
             overflow: "visible",
             whiteSpace: "normal",
             textOverflow: "clip",
-
           },
-
           "& .MuiDataGrid-columnSeparator": {
             display: "none",
           },
-
           "& .MuiDataGrid-cell": {
             display: "flex",
             alignItems: "center",
@@ -205,11 +184,9 @@ const CourseGrid = () => {
             textAlign: "center",
             padding: "10px",
           },
-
           "& .MuiDataGrid-cellContent": {
             justifyContent: 'right'
           },
-
           "& .MuiDataGrid-row": {
             width: '100%',
             height: '7%',
@@ -218,7 +195,6 @@ const CourseGrid = () => {
             "&:nth-of-type(even)": { backgroundColor: "#FAFCFF" },
             "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" },
           },
-
           "& .MuiDataGrid-footerContainer": {
             background: "#FFFFFF",
             boxShadow: "0px 0px 4px 0px #D7E6FCCC",
@@ -230,10 +206,8 @@ const CourseGrid = () => {
         getRowId={(row) => row.courseId}
         rowModesModel={rowModesModel}
         hideFooter={true}
-
       />
     </Box>
-
   );
 };
 

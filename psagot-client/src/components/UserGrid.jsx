@@ -1,7 +1,6 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUsers, updateUserAction } from "../features/user/userAction";
 import { useEffect, useState } from "react";
 import { DataGrid, GridRowModes,  GridActionsCellItem} from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
@@ -18,7 +17,7 @@ const UserGrid = () => {
   const [rowModesModel, setRowModesModel] = useState({});
 
   useEffect(() => {
-    dispatch(fetchAllUsers());
+    // dispatch(fetchAllUsers());
   }, [dispatch]);
 
   useEffect(() => {
