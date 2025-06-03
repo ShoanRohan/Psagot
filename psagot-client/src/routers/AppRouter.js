@@ -4,10 +4,11 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
-import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import RoomsPage from '../pages/RoomsPage';
 import RoomsSchedule from '../components/RoomsScheduleGrid';
 import UserManagement from'../pages/UserManagement'
+import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
+import RoomEdit from '../components/RoomEdit';
 
 const AppRouter = () => {
     return (
@@ -19,6 +20,8 @@ const AppRouter = () => {
                 <Route path='/users' element={<UserManagement />} />
                 <Route path='/rooms' element={<span><RoomsScheduleSearch/></span>} />
                 <Route path="/calendar" element={<span>calander Rooms</span>} />
+                <Route path='/room' element={<RoomEdit />} />
+                <Route path='/roomSearch' element={<RoomsScheduleSearch />} />   
             </Route>
         </Routes>
        
