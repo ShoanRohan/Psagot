@@ -8,7 +8,6 @@ import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
 import RegisterPage from '../pages/RegisterPage';
-import CreateCourse from '../components/CreateCourse';
 
 const AppRouter = () => {
     return (
@@ -29,16 +28,6 @@ const AppRouter = () => {
             </Route>
             <Route path='/register' element={<RegisterPage />}>
                 <Route index element={<Register />} />
-        
-        <Routes>  
-             <Route path='/' element={<Layout/>}>
-                <Route path='/home' element={<HomePage />} />  
-                <Route path='user' element={<UserManagement />}/>
-                <Route path='newCourse' element={<CreateCourse />}/>
-            </Route> 
-                
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
             </Route>
         </Routes>
     );
