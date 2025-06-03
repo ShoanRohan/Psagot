@@ -64,7 +64,7 @@ const CourseSearch = () => {
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    dispatch(filterCourses({ statusId: 1 })); // Use filterCourses with default statusId: 1
+    dispatch(filterCourses({ statusId: 1 }));
   };
 
   return (
@@ -72,17 +72,23 @@ const CourseSearch = () => {
       <Box
         dir="rtl"
         sx={{
-          width: '90%',
-          margin: '0 auto',
+          position: "absolute",
+          top: "120px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
+          height: '72px',
           background: '#fff',
           boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
           borderRadius: '10px',
-          padding: 3,
+          padding: '16px',
           display: 'flex',
           alignItems: 'center',
-          gap: 3,
-          flexWrap: 'wrap',
+          gap: '16px',
           fontFamily: 'Rubik',
+          border: '1px solid #E5E7EB',
+          boxSizing: 'border-box', // Ensure padding is included in width
+          zIndex: 2,
         }}
       >
         <TextField
@@ -91,9 +97,9 @@ const CourseSearch = () => {
           value={filters.courseId}
           onChange={handleChange('courseId')}
           sx={{
-            width: 200,
+            width: 120,
             borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik' },
+            input: { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         />
         <TextField
@@ -102,9 +108,9 @@ const CourseSearch = () => {
           value={filters.name}
           onChange={handleChange('name')}
           sx={{
-            width: 200,
+            width: 120,
             borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik' },
+            input: { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         />
         <TextField
@@ -114,13 +120,13 @@ const CourseSearch = () => {
           value={filters.coordinator}
           onChange={handleChange('coordinator')}
           sx={{
-            width: 200,
+            width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         >
           {coordinators?.map((coordinator) => (
-            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik' }}>
+            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
               {coordinator}
             </MenuItem>
           ))}
@@ -132,13 +138,13 @@ const CourseSearch = () => {
           value={filters.year}
           onChange={handleChange('year')}
           sx={{
-            width: 200,
+            width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         >
           {years.map((year) => (
-            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik' }}>
+            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
               {year}
             </MenuItem>
           ))}
@@ -150,9 +156,20 @@ const CourseSearch = () => {
             value={filters.startDate}
             onChange={handleDateChange('startDate')}
             sx={{
-              width: 200,
+              width: 120,
               borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik' },
+              input: { fontFamily: 'Rubik', fontSize: '14px' },
+            }}
+            slotProps={{
+              textField: {
+                placeholder: 'תאריך התחלה',
+                variant: 'standard',
+                sx: {
+                  width: 120,
+                  borderBottom: '1px solid #C6C6C6',
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                },
+              },
             }}
           />
         </Grid>
@@ -162,9 +179,20 @@ const CourseSearch = () => {
             value={filters.endDate}
             onChange={handleDateChange('endDate')}
             sx={{
-              width: 200,
+              width: 120,
               borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik' },
+              input: { fontFamily: 'Rubik', fontSize: '14px' },
+            }}
+            slotProps={{
+              textField: {
+                placeholder: 'תאריך סיום',
+                variant: 'standard',
+                sx: {
+                  width: 120,
+                  borderBottom: '1px solid #C6C6C6',
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                },
+              },
             }}
           />
         </Grid>
@@ -175,26 +203,34 @@ const CourseSearch = () => {
           value={filters.status}
           onChange={handleChange('status')}
           sx={{
-            width: 200,
+            width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         >
           {statuses.map((status) => (
-            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik' }}>
+            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
               {status}
             </MenuItem>
           ))}
         </TextField>
 
-        <Box sx={{ display: 'flex', gap: 2, marginRight: 'auto' }}>
+        <Box sx={{ display: 'flex', gap: '16px', marginRight: 'auto' }}>
           <Button
             variant="outlined"
             onClick={handleReset}
             sx={{
               borderRadius: '50px',
-              minWidth: 100,
+              width: '100px',
+              height: '40px',
               fontFamily: 'Rubik',
+              fontSize: '14px',
+              borderColor: '#326DEF',
+              color: '#326DEF',
+              '&:hover': {
+                borderColor: '#2a5ed9',
+                backgroundColor: 'rgba(50, 109, 239, 0.04)',
+              },
             }}
           >
             ניקוי
@@ -205,12 +241,18 @@ const CourseSearch = () => {
             disabled={!isFiltersChanged}
             sx={{
               borderRadius: '50px',
-              minWidth: 100,
+              width: '100px',
+              height: '40px',
               fontFamily: 'Rubik',
+              fontSize: '14px',
               backgroundColor: '#326DEF',
               color: 'white',
               '&:hover': {
                 backgroundColor: '#2a5ed9',
+              },
+              '&:disabled': {
+                backgroundColor: '#B0C4DE',
+                color: 'white',
               },
             }}
             startIcon={<SearchIcon />}

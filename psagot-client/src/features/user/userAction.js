@@ -22,7 +22,6 @@ export const addUserAction = createAsyncThunk('user/addUserAction', async (newUs
       return {
         success: true,
         user: data.user,
-        
       };
     } else {
       return thunkAPI.rejectWithValue(data);

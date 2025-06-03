@@ -15,7 +15,7 @@ const CoursesPage = () => {
   const courses = useSelector((state) => state.course.courses);
 
   useEffect(() => {
-    dispatch(filterCourses({ statusId: 1 })); // Use filterCourses with default statusId: 1
+    dispatch(filterCourses({ statusId: 1 }));
   }, [dispatch]);
 
   const exportToExcel = () => {
@@ -57,12 +57,11 @@ const CoursesPage = () => {
         variant="h1"
         sx={{
           position: "absolute",
-          height: "4.35%",
-          top: "7.5%",
-          transform: "translateX(-50%)",
+          top: "60px",
+          right: "24px", // Aligned with the start of CourseSearch and grid (24px from right)
           fontFamily: "Rubik",
           fontWeight: 700,
-          fontSize: "4.5vh",
+          fontSize: "48px",
           lineHeight: "normal",
           textAlign: "right",
           color: "var(--Brand-90, #0D1783)",
@@ -77,47 +76,48 @@ const CoursesPage = () => {
         onClick={exportToExcel}
         sx={{
           position: "absolute",
-          width: "2.5rem",
-          height: "2.5rem",
-          top: "7.78%",
-          left: "16%",
-          borderRadius: "0.68vh",
-          padding: "0.2rem",
+          width: "40px",
+          height: "40px",
+          top: "60px",
+          left: "184px", // Adjusted to be side by side with 24px gap (152px width of "Add Course" + 24px gap + 8px adjustment)
+          borderRadius: "8px",
+          padding: "0",
           backgroundColor: "#F0F1F3",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minWidth: "2.5rem",
-          minHeight: "2.5rem",
+          minWidth: "40px",
+          minHeight: "40px",
         }}
       >
-        <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
+        <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: "24px", height: "24px" }} />
       </Button>
 
       <Button
         variant="contained"
         sx={{
           position: "absolute",
-          width: "9.5rem",
-          height: "2.5rem",
-          top: "7.78%",
-          left: "1.5%",
+          width: "152px",
+          height: "40px",
+          top: "60px",
+          left: "24px",
           borderRadius: "50vh",
-          padding: "0 1.3%",
-          gap: "0.5vw",
+          padding: "0 16px",
+          gap: "8px",
           backgroundColor: "#326DEF",
           display: "flex",
           alignItems: "center",
-          minWidth: "9.5rem",
-          minHeight: "2.5rem",
+          justifyContent: "center",
+          minWidth: "152px",
+          minHeight: "40px",
         }}
       >
-        <img src={circlePlus} alt="הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
+        <img src={circlePlus} alt="הוספת קורס" style={{ width: "16px", height: "16px" }} />
         <Typography
           sx={{
             fontFamily: "Rubik",
             fontWeight: 400,
-            fontSize: "1.8vh",
+            fontSize: "16px",
             lineHeight: "100%",
             textAlign: "center",
             color: "#FFFFFF",
@@ -127,7 +127,9 @@ const CoursesPage = () => {
           הוספת קורס
         </Typography>
       </Button>
+
       <CourseSearch />
+
       <CourseGrid courses={courses} />
     </NoPaddingBox>
   );
