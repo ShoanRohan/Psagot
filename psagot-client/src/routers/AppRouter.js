@@ -7,6 +7,7 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
+import CreateCourse from '../components/CreateCourse';
 import RegisterPage from '../pages/RegisterPage';
 import UserSearch from '../components/UserSearch';
 
@@ -21,6 +22,7 @@ const AppRouter = () => {
                 <Route index element={<UserSearch />} />
                 <Route path="/user" element={<UserManagement />} />
                 <Route path="/courses" element={<CoursesPage />} />
+                <Route path='newCourse' element={<CreateCourse />} />
             </Route>
 
             {/* עמוד התחברות */}

@@ -1,5 +1,4 @@
 import React from 'react';
-import Login from '../components/Login';
 import { Box } from '@mui/material';
 import loginImage from '../assets/imgs/login_image.png';
 import logoPsagot from '../assets/imgs/logo_psagot.svg';
