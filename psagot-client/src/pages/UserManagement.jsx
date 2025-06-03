@@ -6,6 +6,7 @@ import UserGrid from '../components/UserGrid';
 import { useSelector } from 'react-redux';
 import circlePlus from '../assets/icons/circle-plus.png';
 import exptExsel from '../assets/icons/image 6.png';
+import UserSearch from '../components/UserSearch';
 
 
 const UserManagement = () => {
@@ -47,7 +48,7 @@ const UserManagement = () => {
       <Typography
         variant="h1"
         sx={{
-          position: 'absolute',
+          position: 'relative',
           width: '9.48%',
           height: '4.35%',
           top: '7.5%',
@@ -68,7 +69,7 @@ const UserManagement = () => {
       <Button
         onClick={exportToExcel}
         sx={{
-          position: 'absolute',
+          position: 'relative',
           width: '2.5rem',
           height: '2.5rem',
           top: '7.78%',
@@ -93,7 +94,7 @@ const UserManagement = () => {
       <Button
         variant="contained"
         sx={{
-          position: 'absolute',
+          position: 'relative',
           width: '9.5rem',
           height: '2.5rem',
           top: '7.78%',
@@ -127,7 +128,7 @@ const UserManagement = () => {
           הוספת משתמש
         </Typography>
       </Button>
-
+      <UserSearch/>
       <UserGrid />
     </Box>
   );

@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userTypeReducer from './userType/userTypeSlice';
-import dayReducer from './day/daySlice';
+// import dayReducer from './day/daySlice';
 import roomReducer from './room/roomSlice';
 import userReduser from './user/userSlice';
 import scheduleForTopicReducer from './scheduleForTopic/scheduleForTopicSlice';
