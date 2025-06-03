@@ -4,16 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
 import { fetchCourseStatuses } from "../features/statusCourse/statusCourseActions";
 
-const CreateCourse = (open=true, setOpen) => {
+const NewCourse = (open=true, setOpen) => {
   const dispatch = useDispatch();
   const statuses = useSelector((state) => state.statusCourse.statuses);
 
-  // const handleClickOpen = () => {
-  //   setOpen(true);
-  // };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  
   const [formData, setFormData] = useState({
     courseName: '',
     coordinatorName: '',
@@ -25,7 +20,7 @@ const CreateCourse = (open=true, setOpen) => {
     studentsCount: '',
     notes: '',
     status: '',
-    color: '#000000',
+    color: '#ffffff',
   });
 
   const handleChange = (e) => {
@@ -36,9 +31,9 @@ const CreateCourse = (open=true, setOpen) => {
     }));
   };
 
-//   const getStatusId = (statusText) => {
-//     return statuses[statusText] ?? null;
-// };
+  const getStatusId = (statusText) => {
+    return statuses[statusText] ?? null;
+};
 
   const handleSubmit = () => {
       const dtoToSend = {
@@ -50,7 +45,7 @@ const CreateCourse = (open=true, setOpen) => {
   NumberOfMeetings: formData.meetingsCount ? parseInt(formData.meetingsCount) : null,
   NumberOfStudents: parseInt(formData.studentsCount),
   Notes: formData.notes || null,
- // StatusId: getStatusId(formData.status) // פונקציה שתמיר טקסט למספר סטטוס
+ StatusId: getStatusId(formData.status) // פונקציה שתמיר טקסט למספר סטטוס
   };
     dispatch(addCourseAction(dtoToSend));
   };
@@ -61,24 +56,28 @@ const CreateCourse = (open=true, setOpen) => {
   
 
   return (
-    <>
-
-      <Typography variant='body1' fontWeight='bold'
-      sx={{
-        textAlign: "right",
-        fontFamily: 'Rubik',
-         fontSize: {xs: '1.5rem', sm: '1.75rem', md: '2rem'},
-        fontStyle: 'normal',
-        fontWeight:700,
-        lineHeight: 'normal',
-        textTransform: 'capitalize',
-        width: '100%',
-        color: '#0D1783',
-         mt: {xs: 1, sm: 2, md: 1},
-         mb: {xs: 1, sm: 2, md: 1},
-      }}>
-        הוספת קורס
-      </Typography>
+    <Paper
+       elevation={0}
+       dir="rtl"
+  sx={{
+     position: 'absolute',
+    top: { xs: '2%', md: '12%' },         // כ־232px מתוך 1920px
+    left: { xs: '2%', md: '4.375%' },      // כ־84px מתוך 1920px
+    width: { xs: '90%', md: '77%' },       // 1476px מתוך 1920px ≈ 77%
+    height: { xs: 'auto', md: '47%' },     // 507px מתוך 1080px ≈ 47%
+    borderRadius: '10px',
+    background: '#FFFFFF',
+    boxShadow: '0px 0px 4px 0px #DCE2EC',
+    paddingTop: { xs: '2%', md: '1.8%' },   // יחסית לגובה
+    paddingRight: { xs: '4%', md: '2%' },  // יחסית לרוחב
+    paddingBottom: { xs: '5%', md: '3.7%' },
+    paddingLeft: { xs: '4%', md: '2%' },
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    gap: { xs: '2%', md: '2.2%' },
+    }}
+    > 
       <Button
     variant="outlined"
     onClick={() => {/* למשל: navigate(-1) */}}
@@ -110,44 +109,23 @@ const CreateCourse = (open=true, setOpen) => {
     }}
   >
     שמור
-  </Button>
-    <Paper
-       elevation={0}
-       dir="rtl"
-  sx={{
-    width: { xs: '90vw', sm: '85vw', md: '76%' },
-    maxWidth: '1476px',
-    height: { xs: 'auto', md: '26.4vw' }, // 507 / 1920 * 100
-    top: { xs: 0, md: '12.08vw' }, // 232 / 1920 * 100
-    left: { xs: 0, md: '4.375vw' }, // 84 / 1920 * 100
-    paddingTop: { xs: '1rem', md: '1.25rem' },
-    paddingRight: { xs: '1rem', md: '1.875rem' },
-    paddingBottom: { xs: '2rem', md: '2.5rem' },
-    paddingLeft: { xs: '1rem', md: '1.875rem' },
-    borderRadius: '0.625rem',
-    gap: { xs: 2, md: '2rem' },
-    background: '#FFFFFF',
-    boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-    }}
-    >      
+  </Button>     
       {/* Top Row */}
       <Stack
       direction="row"
       justifyContent="flex-end"
       alignItems="center"
       >
+
        <TextField
         name="courseCode"
         label="קוד קורס"
         variant="standard"
         value={formData.courseCode}
         onChange={handleChange}
-        inputProps={{ dir: "rtl" }}
+        inputProps={{ dir: "rtl", readOnly: true  }}
         InputLabelProps={{ sx: { right: 0 } }}
-        sx={{ width: '200px' }}
+        sx={{ width: '200px', pointerEvents: 'none' }}
         />
  
   <Box sx={{ mr: 2 }}>
@@ -281,25 +259,50 @@ const CreateCourse = (open=true, setOpen) => {
           
           
         </TextField>
-        <Stack direction="row" spacing={2} alignItems="center">
-  <input
+      <Stack direction="row" spacing={2} alignItems="center" sx={{ gap: '16px'}}>
+  <Typography
+    variant="body2"
+    sx={{
+      fontSize: '0.875rem',
+      whiteSpace: 'nowrap',
+    }}
+  >
+    צבע לטבלה
+  </Typography>
+
+  <Box
+    component="input"
     type="color"
     name="color"
     value={formData.color}
     onChange={handleChange}
-    style={{
-      width: 40,
-      height: 40,
-      border: "none",
+    sx={{
+      width: '32px',
+      height: '28.44px',
+      borderRadius: '4px',
+      border: '1px solid #6F6F6F',
       padding: 0,
-      background: "none",
-      cursor: "pointer"
+      backgroundColor: 'transparent',
+      appearance: 'none',
+      WebkitAppearance: 'none',
+      MozAppearance: 'none',
+      outline: 'none',
+      '&::-webkit-color-swatch-wrapper': {
+        padding: 0,
+        borderRadius: '4px',
+      },
+      '&::-webkit-color-swatch': {
+        border: 'none',
+        borderRadius: '4px',
+      },
+      '&::-moz-color-swatch': {
+        border: 'none',
+        borderRadius: '4px',
+      },
     }}
   />
-  <Typography variant="body2" sx={{ textAlign: "right" }}>
-    צבע לטבלה
-  </Typography>
 </Stack>
+
 
       </Stack>
       <Stack
@@ -313,8 +316,7 @@ const CreateCourse = (open=true, setOpen) => {
 >
 </Stack>
     </Paper>
-    </>
   );
 };
 
-export default CreateCourse;
+export default NewCourse;
