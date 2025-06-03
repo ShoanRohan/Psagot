@@ -20,6 +20,7 @@ namespace DL
         {
             try
             {
+                user.UserType = null;
                 var addedUser = await _context.Set<User>().AddAsync(user);
                 await _context.SaveChangesAsync();
                 return (addedUser.Entity, null);
@@ -29,6 +30,13 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<User> GetUserByEmailAndPhone(string email, string phone)
+{
+    return await _context.Users
+        .FirstOrDefaultAsync(u => u.Email == email && u.Phone == phone);
+}
+
 
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
         {
@@ -86,6 +94,14 @@ namespace DL
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return user;
+        }
+
+        public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
+        {
+            return await _context.Users
+                                 .Where(u => u.UserTypeId == userTypeId)
+                                 .Select(u => u.Name)
+                                 .ToListAsync();
         }
 
     }

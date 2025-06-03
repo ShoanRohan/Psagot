@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
 
 const HomePage = () => {
@@ -13,7 +12,6 @@ const HomePage = () => {
         }
     }, [status, dispatch]);
 
-    // Remark: all functions - start with **handle**
     const handleClickButton = () => {
         alert("handle click button - userTypes" + JSON.stringify(userTypes));
     };

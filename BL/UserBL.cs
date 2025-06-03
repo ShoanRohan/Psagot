@@ -20,15 +20,24 @@ namespace BL
 
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
+            if (string.IsNullOrWhiteSpace(userDTO.Email) || string.IsNullOrWhiteSpace(userDTO.Phone))
+                return (null, "Email and phone are required");
+            
+            var existingUser = await _userDL.GetUserByEmailAndPhone(userDTO.Email, userDTO.Phone);
+            if (existingUser != null)
+                return (null, "User with this email and phone already exists");
+
+            
             var userEntity = _mapper.Map<User>(userDTO);
-
             userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
-            var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 
+            var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
             if (addedUser == null) return (null, errorMessage);
 
             return (_mapper.Map<UserDTO>(addedUser), null);
         }
+
+
 
         public async Task<(UserDTO User, string ErrorMessage)> UpdateUser(UserDTO userDTO)
         {
@@ -64,6 +73,11 @@ namespace BL
             if (users == null) return (null, errorMessage);
 
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+        }
+
+        public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
+        {
+            return await _userDL.GetUserNamesByUserTypeId(userTypeId);
         }
 
     }
