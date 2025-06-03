@@ -1,5 +1,13 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { Box, Select, MenuItem, FormControl, InputLabel, TextField, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  TextField,
+  Button,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,51 +40,46 @@ const buttonStyles = {
   lineHeight: "18.96px",
 };
 
-const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
+const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
-  const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
-  
+
+  const [wasModified, setWasModified] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCoordinators());
   }, [dispatch]);
 
-  // פונקציה לטיפול במיקוxsxד בשדה השנה
   const handleYearFocus = () => {
     if (!filters.year) {
-      setFilters((prevFilters) => ({ ...prevFilters, year: currentYear }));
+      setFilters((prev) => ({ ...prev, year: currentYear }));
+      setWasModified(true);
     }
   };
 
-  // פונקציה לטיפול בשינוי ערך בשדה השנה
   const handleYearChange = (e) => {
     const value = e.target.value;
     if (value === "" || (/^\d+$/.test(value) && value >= 2016 && value <= 2050)) {
-      setFilters((prevFilters) => ({ ...prevFilters, year: value }));
+      setFilters((prev) => ({ ...prev, year: value }));
+      setWasModified(true);
     }
   };
 
-  // פונקציה לטיפול בשינוי ערך בשדה קוד הקורס
   const handleCourseCodeChange = (e) => {
     const value = e.target.value;
     if (value === "" || (/^\d+$/.test(value) && value > 0)) {
-      setFilters((prevFilters) => ({ ...prevFilters, courseCode: value }));
+      setFilters((prev) => ({ ...prev, courseCode: value }));
+      setWasModified(true);
     }
   };
 
-  // בדיקה אם היה שינוי בערכים
-  const isSearchDisabled = useMemo(() => {
-    return JSON.stringify(filters) === JSON.stringify(initialState);
-  }, [filters]);
+  const isSearchDisabled = !wasModified;
 
   return (
     <Box
       sx={{
-        //width: "100%",
         margin: "auto",
-        //position: "relative",
         gap: 20,
         borderRadius: "10px",
         padding: "25px 24px",
@@ -91,10 +94,8 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
         lineHeight: "18.96px",
         textAlign: "right",
         direction: "rtl",
-
-      WebkitBackdropFilter: "blur(4px)", // תמיכה ב-Safari
-      boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
-
+        WebkitBackdropFilter: "blur(4px)",
+        boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
       }}
     >
       <Box
@@ -107,7 +108,6 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           marginRight: 0,
         }}
       >
-        {/* קוד קורס - ערך מספרי בלבד */}
         <TextField
           label="קוד קורס"
           type="number"
@@ -117,30 +117,35 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           onChange={handleCourseCodeChange}
         />
 
-        {/* שם קורס - טקסט */}
         <TextField
           label="שם הקורס"
           variant="standard"
           sx={sharedStyles}
           value={filters.courseName}
-          onChange={(e) => setFilters({ ...filters, courseName: e.target.value })}
+          onChange={(e) => {
+            setFilters({ ...filters, courseName: e.target.value });
+            setWasModified(true);
+          }}
         />
 
-        {/* רכזת - מתוך רשימה */}
         <FormControl variant="standard" sx={sharedStyles}>
           <InputLabel>רכזת</InputLabel>
           <Select
             value={filters.courseCoordinator}
-            onChange={(e) => setFilters({ ...filters, courseCoordinator: e.target.value })}
+            onChange={(e) => {
+              setFilters({ ...filters, courseCoordinator: e.target.value });
+              setWasModified(true);
+            }}
             sx={sharedStyles}
           >
-            {coordinators && coordinators?.map((coordinator) => (
+            {coordinators?.map((coordinator) => (
               <MenuItem key={coordinator.userId} value={coordinator.name}>
                 {coordinator.name}
               </MenuItem>
             ))}
           </Select>
         </FormControl>
+
         <TextField
           variant="standard"
           label="שנה"
@@ -152,6 +157,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           sx={sharedStyles}
         />
       </Box>
+
       <Box
         sx={{
           display: "flex",
@@ -161,22 +167,20 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
       >
         <Button
           variant="outlined"
-          sx={{
-            ...buttonStyles,
-          }}
+          sx={buttonStyles}
           onClick={() => {
             setFilters(initialState);
             dispatch(fetchCoordinators());
+            // intentionally NOT resetting wasModified
           }}
         >
           ניקוי
         </Button>
         <Button
           variant="contained"
-          backgroundColor="#326DEF"
-          sx={buttonStyles}
+          sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
           startIcon={<SearchIcon />}
-          disabled={isSearchDisabled} // הכפתור מושבת אם אין שינוי
+          disabled={isSearchDisabled}
           onClick={() => {
             onSearch();
           }}
@@ -187,4 +191,5 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
     </Box>
   );
 };
+
 export default CourseSearch;

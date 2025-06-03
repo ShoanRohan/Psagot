@@ -22,6 +22,7 @@ import CourseGrid from "../components/CourseGrid";
 import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import api from "../utils/api";
 
 const buttonStyles = {
   height: "44px",
@@ -69,9 +70,21 @@ const CoursesPage = () => {
 
   
 
-  const handleExportToExcel = () => {
-    if (!courses || courses.length === 0) {
-      console.warn("אין נתונים לייצוא");
+  const exportAllCoursesToExcel = async () => {
+    const params = {
+      courseId: filters.courseCode,
+      courseName: filters.courseName,
+      coordinatorName: filters.courseCoordinator,
+      year: filters.year,
+    };
+  
+    const queryString = new URLSearchParams(params).toString();
+  
+    const response = await api.get(`/Course/GetFilteredCourses?${queryString}`);
+    const allCourses = response.data;
+  
+    if (!allCourses || allCourses.length === 0) {
+      console.warn("אין קורסים לייצוא");
       return;
     }
 
@@ -170,15 +183,15 @@ const CoursesPage = () => {
         <Stack direction="row" spacing={2} sx={{ direction: "ltr" }}>
           <Button
             variant="contained"
-            sx={buttonStyles}
-            backgroundColor="#326DEF"
+            sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
+
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => setOpenDialog(true)}
           >
             הוספת קורס
           </Button>
           <IconButton
-            onClick={handleExportToExcel}
+            onClick={exportAllCoursesToExcel}
             sx={{
               display: "flex",
               alignItems: "center",
