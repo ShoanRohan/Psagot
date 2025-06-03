@@ -11,30 +11,30 @@ import CoursPage from '../pages/CoursPage';
 import RegisterPage from '../pages/RegisterPage';
 
 const AppRouter = () => {
-	return (
-		<Routes>
-			{/* עמוד התחברות – ברירת מחדל בנתיב '/' */}
-			<Route path="/" element={<LoginPage />}>
-				<Route index element={<Login />} />
-			</Route>
+  return (
+    <Routes>
+      {/* עמוד התחברות */}
+      <Route path="/" element={<LoginPage />}>
+        <Route index element={<Login />} />
+      </Route>
 
-			{/* עמודים אחרי התחברות */}
-			<Route path="/" element={<Layout />}>
-				<Route path="home" element={<HomePage />} />
-				<Route path="cours/:id" element={<CoursPage />} />
-				<Route path="user" element={<UserManagement />} />
-				<Route path="courses" element={<CoursesPage />} />
-			</Route>
+      {/* עמוד הרשמה */}
+      <Route path="/register" element={<RegisterPage />}>
+        <Route index element={<Register />} />
+      </Route>
 
-			{/* עמוד הרשמה */}
-			<Route path="/register" element={<RegisterPage />}>
-				<Route index element={<Register />} />
-			</Route>
+      {/* עמודים אחרי התחברות – תחת Layout */}
+      <Route path="/" element={<Layout />}>
+        <Route path="home" element={<HomePage />} />
+        <Route path="cours/:id" element={<CoursPage />} />
+        <Route path="user" element={<UserManagement />} />
+        <Route path="courses" element={<CoursesPage />} />
+      </Route>
 
-			{/* ניווט שגוי ל'/' */}
-			<Route path="*" element={<Navigate to="/" replace />} />
-		</Routes>
-	);
+      {/* כל כתובת שלא קיימת */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 };
 
 export default AppRouter;
