@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { signUp } from '../utils/api';
 import { useDispatch } from 'react-redux';
 import { addUserAction } from '../features/user/userAction';
 import { useNavigate } from 'react-router-dom';
@@ -100,6 +99,7 @@ const Register = () => {
     password,
     isActive: true,
     userTypeId: 5,
+        // userTypeName: 'Standard User',
   }));
 console.log('Result action:', resultAction);
 const registeredUser = resultAction.payload.user;
@@ -113,7 +113,7 @@ const registeredUser = resultAction.payload.user;
 } else {
   const error = resultAction.payload;
   if (error?.errorCode === 'EMAIL_PHONE_EXISTS') {
-    alert("כבר קיים משתמש עם האימייל והטלפון שהזנת.");
+    alert("כבר קיים משתמש עם האימייל והטלפון שהזנו.");
   } else {
     alert("אירעה שגיאה בהרשמה. נסי שוב.");
   }}

@@ -55,5 +55,15 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+        public async Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetCoursesByFilter(CourseFilterDTO filter)
+        {
+            var (courses, errorMessage) = await _courseDL.GetCoursesByFilter(filter);
+            if (courses == null)
+                return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
+        }
+
+
     }
 }

@@ -51,5 +51,14 @@ namespace Psagot.Controllers
             return Ok(updatedCourse);
         }
 
+        [HttpPost("FilterCourses")]
+        public async Task<IActionResult> FilterCourses([FromBody] CourseFilterDTO filter)
+        {
+            var (courses, errorMessage) = await _courseBL.GetCoursesByFilter(filter);
+            if (courses == null)
+                return BadRequest(errorMessage);
+
+            return Ok(courses);
+        }
     }
 }
