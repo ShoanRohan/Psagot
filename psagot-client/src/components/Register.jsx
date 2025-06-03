@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import EyeIcon from '../assets/icons/eye_icon.svg';
 import {
   Box,
@@ -9,7 +9,6 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { signUp } from '../utils/api';
 import { useDispatch } from 'react-redux';
 import { addUserAction } from '../features/user/userAction';
 import { useNavigate } from 'react-router-dom';

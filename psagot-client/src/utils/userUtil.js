@@ -52,7 +52,4 @@ const getCoordinators = async (userTypeId = 3) => {
     }
 };
 
-
-
-
 export { getAllUsers, getUserById, addUser, updatedUser, getCoordinators };

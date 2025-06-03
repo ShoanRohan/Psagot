@@ -1,38 +1,38 @@
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Typography } from "@mui/material";
-import React from "react";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import CourseGrid from "../components/CoursesGrid";
-import { useSelector } from "react-redux";
+import { filterCourses } from "../features/course/courseActions";
+import CourseSearch from "../components/CourseSearch";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
 import { styled } from "@mui/system";
-import CourseSearch from "../components/CourseSearch";
-import { fetchAllCourses } from "../features/course/courseActions";
-
 
 const CoursesPage = () => {
-  const Course = useSelector((state) => state.course?.courses || []);
+  const dispatch = useDispatch();
+  const courses = useSelector((state) => state.course.courses);
 
+  useEffect(() => {
+    dispatch(filterCourses({ statusId: 1 })); // Use filterCourses with default statusId: 1
+  }, [dispatch]);
 
   const exportToExcel = () => {
-    if (!Course || Course.length === 0) {
+    if (!courses || courses.length === 0) {
       alert("אין נתונים לייצוא!");
       return;
     }
 
-    const worksheet = XLSX.utils.json_to_sheet(Course);
-
-
+    const worksheet = XLSX.utils.json_to_sheet(courses);
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Course");
-
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Courses");
 
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-
-
-    const data = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-    saveAs(data, "Course.xlsx");
+    const data = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8",
+    });
+    saveAs(data, "Courses.xlsx");
   };
 
   const NoPaddingBox = styled(Box)({
@@ -51,7 +51,6 @@ const CoursesPage = () => {
         backgroundColor: "#FFFFFF",
         position: "relative",
         margin: 0,
-
       }}
     >
       <Typography
@@ -92,7 +91,7 @@ const CoursesPage = () => {
           minHeight: "2.5rem",
         }}
       >
-        <img src={exptExcel} alt="אייקון ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
+        <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: "75%", height: "80%" }} />
       </Button>
 
       <Button
@@ -113,7 +112,7 @@ const CoursesPage = () => {
           minHeight: "2.5rem",
         }}
       >
-        <img src={circlePlus} alt="אייקון הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
+        <img src={circlePlus} alt="הוספת קורס" style={{ width: "0.76vw", height: "1.8vh" }} />
         <Typography
           sx={{
             fontFamily: "Rubik",
@@ -129,9 +128,8 @@ const CoursesPage = () => {
         </Typography>
       </Button>
       <CourseSearch />
-      <CourseGrid />
-    </NoPaddingBox >
-
+      <CourseGrid courses={courses} />
+    </NoPaddingBox>
   );
 };
 
