@@ -1,0 +1,87 @@
+.meeting-form-wrapper {
+  font-family: 'Rubik', sans-serif;
+  padding: 24px;
+}
+
+.meeting-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.main-title {
+  font-size: 36px;
+  font-weight: bold;
+  color: #1f2b6c;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #888;
+  margin-top: 4px;
+}
+
+.buttons-group {
+  display: flex;
+  gap: 10px;
+}
+
+.rounded-button {
+  border-radius: 20px !important;
+  padding: 6px 18px;
+}
+
+.form-box {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.section-title {
+  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 20px;
+  color: #222;
+}
+
+
+.select-left-arrow .MuiSelect-icon {
+  left: 7px;
+  right: auto;
+}
+
+/* שדות רגילים */
+.fields-grid .MuiFormControl-root,
+.fields-grid .MuiTextField-root {
+  direction: rtl;
+  font-size: 13px;
+  width: 200px !important; 
+  margin-bottom: 24px;
+}
+
+
+/* יישור טקסט לימין בתוך שדות */
+.fields-grid .MuiInputBase-input,
+.fields-grid .MuiSelect-select {
+  text-align: right !important;
+  direction: rtl !important;
+ /* padding: 6px 8px !important;*/
+  font-size: 13px !important;
+}
+
+/* גובה שדה קטן */
+.fields-grid .MuiInputBase-root {
+  height: 45px !important;
+}
+
+/* תוויות של שדות */
+.fields-grid label,
+.fields-grid .MuiInputLabel-root {
+  text-align: right !important;
+  direction: rtl !important;
+  right: 0;
+  left: auto;
+}
+
