@@ -21,7 +21,7 @@ export const fetchDaysForCourseById = createAsyncThunk('DaysForCourse/fetchDaysF
     return data;
 });
 
-export const updateDaysForCourseAction = createAsyncThunk('DaysForCourse/updateDaysForCourseAction', async (updateDaysForCourse) => {
-    const data = await updateDaysForCourse(updateDaysForCourse);
+export const updateDaysForCourseAction = createAsyncThunk('DaysForCourse/updateDaysForCourseAction', async (daysForCourse) => {
+    const data = await updateDaysForCourse(daysForCourse);
     return data;
 });
