@@ -8,6 +8,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import RoomTable from "./RoomTable"; 
+import { Box } from "@mui/system";
 
 
 const RoomsHeader = () => {
@@ -31,7 +32,7 @@ const RoomsHeader = () => {
     };
 
     return (
-        <div>
+        <Box>
         <HeaderContainer>
             <Title component="h1">חדרים</Title>
             <NavigationBar
@@ -55,7 +56,7 @@ const RoomsHeader = () => {
      
      <RoomTable date={currentDate.format('YYYY-MM-DD')} />
        
-       </div>
+       </Box>
     );
 };
 

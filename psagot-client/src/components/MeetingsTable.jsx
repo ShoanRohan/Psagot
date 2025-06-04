@@ -37,6 +37,19 @@ export default function MeetingsTable() {
     severity: "success",
   });
 
+const getStatusChip = (meetingDateStr) => {
+  const meetingDate = new Date(meetingDateStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isActive = meetingDate >= today;
+    return (
+      <Chip
+        label={isActive ? "פעיל" : "הסתיים"}
+        className={isActive ? "status-chip active" : "status-chip inactive"}
+      />
+    );
+};
+
   useEffect(() => {
     if (!pageNumber || !rowsPerPage) return;
 
@@ -65,7 +78,7 @@ export default function MeetingsTable() {
 
   const pageCount = Math.ceil(totalCount / rowsPerPage);
   return (
-    <div>
+    <Box>
       <TableContainer component={Paper} className="table-container">
         <Table className="meetings-table">
           <TableHead>
@@ -111,26 +124,10 @@ export default function MeetingsTable() {
                 <StyledTableCell>{meeting.endTime}</StyledTableCell>
                 <StyledTableCell>{meeting.room?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.isValid ? "V" : "X"}</StyledTableCell>
-                <StyledTableCell>
-                 {(() => {
-                   const meetingDate = new Date(meeting.meetingDate);
-                   const today = new Date();
-                   today.setHours(0, 0, 0, 0);
-                      return (
-                               <Chip
-                                 label={meetingDate >= today ? "פעיל" : "הסתיים"}
-                                 className={meetingDate >= today ? "status-chip active" : "status-chip inactive"}
-                               />
-                             );
-                         }
-                   )()}
-                </StyledTableCell>
+                <StyledTableCell>{getStatusChip(meeting.meetingDate)}</StyledTableCell>
                 <StyledTableCell>
                   <Box className="icon-buttons">
-                    <IconButton
-                      className="delete-button"
-                      onClick={() => handleDelete(meeting.id)}
-                    >
+                    <IconButton className="delete-button" onClick={() => handleDelete(meeting.id)}>
                       <DeleteOutlineIcon />
                     </IconButton>
                     <IconButton className="edit-button">
@@ -181,6 +178,6 @@ export default function MeetingsTable() {
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 }

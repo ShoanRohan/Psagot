@@ -12,17 +12,7 @@ public class MappingProfile : Profile
             .ReverseMap();
         CreateMap<Room, RoomDTO>().ReverseMap();
         CreateMap<Day, DayDTO>().ReverseMap();
-        CreateMap<Meeting, MeetingDTO>()
-            .ForMember(dest => dest.Course, opt => opt.MapFrom(src => src.Course))
-            .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Topic))
-            .ForMember(dest => dest.Room, opt => opt.MapFrom(src => src.Room))
-            .ForMember(dest => dest.Teacher, opt => opt.MapFrom(src =>
-            src.Teacher != null && src.Teacher.UserType != null && src.Teacher.UserType.Name == "מרצה"
-            ? src.Teacher
-            : null))
-            .ForMember(dest => dest.Day, opt => opt.MapFrom(src => src.Day))
-            .ForMember(dest => dest.ScheduleForTopic, opt => opt.MapFrom(src => src.ScheduleForTopic))
-            .ReverseMap();
+        CreateMap<Meeting, MeetingDTO>().ReverseMap();
         CreateMap<DaysForCourse, DaysForCourseDTO>().ReverseMap();
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
         CreateMap<Topic, TopicDTO>().ReverseMap();

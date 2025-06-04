@@ -56,8 +56,8 @@ export default function RoomTable({ date }) {
     );
   }
 
-  if (roomsStatus === 'failed') return <div>שגיאה בטעינת חדרים: {roomsError}</div>;
-  if (rangeStatus === 'failed') return <div>שגיאה בטעינת מפגשים: {meetingsError}</div>;
+  if (roomsStatus === 'failed') return <Box>שגיאה בטעינת חדרים: {roomsError}</Box>;
+  if (rangeStatus === 'failed') return <Box>שגיאה בטעינת מפגשים: {meetingsError}</Box>;
 
   const occupiedCells = {};
 
@@ -124,12 +124,12 @@ export default function RoomTable({ date }) {
 
                     return (
                       <TableCell key={cellKey} rowSpan={rowSpan} className="room-cell meeting-cell">
-                        <div
-                          className="meeting-box"
-                          style={{'--meeting-color': bgColorLine,'--meeting-bg-color':bgColor,}} >
-                          <div className="meeting-title"> {meeting.title.split(' - ')[0] } </div>
-                          <div className="meeting-subtitle">{meeting.title.split(' - ')[1] || ''}</div>
-                        </div>
+                       <Box
+                         className="meeting-box"
+                         sx={{'--meeting-color': bgColorLine,'--meeting-bg-color': bgColor, }} >
+                         <Box className="meeting-title">{meeting.title?.split(' - ')[0]}</Box>
+                         <Box className="meeting-subtitle">{meeting.title?.split(' - ')[1] || ''}</Box>
+                       </Box>
                       </TableCell>
                     );
                   } else {
