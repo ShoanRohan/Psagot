@@ -75,7 +75,7 @@ namespace DL
             try
             {
                 var coordinators = await _context.Set<User>()
-                    .Where(u => u.UserTypeId == 9 && u.IsActive) // סינון רק רכזות פעילות
+                    .Where(u => u.UserTypeId == 3 && u.IsActive) // סינון רק רכזות פעילות
                     .Select(u => new CoordinatorDTO
                     {
                         UserId = u.UserId,
@@ -90,7 +90,26 @@ namespace DL
                 return (null, ex.Message); // אם קרתה שגיאה
             }
         }
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 4 && u.IsActive) // סינון רק מורות פעילות
+                    .Select(u => new TeacherDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
 
+                return (teachers, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
         public async Task<User> UserLoginAsync(string email, string password)
         {
             var user = await _context.Users
@@ -99,19 +118,19 @@ namespace DL
             return user;
         }
 
-        public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
-        {
-            try
-            {
-                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
-                    .Include(user => user.UserType).ToListAsync();
-                return (users, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
+        //public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
+        //{
+        //    try
+        //    {
+        //        var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+        //            .Include(user => user.UserType).ToListAsync();
+        //        return (users, null);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return (null, ex.Message);
+        //    }
+        //}
 
         public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
         {

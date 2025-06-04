@@ -4,11 +4,10 @@ const getAllUsers = async ()=> {
     const response = await api.get('/User/GetAllUsers');
     return response.data;
 };
-
-const getAllCoordinators = async ()=> {
-    const response = await api.get('/User/GetAllCoordinators');
-    return response.data;
-};
+//  const getAllCoordinators = async ()=> {
+//     const response = await api.get('/User/GetAllCoordinators');
+//      return response.data;
+//  };
 
 const getUserById = async (id) => {
     const response = await api.get(`/User/GetUserById/${id}`);
@@ -34,8 +33,11 @@ const getCoordinators = async () => {
     const response = await api.get('/User/GetCoordinators');
     return response.data;
 };
+const getTeachers = async () => {
+    const response = await api.get('/User/GetTeachers');
+    return response.data;
+};
 
-
-export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators };
+export { getAllUsers, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getTeachers };
 
 

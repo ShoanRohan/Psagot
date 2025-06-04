@@ -12,6 +12,7 @@ import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
 import { fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
+import { fetchAllTopic} from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
@@ -21,7 +22,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-
+import TopicDialog from './TopicDialog';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -29,7 +30,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
         fontWeight: 'bold',
         fontFamily: 'Rubik',
     },
-    
+
     [`&.${tableCellClasses.body}`]: {
         fontFamily: 'Rubik'
     },
@@ -53,7 +54,7 @@ export default function CourseTopicGrid() {
     useEffect(() => {
         if (courseId) {
             dispatch(fetchAllTopicForCourseByCourseId(courseId));
-        }        
+        }
     }, [dispatch, courseId]);
 
     console.log("טופיקס:", topics)
@@ -106,6 +107,22 @@ export default function CourseTopicGrid() {
         currentPage * pageSize
     );
 
+    const handleEditClick = (topic) => {
+        setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
+        setDialogOpen(true);     // פותחים את הדיאלוג
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setSelectedTopic(null);
+    };
+
+    const handleDialogSubmit = (formData) => {
+        console.log("נתוני עריכה:", formData);
+        setDialogOpen(false);
+        setSelectedTopic(null);
+    };
+
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
             <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px',
@@ -123,7 +140,7 @@ export default function CourseTopicGrid() {
                             <StyledTableCell align='center'>ציוד</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Box>
-                                    <>סטטוס</>
+                                    סטטוס
                                     <IconButton sx={{ width: '20px', height: '20px' }}>
                                         <UnfoldMoreOutlinedIcon sx={{ height: '20px' }} />
                                     </IconButton>
@@ -164,8 +181,8 @@ export default function CourseTopicGrid() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <IconButton sx={{ bgcolor: '#F4F4F4'}}>
-                                        <img src={editSvg} alt='edit_icon' style={{marginTop: '0px'}} />
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
+                                        <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
                                     </StyledTableCell>
                                     <StyledTableCell>
@@ -178,7 +195,7 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{  p: "30px 20px 10px 20px" , borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: 'unset', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
+            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
                 <Grid2 container>
                     {/* עמודים */}
                     <Grid2 xs={3}>
@@ -231,6 +248,12 @@ export default function CourseTopicGrid() {
                     <Button onClick={handleConfirmDelete} variant="contained" color="error">מחק</Button>
                 </DialogActions>
             </Dialog>
+            <TopicDialog
+                open={dialogOpen}
+                onClose={handleDialogClose}
+                onSubmit={handleDialogSubmit}
+                initialData={selectedTopic}
+            />
         </Box>
     );
 }

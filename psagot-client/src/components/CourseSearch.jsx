@@ -7,7 +7,7 @@ import { fetchCoordinators } from "../features/user/userAction";
 
 // סטייל לשדות בחירה
 const sharedStyles = {
-  width: "150px",
+  width: "100%",
   textAlign: "right",
   direction: "rtl",
   "& .MuiInputLabel-root": {
@@ -34,8 +34,10 @@ const buttonStyles = {
 
 const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   const dispatch = useDispatch();
-  const coordinators = useSelector((state) => state.user.coordinatorsCode);
+  const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
+  const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
+  
 
   useEffect(() => {
     dispatch(fetchCoordinators());
@@ -72,10 +74,11 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
   return (
     <Box
       sx={{
-        width: "100%",
+        //width: "100%",
         margin: "auto",
         //position: "relative",
-        borderRadius: "4px",
+        gap: 20,
+        borderRadius: "10px",
         padding: "25px 24px",
         backgroundColor: "white",
         display: "flex",
@@ -88,6 +91,10 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
         lineHeight: "18.96px",
         textAlign: "right",
         direction: "rtl",
+
+      WebkitBackdropFilter: "blur(4px)", // תמיכה ב-Safari
+      boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
+
       }}
     >
       <Box
@@ -128,7 +135,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
             sx={sharedStyles}
           >
             {coordinators && coordinators?.map((coordinator) => (
-              <MenuItem key={coordinator.userId} value={coordinator.userId}>
+              <MenuItem key={coordinator.userId} value={coordinator.name}>
                 {coordinator.name}
               </MenuItem>
             ))}
@@ -157,11 +164,9 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
           sx={{
             ...buttonStyles,
           }}
-          //startIcon={<FilterAltOffOutlinedIcon />}
           onClick={() => {
             setFilters(initialState);
-            dispatch(fetchCoordinators()); // טוען מחדש את הקורסים
-            //לבדוק שטעינת הקורסים מתבצעת דרך fetchCoordinators
+            dispatch(fetchCoordinators());
           }}
         >
           ניקוי

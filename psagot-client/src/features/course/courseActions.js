@@ -13,7 +13,7 @@ export const fetchCourseById = createAsyncThunk("course/fetchCourseById", async 
 
 export const fetchFilteredPaginatedCourses = createAsyncThunk("course/getFilteredPaginatedCourses", async ({
     courseCode, courseName, courseCoordinator, year, pageNumber, pageSize, }) => {
-    const filters = { courseId: courseCode, courseName: courseName, courseCoordinator: courseCoordinator, year: year, };
+    const filters = { courseId: courseCode, courseName: courseName,   coordinatorName: courseCoordinator, year: year, };
     const data = await getFilterPaginatedCourses(filters, pageNumber, pageSize);
     return data;
   });

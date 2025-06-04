@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators } from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser, getCoordinators,getAllCoordinators, getAllLecturersAndCoordinators, getTeachers } from "../../utils/userUtil";
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
     const data = await getAllUsers();
     return data;
 });
 
-export const fetchAllCoordinators = createAsyncThunk('user/fetchAllCoordinators', async () => {
-    const data = await getAllCoordinators();
-    return data;
-});
+//  export const fetchAllCoordinators = createAsyncThunk('user/fetchAllCoordinators', async () => {
+//     const data = await getAllCoordinators();
+//     return data;
+//  });
 
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) =>{
     const data = await getUserById(id);
@@ -31,6 +31,10 @@ export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", asyn
         return data;
 });
 
+export const fetchTeachers = createAsyncThunk("user/fetchTeachers", async () => {
+        const data = await getTeachers();
+        return data;
+});
 export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
     const data = await getAllLecturersAndCoordinators();
     return data;

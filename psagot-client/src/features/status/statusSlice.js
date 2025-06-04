@@ -1,14 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAllStatuses } from "./statusCourseActions";
+import { fetchAllStatuses, fetchAllStatusesTopics } from "./statusActions";
 
 const initialState = {
-  coursesStatuses: [],
+  coursesStatuses: [], 
+  topicsStatuses: [],
   status: "idle", // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
   error: null,
 };
 
-const statusCourseSlice = createSlice({
-  name: "statusCourse",
+const statusSlice = createSlice({
+  name: "status",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -23,9 +24,20 @@ const statusCourseSlice = createSlice({
       .addCase(fetchAllStatuses.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(fetchAllStatusesTopics.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchAllStatusesTopics.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.topicsStatuses = action.payload;
+      })
+      .addCase(fetchAllStatusesTopics.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
 
-export const selectStatuses = (state) => state.statusCourse.coursesStatuses;
-export default statusCourseSlice.reducer;
+export const selectStatuses = (state) => state.status.coursesStatuses;
+export default statusSlice.reducer;

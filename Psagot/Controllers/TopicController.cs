@@ -44,6 +44,7 @@ namespace Psagot.Controllers
 
             return Ok(topics);
         }
+
         [HttpPut("UpdateTopic")]
         public async Task<IActionResult> UpdateTopic([FromBody] TopicDTO topicDTO)
         {
