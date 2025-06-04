@@ -1,31 +1,56 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser ,getAllLecturersAndCoordinators,getFilteredUsers} from "../../utils/userUtil";
+import {
+  getAllUsers,
+  getUserById,
+  addUser,
+  updatedUser,
+  getAllLecturersAndCoordinators,
+  getFilteredUsers,
+} from "../../utils/userUtil";
 
-export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
+export const fetchAllUsers = createAsyncThunk(
+  "user/fetchAllUsers",
+  async () => {
     const data = await getAllUsers();
     return data;
-});
+  }
+);
 
-export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) =>{
+export const fetchUserById = createAsyncThunk(
+  "user/fetchUserById",
+  async (id) => {
     const data = await getUserById(id);
     return data;
-});
+  }
+);
 
-export const fetchFilteredUseres = createAsyncThunk('user/fetchFilteredUseres', async (filteredUsersParamaters) =>{
+export const fetchFilteredUseres = createAsyncThunk(
+  "user/fetchFilteredUseres",
+  async (filteredUsersParamaters) => {
     const data = await getFilteredUsers(filteredUsersParamaters);
     return data;
-});
+  }
+);
 
-export const addUserAction = createAsyncThunk('user/addUserAction' , async(newUser)=>{
+export const addUserAction = createAsyncThunk(
+  "user/addUserAction",
+  async (newUser) => {
     const data = await addUser(newUser);
     return data;
-}) ;
-export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
+  }
+);
+export const updateUserAction = createAsyncThunk(
+  "user/updateUserAction",
+  async (updateUser) => {
     const data = await updatedUser(updateUser);
     return data;
-});
+  }
+);
 
-export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
+export const fetchAllLecturersAndCoordinators = createAsyncThunk(
+  "user/fetchAllLecturersAndCoordinators",
+  async () => {
     const data = await getAllLecturersAndCoordinators();
     return data;
-});
+  }
+);
