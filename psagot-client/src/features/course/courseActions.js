@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllCourses, getCourseById, addCourse, updateCourse, getExistingCourseYears } from '../../utils/courseUtil';
+import { getAllCourses, getCourseById, addCourse, updateCourse, getExistingCourseYears, GetAllStatusCourses } from '../../utils/courseUtil';
 import { filterCourses as filterCoursesApi } from '../../utils/courseUtil';
 
 
@@ -41,4 +41,11 @@ export const filterCourses = createAsyncThunk('courses/filterCourses', async (fi
     }
   }
 );
+
+export const fetchCourseStatuses = createAsyncThunk('course/fetchCourseStatuses', async () => {
+  const data = await GetAllStatusCourses();
+      return data;
+  }
+);
+
 

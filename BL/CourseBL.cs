@@ -67,6 +67,11 @@ namespace BL
         {
             return await _courseDL.GetExistingCourseYears();
         }
+        public async Task<List<StatusCourse>> GetAllStatusCourses()
+        {
+            return await _courseDL.GetAllStatusCourses();
+        }
+
 
 
     }

@@ -27,6 +27,12 @@ const getExistingCourseYears = async () => {
   const response = await api.get('/Course/GetExistingYears');
   return response.data;
 };
+const GetAllStatusCourses = async() => {
+    const response = await api.get('/Course/GetAllStatusCourses');
+    console.log('response from status API:', response.data);
+    return response.data;
+
+  }
 
 
-export { getCourseById, getAllCourses, addCourse, updateCourse , filterCourses, getExistingCourseYears};
+export { getCourseById, getAllCourses, addCourse, updateCourse , filterCourses, getExistingCourseYears, GetAllStatusCourses};

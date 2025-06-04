@@ -6,6 +6,7 @@ import {
     updateCourseAction,
     filterCourses,
     fetchAvailableYears,
+    fetchCourseStatuses,
 } from './courseActions';
 
 const initialState = {
@@ -13,6 +14,8 @@ const initialState = {
     selectedCourse: null,
     status: 'idle',
     error: null,
+    availableYears: [],
+    courseStatuses: [],
 };
 
 const courseSlice = createSlice({
@@ -61,6 +64,9 @@ const courseSlice = createSlice({
             })
             .addCase(fetchAvailableYears.fulfilled, (state, action) => {
                 state.availableYears = action.payload;
+            })
+            .addCase(fetchCourseStatuses.fulfilled, (state, action) => {
+                state.courseStatuses = action.payload;
             });
     }
 });

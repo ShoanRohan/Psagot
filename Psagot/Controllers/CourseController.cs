@@ -65,6 +65,12 @@ namespace Psagot.Controllers
             var years = await _courseBL.GetExistingCourseYears();
             return Ok(years);
         }
+        [HttpGet("GetAllStatusCourses")]
+        public async Task<IActionResult> GetAllStatusCourses()
+        {
+            var statusList = await _courseBL.GetAllStatusCourses();
+            return Ok(statusList);
+        }
 
     }
 }

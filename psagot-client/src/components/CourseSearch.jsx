@@ -12,9 +12,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchCoordinators } from '../features/user/userAction';
-import { filterCourses, fetchAvailableYears } from '../features/course/courseActions';
+import { filterCourses, fetchAvailableYears, fetchCourseStatuses } from '../features/course/courseActions';
 
-const statuses = ['פעיל', 'לא פעיל'];
 
 const defaultFilters = {
   courseId: '',
@@ -23,19 +22,21 @@ const defaultFilters = {
   year: '',
   startDate: null,
   endDate: null,
-  status: 'פעיל',
+  status: '',
 };
 
 const CourseSearch = () => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
   const years = useSelector((state) => state.course.availableYears || []);
+  const statuses = useSelector((state) => state.course.courseStatuses || []);
 
   useEffect(() => {
     dispatch(fetchCoordinators());
     dispatch(fetchAvailableYears());
-
+    dispatch(fetchCourseStatuses());
   }, [dispatch]);
+
 
   const [filters, setFilters] = useState(defaultFilters);
   const [lastSearchedFilters, setLastSearchedFilters] = useState(defaultFilters);
@@ -57,7 +58,7 @@ const CourseSearch = () => {
       startDate: filters.startDate ? filters.startDate.toISOString() : null,
       endDate: filters.endDate ? filters.endDate.toISOString() : null,
       coordinator: filters.coordinator || null,
-      statusId: filters.status === 'פעיל' ? 1 : 2,
+      statusId: filters.status || null,
     };
 
     dispatch(filterCourses(filterDto));
@@ -66,7 +67,7 @@ const CourseSearch = () => {
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    dispatch(filterCourses({ statusId: 1 })); // Use filterCourses with default statusId: 1
+    dispatch(filterCourses({ statusId: 1 }));
   };
 
   return (
@@ -124,7 +125,7 @@ const CourseSearch = () => {
             MenuProps: {
               PaperProps: {
                 style: {
-                  maxHeight: 200, // הצג עד 5 פריטים עם פס גלילה
+                  maxHeight: 200,
                   overflowY: 'auto',
                 },
               },
@@ -196,9 +197,9 @@ const CourseSearch = () => {
             '.MuiSelect-select': { fontFamily: 'Rubik' },
           }}
         >
-          {statuses.map((status) => (
-            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik' }}>
-              {status}
+          {statuses?.map((status) => (
+            <MenuItem key={status.statusCourseId} value={status.statusCourseId} sx={{ fontFamily: 'Rubik' }}>
+              {status.name}
             </MenuItem>
           ))}
         </TextField>

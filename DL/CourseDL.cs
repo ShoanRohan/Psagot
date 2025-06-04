@@ -114,6 +114,10 @@ namespace DL
 
         }
 
+        public async Task<List<StatusCourse>> GetAllStatusCourses()
+        {
+            return await _context.StatusCourses.ToListAsync();
+        }
 
 
     }
