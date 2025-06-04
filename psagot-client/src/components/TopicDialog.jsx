@@ -86,17 +86,17 @@ const addDayButtonStyle = {
   minWidth: "auto",
 };
 
-const TopicDialog = ({ open, onClose, onSubmit }) => {
+const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const [formData, setFormData] = useState({
-    topic: "",
-    lecturerName: "",
-    startDate: "",
-    endDate: "",
-    numberOfStudents: "",
+    topic: initialData?.topicId||"",
+    lecturerName: initialData?.teacherName||"",
+    startDate: initialData?.startDate||"",
+    endDate: initialData?.endDate||"",
+    numberOfMeetings: initialData?.numberOfMeetings||"",
     equipment: {
-      computers: false,
-      microphone: false,
-      projector: false,
+      computers: initialData?.computers||false,
+      microphone: initialData?.microphone||false,
+      projector: initialData?.projector||false,
     },
     status: "",
   });
@@ -265,7 +265,7 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
           >
             <TextField label="נושא" name="topic" value={formData.topic} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
             <TextField label="שם מרצה" name="lecturerName" value={formData.lecturerName} onChange={handleChange} variant="standard" sx={{ ...sharedStyles, mr: -17 }} />
-            <TextField label="מספר מפגשים" name="numberOfStudents" value={formData.numberOfStudents} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
+            <TextField label="מספר מפגשים" name="numberOfMeetings" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
 
             <TextField
               label="תאריך התחלה"
