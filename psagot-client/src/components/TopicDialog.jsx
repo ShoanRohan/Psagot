@@ -7,6 +7,10 @@ import {
 } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
+import editSvg from '../assets/icons/editIcon.svg';
+import deleteSvg from '../assets/icons/deleteIcon.svg';
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
 
 const sharedStyles = {
   width: "150px",
@@ -23,7 +27,7 @@ const sharedStyles = {
 };
 
 const buttonStyles = {
-  height: "44px",
+  height: "36px",
   padding: "0px 16px",
   borderRadius: "50px",
   fontFamily: "Rubik",
@@ -104,7 +108,7 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
   ]);
 
   const [mainSaved, setMainSaved] = useState(false);
-
+  const [editingDayIndex, setEditingDayIndex] = useState(null); 
   // אם משתנה כלשהו בטופס הראשי - מבטל את מצב השמירה (אפשר לערוך)
   useEffect(() => {
     if (mainSaved) {
@@ -167,11 +171,19 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
     onSubmit({ ...formData, courseDays });
     setMainSaved(true);
   };
+  const handleEditDay = (index) => {
+    setEditingDayIndex(index);
+  };
+  
+  const handleCancelEditDay = () => {
+    setEditingDayIndex(null);
+  };
 
   const handleSaveDay = (index) => {
     const updatedDays = [...courseDays];
     updatedDays[index].saved = true;
     setCourseDays(updatedDays);
+    setEditingDayIndex(null);
   };
 
   return (
@@ -359,6 +371,7 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
                   <Select
                     value={dayItem.day}
                     onChange={(e) => handleDayChange(index, "day", e.target.value)}
+                    disabled={editingDayIndex !== index}
                   >
                     {["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי"].map(day => (
                       <MenuItem key={day} value={day}>{day}</MenuItem>
@@ -371,6 +384,7 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
                   <Select
                     value={dayItem.startHour}
                     onChange={(e) => handleDayChange(index, "startHour", e.target.value)}
+                    disabled={editingDayIndex !== index}
                   >
                     {Array.from({ length: 24 }, (_, i) => (
                       <MenuItem key={i} value={`${i.toString().padStart(2, '0')}:00`}>
@@ -385,6 +399,7 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
                   <Select
                     value={dayItem.endHour}
                     onChange={(e) => handleDayChange(index, "endHour", e.target.value)}
+                    disabled={editingDayIndex !== index}
                   >
                     {Array.from({ length: 24 }, (_, i) => (
                       <MenuItem key={i} value={`${i.toString().padStart(2, '0')}:00`}>
@@ -395,28 +410,69 @@ const TopicDialog = ({ open, onClose, onSubmit }) => {
                 </FormControl>
               </Box>
 
-              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                <Button
-                  onClick={() => handleDeleteDay(index)}
-                  variant="outlined"
-                  sx={{
-                    ...cancelButtonStyle,
-                    cursor: courseDays.length === 1 ? "not-allowed" : "pointer",
-                  }}
-                  disabled={courseDays.length === 1}
-                >
-                  ביטול
-                </Button>
+   <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+  {editingDayIndex === index ? (
+    <>
+    <Button
+        onClick={handleCancelEditDay}
+        sx={{
+          ...cancelButtonStyle,
+          height: "36px",
+          padding: "6px 16px",
+          borderRadius: "20px",
+          minWidth: "auto",
+        }}>
+        ביטול
+      </Button>
+      <Button
+        onClick={() => handleSaveDay(index)}
+        sx={{
+          ...saveButtonStyle,
+          height: "36px",
+          padding: "6px 16px",
+          borderRadius: "20px",
+          minWidth: "auto",
+        }}
+      >
+        שמור
+      </Button>
+      
+    </>
+  ) : (
+    <>
+      <IconButton
+        onClick={() => handleDeleteDay(index)}
+        sx={{
+          bgcolor: "#F4F4F4",
+          p: "6px",
+          width: "36px",
+          height: "36px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={deleteSvg} alt="delete_icon" style={{ marginTop: "-1px" }} />
+      </IconButton>
 
-                <Button
-                  onClick={() => handleSaveDay(index)}
-                  variant="contained"
-                  sx={dayItem.saved ? disabledSaveButtonStyle : saveButtonStyle}
-                  disabled={dayItem.saved}
-                >
-                   שמור
-                </Button>
-              </Box>
+      <IconButton
+        onClick={() => handleEditDay(index)}
+        sx={{
+          bgcolor: "#F4F4F4",
+          p: "6px",
+          width: "36px",
+          height: "36px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <img src={editSvg} alt="edit_icon" style={{ marginTop: "-1px" }} />
+      </IconButton>
+    </>
+  )}
+</Box>
+
             </Box>
           ))}
 
