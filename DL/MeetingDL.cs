@@ -1,21 +1,19 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Entities.Contexts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using OfficeOpenXml; 
-
 
 namespace DL
 {
     public class MeetingDL : IMeetingDL
     {
         private readonly PsagotDbContext _context;
-
 
         public MeetingDL(PsagotDbContext context)
         {
@@ -40,9 +38,15 @@ namespace DL
         {
             try
             {
-                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                var meeting = await _context.Meetings
+                    .Include(m => m.Course)
+                    .Include(m => m.Topic)
+                    .Include(m => m.Room)
+                    .FirstOrDefaultAsync(m => m.MeetingId == meetingId);
+
                 return (meeting, null);
             }
+
             catch (Exception ex)
             {
                 return (null, ex.Message);
@@ -74,10 +78,18 @@ namespace DL
             {
                 return (null, ex.Message);
             }
-
         }
-
-        
-        
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserTypesDTO
+    public class UserTypeDTO
     {
-        public int UserTypesId { get; set; }
+        public int UserTypeId { get; set; }
         public string Name { get; set; }
         public TimeOnly EndTime { get; set; }
     }

@@ -14,6 +14,7 @@ namespace BL
         Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
         Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
+       Task<(IEnumerable<StatusCourseDTO> Courses, string ErrorMessage)> GetStatusCourses();
 
     }
 }

@@ -1,8 +1,9 @@
 import React from "react";
-import MeetingButton from "./MeetingButton";
+// import MeetingButton from "./MeetingButton";
 import { ExportIconButton } from "./ExportIconButton";
 import MeetingTable from "../components/MeetingTable";
 import { useDispatch, useSelector } from "react-redux";
+import MeetingButton from "../components/MeetingButton";
 
 const MeetingPage = () => {
   const dispatch = useDispatch();
@@ -11,8 +12,9 @@ const MeetingPage = () => {
   return (
     <div>
       <div style={{display:'flex',justifyContent:'flex-end'}}>
-        <MeetingButton/>
-
+         {/* הוספת מפגש*/}
+        < MeetingButton/>
+         {/* ייצוא לאקסל*/}
         <ExportIconButton
           data={meetings}
           fileName="meetings"

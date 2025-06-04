@@ -11,6 +11,8 @@ const updateMeeting = async (updateMeeting) => {
 };
 
 const addMeeting = async (addNewMeeting) => {
+    console.log("נשלח לשרת:", addNewMeeting);
+
     const response = await api.post("/Meeting/AddMeeting", addNewMeeting);
     return response.data;
 };

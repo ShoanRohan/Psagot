@@ -15,7 +15,7 @@ public partial class User
 
     public string Password { get; set; } = null!;
 
-    public int UserTypesId { get; set; }
+    public int UserTypeId { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -25,5 +25,5 @@ public partial class User
 
     public virtual ICollection<Topic> Topics { get; set; } = new List<Topic>();
 
-    public virtual UserTypes UserTypes { get; set; } = null!;
+    public virtual UserType UserType { get; set; } = null!;
 }

@@ -19,11 +19,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CloseIcon from '@mui/icons-material/Close';
 import { useNavigate } from 'react-router-dom';
+import { clearError, resetStatus } from '../features/meeting/meetingSlice';
+import MeetingForm from './MeetingForm';
 
 const MeetingTable = ({ onEdit, onDelete }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { meetings, status, error } = useSelector((state) => state.meeting);
+  const { meetings, status } = useSelector((state) => state.meeting);
 
   const [localMeetings, setLocalMeetings] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -33,6 +35,13 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
+    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [showForm, setShowForm] = useState(false);
+    const [initialMeeting, setInitialMeeting] = useState(null);
+    const { isLoading,error} = useSelector((state) => state.meeting);
+
+    
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchAllMeetings());
@@ -45,8 +54,14 @@ const MeetingTable = ({ onEdit, onDelete }) => {
   }, [status, dispatch, meetings]);
 
   const handleEditMeeting = (meetingId) => {
-    navigate(`/edit-meeting/${meetingId}`);
+    dispatch(clearError());
+    dispatch(resetStatus());
+    setInitialMeeting(meetingId);
+navigate(`/edit-meeting/${meetingId}`)
+    
   };
+
+
 
   const handleOpenDescriptionDialog = (meeting) => {
     setCurrentMeeting(meeting);
@@ -92,7 +107,6 @@ const MeetingTable = ({ onEdit, onDelete }) => {
         });
     }
   };
-
   const columns = [
     'שם קורס',
     'נושא',
@@ -170,12 +184,15 @@ const MeetingTable = ({ onEdit, onDelete }) => {
         </div>
       )
     },
+
     'עריכה': {
       render: (row) => (
         <Tooltip title="עריכת מפגש">
           <IconButton
-            color="primary"
-            onClick={() => handleEditMeeting(row.meetingId)}
+          color="primary"            
+          onClick={() => 
+            handleEditMeeting(row.meetingId)}
+          disabled={isLoading}
             size="small"
           >
             <EditIcon />
@@ -286,8 +303,11 @@ const MeetingTable = ({ onEdit, onDelete }) => {
           )}
         </DialogActions>
       </Dialog>
+
     </div>
   );
+  
+  
 };
 
 export default MeetingTable;

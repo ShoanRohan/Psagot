@@ -12,7 +12,8 @@ public class UserDTO
 
     public string Password { get; set; } = null!;
 
-        public int UserTypeId { get; set; }
+    public int UserTypeId { get; set; }
+
         
         public string UserTypeName { get; set; } = null!;
 
@@ -21,5 +22,5 @@ public class UserDTO
     public string? Role { get; set; }
 
 
-    public virtual UserTypesDTO UserTypes { get; set; } = null!;
+    public virtual UserTypeDTO UserType { get; set; } = null!;
 }

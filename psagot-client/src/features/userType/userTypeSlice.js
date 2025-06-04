@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllUserTypes, fetchUserTypeById, addUserTypeAction, updateUserTypeAction } from './userTypeActions';
+import { fetchAllUserType, fetchUserTypeById, addUserTypeAction, updateUserTypeAction } from './userTypeActions';
 
 const initialState = {
     userTypes: [],
@@ -19,14 +19,14 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllUserTypes.pending, (state) => {
+            .addCase(fetchAllUserType.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchAllUserTypes.fulfilled, (state, action) => {
+            .addCase(fetchAllUserType.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.userTypes = action.payload;
             })
-            .addCase(fetchAllUserTypes.rejected, (state, action) => {
+            .addCase(fetchAllUserType.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })

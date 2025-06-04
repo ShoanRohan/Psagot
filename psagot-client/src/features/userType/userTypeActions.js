@@ -1,9 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllUserTypes, getUserTypeById, addUserType, updateUserType } from '../../utils/userTypeUtil';
+import { getAllUserType, getUserTypeById, addUserType, updateUserType } from '../../utils/userTypeUtil';
 
 // getting all user types
-export const fetchAllUserTypes = createAsyncThunk('userType/fetchAllUserTypes', async () => {
-  const data = await getAllUserTypes();
+export const fetchAllUserType = createAsyncThunk('userType/fetchAllUserType', async () => {
+  const data = await getAllUserType();
   return data;
 });
 

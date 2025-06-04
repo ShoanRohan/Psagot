@@ -6,6 +6,9 @@ import UserManagement from '../pages/UserManagement';
 import AddMeeting from '../pages/AddMeeting';
 import MeetingPage from '../pages/MeetingPage';
 import EditMeeting from '../pages/EditMeeting';
+import MeetingLocatorBar from '../pages/MeetingLocatorBar';
+import MeetingButton from '../components/MeetingButton';
+import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
     return (
@@ -17,8 +20,11 @@ const AppRouter = () => {
                 <Route path='/users' element={<UserManagement />} />
                 <Route path='/rooms' element={<span>page Rooms</span>} />
                 <Route path="/calendar" element={<span>calander Rooms</span>} />
-                <Route path='add-meeting' element={<AddMeeting />} />
-                <Route path="edit-meeting/:meetingId" element={<EditMeeting />} />
+                <Route path='/add-meeting'  element={<MeetingForm  />} />
+                <Route path="/edit-meeting/:meetingId" element={<MeetingForm />} />
+
+             {/* <Route path='/MeetingLocatorBar' element={<MeetingLocatorBar />} /> */}
+
                 </Route>
         </Routes>
     );

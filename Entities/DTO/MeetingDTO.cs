@@ -34,17 +34,9 @@ namespace Entities.DTO
         public int? TeacherId { get; set; }
 
         public DateOnly MeetingDate { get; set; }
+        public string? Reason { get; set; }
+        public int Year { get; set; }
+        public int StatusCourseId { get; set; }
 
-        public virtual CourseDTO? Course { get; set; }
-
-        public virtual DayDTO? Day { get; set; }
-
-        public virtual RoomDTO Room { get; set; } = null!;
-
-        public virtual ScheduleForTopicDTO? ScheduleForTopic { get; set; }
-
-        public virtual UserDTO? Teacher { get; set; }
-
-        public virtual TopicDTO? Topic { get; set; }
     }
 }

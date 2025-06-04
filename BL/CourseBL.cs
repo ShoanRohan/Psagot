@@ -55,5 +55,12 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+        public async Task<(IEnumerable<StatusCourseDTO> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            var (statusCourses, errorMessage) = await _courseDL.GetStatusCourses();
+            if (statusCourses == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<StatusCourseDTO>>(statusCourses), null);
+        }
     }
 }
