@@ -65,9 +65,10 @@ const TopicsSearch = ({ id }) => {
   }
 
   return (
+    <Box  sx={{width: '100%'}}>
     <Box
       sx={{
-        width: "100%" ,
+        width: "unset" ,
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -173,6 +174,7 @@ const TopicsSearch = ({ id }) => {
         </Button>
               
       </Box>
+    </Box>
     </Box>
   );
 };
