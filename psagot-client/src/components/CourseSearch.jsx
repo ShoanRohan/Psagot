@@ -22,7 +22,7 @@ const defaultFilters = {
   year: '',
   startDate: null,
   endDate: null,
-  status: '',
+  status: 1 ,
 };
 
 const CourseSearch = () => {
