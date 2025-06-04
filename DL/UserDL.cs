@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -68,6 +69,28 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            try
+            {
+                var coordinators = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 9 && u.IsActive) // סינון רק רכזות פעילות
+                    .Select(u => new CoordinatorDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
+
+                return (coordinators, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
+
 
         public async Task<(IEnumerable<User> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
             string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
@@ -141,5 +164,22 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-    }
+
+        public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Where(u => u.UserType != null && (u.UserType.Name == "Coordinator" || u.UserType.Name == "Lecturer"))
+                    .Include(u => u.UserType)
+                    .ToListAsync();
+
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+        }
 }
