@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CourseSearch from "./CourseSearch";
+import CourseSearch from "../components/CourseSearch";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,7 +18,8 @@ import {
   setCurrentPage,
   setPageSize,
 } from "../features/course/courseSlice";
-import CourseGrid from "./CourseGrid";
+import CourseGrid from "../components/CourseGrid";
+import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
@@ -51,18 +52,22 @@ const CoursesPage = () => {
     courseCode: "",
     courseName: "",
     courseCoordinator: "",
-    year: "",
+    year: 2025,
   };
 
   const [filters, setFilters] = useState(initialState);
+  const [openDialog, setOpenDialog] = useState(false);
   const currentPage = useSelector(selectCurrentPage);
   const pageSize = useSelector(selectPageSize);
   const totalCount = useSelector(selectTotalCount);
   const courses = useSelector(selectCourses);
+  
 
   const changePage = async (page) => {
     await dispatch(setCurrentPage(page));
   };
+
+  
 
   const handleExportToExcel = () => {
     if (!courses || courses.length === 0) {
@@ -97,6 +102,8 @@ const CoursesPage = () => {
     saveAs(fileData, "courses.xlsx");
   };
 
+
+
   const handleSearch = async () => {
     const params = {
       ...filters,
@@ -104,14 +111,23 @@ const CoursesPage = () => {
       pageSize: pageSize,
     };
 
+   
+
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
-    setFilters(initialState);
+    // setFilters(initialState);
   };
+
 
   const handlePageSizeChange = (newPageSize) => {
     dispatch(setCurrentPage(1));
     dispatch(setPageSize(newPageSize));
+  };
+
+  const handleAddCourse = (newCourseData) => {
+    console.log("קורס חדש:", newCourseData);
+    // כאן תוכל להוסיף קריאה ל־API בעתיד
+    setOpenDialog(false);
   };
 
   useEffect(() => {
@@ -128,8 +144,7 @@ const CoursesPage = () => {
   }, [dispatch, currentPage, pageSize]);
 
   return (
-<Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3 }}>
-{/* Header row: title on right, buttons on left */}
+    <Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3, overflowY: 'unset' }}>
       <Box
         sx={{
           display: "flex",
@@ -156,7 +171,9 @@ const CoursesPage = () => {
           <Button
             variant="contained"
             sx={buttonStyles}
+            backgroundColor="#326DEF"
             startIcon={<AddCircleOutlineIcon />}
+            onClick={() => setOpenDialog(true)}
           >
             הוספת קורס
           </Button>
@@ -199,6 +216,12 @@ const CoursesPage = () => {
         pageSize={pageSize}
         onPageChange={changePage}
         onPageSizeChange={handlePageSizeChange}
+      />
+
+      <TopicDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onSubmit={handleAddCourse}
       />
     </Container>
   );
