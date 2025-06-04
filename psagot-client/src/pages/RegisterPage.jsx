@@ -1,5 +1,5 @@
 import React from 'react';
-import Register from '../components/Register'; 
+// import Register from '../components/Register'; 
 import { Box } from '@mui/material';
 import loginImage from '../assets/imgs/login_image.png'; 
 import logoPsagot from '../assets/imgs/logo_psagot.svg';

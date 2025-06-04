@@ -10,6 +10,7 @@ import networkWired from "../assets/icons/networkWired.svg";
 import userIcon from "../assets/icons/userIcon.svg";
 import courses from "../assets/icons/courses.svg";
 
+
 const Sidebar = () => {
     const user = useSelector((state) => state.user.selectedUser);
     const isAdmin = user?.role === "admin";
@@ -40,7 +41,7 @@ const Sidebar = () => {
             }}
         >
             {/* לוגו */}
-            <Box sx={{ width: 193, height: 60, mb: 9.5,mt:6 }}>
+            <Box sx={{ width: 193, height: 60, mb: 9.5, mt: 6 }}>
                 <img
                     src={logoWhite}
                     alt="Logo"
@@ -74,6 +75,7 @@ const Sidebar = () => {
                                 fontWeight: 400,
                                 fontSize: "22px",
                                 lineHeight: "33px",
+                                letterSpacing: "0%",
                                 textAlign: "right"
                             }}
                         >
@@ -83,8 +85,8 @@ const Sidebar = () => {
                 ))}
             </Box>
 
-            {/* משתמש מחובר */}
-            <Box 
+           {/* משתמש מחובר */}
+           <Box 
                 sx={{
                     width: "100%",
                     textAlign: "center",
@@ -129,6 +131,7 @@ const Sidebar = () => {
                 </Typography>
                 </div>
             </Box>
+
         </Box>
     );
 };
