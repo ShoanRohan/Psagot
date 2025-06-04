@@ -15,6 +15,8 @@ namespace BL
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
         Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetCoursesByFilter(CourseFilterDTO filter);
+        Task<List<int>> GetExistingCourseYears();
+
 
 
     }

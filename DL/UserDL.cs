@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Entities.Contexts;
+using Entities.DTO;
 
 namespace DL
 {
@@ -96,12 +97,16 @@ namespace DL
             return user;
         }
 
-        public async Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId)
+        public async Task<IEnumerable<UserNameIdDTO>> GetUserNamesByUserTypeId(int userTypeId)
         {
             return await _context.Users
-                                 .Where(u => u.UserTypeId == userTypeId)
-                                 .Select(u => u.Name)
-                                 .ToListAsync();
+                .Where(u => u.UserTypeId == userTypeId)
+                .Select(u => new UserNameIdDTO
+                {
+                    UserId = u.UserId,
+                    Name = u.Name
+                })
+                .ToListAsync();
         }
 
     }

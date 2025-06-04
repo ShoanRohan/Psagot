@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllCourses, getCourseById, addCourse, updateCourse } from '../../utils/courseUtil';
+import { getAllCourses, getCourseById, addCourse, updateCourse, getExistingCourseYears } from '../../utils/courseUtil';
 import { filterCourses as filterCoursesApi } from '../../utils/courseUtil';
 
 
@@ -31,4 +31,14 @@ export const filterCourses = createAsyncThunk('courses/filterCourses', async (fi
     return rejectWithValue(error.response?.data || 'שגיאה בסינון הקורסים');
   }
 });
+
+  export const fetchAvailableYears = createAsyncThunk('course/fetchAvailableYears', async (_, { rejectWithValue }) => {
+    try {
+      const years = await getExistingCourseYears();
+      return years;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message || 'שגיאה בקבלת השנים הקיימות');
+    }
+  }
+);
 

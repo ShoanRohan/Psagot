@@ -12,10 +12,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchCoordinators } from '../features/user/userAction';
-import { filterCourses } from '../features/course/courseActions';
+import { filterCourses, fetchAvailableYears } from '../features/course/courseActions';
 
 const statuses = ['פעיל', 'לא פעיל'];
-const years = Array.from({ length: 2050 - 2016 + 1 }, (_, i) => 2016 + i);
 
 const defaultFilters = {
   courseId: '',
@@ -30,9 +29,12 @@ const defaultFilters = {
 const CourseSearch = () => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
+  const years = useSelector((state) => state.course.availableYears || []);
 
   useEffect(() => {
     dispatch(fetchCoordinators());
+    dispatch(fetchAvailableYears());
+
   }, [dispatch]);
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -118,10 +120,24 @@ const CourseSearch = () => {
             borderBottom: '1px solid #C6C6C6',
             '.MuiSelect-select': { fontFamily: 'Rubik' },
           }}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  maxHeight: 200, // הצג עד 5 פריטים עם פס גלילה
+                  overflowY: 'auto',
+                },
+              },
+            },
+            renderValue: (selected) => {
+              const selectedCoordinator = coordinators.find((c) => c.userId === selected);
+              return selectedCoordinator ? selectedCoordinator.name : '';
+            },
+          }}
         >
           {coordinators?.map((coordinator) => (
-            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik' }}>
-              {coordinator}
+            <MenuItem key={coordinator.userId} value={coordinator.userId} sx={{ fontFamily: 'Rubik' }}>
+              {coordinator.name}
             </MenuItem>
           ))}
         </TextField>

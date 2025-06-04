@@ -63,6 +63,10 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
+        public async Task<List<int>> GetExistingCourseYears()
+        {
+            return await _courseDL.GetExistingCourseYears();
+        }
 
 
     }

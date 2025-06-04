@@ -104,6 +104,16 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<List<int>> GetExistingCourseYears()
+        {
+            return await _context.Set<Course>()
+              .Select(c => c.Year)
+              .Distinct()
+              .OrderByDescending(y => y)
+              .ToListAsync();
+
+        }
+
 
 
     }
