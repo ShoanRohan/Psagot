@@ -2,21 +2,23 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import Meetings from '../components/Meetings';
-import Calendar from '../components/Calendar';
-import Users from '../components/Users';
-import Rooms from '../components/Rooms';
+import CalendarPage from '../pages/CalendarPage';
+import MeetingsTable from '../components/MeetingsTable';
+import RoomTable from '../components/RoomTable';
+import RoomsHeader from '../components/RoomsHeader';
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
                 <Route path='/' element={<HomePage />} />
-                <Route path='/courses' element={<span>page courses</span>} />
-                <Route path='/meetings' element={<Meetings />} />
-                <Route path='/calendar' element={<Calendar />} />
-                <Route path='/users' element={<Users />} />
-                <Route path='/rooms' element={<Rooms />} />
+                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/meetings' element={<MeetingsTable />} />
+                <Route path='/users' element={<span>page Users</span>} />
+                <Route path='/rooms' element={<RoomTable />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
+                <Route path="/roomsHeader" element={<RoomsHeader/>} />
             </Route>
         </Routes>
     );

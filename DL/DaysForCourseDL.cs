@@ -1,4 +1,5 @@
-﻿using Entities.Contexts;
+﻿using AutoMapper;
+using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,21 +19,17 @@ namespace DL
             _context = context;
         }
 
-        public async Task<bool> AddDaysForCourse(int courseId, int daysToAdd)
+        public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourse daysForCourse)
         {
             try
             {
-                var course = await _context.Set<Course>().FindAsync(courseId);
-                if (course == null)
-                    return false;
-
-                course.EndDate = course.EndDate?.AddDays(daysToAdd);
+                var addedDaysForCourse = await _context.Set<DaysForCourse>().AddAsync(daysForCourse);
                 await _context.SaveChangesAsync();
-                return true;
+                return (addedDaysForCourse.Entity, null);
             }
             catch (Exception ex)
             {
-                return false;
+                return (null, ex.Message);
             }
         }
 
@@ -68,6 +65,20 @@ namespace DL
             {
                 IEnumerable<DaysForCourse> DaysForCourse = await _context.Set<DaysForCourse>().Where(d => d.CourseId == courseId).ToListAsync();
                 return (DaysForCourse, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(DaysForCourse DaysForCourse, string ErrorMessage)> UpdateDaysForCourse(DaysForCourse daysForCourse)
+        {
+            try
+            {
+                _context.Set<DaysForCourse>().Update(daysForCourse);
+                await _context.SaveChangesAsync();
+                return (daysForCourse, null);
             }
             catch (Exception ex)
             {

@@ -23,11 +23,23 @@ public partial class Meeting
 
     public bool IsPartOfSchedule { get; set; }
 
+    public int? CourseId { get; set; }
+
+    public int? TopicId { get; set; }
+
+    public int? TeacherId { get; set; }
+
+    public DateOnly MeetingDate { get; set; }
+
+    public virtual Course? Course { get; set; }
+
     public virtual Day? Day { get; set; }
 
     public virtual Room Room { get; set; } = null!;
 
     public virtual ScheduleForTopic? ScheduleForTopic { get; set; }
 
-    public string? Notes { get; set; }
+    public virtual User? Teacher { get; set; }
+
+    public virtual Topic? Topic { get; set; }
 }
