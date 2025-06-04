@@ -1,8 +1,18 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, DialogActions, DialogContent, DialogContentText, Grid } from "@mui/material";
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Grid,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { DialogGeneric, TitleGeneric, XButton } from "../style/GenericPopupStyle";
+import {
+  DialogGeneric,
+  TitleGeneric,
+  XButton,
+} from "../styles/GenericPopupStyle";
 
 const GenericPopup = ({ open, onClose, onSave, onCancel }) => {
   return (
@@ -29,12 +39,20 @@ const GenericPopup = ({ open, onClose, onSave, onCancel }) => {
       {/* כפתורים */}
       <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
         {onCancel && (
-          <Button variant="outlined" onClick={onCancel} sx={{ borderRadius: "20px" }}>
+          <Button
+            variant="outlined"
+            onClick={onCancel}
+            sx={{ borderRadius: "20px" }}
+          >
             ביטול
           </Button>
         )}
         {onSave && (
-          <Button variant="contained" onClick={onSave} sx={{ borderRadius: "20px" }}>
+          <Button
+            variant="contained"
+            onClick={onSave}
+            sx={{ borderRadius: "20px" }}
+          >
             שמור
           </Button>
         )}
