@@ -48,7 +48,7 @@ namespace DL
         public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
         {
             try
-            {            
+            {
                 var meetings = await _context.Set<Meeting>().ToListAsync();
                 return (meetings, null);
             }

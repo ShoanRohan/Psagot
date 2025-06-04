@@ -86,7 +86,6 @@ namespace Psagot.Controllers
             return Ok(new { TotalCount = totalCount, Users = users });
         }
 
-
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {

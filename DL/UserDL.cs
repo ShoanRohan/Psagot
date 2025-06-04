@@ -1,6 +1,11 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DL
 {
@@ -93,8 +98,6 @@ namespace DL
                         .Select(u => u.User); // חזרה לאובייקט המקורי של ה-User
                 }
 
-
-
                 if (isActive.HasValue)
                 {
                     query = query.Where(u => u.IsActive == isActive);
@@ -116,8 +119,6 @@ namespace DL
                 return (null, 0, ex.Message);
             }
         }
-
-
 
         public async Task<User> UserLoginAsync(string email, string password)
         {

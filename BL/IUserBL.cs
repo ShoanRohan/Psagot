@@ -15,7 +15,6 @@ namespace BL
         Task<(UserDTO User, string ErrorMessage)> GetUserById(int id);
         Task<(IEnumerable<UserDTO> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
       string username, string phone, string role, bool? isActive, int pageNumber, int pageSize);
-
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
         Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators();
