@@ -148,7 +148,8 @@ export default function RoomsScheduleGrid() {
             שגיאה
           </Typography>
           <Typography id="modal-error-description" sx={{ mb: 2 }}>
-            המערכת לא הצליחה לטעון את הנתונים. אנא נסה מאוחר יותר.
+            המערכת לא הצליחה לטעון את הנתונים.<br/>
+             אנא נסה מאוחר יותר.
           </Typography>
           <Button variant="contained" onClick={() => setOpenError(false)} sx={{borderRadius:14}}>
             סגור
