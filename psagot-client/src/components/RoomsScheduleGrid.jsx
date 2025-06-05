@@ -7,12 +7,16 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 
 export default function RoomsScheduleGrid() {
   const calendarRef = useRef(null);
   const dispatch = useDispatch();
+  const calendarRef = useRef(null);
+  const dispatch = useDispatch();
 
+  const { displayDate, roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
   const { displayDate, roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -50,12 +54,31 @@ export default function RoomsScheduleGrid() {
     id: name?.trim(),
     title: name,
   }));
+  const allRooms = rooms.map(({ name }) => ({
+    id: name?.trim(),
+    title: name,
+  }));
 
   const visibleRooms = allRooms.slice(
     currentPage * roomsPerPage,
     (currentPage + 1) * roomsPerPage
   );
+  const visibleRooms = allRooms.slice(
+    currentPage * roomsPerPage,
+    (currentPage + 1) * roomsPerPage
+  );
 
+  const events = roomSchedule
+    .filter(event => visibleRooms.some(room => room.id === event.roomName?.trim()))
+    .map(({ courseName, topicName, startTime, endTime, lecturer, roomName, courseColor }) => ({
+      title: courseName,
+      secondTitle: topicName,
+      start: `${formattedDate}T${startTime?.trim()}`,
+      end: `${formattedDate}T${endTime?.trim()}`,
+      lecturer,
+      resourceId: roomName?.trim(),
+      color: courseColor,
+    }));
   const events = roomSchedule
     .filter(event => visibleRooms.some(room => room.id === event.roomName?.trim()))
     .map(({ courseName, topicName, startTime, endTime, lecturer, roomName, courseColor }) => ({
@@ -76,7 +99,19 @@ export default function RoomsScheduleGrid() {
     let b = Math.min(255, Math.round((color & 0xFF) + (255 - (color & 0xFF)) * factor)).toString(16).padStart(2, '0');
     return `#${r}${g}${b}`;
   };
+  const lightenColor = (hex, factor) => {
+    if (!hex) return '#ffffff';
+    let color = parseInt(hex.slice(1), 16);
+    let r = Math.min(255, Math.round(((color >> 16) & 0xFF) + (255 - ((color >> 16) & 0xFF)) * factor)).toString(16).padStart(2, '0');
+    let g = Math.min(255, Math.round(((color >> 8) & 0xFF) + (255 - ((color >> 8) & 0xFF)) * factor)).toString(16).padStart(2, '0');
+    let b = Math.min(255, Math.round((color & 0xFF) + (255 - (color & 0xFF)) * factor)).toString(16).padStart(2, '0');
+    return `#${r}${g}${b}`;
+  };
 
+  const handleEventDidMount = (info) => {
+    const eventElement = info.el;
+    const courseColor = info.event.backgroundColor;
+    const lightCourseColor = lightenColor(courseColor, 0.8);
   const handleEventDidMount = (info) => {
     const eventElement = info.el;
     const courseColor = info.event.backgroundColor;
@@ -86,7 +121,20 @@ export default function RoomsScheduleGrid() {
     eventElement.style.borderRight = `7px solid ${courseColor}`;
     eventElement.style.borderRadius = "8px";
   };
+    eventElement.style.backgroundColor = lightCourseColor;
+    eventElement.style.borderRight = `7px solid ${courseColor}`;
+    eventElement.style.borderRadius = "8px";
+  };
 
+  const renderEventContent = ({ event }) => (
+    <div style={{ fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
+      <div>{event.title}</div>
+      <div style={{ fontSize: "10px", opacity: 0.8 }}>
+        {event.extendedProps.secondTitle}<br />
+        {event.extendedProps.lecturer}
+      </div>
+    </div>
+  );
   const renderEventContent = ({ event }) => (
     <div style={{ fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
       <div>{event.title}</div>
@@ -102,6 +150,11 @@ export default function RoomsScheduleGrid() {
       setCurrentPage(prevPage => prevPage - 1);
     }
   };
+  const handlePrevRooms = () => {
+    if (currentPage > 0) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
 
   const handleNextRooms = () => {
     const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
@@ -109,7 +162,21 @@ export default function RoomsScheduleGrid() {
       setCurrentPage(prevPage => prevPage + 1);
     }
   };
+  const handleNextRooms = () => {
+    const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
+    if (currentPage < maxPage) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
 
+  useEffect(() => {
+    const calendarApi = calendarRef.current?.getApi();
+    if (calendarApi) {
+      calendarApi.setOption('resources', visibleRooms);
+      calendarApi.refetchEvents();
+      calendarApi.gotoDate(formattedDate);
+    }
+  }, [currentPage, visibleRooms, formattedDate]);
   useEffect(() => {
     const calendarApi = calendarRef.current?.getApi();
     if (calendarApi) {
