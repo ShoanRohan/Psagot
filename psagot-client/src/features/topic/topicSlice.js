@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicFotCourseByCourseId } from './topicActions';
-import { Topic } from '@mui/icons-material';
 
 const initialState = {
     topics: [],

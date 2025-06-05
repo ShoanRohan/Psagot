@@ -4,29 +4,23 @@ import Layout from '../pages/Layout';
 import Login from '../components/Login'; 
 import LoginPage from '../pages/LoginPage';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
-import HomePage from '../pages/HomePage';
-import RoomsSearch from '../components/RoomsSearch';
-
-
+import RoomsPage from '../pages/RoomsPage';
+import RoomsSchedule from '../components/RoomsScheduleGrid';
+import UserManagement from'../pages/UserManagement'
 
 const AppRouter = () => {
     return (
-        
-        <Routes>  
-           
-
-           <Route path="/" element={<RoomsSearch />} />  {/* זה יטען כברירת מחדל */}
-
-             <Route path='/home' element={<Layout/>}>
-                <Route index element={<HomePage/>}/>    
-            </Route> 
-                
-            <Route path='/' element={<LoginPage/>}> 
-                <Route path='login' element={<Login/>}/> 
+        <Routes>
+            <Route path='/' element={<Layout />}>
+                <Route path='/' element={<LoginPage />} />
+                <Route path='/courses' element={<span>page Courses</span>} />
+                <Route path='/meetings' element={<span>page Meetings</span>} />
+                <Route path='/users' element={<UserManagement />} />
+                <Route path='/rooms' element={<span><RoomsScheduleSearch/></span>} />
+                <Route path="/calendar" element={<span>calander Rooms</span>} />
             </Route>
         </Routes>
-
-
+       
     );
 };
 

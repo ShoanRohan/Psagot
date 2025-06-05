@@ -5,18 +5,17 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Psagot.Controllers
 {
-    namespace API.Controllers
-    {
-        [Route("api/[controller]")]
-        [ApiController]
-        public class RoomController : ControllerBase
-        {
-            private readonly IRoomBL _roomBL; // ← הזזתי למעלה
 
-            public RoomController(IRoomBL roomBL)
-            {
-                _roomBL = roomBL;
-            }
+    [Route("api/[controller]")]
+    [ApiController]
+    public class RoomController : ControllerBase
+    {
+        private readonly IRoomBL _roomBL;
+
+        public RoomController(IRoomBL roomBL)
+        {
+            _roomBL = roomBL;
+        }
 
             [HttpPost("search")]
             public async Task<IActionResult> SearchRooms([FromBody] RoomDTO searchParams)
@@ -46,42 +45,42 @@ namespace Psagot.Controllers
                 return Ok(result.Room);
             }
 
-            [HttpPut("UpdatrRoom")]
-            public async Task<IActionResult> UpdateRoom([FromBody] RoomDTO roomDTO)
-            {
-                var result = await _roomBL.UpdateRoom(roomDTO);
-                if (result.Room == null) return BadRequest(result.ErrorMessage);
-                return Ok(result.Room);
-            }
+        [HttpPut("UpdatrRoom")]
+        public async Task<IActionResult> UpdateRoom([FromBody] RoomDTO roomDTO)
+        {
+            var result = await _roomBL.UpdateRoom(roomDTO);
+            if (result.Room == null) return BadRequest(result.ErrorMessage);
+            return Ok(result.Room);
+        }
 
-            [HttpGet("GetAllRooms")]
-            public async Task<IActionResult> GetAllRooms()
-            {
-                var (rooms, errorMessage) = await _roomBL.GetAllRooms();
+        [HttpGet("GetAllRooms")]
+        public async Task<IActionResult> GetAllRooms()
+        {
+            var (rooms, errorMessage) = await _roomBL.GetAllRooms();
 
-                if (rooms == null)
-                    return BadRequest(errorMessage);
+            if (rooms == null)
+                return BadRequest(errorMessage);
 
-                return Ok(rooms);
-            }
+            return Ok(rooms);
+        }
 
-            [HttpGet("GetRoomById/{id}")]
-            public async Task<IActionResult> GetRoomById([FromRoute] int id)
-            {
-                var (room, errorMessage) = await _roomBL.GetRoomById(id);
+        [HttpGet("GetRoomById/{id}")]
+        public async Task<IActionResult> GetRoomById([FromRoute] int id)
+        {
+            var (room, errorMessage) = await _roomBL.GetRoomById(id);
 
-                if (room == null)
-                    return NotFound(errorMessage);
+            if (room == null)
 
-                return Ok(room);
-            }
+                return NotFound(errorMessage);
 
-            [HttpGet("GetCourseScheduleByDate")]
-            public async Task<IActionResult> GetRoomsScheduleByDate([FromQuery] DateTime date)
-            {
-                var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
-                if (schedule == null)
-                    return NotFound(errorMessage);
+            return Ok(room);
+        }
+        [HttpGet("GetRoomsScheduleByDate")]
+        public async Task<IActionResult> GetRoomScheduleByDate([FromQuery] DateTime date)
+        {
+            var (schedule, errorMessage) = await _roomBL.GetRoomsScheduleByDate(date);
+            if (schedule == null)
+                return NotFound(errorMessage);
 
                 return Ok(schedule);
             }

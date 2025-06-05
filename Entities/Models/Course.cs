@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 
 namespace Entities.Models;
-
 public partial class Course
 {
     public int CourseId { get; set; }
