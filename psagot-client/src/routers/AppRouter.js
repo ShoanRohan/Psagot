@@ -27,6 +27,7 @@ const AppRouter = () => {
             </Route>
 
         </Routes>
+       
     );
 };
 

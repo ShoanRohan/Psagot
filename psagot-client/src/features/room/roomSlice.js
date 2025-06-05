@@ -4,13 +4,16 @@ import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllR
 
 const initialState = {
     rooms: [],
+    roomsStatus:'idle',
     selectedRoom: null,
     roomSchedule: [],
     viewMode: 'rooms',
     displayDate:new Date().toLocaleDateString('en-GB'),
+    // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
+    console.log(initialState.displayDate)
 
 const roomSlice = createSlice({
     name: 'room',
@@ -33,14 +36,15 @@ const roomSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
-                state.status = 'loading';
+                state.roomsStatus = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                console.log(action.payload)
+                state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
-                state.status = 'failed';
+                state.roomsStatus = 'failed';
                 state.error = action.error.message;
             })
             .addCase(fetchRoomById.pending, (state) => {
@@ -58,6 +62,7 @@ const roomSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchRoomsScheduleByDate.fulfilled, (state, action) => {
+                // console.log('payload:', action.payload);
                 state.status = 'succeeded';
                 state.roomSchedule = action.payload;
             })
