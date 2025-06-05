@@ -9,8 +9,10 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import editSvg from '../assets/icons/editIcon.svg';
 import deleteSvg from '../assets/icons/deleteIcon.svg';
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+//import CheckIcon from "@mui/icons-material/Check";
+//import ClearIcon from "@mui/icons-material/Clear";
+import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
+import AddDayErrorDialog from './AddDayErrorDialog';
 
 const sharedStyles = {
   width: "150px",
@@ -159,6 +161,8 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     }
   }, [formData]);
 
+  const [isAddDayErrorOpen, setIsAddDayErrorOpen] = useState(false);
+
   // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
   useEffect(() => {
     // רק נבדוק אם יש ימים שלא שמורים
@@ -222,11 +226,26 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     setEditingDayIndex(null);
   };
 
-  const handleSaveDay = (index) => {
+  const handleSaveDay = async (index) => {
     const updatedDays = [...courseDays];
-    updatedDays[index].saved = true;
-    setCourseDays(updatedDays);
-    setEditingDayIndex(null);
+    const dayItem = updatedDays[index];
+  
+    try {
+      await addScheduleForTopic({
+        topicId: formData.topic, // נניח שזה מזהה הנושא
+        dayId: dayItem.day,      // כאן צריך לשים מזהה יום, לא השם בעברית
+        startTime: dayItem.startHour,
+        endTime: dayItem.endHour,
+      });
+  
+      updatedDays[index].saved = true;
+      setCourseDays(updatedDays);
+      setEditingDayIndex(null);
+    } catch (error) {
+      console.error("שגיאה בשמירת יום לנושא:", error);
+      setIsAddDayErrorOpen(true);
+
+    }
   };
 
   return (
@@ -542,6 +561,11 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
           </Button>
         </Box>
       </DialogContent>
+
+      <AddDayErrorDialog
+      open={isAddDayErrorOpen}
+      onClose={() => setIsAddDayErrorOpen(false)}
+    />
     </Dialog>
   );
 };
