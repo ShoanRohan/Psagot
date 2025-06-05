@@ -42,6 +42,7 @@ namespace Psagot.Controllers
                 return BadRequest(errorMessage);
 
             return Ok(rooms);
+           // return StatusCode(500, "שגיאה יזומה לבדיקה");
         }
 
         [HttpGet("GetRoomById/{id}")]
