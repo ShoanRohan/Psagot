@@ -13,5 +13,9 @@ namespace DL
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
+        Task<(Meeting Meeting, string ErrorMessage)> DeleteMeeting(int meetingId);
+
+
+
     }
 }

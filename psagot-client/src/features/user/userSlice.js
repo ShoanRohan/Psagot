@@ -1,5 +1,5 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
 
 const initialState = {
     user: [],
@@ -21,6 +21,7 @@ const userSlice = createSlice({
             state.status = 'loading';
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) =>{
+            console.log("Users from API:", action.payload);
             state.status ='succeeded';
             state.user =action.payload;
         })
@@ -32,7 +33,7 @@ const userSlice = createSlice({
             state.status ='loading';
 
         })
-        .addCase(fetchUserById. fulfilled, (state, action)=>{
+        .addCase(fetchUserById.fulfilled, (state, action)=>{
             state.status ='succeeded';
             state.selectedUser =action.payload;
         })
@@ -41,7 +42,7 @@ const userSlice = createSlice({
             state.error =action.error.message;
         })
         .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.puse(action.payload);
+            state.user.push(action.payload);
         })
         .addCase(updateUserAction.fulfilled, (state, action)=> {
             const index = state.user.findIndex((user)=> user.id===action.payload.id);
