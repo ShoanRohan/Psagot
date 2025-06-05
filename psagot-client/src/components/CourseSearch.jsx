@@ -180,7 +180,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
           variant="contained"
           sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
           startIcon={<SearchIcon />}
-          disabled={isSearchDisabled}
+          //disabled={isSearchDisabled}
           onClick={() => {
             onSearch();
           }}
