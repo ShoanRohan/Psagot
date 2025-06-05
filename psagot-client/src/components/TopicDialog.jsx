@@ -88,24 +88,67 @@ const addDayButtonStyle = {
 
 const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const [formData, setFormData] = useState({
-    topic: initialData?.topicId||"",
-    lecturerName: initialData?.teacherName||"",
-    startDate: initialData?.startDate||"",
-    endDate: initialData?.endDate||"",
-    numberOfMeetings: initialData?.numberOfMeetings||"",
+    topic: "",
+    lecturerName: "",
+    startDate: "",
+    endDate: "",
+    numberOfMeetings: "",
     equipment: {
-      computers: initialData?.computers||false,
-      microphone: initialData?.microphone||false,
-      projector: initialData?.projector||false,
+      computers: false,
+      microphone: false,
+      projector: false,
     },
     status: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        topic: initialData?.name || "", // שינוי ל-initialData.name
+        lecturerName: initialData?.teacherName || "",
+        // פורמט התאריך: אם initialData.startDate קיים, נמיר אותו לפורמט YYYY-MM-DD
+        startDate: initialData?.startDate ||"",
+        endDate: initialData?.endDate || "",
+        numberOfMeetings: initialData?.numberOfMeetings || "",
+        equipment: {
+          computers: initialData?.computers || false,
+          microphone: initialData?.microphone || false,
+          projector: initialData?.projector || false,
+        },
+        status: initialData?.statusId ? (initialData.statusId === 1 ? "פעיל" : initialData.statusId === 2 ? "ממתין" : initialData.statusId === 3 ? "מושהה" : initialData.statusId === 4 ? "הסתיים" : "") : "",
+      });
+    } else {
+      // אם initialData הוא null (כאשר הפופ-אפ נסגר או נפתח ללא נתונים), נאפס את הטופס
+      setFormData({
+        topic: "",
+        lecturerName: "",
+        startDate: "",
+        endDate: "",
+        numberOfMeetings: "",
+        equipment: {
+          computers: false,
+          microphone: false,
+          projector: false,
+        },
+        status: "",
+      });
+    }
+  }, [initialData]); 
 
   const [startDateType, setStartDateType] = useState("text");
   const [endDateType, setEndDateType] = useState("text");
   const [courseDays, setCourseDays] = useState([
     { day: "", startHour: "", endHour: "", saved: false },
   ]);
+
+  // useEffect(() => {
+  //   if (initialData && initialData.courseDays) {
+  //     setCourseDays(initialData.courseDays.map(day => ({ ...day, saved: true }))); // נניח שהימים מה-initialData שמורים
+  //   } else {
+  //     setCourseDays([{ day: "", startHour: "", endHour: "", saved: false }]);
+  //   }
+  // }, [initialData]);
+
 
   const [mainSaved, setMainSaved] = useState(false);
   const [editingDayIndex, setEditingDayIndex] = useState(null); 

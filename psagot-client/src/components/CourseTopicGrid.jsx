@@ -87,6 +87,7 @@ const handleDialogClose = () => {
 
 const handleDialogSubmit = (formData) => {
   console.log("נתוני עריכה:", formData);
+  
   setDialogOpen(false);
   setSelectedTopic(null);
 };
