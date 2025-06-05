@@ -7,7 +7,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import { useEffect, useRef, useState } from 'react';
-import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 
 export default function RoomsScheduleGrid() {
