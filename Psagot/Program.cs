@@ -4,6 +4,8 @@ using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
+//using Psagot.Converter;
 
 namespace Psagot
 {
@@ -35,6 +37,8 @@ namespace Psagot
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
             builder.Services.AddControllers();
+
+
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

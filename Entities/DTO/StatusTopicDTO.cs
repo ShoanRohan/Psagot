@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class DayDTO
+    public class StatusTopicDTO
     {
-        public int DayId { get; set; }
+        public int StatusTopicId { get; set; }
 
         public string Name { get; set; } = null!;
 
-        public string? Descr { get; set; }
-
-        
     }
 }

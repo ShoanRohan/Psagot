@@ -8,6 +8,7 @@ import daysForCourseReducer from '../features/daysForCourse/daysForCourseSlice';
 import topicReducer from '../features/topic/topicSlice';
 import courseReducer from '../features/course/courseSlice';
 
+
 const store = configureStore({
   reducer: {
     userType: userTypeReducer, //Slice of userType
