@@ -2,24 +2,30 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import Login from '../components/Login'; 
+import CoursesPage from '../pages/CoursesPage';
+import Login from '../components/Login';
+import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
-import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
-import RoomsPage from '../pages/RoomsPage';
-import RoomsSchedule from '../components/RoomsScheduleGrid';
-import UserManagement from'../pages/UserManagement'
+import RegisterPage from '../pages/RegisterPage';
 
 const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
-                <Route path='/' element={<LoginPage />} />
-                <Route path='/courses' element={<span>page Courses</span>} />
-                <Route path='/meetings' element={<span>page Meetings</span>} />
-                <Route path='/users' element={<UserManagement />} />
-                <Route path='/rooms' element={<span><RoomsScheduleSearch/></span>} />
-                <Route path="/calendar" element={<span>calander Rooms</span>} />
+                <Route index element={<HomePage />} />
+                <Route path='courses' element={<CoursesPage />} />
+                {/* <Route path='meetings' element={<MeetingsPage />} /> */}
             </Route>
+
+            <Route path='' element={<LoginPage />}>
+                <Route path='login' element={<Login />} />
+
+            </Route>
+            <Route path='' element={<RegisterPage />}>
+                <Route path='Register' element={<Register />} />
+
+            </Route>
+
         </Routes>
        
     );
