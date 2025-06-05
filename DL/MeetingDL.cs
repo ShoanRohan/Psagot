@@ -36,9 +36,15 @@ namespace DL
         {
             try
             {
-                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                var meeting = await _context.Meetings
+                    .Include(m => m.Course)
+                    .Include(m => m.Topic)
+                    .Include(m => m.Room)
+                    .FirstOrDefaultAsync(m => m.MeetingId == meetingId);
+
                 return (meeting, null);
             }
+
             catch (Exception ex)
             {
                 return (null, ex.Message);

@@ -2,6 +2,7 @@ using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Psagot.Controllers
@@ -50,5 +51,13 @@ namespace Psagot.Controllers
             return Ok(updatedCourse);
         }
 
+        [HttpGet("status-courses")]
+        public async Task<ActionResult<IEnumerable<StatusCourseDTO>>> GetStatusCourses()
+        {
+            var (statuses, errorMessage) = await _courseBL.GetStatusCourses();
+            if (statuses == null) return BadRequest(errorMessage);
+
+            return Ok(statuses);
+        }
     }
 }

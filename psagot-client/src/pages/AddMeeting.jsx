@@ -1,4 +1,4 @@
-
+/*
 //import { fetchAllUsers } from '../features/user/userAction';
 //import { fetchAllCourses } from '../features/course/courseActions';
 //import { fetchAllTopic } from '../features/topic/topicActions';
@@ -12,10 +12,23 @@ import {addMeetingAction} from '../features/meeting/meetingActions';
 import {useNavigate} from 'react-router-dom';
 
 
-const AddMeeting = () => {
-    const dispatch = useDispatch();
+const AddMeeting = ({ existingMeeting, onClose }) => {
 
-    //const users = useSelector(state => state.user.user || []);
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.user.currentUser || []);
+    const canEdit = [1,2,3,4].includes(currentUser?.userTypeId);
+
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [isSystemPart, setIsSystemPart] = useState(false);  // ברירת מחדל
+
+
+    useEffect(() => {
+      if (existingMeeting) {
+        setMeeting(existingMeeting);
+        setIsSystemPart(existingMeeting.isSystemPart);  // עדכון state אחרי שה-meeting מתעדכן
+        setIsEditMode(true);
+      }
+    }, [existingMeeting]);
     //const courses = useSelector(state => state.course.courses || []);
     //const topics = useSelector(state => state.topic.topics || []);
 
@@ -32,6 +45,9 @@ const AddMeeting = () => {
         roomId: '',
         year: '',
         date: '',
+        isSystemPart: false,
+        reason: '',
+        status: '',
     });
 
     /*
@@ -76,7 +92,7 @@ const AddMeeting = () => {
         sx={textFieldStyle}
     />
 </Grid>
-*/
+
         
 
     //כפתור ביטול
@@ -105,6 +121,9 @@ const AddMeeting = () => {
 
     const [validationErrors, setValidationErrors] = useState({});
 
+   
+
+    
     const handleSaveMeeting = () => {
     const requiredFields = {
         meetingId: 'מספר מפגש',
@@ -146,7 +165,10 @@ const AddMeeting = () => {
                     endTime: '',
                     roomId: '',
                     year: '',
-                    date: ''
+                    date: '',
+                    isSystemPart: false, 
+                    reason: '',
+                    status: '', 
                 });
                 
                 // Show success message
@@ -243,6 +265,8 @@ const AddMeeting = () => {
                 שמור
             </Button>
         </Box>
+
+       
       <br/> <br/> <br/> <br/> 
         <Container
       maxWidth="lg"
@@ -416,6 +440,7 @@ const AddMeeting = () => {
 };
 
 export default AddMeeting;
+
 
 
 

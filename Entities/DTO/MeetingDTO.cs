@@ -35,16 +35,11 @@ namespace Entities.DTO
 
         public DateOnly MeetingDate { get; set; }
 
-        public virtual CourseDTO? Course { get; set; }
+        public string? Reason { get; set; }
 
-        public virtual DayDTO? Day { get; set; }
+        public int Year { get; set; } 
+        public int StatusCourseId { get; set; }
 
-        public virtual RoomDTO Room { get; set; } = null!;
 
-        public virtual ScheduleForTopicDTO? ScheduleForTopic { get; set; }
-
-        public virtual UserDTO? Teacher { get; set; }
-
-        public virtual TopicDTO? Topic { get; set; }
     }
 }

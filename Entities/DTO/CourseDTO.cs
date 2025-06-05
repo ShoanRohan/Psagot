@@ -6,12 +6,12 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Entities.DTO
 {
     public class CourseDTO
     {
+
         public int CourseId { get; set; }
 
         public string Name { get; set; } = null!;
@@ -30,10 +30,10 @@ namespace Entities.DTO
 
         public string? Notes { get; set; }
 
+        public int? CoordinatorId { get; set; }
+
         public int? StatusId { get; set; }
 
-        public virtual UserDTO? Coordinator { get; set; }
-
-        public virtual StatusCourse? Status { get; set; }
+ 
     }
 }

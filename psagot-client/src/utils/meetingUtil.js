@@ -20,4 +20,6 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
+
 export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+

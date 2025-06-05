@@ -61,6 +61,15 @@ VALUES
     (N'מושהה'),
     (N'הסתיים');
 
+IF NOT EXISTS (SELECT 1 FROM StatusCourses WHERE Name = N'פעיל' or Name = N'ממתין' or Name = N'מושהה' or Name = N'הסתיים' )
+BEGIN
+    INSERT INTO StatusCourses (Name) VALUES (N'פעיל')
+	INSERT INTO StatusCourses (Name) VALUES (N'ממתין')
+	INSERT INTO StatusCourses (Name) VALUES (N'מושהה')
+	INSERT INTO StatusCourses (Name) VALUES (N'הסתיים')
+END
+
+
 -- הכנסת נתונים לטבלת StatusTopics
 INSERT INTO StatusTopics (Name) 
 VALUES 
