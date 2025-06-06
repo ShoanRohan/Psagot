@@ -1,16 +1,28 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { DataGrid, GridRowModes, GridActionsCellItem } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridRowModes,
+  GridActionsCellItem
+} from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import editIcon from "../assets/icons/editIcon.png";
+import Pagination from '@mui/material/Pagination';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
 
 const CourseGrid = ({ courses }) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
 
   useEffect(() => {
     if (courses && courses.length > 0) {
@@ -25,7 +37,7 @@ const CourseGrid = ({ courses }) => {
   }, [courses]);
 
   const handleEditClick = (id) => () => {
-    // Implement edit logic if needed
+
   };
 
   const formatDayMonthFromParts = (params) => {
@@ -54,57 +66,29 @@ const CourseGrid = ({ courses }) => {
       align: "center",
       renderCell: (params) => {
         const status = Number(params.value);
-        const cellStyle = {
-          width: '72px',
-          height: '24px',
-          padding: '4px 16px',
-          borderRadius: '50px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: "12px",
-          fontFamily: 'Rubik',
-          fontWeight: 400,
-          lineHeight: '100%',
-          letterSpacing: '0%',
-          textTransform: 'capitalize',
-          cursor: 'default',
-        };
-
         const statusMap = {
-          1: {
-            text: "פעיל",
-            style: {
-              background: '#DAF8E6',
-              color: '#1A8245',
-            }
-          },
-          2: {
-            text: "ממתין",
-            style: {
-              background: '#FEEBEB',
-              color: '#B00020',
-            }
-          },
-          3: {
-            text: "הסתיים",
-            style: {
-              background: '#E5E7EB80',
-              color: '#374151',
-            }
-          }
+          1: { text: "פעיל", style: { background: '#DAF8E6', color: '#1A8245' } },
+          2: { text: "ממתין", style: { background: '#FEEBEB', color: '#B00020' } },
+          3: { text: "הסתיים", style: { background: '#E5E7EB80', color: '#374151' } },
         };
-
         const currentStatus = statusMap[status] || {
-          text: "לא ידוע",
-          style: {
-            background: '#E5E7EB80',
-            color: '#374151',
-          }
+          text: "לא ידוע", style: { background: '#E5E7EB80', color: '#374151' }
         };
-
         return (
-          <div style={{ ...cellStyle, ...currentStatus.style }}>
+          <div style={{
+            width: '72px',
+            height: '24px',
+            padding: '4px 16px',
+            borderRadius: '50px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            fontSize: "0.65vw",
+            fontFamily: 'Rubik',
+            fontWeight: 400,
+            cursor: 'default',
+            ...currentStatus.style
+          }}>
             {currentStatus.text}
           </div>
         );
@@ -119,91 +103,112 @@ const CourseGrid = ({ courses }) => {
       align: "center",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-            />,
-          ];
-        }
-        return [
-          <GridActionsCellItem
-            icon={<img src={editIcon} alt='עריכה' />}
-            label="Edit"
-            onClick={handleEditClick(id)}
-          />
+        return isInEditMode ? [
+          <GridActionsCellItem icon={<SaveIcon />} label="Save" />,
+          <GridActionsCellItem icon={<CancelIcon />} label="Cancel" />,
+        ] : [
+          <GridActionsCellItem icon={<img src={editIcon} alt='עריכה' />} label="Edit" onClick={handleEditClick(id)} />,
         ];
       },
     },
   ];
 
+  const CustomPagination = () => {
+    const pageCount = Math.ceil(rows.length / paginationModel.pageSize);
+
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          width: "100%",
+          padding: "1% 2%",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <span style={{ fontSize: "0.75vw", fontFamily: "Rubik" }}>
+            מספר שורות :
+          </span>
+          <Select
+            size="small"
+            value={paginationModel.pageSize}
+            onChange={(e) =>
+              setPaginationModel({ page: 0, pageSize: e.target.value })
+            }
+            variant="standard"
+            disableUnderline
+            sx={{ fontSize: "0.75vw", height: "30px", border: "none" }}
+          >
+            {[10, 20, 50].map((size) => (
+              <MenuItem key={size} value={size}>
+                {size}
+              </MenuItem>
+            ))}
+          </Select>
+        </Stack>
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Pagination
+        dir="rtl"
+          count={pageCount}
+          page={paginationModel.page + 1}
+          onChange={(e, value) =>
+            setPaginationModel((prev) => ({ ...prev, page: value - 1 }))
+          }
+          shape="rounded"
+          siblingCount={0}
+          size="small"
+        />
+      </Box>
+  );
+};
+
+
   return (
     <Box
       sx={{
         direction: 'rtl',
-        height: 'calc(100vh - 240px)', // Adjusted for larger gap
-        width: 'calc(100% - 48px)', // Match CourseSearch width
+        height: "65%",
+        width: 'calc(100% - 48px)',
         display: 'flex',
         flexGrow: 1,
         position: 'absolute',
-        top: '216px', // Increased gap: 120px (top of CourseSearch) + 72px (height of CourseSearch) + 24px (larger gap)
+        top: '29.72%',
         left: '50%',
         transform: 'translateX(-50%)',
         zIndex: 1,
-        boxSizing: 'border-box', // Ensure width calculation is consistent
+        boxSizing: 'border-box',
+        boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
+        backgroundColor: "#FFFFFF",
+        borderRadius: '10px',
+        border: '1px solid #E5E7EB',
+        flexDirection: 'column',
       }}
     >
       <DataGrid
         sx={{
-          width: '100%',
-          height: '100%',
-          background: "#FFFFFF",
-          boxShadow: "0px 0px 4px 0px #D7E6FCCC",
-          borderRadius: "10px",
-          boxSizing: 'border-box', // Ensure padding is included in width
-          "& .MuiDataGrid-virtualScroller": {
-            width: '100%',
-            height: 'calc(100% - 48px)', // Adjust for header height
-            paddingTop: "16px",
-            paddingRight: "16px",
-            paddingBottom: "16px",
-            paddingLeft: "16px",
-            borderRadius: "10px",
-            background: "#FFFFFF",
-            boxShadow: "0px 0px 4px 0px #D7E6FCCC",
-            boxSizing: 'border-box',
-          },
           "& .MuiDataGrid-columnHeaders": {
-            display: "grid",
-            gridTemplateColumns: `repeat(${columns.length}, 1fr)`,
-            backgroundColor: "#F0F0F0",
-            fontWeight: "bold",
-            height: "48px",
-          },
-          "& .MuiDataGrid-columnHeadersInner": {
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            justifyContent: 'center',
-            width: "100%",
+            padding: "1% 2%",
+            height: "6%",
+            borderBottom: "2px solid var(--Neutral-20, #F0F1F3)",
+            backgroundColor: "#FFFFFF",
           },
           "& .MuiDataGrid-columnHeader": {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            flex: 1,
-            fontWeight: 'bold',
-            fontSize: '14px',
-          },
-          "& .MuiDataGrid-columnHeaderTitle": {
-            overflow: "visible",
-            whiteSpace: "normal",
-            textOverflow: "clip",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            fontFamily: "Rubik",
+            fontSize: "0.8vw",
+            fontWeight: 500,
+            color: "#2A2A2A",
           },
           "& .MuiDataGrid-columnSeparator": {
             display: "none",
@@ -215,31 +220,36 @@ const CourseGrid = ({ courses }) => {
             justifyContent: "center",
             alignItems: "center",
             textAlign: "center",
-            padding: "8px",
-            fontSize: "14px",
-          },
-          "& .MuiDataGrid-cellContent": {
-            justifyContent: 'right'
+            padding: "1.5% 1%",
+            fontSize: "0.8vw",
+            fontFamily: "Rubik",
           },
           "& .MuiDataGrid-row": {
-            width: '100%',
-            height: '48px', // Fixed row height based on Figma
-            justifyContent: 'space-between',
-            borderBottom: "1px solid #D7E6FCCC",
-            "&:nth-of-type(even)": { backgroundColor: "#FAFCFF" },
-            "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" },
-          },
-          "& .MuiDataGrid-footerContainer": {
+            display: "flex",
+            width: "100%",
+            height: "7%",
+            padding: "0.2% 0 0.2% 0.2%",
+            justifyContent: "space-between",
+            alignItems: "center",
+            borderBottom: "0.1% solid #F0F1F3",
             background: "#FFFFFF",
-            boxShadow: "0px 0px 4px 0px #D7E6FCCC",
-            borderRadius: "8px",
+            "&:nth-of-type(even)": {
+              backgroundColor: "#FAFCFF",
+            },
+            "&:nth-of-type(odd)": {
+              backgroundColor: "#FFFFFF",
+            },
           }
         }}
-        rows={courses}
+        rows={rows}
         columns={columns}
         getRowId={(row) => row.courseId}
         rowModesModel={rowModesModel}
-        hideFooter={true}
+        pagination
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        pageSizeOptions={[10, 20, 50]}
+        slots={{ pagination: CustomPagination }}
       />
     </Box>
   );
