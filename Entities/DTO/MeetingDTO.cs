@@ -34,10 +34,8 @@ namespace Entities.DTO
         public int? TeacherId { get; set; }
 
         public DateOnly MeetingDate { get; set; }
-
         public string? Reason { get; set; }
-
-        public int Year { get; set; } 
+        public int Year { get; set; }
         public int StatusCourseId { get; set; }
 
 

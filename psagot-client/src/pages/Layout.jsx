@@ -1,34 +1,41 @@
 import React from "react";
+import Header from "../components/Header";
 import Section from "../components/Section";
+import Footer from "../components/Footer";
 import { Box } from "@mui/material";
-//import { Outlet } from 'react-router-dom';
+
+import MeetingButton from "../components/MeetingButton";
+import { Outlet } from 'react-router-dom';
 
 //import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import MeetingButton from "./MeetingButton";
+
+
 
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh' }}>
+
+        <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
          
-      
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-            <MeetingButton />
-           
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             
+
+            <Header />
+            <Section />
+       
+            
+           
+<Footer />
         </Box>
     );
 }
+
 
 //<Sidebar/>
 /*
  <Header />
             <Section />
             <Footer />
-
+   <Outlet /> 
 */
 
 export default Layout;

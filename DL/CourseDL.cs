@@ -31,7 +31,6 @@ namespace DL
             }
         }
 
-
         public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetAllCourses()
         {
             try
@@ -85,5 +84,19 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+            public async Task<(IEnumerable<StatusCourse> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            try
+            {
+                var statusCourses = await _context.Set<StatusCourse>().ToListAsync();
+                return (statusCourses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
+

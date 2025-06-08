@@ -1,5 +1,7 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
+using Entities.Contexts;
+using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -79,3 +81,15 @@ namespace DL
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+

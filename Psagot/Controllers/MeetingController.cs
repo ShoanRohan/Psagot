@@ -3,6 +3,7 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace Psagot.Controllers
 {
@@ -17,6 +18,7 @@ namespace Psagot.Controllers
             _meetingBL = meetingBL;
         }
 
+
         [HttpPut("UpdateMeeting")]
         public async Task<IActionResult> UpdateMeeting([FromBody] MeetingDTO meetingDTO)
         {
@@ -26,6 +28,7 @@ namespace Psagot.Controllers
 
             return Ok(updatedMeeting);
         }
+
 
         [HttpGet("GetMeetingById/{id}")]
         public async Task<IActionResult> GetMeetingById([FromRoute] int id)
@@ -44,6 +47,7 @@ namespace Psagot.Controllers
             return Ok(meeting);
         }
 
+
         [HttpGet("GetAllMeetings")]
         public async Task<IActionResult> GetAllMeetings()
         {
@@ -52,6 +56,8 @@ namespace Psagot.Controllers
 
             return Ok(meetings);
         }
+
+
 
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
@@ -62,7 +68,8 @@ namespace Psagot.Controllers
             return Ok(addedMeeting);
         }
 
+
       
-      
+   
     }
 }

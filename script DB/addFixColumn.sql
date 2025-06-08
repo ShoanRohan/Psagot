@@ -44,6 +44,7 @@ ADD CONSTRAINT FK_Meetings_Course FOREIGN KEY (CourseId) REFERENCES Courses(Cour
     CONSTRAINT FK_Meetings_Topic FOREIGN KEY (TopicId) REFERENCES Topics(TopicId),
     CONSTRAINT FK_Meetings_Teacher FOREIGN KEY (TeacherId) REFERENCES Users(UserId);
 
+
     -- הכנסת נתונים לטבלת UserTypes
 INSERT INTO UserTypes (Name) 
 VALUES 
@@ -88,4 +89,5 @@ VALUES
 	(N'ה',N'חמישי'),
 	(N'ו',N'שישי'),
     (N'ז',N'שבת');
+
 

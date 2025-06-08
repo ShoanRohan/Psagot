@@ -6,8 +6,16 @@ DELETE FROM DaysForCourse;
 DELETE FROM Courses;
 DELETE FROM Users;
 DELETE FROM Rooms;
+DELETE FROM UserTypes;
+DELETE FROM StatusCourses;
+DELETE FROM StatusTopics;
+DELETE FROM Days;
 
 -- איפוס מפורש של ה-ID לטבלאות עם Identity
+DBCC CHECKIDENT ('Days', RESEED, 0);
+DBCC CHECKIDENT ('StatusTopics', RESEED, 0);
+DBCC CHECKIDENT ('StatusCourses', RESEED, 0);
+DBCC CHECKIDENT ('UserTypes', RESEED, 0);
 DBCC CHECKIDENT ('Users', RESEED, 0);
 DBCC CHECKIDENT ('Rooms', RESEED, 0);
 DBCC CHECKIDENT ('Courses', RESEED, 0);
@@ -15,6 +23,42 @@ DBCC CHECKIDENT ('DaysForCourse', RESEED, 0);
 DBCC CHECKIDENT ('Topics', RESEED, 0);
 DBCC CHECKIDENT ('ScheduleForTopic', RESEED, 0);
 DBCC CHECKIDENT ('Meetings', RESEED, 0);
+
+    -- הכנסת נתונים לטבלת UserTypes
+INSERT INTO UserTypes (Name) 
+VALUES 
+    (N'מנהלת'),
+    (N'מזכירה'),
+    (N'רכזת'),
+    (N'מרצה'),
+    (N'משתמש רגיל');
+
+-- הכנסת נתונים לטבלת StatusCourses
+INSERT INTO StatusCourses (Name) 
+VALUES 
+    (N'פעיל'),
+    (N'ממתין'),
+    (N'מושהה'),
+    (N'הסתיים');
+
+-- הכנסת נתונים לטבלת StatusTopics
+INSERT INTO StatusTopics (Name) 
+VALUES 
+    (N'פעיל'),
+    (N'ממתין'),
+    (N'מושהה'),
+    (N'הסתיים');
+
+-- הכנסת נתונים לטבלת Days
+INSERT INTO Days (Name,Descr) 
+VALUES 
+    (N'א',N'ראשון'),
+    (N'ב',N'שני'),
+    (N'ג',N'שלישי'),
+	(N'ד',N'רביעי'),
+	(N'ה',N'חמישי'),
+	(N'ו',N'שישי'),
+    (N'ז',N'שבת');
 
 -- הכנסת משתמשים
 INSERT INTO Users (Name, Email, Phone, Password, UserTypeId, IsActive)
