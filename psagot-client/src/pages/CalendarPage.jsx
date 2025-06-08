@@ -34,6 +34,13 @@ const CalendarPage = () => {
     }, [dispatch, currentDate, view]);
 
     const fetchEvents = async (startDate, endDate) => {
+        // const fetchedEvents = [
+        //     { id: "1", title: "קורס תכנות - JAVA", start: "2025-05-18T12:00:00", end: "2025-05-18T14:40:00", extendedProps: { location: "חדר מחשבים", color: "#ffccf3", borderColor: "#ff00b4" } },
+        //     { id: "2", title: "קורס עיצוב - מיתוג", start: "2025-05-23T11:00:00", end: "2025-05-23T12:30:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } },
+        //     { id: "3", title: "קורס יעוץ מס - חשבונאות", start: "2025-05-24T13:00:00", end: "2025-05-24T15:00:00", extendedProps: { location: "חדר חדשנות", color: "#ccffcc", borderColor: "#00b400" } },
+        //     { id: "4", title: "קורס עיצוב - מיתוג", start: "2025-05-25T11:00:00", end: "2025-05-25T12:00:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } }
+        // ];
+
         dispatch(fetchMeetingsByRange({startDate,endDate}))
     };
 
