@@ -12,6 +12,12 @@ const initialState = {
     // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
+     searchRoom:{roomName:'',mic:'false',projector:'false',computer:'false',numOfSeats:0},
+    roomsWithPagination:[],
+    pageNumber:1,
+    pageSize:10,
+    totalCount:0,
+    searchStatus:'false'
 };
     console.log(initialState.displayDate)
 
@@ -58,6 +64,7 @@ const roomSlice = createSlice({
                 state.rooms = action.payload;
                 state.totalCount = action.payload.length;
                 state.roomsWithPagination = state.rooms.slice(state.pageSize*(state.pageNumber-1),state.pageSize*state.pageNumber);
+                console.log(state.roomsWithPagination)
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.roomsStatus = 'failed';
