@@ -1,7 +1,5 @@
 ﻿using Entities.Contexts;
 using Entities.Models;
-using Entities.Contexts;
-using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -40,7 +38,9 @@ namespace DL
             {
                 var meeting = await _context.Meetings
                     .Include(m => m.Course)
+                        .ThenInclude(c => c.DaysForCourses) // טעינת ימי קורס
                     .Include(m => m.Topic)
+                        .ThenInclude(t => t.ScheduleForTopics) // טעינת לוחות זמנים של נושא
                     .Include(m => m.Room)
                     .FirstOrDefaultAsync(m => m.MeetingId == meetingId);
 
@@ -57,7 +57,14 @@ namespace DL
         {
             try
             {
-                var meetings = await _context.Set<Meeting>().ToListAsync();
+                var meetings = await _context.Meetings
+             .Include(m => m.Course)
+                 .ThenInclude(c => c.DaysForCourses)
+             .Include(m => m.Topic)
+                 .ThenInclude(t => t.ScheduleForTopics)
+             .Include(m => m.Room)
+             .ToListAsync();
+
                 return (meetings, null);
             }
             catch (Exception ex)

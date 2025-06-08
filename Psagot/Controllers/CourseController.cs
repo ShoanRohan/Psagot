@@ -61,13 +61,6 @@ namespace Psagot.Controllers
             return Ok(statuses);
         }
 
-        [HttpGet("status-courses")]
-        public async Task<ActionResult<IEnumerable<StatusCourseDTO>>> GetStatusCourses()
-        {
-            var (statuses, errorMessage) = await _courseBL.GetStatusCourses();
-            if (statuses == null) return BadRequest(errorMessage);
 
-            return Ok(statuses);
-        }
     }
 }

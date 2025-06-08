@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Grid, Box, Typography, Container, MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel, CircularProgress, Alert, Snackbar, Autocomplete } from '@mui/material';
+import { Button, TextField, Grid, Box, Typography, Container, MenuItem, Select, InputLabel, FormControl, Switch, FormControlLabel, CircularProgress, Alert, Snackbar, Autocomplete, Dialog, DialogTitle, DialogContent, DialogActions,
+  DialogContentText, IconButton } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningIcon from '@mui/icons-material/Warning';
+import InfoIcon from '@mui/icons-material/Info';
+import CloseIcon from '@mui/icons-material/Close';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { fetchAllRooms } from '../features/room/roomActions';
@@ -13,7 +19,7 @@ import { clearError } from '../features/meeting/meetingSlice';
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
 
-const MeetingForm = () => {
+const MeetingForm = ({ meeting, onSave, onCancel }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -22,7 +28,7 @@ const isEditMode=meetingId?true:false;
 const { isLoading, error: reduxError } = useSelector(state => state.meeting);
 
   const initialFormData = {
-   meetingId: 0,
+   meetingId: '',
     scheduleForTopicId: null,
     meetingNumberForTopic: 1,
     year: '',
@@ -52,8 +58,17 @@ const { isLoading, error: reduxError } = useSelector(state => state.meeting);
   const [validationErrors, setValidationErrors] = useState({});
   const [invalidReasons, setInvalidReasons] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
+  // State for Dialog
+  const [dialog, setDialog] = useState({ 
+    open: false, 
+    type: 'success', // 'success', 'error', 'warning', 'info'
+    title: '', 
+    message: '',
+    showCancel: false,
+    onConfirm: null,
+    onCancel: null
+  });
 
   useEffect(() => {
     dispatch(fetchAllRooms());
@@ -62,6 +77,30 @@ const { isLoading, error: reduxError } = useSelector(state => state.meeting);
     dispatch(fetchAllUsers());
   }, [dispatch]);
 
+
+  //שדה חלק מהמערכת אם הנושא או הקורס חד פעמיים
+  useEffect(() => {
+  const isSingleMeeting = !formData.topicId && !formData.courseId;
+  setFormData(prev => ({
+    ...prev,
+    isPartOfSchedule: isSingleMeeting
+  }));
+}, [formData.topicId, formData.courseId]);
+
+ // חישוב מס' מפגש
+  useEffect(() => {
+    if (formData.topicId && formData.meetingDate) {
+      const newMeetingNumber = calculateMeetingNumber(
+        parseInt(formData.topicId),
+        formData.meetingDate,
+        meetings
+      );
+      setFormData(prev => ({
+        ...prev,
+        meetingNumberForTopic: newMeetingNumber
+      }));
+    }
+  }, [formData.topicId, formData.meetingDate, meetings]);
 
 useEffect(() => {
     if (meetingId) {
@@ -96,6 +135,40 @@ const meetingToEdit = meetings.find(meeting => meeting.meetingId === Number(meet
         dispatch(clearError());
     }, [dispatch]);
 
+     // Function to show dialog
+  const showDialog = (type, title, message, showCancel = false, onConfirm = null, onCancelCallback = null) => {
+    setDialog({
+      open: true,
+      type,
+      title,
+      message,
+      showCancel,
+      onConfirm,
+      onCancel: onCancelCallback
+    });
+  };
+
+  // Function to close dialog
+  const closeDialog = () => {
+    setDialog(prev => ({ ...prev, open: false }));
+  };
+
+  // Get dialog icon based on type
+  const getDialogIcon = () => {
+    switch (dialog.type) {
+      case 'success':
+        return <CheckCircleIcon sx={{ color: '#4caf50', fontSize: 48, mb: 2 }} />;
+      case 'error':
+        return <ErrorIcon sx={{ color: '#f44336', fontSize: 48, mb: 2 }} />;
+      case 'warning':
+        return <WarningIcon sx={{ color: '#ff9800', fontSize: 48, mb: 2 }} />;
+      case 'info':
+        return <InfoIcon sx={{ color: '#2196f3', fontSize: 48, mb: 2 }} />;
+      default:
+        return null;
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -119,22 +192,15 @@ const meetingToEdit = meetings.find(meeting => meeting.meetingId === Number(meet
   };
 
 
-   //כפתור ביטול
-   const showCancelButton = true;
 
-  // כפתור ביטול-חזרה לעמוד הקודם  
+   // כפתור ביטול-חזרה לעמוד הקודם  
   const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    } else {
       navigate(-1);
-    
+    }
   };
-
-   const showSnackbar = (message, severity = 'success') => {
-        setSnackbar({ open: true, message, severity });
-    };
-
-    const closeSnackbar = () => {
-        setSnackbar({ ...snackbar, open: false });
-    };
 
   useEffect(() => {
     const fetchStatuses = async () => {
@@ -157,6 +223,15 @@ const validateForm = () => {
         if (!formData.topicId && !formData.courseId) {
             errors.general = 'יש לבחור נושא או קורס';
         }
+
+         if (formData.startTime && formData.endTime) {
+        const start = formData.startTime + ":00";
+        const end = formData.endTime + ":00";
+        if (start >= end) {
+            errors.endTime = 'שעת הסיום חייבת להיות אחרי שעת ההתחלה';
+        }
+      }
+
         if (!formData.topicId) errors.topicId = 'נושא הוא שדה חובה';
         if (!formData.courseId) errors.courseId = 'שם קורס הוא שדה חובה';
         if (!formData.teacherId) errors.teacherId = 'שם מרצה הוא שדה חובה';
@@ -176,11 +251,8 @@ const validateForm = () => {
             if (!formData.meetingDate) errors.meetingDate = 'תאריך הוא שדה חובה';
             if (!formData.startTime) errors.startTime = 'שעת התחלה היא שדה חובה';
             if (!formData.endTime) errors.endTime = 'שעת סיום היא שדה חובה';
-            if (!formData.year) errors.year = 'שנה היא שדה חובה';
-            if (!formData.isValid) errors.isValid = 'שיבוץ תקין הוא שדה חובה';
-            if (!formData.reason) errors.reason = 'סיבה הוא שדה חובה';
+            if (!formData.year) errors.year = 'שנה היא שדה חובה';      
             if (!formData.statusCourseId) errors.statusCourseId = 'סטטוס הוא שדה חובה';
-            if (!formData.isPartOfSchedule) errors.isPartOfSchedule = 'חלק מהמערכת הוא שדה חובה';
         }
 
         return errors;
@@ -234,40 +306,101 @@ const validateForm = () => {
     return !!(formData.topicId || formData.courseId);
   };
 
-  // Helper function for invalid "Shivutz Takkin"
+  useEffect(() => {
+  // רק אם יש לנו את כל הנתונים הנדרשים
+  if (formData.topicId || formData.courseId) {
+    const selectedTopic = topics.find(t => t.topicId === parseInt(formData.topicId));
+    const selectedCourse = courses.find(c => c.courseId === parseInt(formData.courseId));
+    const selectedRoom = rooms.find(r => r.roomId === parseInt(formData.roomId));
+    
+    // בדיקת תקינות השיבוץ
+    const validationResult = isShivutzInvalid(formData, selectedTopic, selectedCourse, selectedRoom);
+    
+    // עדכון הטופס עם התוצאות
+    setFormData(prev => ({
+      ...prev,
+      isValid: !validationResult.isInvalid,
+      reason: validationResult.isInvalid ? validationResult.reasons.join('; ') : null
+    }));
+    
+    // עדכון רשימת הסיבות עבור התצוגה
+    setInvalidReasons(validationResult.reasons);
+  }
+}, [formData.topicId, formData.courseId, formData.roomId, formData.meetingDate, formData.startTime, formData.endTime, topics, courses, rooms]);
+
+
+//פונקציה לבדיקת שיבוץ תקין
   const isShivutzInvalid = (meeting, topic, course, room) => {
-    const reasons = [];
-    const meetingDay = new Date(meeting.meetingDate).getDay(); // 0 = Sunday, 1 = Monday etc.
+  const reasons = [];
+  
+  if (!meeting.meetingDate || !meeting.startTime) {
+    return { isInvalid: false, reasons: [] }; // אם אין תאריך או שעה, לא בודקים
+  }
 
-    // Ensure topic or course exists before checking their properties
-    if (topic) {
-        if (!topic.days?.includes(meetingDay) || !topic.hours?.includes(meeting.startTime.substring(0, 5))) { // Compare "HH:mm" only
-            reasons.push("המפגש אינו בשעות או בימים של הנושא");
-        }
+  const meetingDate = new Date(meeting.meetingDate);
+  const dayId = meetingDate.getDay() + 1; // המרה ל-dayId כמו בשרת (1-7)
+  const startTime = meeting.startTime.substring(0, 5); // "HH:mm"
 
-        const roomFeatures = room?.features || [];
-        const topicFeatures = topic.requiredFeatures || [];
-        const missingFeatures = topicFeatures.filter(f => !roomFeatures.includes(f));
-        if (missingFeatures.length > 0) {
-            reasons.push("החדר אינו מתאים למאפייני הנושא: " + missingFeatures.join(", "));
-        }
-    } else if (course) { // Only check course if no topic is selected
-        if (!course.days?.includes(meetingDay) || !course.hours?.includes(meeting.startTime.substring(0, 5))) { // Compare "HH:mm" only
-            reasons.push("המפגש אינו בשעות או בימים של הקורס");
-        }
-    } else {
-        reasons.push("יש לבחור נושא או קורס כדי לבדוק את תקינות השיבוץ.");
+  // 1. בדיקת התאמה לפי נושא (אם המפגש חלק מנושא)
+  if (topic && meeting.topicId) {
+    // בדיקת התאמת יום ושעה לנושא
+    const topicSchedules = topic.scheduleForTopics || [];
+    const matchedTime = topicSchedules.some(s =>
+      s.dayId === dayId &&
+      s.startTime <= startTime &&
+      s.endTime > startTime
+    );
+
+    if (!matchedTime && topicSchedules.length > 0) {
+      reasons.push("המפגש אינו מתקיים ביום או בשעה המוגדרים לנושא");
     }
 
-    if (course && room?.capacity < course.studentsCount) {
-      reasons.push("קיבולת החדר קטנה ממספר התלמידים בקורס");
-    }
+    // בדיקת מאפייני חדר לנושא
+    if (room) {
+      const missingFeatures = [];
+      
+      if (topic.computers && !room.computers) {
+        missingFeatures.push("מחשבים");
+      }
+      if (topic.projector && !room.projector) {
+        missingFeatures.push("מקרן");
+      }
+      if (topic.microphone && !room.speakers) {
+        missingFeatures.push("מערכת הגברה");
+      }
 
-    return {
-      isInvalid: reasons.length > 0,
-      reasons: reasons
-    };
+      if (missingFeatures.length > 0) {
+        reasons.push(`החדר אינו מתאים למאפייני הנושא הנדרשים: ${missingFeatures.join(", ")}`);
+      }
+    }
+  }
+
+  // 2. בדיקת התאמה לפי קורס (אם המפגש חד פעמי וחלק מקורס)
+  if (!meeting.isPartOfSchedule && course && meeting.courseId) {
+    const courseDays = course.daysForCourses || [];
+    const matchedDay = courseDays.some(d =>
+      d.dayId === dayId &&
+      d.startTime <= startTime &&
+      d.endTime > startTime
+    );
+
+    if (!matchedDay && courseDays.length > 0) {
+      reasons.push("המפגש אינו מתקיים ביום או בשעה המוגדרים לקורס");
+    }
+  }
+
+  // 3. בדיקת קיבולת חדר מול כמות תלמידים (אם המפגש משויך לקורס)
+  if (course && room && meeting.courseId) {
+    if (course.numberOfStudents > room.capacity) {
+      reasons.push(`כמות התלמידים בקורס (${course.numberOfStudents}) גדולה מקיבולת החדר (${room.capacity})`);
+    }
+  }
+
+  return {
+    isInvalid: reasons.length > 0,
+    reasons: reasons
   };
+};
 
 const handleSaveMeeting = async () => {
   const formatTime = (timeStr) => {
@@ -282,31 +415,23 @@ const handleSaveMeeting = async () => {
     console.log("Validation Errors:", errors);
     setValidationErrors(errors);
     
+
     if (Object.keys(errors).length > 0) {
-        alert('אנא תקן את השגיאות בטופס');
+        // הכנס כאן את השינוי
+        const errorMessages = Object.values(errors).join('\n'); // יחבר את כל הודעות השגיאה לשורה אחת עם מעברי שורה
+        showDialog(
+            'error', // סוג הדיאלוג יהיה "שגיאה"
+            'שגיאות בטופס', // כותרת הדיאלוג
+            `אנא מלא את כל שדות החובה ותקן את השגיאות הבאות:\n${errorMessages}`, // הודעה מפורטת
+            false, // לא נציג כפתור ביטול בהודעת שגיאת ולידציה פשוטה
+            closeDialog
+        );
         return;
     }
 
     try {
-        // Get related objects
-        const selectedTopic = topics.find(t => t.topicId === parseInt(formData.topicId));
-        const selectedCourse = courses.find(c => c.courseId === parseInt(formData.courseId));
-        const selectedRoom = rooms.find(r => r.roomId === parseInt(formData.roomId));
-
-        // Validate "Shivutz"
-        const validationResult = isShivutzInvalid(formData, selectedTopic, selectedCourse, selectedRoom);
-        
-        if (validationResult.isInvalid) {
-            const confirmSave = window.confirm(
-                `השיבוץ אינו תקין מהסיבות הבאות:\n${validationResult.reasons.join('\n')}\n\nהאם לשמור בכל זאת?`
-            );
-            if (!confirmSave) {
-                setInvalidReasons(validationResult.reasons);
-                return;
-            }
-        }
-
-        // Check room availability
+      
+         // בדיקת זמינות חדר
         if (!isRoomAvailable(
             parseInt(formData.roomId), 
             formData.meetingDate, 
@@ -320,87 +445,42 @@ const handleSaveMeeting = async () => {
                 ...prev, 
                 roomId: 'החדר אינו פנוי בתאריך ובשעות המבוקשות' 
             }));
-            alert('החדר אינו פנוי בתאריך ובשעות המבוקשות');
+            showDialog(
+            'error', // סוג הדיאלוג
+            'שגיאת זמינות חדר', // כותרת
+            'החדר אינו פנוי בתאריך ובשעות המבוקשות', // הודעה
+            false, // showCancel
+            closeDialog // פונקציית onConfirm
+        );
             return;
-        }
+          }
+      
+      
 
-        // Calculate meeting number if needed
+        // חישוב מס' מפגש
         let meetingNumberForTopic = 1;
         if (formData.topicId && formData.courseId) {
             meetingNumberForTopic = calculateMeetingNumber(parseInt(formData.topicId), formData.meetingDate, meetings);
         }
 
-        // Calculate day ID from meeting date
-        const meetingDateObj = new Date(formData.meetingDate);
-        const dayId = meetingDateObj.getDay() + 1;
-
-
-        // Prepare DTO - נתונים נקיים לשרת
-       var meetingDTO = {
-          // meetingId: isEditMode ? Number(formData.meetingId) : null,
-          topicId: formData.topicId ? Number(formData.topicId) : null,
-          courseId: formData.courseId ? Number(formData.courseId) : null,
-          teacherId: formData.teacherId ? Number(formData.teacherId) : null,
-          roomId: Number(formData.roomId),
-         startTime: formatTime(formData.startTime),
-  endTime: formatTime(formData.endTime),
-          meetingDate: dayjs(formData.meetingDate).format("YYYY-MM-DD"),
-          meetingNumberForTopic: formData.meetingNumberForTopic || meetingNumberForTopic,
-          isValid: validationResult.reasons.length === 0,
-          year: parseInt(formData.year, 10),
-          dayId: dayId,
-          isPartOfSchedule: formData.isPartOfSchedule ?? false,
-          scheduleForTopicId: formData.scheduleForTopicId ? parseInt(formData.scheduleForTopicId, 10) : null,
-          reason: validationResult.reasons.join('\n') || formData.reason || '',
-          statusCourseId: formData.statusCourseId && Number(formData.statusCourseId) > 0 ? Number(formData.statusCourseId) : undefined
-
-        };
-          meetingDTO= isEditMode ?{...meetingDTO,meetingId:Number(formData.meetingId)}:meetingDTO;
- 
-
-        console.log("Sending meeting data:", meetingDTO);
-        console.log("DTO being sent to server:", JSON.stringify(meetingDTO, null, 2));
-
-        // Dispatch action
-        const action = isEditMode ? updateMeetingAction : addMeetingAction;
-        const resultAction = await dispatch(action(meetingDTO));
-        
-        // בדיקה מתוקנת - בהתבסס על מבנה Redux Toolkit
-        if (addMeetingAction.fulfilled.match(resultAction) || updateMeetingAction.fulfilled.match(resultAction)) {
-        console.log('Meeting saved successfully:', resultAction.payload);
-        alert(isEditMode ? 'המפגש עודכן בהצלחה!' : 'המפגש נוסף בהצלחה למערכת!');
-        
-        if (!isEditMode) {
-          // איפוס הטופס כמו בדף המקורי
-          setFormData({
-            meetingId: 0,
-    scheduleForTopicId: null,
-    meetingNumberForTopic: 1,
-    year: '',
-    roomId: '',
-    isValid: true,
-    startTime: '',
-    endTime: '',
-    meetingDate: '', 
-    dayId: null,
-    courseId: '',
-    courseName: '', 
-    topicId: '',
-    topicName: '', 
-    teacherId: '',
-    teacherName: '',
-    reason: null,
-    statusCourseId: 0,
-    isPartOfSchedule: false
-          });
-        }
-    {
-          
-          navigate(-1);
-        }
-      } else {
-        throw new Error(resultAction.payload || resultAction.error?.message || 'Unknown error');
-      }
+        if (isEditMode && !formData.isValid && formData.reason){
+         showDialog(
+            'warning',
+            'שיבוץ לא תקין',
+            `השיבוץ אינו תקין מהסיבות הבאות:\n${formData.reason}\n\nהאם לשמור בכל זאת?`,
+            true,
+            () => {
+                closeDialog();
+                proceedWithSave(meetingNumberForTopic);
+            },
+            () => {
+                closeDialog();
+            }
+        );
+        return;
+    }
+    
+          await proceedWithSave(meetingNumberForTopic);
 
     } catch (error) {
       console.error('Failed to save meeting:', error);
@@ -425,9 +505,103 @@ const handleSaveMeeting = async () => {
         errorMessage = `שגיאה: ${error.message}`;
       }
 
-      alert(errorMessage);
+      showDialog('error', 'שגיאה בשמירה', errorMessage, false, closeDialog); 
     }
   };
+
+  // Separate function to handle the actual save logic
+  //const proceedWithSave = async (validationResult, meetingNumberForTopic) => {
+    const proceedWithSave = async (meetingNumberForTopic) => {
+    const formatTime = (timeStr) => {
+      return timeStr.length === 5 ? `${timeStr}:00` : timeStr;
+    };
+
+    // Calculate day ID from meeting date
+    const meetingDateObj = new Date(formData.meetingDate);
+    const dayId = meetingDateObj.getDay() + 1;
+
+    // Prepare DTO - נתונים נקיים לשרת
+    var meetingDTO = {
+      topicId: formData.topicId ? Number(formData.topicId) : null,
+      courseId: formData.courseId ? Number(formData.courseId) : null,
+      teacherId: formData.teacherId ? Number(formData.teacherId) : null,
+      roomId: Number(formData.roomId),
+      startTime: formatTime(formData.startTime),
+      endTime: formatTime(formData.endTime),
+      meetingDate: dayjs(formData.meetingDate).format("YYYY-MM-DD"),
+      meetingNumberForTopic: formData.meetingNumberForTopic || meetingNumberForTopic,
+      //isValid: validationResult.reasons.length === 0,
+      year: parseInt(formData.year, 10),
+      dayId: dayId,
+      isPartOfSchedule: formData.isPartOfSchedule ?? false,
+      scheduleForTopicId: formData.scheduleForTopicId ? parseInt(formData.scheduleForTopicId, 10) : null,
+      //reason: validationResult.reasons.join('\n') || formData.reason || '',
+      statusCourseId: formData.statusCourseId && Number(formData.statusCourseId) > 0 ? Number(formData.statusCourseId) : undefined
+    };
+
+     // כלול את ה-reason רק אם isValid הוא false
+    if (!formData.isValid && formData.reason) {
+        meetingDTO.reason = formData.reason;
+    } else {
+        meetingDTO.reason = null; // או מחרוזת ריקה, תלוי בציפיית השרת
+    }
+
+    
+    meetingDTO = isEditMode ? {...meetingDTO, meetingId: Number(formData.meetingId)} : meetingDTO;
+
+    console.log("Sending meeting data:", meetingDTO);
+    console.log("DTO being sent to server:", JSON.stringify(meetingDTO, null, 2));
+
+    // Dispatch action
+    const action = isEditMode ? updateMeetingAction : addMeetingAction;
+    const resultAction = await dispatch(action(meetingDTO));
+    
+    // בדיקה מתוקנת - בהתבסס על מבנה Redux Toolkit
+    if (addMeetingAction.fulfilled.match(resultAction) || updateMeetingAction.fulfilled.match(resultAction)) {
+      console.log('Meeting saved successfully:', resultAction.payload);
+
+
+      
+      // Show success dialog
+      showDialog(
+        'success', 
+        'שמירה בוצעה בהצלחה', 
+        isEditMode ? 'המפגש עודכן בהצלחה!' : 'המפגש נוסף בהצלחה למערכת!',
+        false,
+        () => {
+          closeDialog();
+          if (!isEditMode) {
+            // איפוס הטופס כמו בדף המקורי
+            setFormData({
+              meetingId: '',
+              scheduleForTopicId: null,
+              meetingNumberForTopic: 1,
+              year: '',
+              roomId: '',
+              isValid: true,
+              startTime: '',
+              endTime: '',
+              meetingDate: '', 
+              dayId: null,
+              courseId: '',
+              courseName: '', 
+              topicId: '',
+              topicName: '', 
+              teacherId: '',
+              teacherName: '',
+              reason: null,
+              statusCourseId: 0,
+              isPartOfSchedule: false
+            });
+          }
+          navigate(-1);
+        }
+      );
+    } else {
+      throw new Error(resultAction.payload || resultAction.error?.message || 'Unknown error');
+    }
+  };
+
 
   // Topic options filtered by selected course
   const filteredTopics = formData.courseId
@@ -537,7 +711,7 @@ const saveButtonStyle = {
         </Box>
 
         <form>
-          <Grid container spacing={4} sx={{ flexWrap: 'wrap' }}>
+          <Grid container spacing={6} sx={{ flexWrap: 'wrap' }}>
           
             {/* שדה קורס עם Autocomplete */}
             <Grid item xs={3}>
@@ -789,21 +963,48 @@ const saveButtonStyle = {
   </Box>
 </Grid>
 
-            <Grid item xs={12} md={4}>
-              <TextField
-              disable
-                label="סיבה"
-                name="reason"
-      value={formData.reason || ''}
-      onChange={handleChange}
-      margin="none"
-      variant="outlined"
-      fullWidth
-      multiline
-      rows={4}
-      sx={textFieldStyle}
-              />
-            </Grid>
+<Grid item xs={16} md={4}>
+    <TextField
+        label="סיבה"
+        name="reason"
+        value={formData.reason || ''}
+        margin="none"
+        variant="outlined"
+        fullWidth
+        multiline
+        rows={2}
+        sx={{
+            ...textFieldStyle,
+            // עיצוב מיוחד כשהשדה לא תקין
+            ...(formData.reason && !formData.isValid && {
+                '& .MuiOutlinedInput-root': {
+                    backgroundColor: '#fff3cd',
+                    '& fieldset': {
+                        borderColor: '#ffc107',
+                    }
+                }
+            })
+        }}
+        // השדה תמיד disabled - רק השרת קובע את הסיבה
+        disabled={true}
+        // הצגת הודעת עזרה
+        helperText={
+            formData.reason 
+                ? "הסיבה מחושבת אוטומטית על פי כללי תקינות השיבוץ" 
+                : formData.isValid 
+                    ? "השיבוץ תקין" 
+                    : "לא נמצאו בעיות בשיבוץ"
+        }
+        // צבע הודעת העזרה
+        FormHelperTextProps={{
+            sx: {
+                color: formData.reason ? '#856404' : formData.isValid ? '#155724' : '#6c757d'
+            }
+        }}
+    />
+</Grid>
+
+
 
             <Grid  item xs={12} md={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <FormControlLabel
@@ -826,6 +1027,61 @@ const saveButtonStyle = {
 </Grid>
 </form>
 </Container>
+ <Dialog
+        open={dialog.open}
+        onClose={dialog.showCancel ? closeDialog : dialog.onConfirm}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        dir="rtl" // Set direction for RTL
+      >
+        <DialogTitle id="alert-dialog-title" sx={{ textAlign: 'center', pt: 4, pb: 0 }}>
+          {getDialogIcon()}
+          <Typography variant="h5" component="div" sx={{ mb: 1 }}>
+            {dialog.title}
+          </Typography>
+          <IconButton
+            aria-label="close"
+            onClick={dialog.showCancel ? closeDialog : dialog.onConfirm}
+            sx={{
+              position: 'absolute',
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ textAlign: 'center' }}>
+          <DialogContentText id="alert-dialog-description" sx={{ whiteSpace: 'pre-line' }}>
+            {dialog.message}
+          </DialogContentText>
+          {invalidReasons.length > 0 && (
+            <Box sx={{ mt: 2, p: 2, border: '1px solid #ff9800', borderRadius: '4px', backgroundColor: '#fff3e0' }}>
+              <Typography variant="subtitle1" color="text.secondary">
+                סיבות לאי-תקינות:
+              </Typography>
+              <ul style={{ listStyleType: 'none', padding: 0, margin: 0, textAlign: 'right' }}>
+                {invalidReasons.map((reason, index) => (
+                  <li key={index} style={{ marginBottom: '4px' }}>
+                    - {reason}
+                  </li>
+                ))}
+              </ul>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: dialog.showCancel ? 'space-between' : 'center', px: 3, pb: 3 }}>
+          {dialog.showCancel && (
+            <Button onClick={dialog.onCancel} variant="outlined" color="primary">
+              ביטול
+            </Button>
+          )}
+          <Button onClick={dialog.onConfirm} variant="contained" color="primary" autoFocus>
+            אישור
+          </Button>
+        </DialogActions>
+      </Dialog>
 </>
 
   )};
