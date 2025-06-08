@@ -6,15 +6,14 @@ import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setDisplayDate } from '../features/room/roomSlice';
-import { fetchRoomScheduleByDate, fetchRoomsScheduleByDate } from '../features/room/roomActions';
+import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
 import dayjs from 'dayjs';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useEffect, useState } from 'react';
 import 'dayjs/locale/he';
-
-import RoomScheduleGrid from "../components/RoomsScheduleGrid";
+import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 
 const RoomsScheduleSearch = () => {
   const dispatch = useDispatch();
