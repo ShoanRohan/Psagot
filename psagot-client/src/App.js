@@ -5,14 +5,15 @@ import MeetingLocatorBar from './components/MeetingLocatorBar';
 import From from './components/From'; // if you have a From.js component
 import Mifgash from './components/Mifgash';
 import UserProfile from './components/UserProfile';  // נתיב נכון לפי מיקום הקובץ שלך
-import UsersTable from './components/UsersTabel';
+import UserTabel from './components/UserTabel';
+
 
 
 function App() {
   return (
     <div className="App">
       <h1>ברוך הבא</h1>
-      <UsersTable></UsersTable>
+      <UserTabel></UserTabel>
     
     </div>
      
