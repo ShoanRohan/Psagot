@@ -236,6 +236,8 @@ const dayInWeekHeaderStyle = {
   width: "65px", // רוחב קבוע לכל כותרת יום
 };
 
+
+
 const dayCellStyle = {//כל הקוביה שמכילה ריבוע תאריכים וריבוע מפגשים
   display: "flex !important",
   flexDirection: "row !important",
@@ -268,39 +270,6 @@ const gregorianDateStyle = {
 };
 
 
-
-
-
-
-// //עיצוב האירוע
-// const StyledEventBox = styled(Box, {
-//   shouldForwardProp: (prop) => prop !== "isMonthView",
-// })(({ color, borderColor, isMonthView }) => ({
-//   backgroundColor: color || "#808080",
-//   fontFamily: "Rubik",
-//   color: "black",
-//   padding: "3px",
-//   borderRadius: "5px",
-//   borderRight: `3px solid ${borderColor || "blue"}`,
-//   textAlign: "center",
-//   width: "100%",
-//   height: "100%",
-//   display: "flex",
-//   flexDirection: "column",
-//   alignItems: "center",
-//   justifyContent: "center",
-//   overflow: "hidden",
-//   whiteSpace: "normal",
-//   wordBreak: "keep-all",
-//   textOverflow: "ellipsis",
-//   fontSize: isMonthView ? "6px" : "inherit",
-//   ...(isMonthView && {
-//     maxHeight: "19.17px",
-//     minHeight: "19.17px",
-//     lineHeight: "19.17px",
-//     whiteSpace: "nowrap",
-//   }),
-// }));
 
 function darkenColor(hexColor, percent) {
   if (!hexColor) return "#666"; // ברירת מחדל
@@ -340,8 +309,8 @@ function lightenColor(hexColor, percent) {
 const StyledEventBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isMonthView" && prop !== "color",
 })(({ color = "#808080", isMonthView, isPast=false }) => {
-  const borderColor =isPast? lightenColor(color,0.2): darkenColor(color, 0.2);
-  const backgroundColor=isPast? lightenColor(color,0.8) : color;
+  const borderColor =isPast? lightenColor(color,0.7): darkenColor(color, 0.1);
+  const backgroundColor=isPast? lightenColor(color,0.9) : lightenColor(color,0.65);
   return {
     backgroundColor: backgroundColor,
     fontFamily: "Rubik",
@@ -371,6 +340,6 @@ const StyledEventBox = styled(Box, {
 });
 
 
-export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox };
+export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle , StyledEventBox };
 
 

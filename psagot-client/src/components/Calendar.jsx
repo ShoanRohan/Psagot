@@ -64,6 +64,7 @@ const handleEventContent = (eventInfo) => {
   const isDayView = viewType === "timeGridDay";
   const fontSize = isMonthView ? "6px" : isWeekView ? "12px" : "16px";
 
+  console.log(eventInfo);
   return (
     <StyledEventBox
       color={eventInfo.event.extendedProps.color}

@@ -57,7 +57,6 @@ const CalendarPage = () => {
 
 
 
-    // console.log(meetingsByRange)
     return (
 
         <Box >
