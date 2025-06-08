@@ -13,8 +13,8 @@ const HeaderContainer = styled(Box)({
   flexWrap: "nowrap",
   overflow: "hidden",
   minWidth: 0,
-  paddingLeft:"60px",
-  paddingRight:"60px",
+  paddingLeft: "60px",
+  paddingRight: "60px",
 });
 
 const Title = styled(Typography)({
@@ -50,7 +50,7 @@ const ExportButton = styled(IconButton)({
 const PdfLogo = styled("img")({
   width: "24px",
   height: "24px",
-  marginTop:"0px",
+  marginTop: "0px",
 });
 
 
@@ -79,4 +79,4 @@ const ViewButton = styled(Button, {
 }));
 
 
-export { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton , PdfLogo }
+export { HeaderContainer, Title, ButtonsWrapper, ExportButton, ViewButtonsContainer, ViewButton, PdfLogo }

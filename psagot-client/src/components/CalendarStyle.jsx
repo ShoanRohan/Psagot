@@ -200,22 +200,17 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     border: "1px solid #F0F1F3",
   },
 
-  //אירוע
-  // "& .fc-v-event": {
-  //   minWidth: "71.25px",
-  //   minHeight: "10.17px",
-  //   backgroundColor: "transparent !important",
-  //   border: "none !important",
-  // },
-
+  //אירוע בתצוגות שבוע וחודש
   "& .fc-v-event": {
     minWidth: "71.25px",
     minHeight: "10.17px",
-  // backgroundColor: "transparent !important", /* אם אתה רוצה רק שקיפות לרקע */
-  // border: "2px solid var(--border-color)", /* תוכל להשתמש ב-CSS משתנה */
-},
+    backgroundColor: "transparent !important", //למנוע רקע חיצוני לאירוע
+    border: "transparent !important",////למנוע גבול חיצוני לאירוע
 
-  //מוריד גבול ימני בתצוגות שבוע ויום
+  },
+
+
+  //מוריד גבול ללוח(לא כולל ימות השבוע) בתצוגות שבוע ויום
   "& .fc-theme-standard td": {
     border: "none ",
   },
@@ -272,7 +267,7 @@ const gregorianDateStyle = {
 
 
 function darkenColor(hexColor, percent) {
-  if (!hexColor) return "#666"; // ברירת מחדל
+  if (!hexColor) return "#666"; // אפור כהה
   const num = parseInt(hexColor.replace("#", ""), 16);
 
   let r = (num >> 16) & 0xff;
@@ -287,7 +282,7 @@ function darkenColor(hexColor, percent) {
 }
 
 function lightenColor(hexColor, percent) {
-  if (!hexColor) return "#bbb"; // ברירת מחדל
+  if (!hexColor) return "#bbb"; // אפור בהיר
 
   const num = parseInt(hexColor.replace("#", ""), 16);
 
@@ -308,9 +303,9 @@ function lightenColor(hexColor, percent) {
 // עיצוב הרכיב
 const StyledEventBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "isMonthView" && prop !== "color",
-})(({ color = "#808080", isMonthView, isPast=false }) => {
-  const borderColor =isPast? lightenColor(color,0.7): darkenColor(color, 0.1);
-  const backgroundColor=isPast? lightenColor(color,0.9) : lightenColor(color,0.65);
+})(({ color = "#808080", isMonthView, isPast = false }) => {
+  const borderColor = isPast ? lightenColor(color, 0.7) : darkenColor(color, 0.1);
+  const backgroundColor = isPast ? lightenColor(color, 0.9) : lightenColor(color, 0.65);
   return {
     backgroundColor: backgroundColor,
     fontFamily: "Rubik",
@@ -340,6 +335,6 @@ const StyledEventBox = styled(Box, {
 });
 
 
-export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle , StyledEventBox };
+export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox };
 
 
