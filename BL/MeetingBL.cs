@@ -65,7 +65,7 @@ namespace BL
             {
                 var (meetings, errorMessage) = await _meetingDL.GetMeetingsByRange(startDate, endDate);
                 if (meetings == null || !meetings.Any())
-                    return (null, errorMessage ?? "No meetings found");
+                    return (null, null);
                 var events = _mapper.Map<IEnumerable<EventDTO>>(meetings);
                 return (events, null);
             }

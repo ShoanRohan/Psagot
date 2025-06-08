@@ -69,9 +69,9 @@ namespace Psagot.Controllers
                 return BadRequest("Start date cannot be after end date.");
             var (events, errorMessage) = await _meetingBL.GetMeetingsByRange(startDate, endDate);
             if (!string.IsNullOrEmpty(errorMessage))
-                return BadRequest(errorMessage); 
+                return BadRequest(errorMessage);
             if (events == null || !events.Any())
-                return NotFound("No meetings found in the specified date range.");
+                return NoContent();
             return Ok(events);
         }
 

@@ -6,15 +6,16 @@ import CalendarHeader from "../components/CalendarHeader";
 import Calendar from "../components/Calendar";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchMeetingsByRange} from "../features/meeting/meetingActions"
+import { fetchMeetingsByRange } from "../features/meeting/meetingActions"
+
 
 // הצגת לוח השנה, כותרות ושליפת האירועים
 const CalendarPage = () => {
     const [currentDate, setCurrentDate] = useState(dayjs());
     const [view, setView] = useState("dayGridMonth");
-    const {meetingsByRange}=useSelector(state=>(state.meeting));
+    const { meetingsByRange } = useSelector(state => (state.meeting));
     const navigate = useNavigate();
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         let startDate = dayjs(currentDate);
@@ -29,7 +30,7 @@ const CalendarPage = () => {
             startDate = startDate.startOf("month");
             endDate = startDate.endOf("month");
         }
-        
+
         fetchEvents(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
     }, [dispatch, currentDate, view]);
 
@@ -41,17 +42,32 @@ const CalendarPage = () => {
         //     { id: "4", title: "קורס עיצוב - מיתוג", start: "2025-05-25T11:00:00", end: "2025-05-25T12:00:00", extendedProps: { location: "חדר חדשנות", color: "#FFE2E2", borderColor: "#FF7676" } }
         // ];
 
-        dispatch(fetchMeetingsByRange({startDate,endDate}))
+        dispatch(fetchMeetingsByRange({ startDate, endDate }))
     };
 
-    console.log(meetingsByRange)
+    const eventsWithBackground = Array.isArray(meetingsByRange)
+    ? meetingsByRange.map(event => {
+        const backgroundColor = event.extendedProps?.color || "#808080"; // אפור ברירת מחדל
+        return {
+            ...event,
+            color: backgroundColor,
+        };
+    })
+    : [];
+
+
+
+    // console.log(meetingsByRange)
     return (
 
         <Box >
             <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} view={view} setView={setView} />
             <Box sx={{ overflow: 'auto' }}>
-                <Calendar currentDate={currentDate} view={view} events={meetingsByRange} />
-            </Box>
+                <Calendar
+                    currentDate={currentDate}
+                    view={view}
+                    events={Array.isArray(eventsWithBackground) ? eventsWithBackground : []}
+                />            </Box>
         </Box>
     );
 };

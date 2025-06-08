@@ -85,7 +85,7 @@ namespace DL
                     .ToListAsync();
 
                 if (meetings == null || !meetings.Any())
-                    return (null, "No meetings found");
+                    return (null, null);
 
                 return (meetings, null);
             }

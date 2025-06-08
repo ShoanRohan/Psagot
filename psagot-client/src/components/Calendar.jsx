@@ -67,9 +67,10 @@ const handleEventContent = (eventInfo) => {
   return (
     <StyledEventBox
       color={eventInfo.event.extendedProps.color}
-      borderColor={eventInfo.event.extendedProps.borderColor}
       isMonthView={isMonthView}
+      isPast={new Date(eventInfo.event.end) < new Date()}
     >
+
       <Typography sx={{ fontWeight: "bold", fontSize }}>
         {eventInfo.event.title}
       </Typography>
