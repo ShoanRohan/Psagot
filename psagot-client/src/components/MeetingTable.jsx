@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from './CustomTable';
 import {
   fetchAllMeetings,
-  updateMeetingAction,
   deleteMeetingAction
 } from '../features/meeting/meetingActions';
 import {
@@ -13,7 +12,6 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  TextField,
   IconButton,
   Tooltip,
   CircularProgress,
@@ -24,24 +22,16 @@ import {
   Alert
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const MeetingTable = ({ onEdit }) => {
+const MeetingTable = React.memo(({ onEdit }) => {
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
 
   const [refreshKey, setRefreshKey] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-
-  const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
-  const [selectedMeeting, setSelectedMeeting] = useState(null);
-  const [editedDescription, setEditedDescription] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
@@ -57,21 +47,21 @@ const MeetingTable = ({ onEdit }) => {
     setRefreshKey(prev => prev + 1);
   }, []);
 
-  const handleManualRefresh = () => {
+  const handleManualRefresh = useCallback(() => {
     dispatch(fetchAllMeetings());
-  };
+  }, [dispatch]);
 
-  const showSnackbar = (message, severity = 'success') => {
+  const showSnackbar = useCallback((message, severity = 'success') => {
     setSnackbar({
       open: true,
       message,
       severity
     });
-  };
+  }, []);
 
-  const handleCloseSnackbar = () => {
+  const handleCloseSnackbar = useCallback(() => {
     setSnackbar(prev => ({ ...prev, open: false }));
-  };
+  }, []);
 
   useEffect(() => {
     if (status === 'idle') {
@@ -81,82 +71,19 @@ const MeetingTable = ({ onEdit }) => {
     }
   }, [status, dispatch]);
 
-  const handleEditDescription = (row) => {
-    setSelectedMeeting(row);
-    setEditedDescription(row.description || '');
-    setIsEditing(false);
-    setOpenDescriptionDialog(true);
-  };
-
-  const handleCloseDescriptionDialog = () => {
-    if (!isSaving) {
-      setOpenDescriptionDialog(false);
-      setSelectedMeeting(null);
-      setEditedDescription('');
-      setIsEditing(false);
-    }
-  };
-
-  const handleStartEditing = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveDescription = async () => {
-    if (selectedMeeting) {
-      setIsSaving(true);
-
-      const updatedMeeting = {
-        meetingId: selectedMeeting.meetingId,
-        scheduleForTopicId: selectedMeeting.scheduleForTopicId,
-        meetingNumberForTopic: selectedMeeting.meetingNumberForTopic,
-        dayId: selectedMeeting.dayId,
-        startTime: selectedMeeting.startTime,
-        endTime: selectedMeeting.endTime,
-        date: selectedMeeting.date,
-        roomId: selectedMeeting.roomId,
-        description: editedDescription,
-        isPartOfSchedule: selectedMeeting.isPartOfSchedule,
-        isValid: selectedMeeting.isValid,
-        courseName: selectedMeeting.courseName,
-        topicName: selectedMeeting.topicName,
-        lecturerName: selectedMeeting.lecturerName
-      };
-
-      try {
-        await dispatch(updateMeetingAction(updatedMeeting)).unwrap();
-
-        setSelectedMeeting(prev => ({
-          ...prev,
-          description: editedDescription
-        }));
-
-        setIsSaving(false);
-        setIsEditing(false);
-
-        setTimeout(() => {
-          dispatch(fetchAllMeetings());
-        }, 100);
-      } catch (error) {
-        setIsSaving(false);
-        const errorMessage = error?.message || error?.data?.message || 'שגיאה לא ידועה';
-        alert(`שגיאה בשמירת התיאור: ${errorMessage}`);
-      }
-    }
-  };
-
-  const handleDelete = (meeting) => {
+  const handleDelete = useCallback((meeting) => {
     setMeetingToDelete(meeting);
     setOpenDeleteDialog(true);
-  };
+  }, []);
 
-  const handleCloseDeleteDialog = () => {
+  const handleCloseDeleteDialog = useCallback(() => {
     if (!isDeleting) {
       setOpenDeleteDialog(false);
       setMeetingToDelete(null);
     }
-  };
+  }, [isDeleting]);
 
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = useCallback(async () => {
     if (meetingToDelete) {
       setIsDeleting(true);
 
@@ -171,9 +98,10 @@ const MeetingTable = ({ onEdit }) => {
         showSnackbar('מחיקת מפגש נכשלה', 'error');
       }
     }
-  };
+  }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
-  const columns = [
+  // Memoized static data
+  const columns = useMemo(() => [
     'שם קורס',
     'נושא',
     'מספר מפגש',
@@ -185,12 +113,11 @@ const MeetingTable = ({ onEdit }) => {
     'חדר',
     'האם השיבוץ תקין?',
     'חלק מהמערכת?',
-    'תיאור',
     'עריכה',
     'מחיקה'
-  ];
+  ], []);
 
-  const keyMap = {
+  const keyMap = useMemo(() => ({
     'שם קורס': 'courseName',
     'נושא': 'topicName',
     'מספר מפגש': 'meetingNumberForTopic',
@@ -202,84 +129,71 @@ const MeetingTable = ({ onEdit }) => {
     'חדר': 'roomId',
     'מזהה מפגש': 'meetingId',
     'מזהה נושא': 'scheduleForTopicId'
-  };
+  }), []);
 
-  const columnConfig = {
-    'חלק מהמערכת?': {
-      render: (row) => (
-        <Chip
-          label={row.isPartOfSchedule ? 'כן' : 'לא'}
-          color={row.isPartOfSchedule ? 'success' : 'default'}
-          variant="outlined"
-        />
-      )
-    },
-    'האם השיבוץ תקין?': {
-      render: (row) => (
-        <Chip
-          label={row.isValid ? 'תקין' : 'שגוי'}
-          color={row.isValid ? 'success' : 'error'}
-          variant="outlined"
-        />
-      )
-    },
-    'תיאור': {
-      render: (row) => (
-        <Tooltip title={row.description || 'אין תיאור'}>
-          <Typography
-            variant="body2"
-            sx={{
-              maxWidth: 150,
-              whiteSpace: 'nowrap',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              cursor: 'pointer',
-              color: row.description ? 'primary.main' : 'text.disabled'
-            }}
-            onClick={() => handleEditDescription(row)}
-          >
-            {row.description || 'אין תיאור'}
-          </Typography>
-        </Tooltip>
-      )
-    },
-    'עריכה': {
-      render: (row) => (
-        <Tooltip title="ערוך מפגש">
-          <IconButton onClick={() => onEdit && onEdit(row)} size="small" color="primary">
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      )
-    },
-    'מחיקה': {
-      render: (row) => (
-        <Tooltip title="מחק מפגש">
-          <IconButton onClick={() => handleDelete(row)} size="small" color="error">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      )
-    }
-  };
+  // Memoized column renderers
+  const renderScheduleChip = useCallback((row) => (
+    <Chip
+      label={row.isPartOfSchedule ? 'כן' : 'לא'}
+      color={row.isPartOfSchedule ? 'success' : 'default'}
+      variant="outlined"
+    />
+  ), []);
+
+  const renderValidChip = useCallback((row) => (
+    <Chip
+      label={row.isValid ? 'תקין' : 'שגוי'}
+      color={row.isValid ? 'success' : 'error'}
+      variant="outlined"
+    />
+  ), []);
+
+  const renderEditButton = useCallback((row) => (
+    <Tooltip title="ערוך מפגש">
+      <IconButton onClick={() => onEdit && onEdit(row)} size="small" color="primary">
+        <EditIcon />
+      </IconButton>
+    </Tooltip>
+  ), [onEdit]);
+
+  const renderDeleteButton = useCallback((row) => (
+    <Tooltip title="מחק מפגש">
+      <IconButton onClick={() => handleDelete(row)} size="small" color="error">
+        <DeleteIcon />
+      </IconButton>
+    </Tooltip>
+  ), [handleDelete]);
+
+  const columnConfig = useMemo(() => ({
+    'חלק מהמערכת?': { render: renderScheduleChip },
+    'האם השיבוץ תקין?': { render: renderValidChip },
+    'עריכה': { render: renderEditButton },
+    'מחיקה': { render: renderDeleteButton }
+  }), [renderScheduleChip, renderValidChip, renderEditButton, renderDeleteButton]);
+
+  // Memoized loading component
+  const loadingComponent = useMemo(() => (
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
+      <CircularProgress size={60} />
+      <Typography variant="h6" color="text.secondary">טוען מפגשים...</Typography>
+    </Box>
+  ), []);
+
+  // Memoized error component
+  const errorComponent = useMemo(() => (
+    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
+      <Typography variant="h6" color="error" textAlign="center">שגיאה בטעינת המפגשים</Typography>
+      <Typography variant="body2" color="text.secondary" textAlign="center">{error}</Typography>
+      <Button variant="contained" onClick={handleManualRefresh} startIcon={<RefreshIcon />} size="large">נסה שוב</Button>
+    </Box>
+  ), [error, handleManualRefresh]);
 
   if (isInitialLoading) {
-    return (
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-        <CircularProgress size={60} />
-        <Typography variant="h6" color="text.secondary">טוען מפגשים...</Typography>
-      </Box>
-    );
+    return loadingComponent;
   }
 
   if (status === 'failed') {
-    return (
-      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-        <Typography variant="h6" color="error" textAlign="center">שגיאה בטעינת המפגשים</Typography>
-        <Typography variant="body2" color="text.secondary" textAlign="center">{error}</Typography>
-        <Button variant="contained" onClick={handleManualRefresh} startIcon={<RefreshIcon />} size="large">נסה שוב</Button>
-      </Box>
-    );
+    return errorComponent;
   }
 
   return (
@@ -292,50 +206,6 @@ const MeetingTable = ({ onEdit }) => {
       </Box>
 
       <CustomTable columns={columns} data={meetings} keyMap={keyMap} columnConfig={columnConfig} />
-
-      {/* דיאלוג תיאור */}
-      <Dialog open={openDescriptionDialog} onClose={handleCloseDescriptionDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>תיאור מפגש</DialogTitle>
-        <DialogContent dividers>
-          {isEditing ? (
-            <TextField
-              label="תיאור"
-              multiline
-              minRows={4}
-              fullWidth
-              value={editedDescription}
-              onChange={(e) => setEditedDescription(e.target.value)}
-              disabled={isSaving}
-              autoFocus
-            />
-          ) : (
-            <Typography sx={{ whiteSpace: 'pre-wrap' }} variant="body1">
-              {selectedMeeting?.description || 'אין תיאור'}
-            </Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          {!isEditing ? (
-            <>
-              <Button onClick={handleCloseDescriptionDialog} color="inherit" startIcon={<CloseIcon />}>סגור</Button>
-              <Button onClick={handleStartEditing} variant="contained" color="primary" startIcon={<EditIcon />}>ערוך</Button>
-            </>
-          ) : (
-            <>
-              <Button onClick={handleCloseDescriptionDialog} color="inherit" disabled={isSaving} startIcon={<CloseIcon />}>ביטול</Button>
-              <Button
-                onClick={handleSaveDescription}
-                variant="contained"
-                color="primary"
-                disabled={isSaving}
-                startIcon={isSaving ? <CircularProgress size={20} /> : <SaveIcon />}
-              >
-                שמור
-              </Button>
-            </>
-          )}
-        </DialogActions>
-      </Dialog>
 
       {/* דיאלוג מחיקה */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
@@ -372,6 +242,8 @@ const MeetingTable = ({ onEdit }) => {
       </Snackbar>
     </Paper>
   );
-};
+});
+
+MeetingTable.displayName = 'MeetingTable';
 
 export default MeetingTable;

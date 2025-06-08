@@ -2,14 +2,12 @@ import React from 'react';
 import { Table, TableHead, TableRow, TableCell, TableBody, IconButton, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DescriptionIcon from '@mui/icons-material/Description';
 
 const CustomTable = ({ 
   columns, 
   data, 
   onEdit, 
   onDelete, 
-  onEditDescription, // פרופ חדש לעריכת תיאור
   columnConfig = {}, 
   keyMap = {} 
 }) => {
@@ -31,7 +29,6 @@ const CustomTable = ({
   // מציאת האינדקסים של העמודות הקבועות
   const deleteColumnIndex = columns.findIndex(col => col === 'מחיקה');
   const editColumnIndex = columns.findIndex(col => col === 'עריכה');
-  const descriptionColumnIndex = columns.findIndex(col => col === 'תיאור');
   const inSystemColumnIndex = columns.findIndex(col => col === 'חלק מהמערכת?');
   const validScheduleColumnIndex = columns.findIndex(col => col === 'האם השיבוץ תקין?');
   
@@ -84,20 +81,6 @@ const CustomTable = ({
                       onClick={() => onEdit ? onEdit(row) : console.log('Edit', row)}
                     >
                       <EditIcon />
-                    </IconButton>
-                  </TableCell>
-                );
-              }
-              
-              // עמודת תיאור - עם כפתור עריכה נפרד
-              if (colIndex === descriptionColumnIndex) {
-                return (
-                  <TableCell key={cellKey} align="center">
-                    <IconButton
-                      color="secondary"
-                      onClick={() => onEditDescription ? onEditDescription(row) : console.log("Edit description", row)}
-                    >
-                      <DescriptionIcon />
                     </IconButton>
                   </TableCell>
                 );
