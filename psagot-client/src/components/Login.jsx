@@ -10,6 +10,8 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import '@fontsource/rubik';
+import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 
 // הגדרת נושא עם תמיכה ב-RTL ועברית
@@ -48,7 +50,8 @@ export default function CredentialsSignInPage() {
   const [formError, setFormError] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-
+	const theme = useTheme();
+	
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!value) return 'שדה חובה';

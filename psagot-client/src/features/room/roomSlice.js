@@ -4,25 +4,34 @@ import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllR
 
 const initialState = {
     rooms: [],
+    roomsStatus:'idle',
     selectedRoom: null,
+    roomSchedule: [],
+    viewMode: 'rooms',
+    displayDate:new Date().toLocaleDateString('en-GB'),
+    // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
 };
+    console.log(initialState.displayDate)
 
 const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
         setRoom: (state, action) => {
-            // פעולה לא בשימוש כרגע
+            
+        },
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
+        },
+        setRoomSchedule: (state, action) => {
+            state.roomSchedule = action.payload; 
         },
         setViewMode: (state, action) => {
             state.viewMode = action.payload;
         },
         
-        setRoomSchedule: (state, action) => {
-            state.roomSchedule = action.payload; 
-        },
         setPageNumber: (state, action) => {
             state.pageNumber = action.payload;
             const start = (state.pageNumber - 1) * state.pageSize;
@@ -41,16 +50,17 @@ const roomSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
-                state.status = 'loading';
+                state.roomsStatus = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
-                state.status = 'succeeded';
+                console.log(action.payload)
+                state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
                 state.totalCount = action.payload.length;
                 state.roomsWithPagination = state.rooms.slice(state.pageSize*(state.pageNumber-1),state.pageSize*state.pageNumber);
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
-                state.status = 'failed';
+                state.roomsStatus = 'failed';
                 state.error = action.error.message;
             })
             .addCase(fetchRoomById.pending, (state) => {
@@ -68,6 +78,7 @@ const roomSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchRoomsScheduleByDate.fulfilled, (state, action) => {
+                // console.log('payload:', action.payload);
                 state.status = 'succeeded';
                 state.roomSchedule = action.payload;
             })
@@ -100,6 +111,6 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom, setRoomSchedule, setPageNumber, setPageSize ,setViewMode } = roomSlice.actions;
+export const { setRoom, setRoomSchedule, setPageNumber, setPageSize, setViewMode, setDisplayDate } = roomSlice.actions;
 export default roomSlice.reducer;
 

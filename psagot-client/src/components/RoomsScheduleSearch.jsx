@@ -1,106 +1,156 @@
 import * as React from 'react';
-import { AppBar, Box, Toolbar, Typography, Button } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { Box, Typography, Button, IconButton, Popover } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useMediaQuery } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import RoomScheduleGrid from "../components/RoomsScheduleGrid"
+import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDisplayDate } from '../features/room/roomSlice';
+import { fetchRoomsScheduleByDate } from '../features/room/roomActions';
+import dayjs from 'dayjs';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { useEffect, useState } from 'react';
+import 'dayjs/locale/he';
+import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 
 const RoomsScheduleSearch = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+  const dispatch = useDispatch();
+  const currentDisplayDate = useSelector((state) => state.room.displayDate);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  useEffect(() => {
+    dispatch(setDisplayDate(dayjs().format('YYYY-MM-DD')));
+  }, [dispatch]);
+
+  const handleDateChange = (action, newDate = null) => {
+    let updatedDate;
+
+    if (newDate) {
+      updatedDate = dayjs(newDate).format('YYYY-MM-DD');
+    } else {
+      let date = dayjs(currentDisplayDate);
+      if (action === 'next') {
+        updatedDate = date.add(1, 'day').format('YYYY-MM-DD');
+      } else if (action === 'prev') {
+        updatedDate = date.subtract(1, 'day').format('YYYY-MM-DD');
+      } else if (action === 'today') {
+        updatedDate = dayjs().format('YYYY-MM-DD');
+      }
+    }
+
+    dispatch(setDisplayDate(updatedDate));
+    dispatch(fetchRoomsScheduleByDate(updatedDate));
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <>
     <Box
       sx={{
-        mt: 5,
+        mt: 3,
         mb: 1,
         mx: 'auto',
-        width: '90%',
-        maxWidth: 1000,
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        gap: 1,
       }}
     >
-      <AppBar
-        position="static"
-        color="white"
+      <IconButton
+        onClick={() => handleDateChange('prev')}
         sx={{
-          boxShadow: 2,
-          borderRadius: 2,
-          height: isMobile ? '9vh' : '12vh', 
-          display: 'flex',
-          justifyContent: 'center',
+          padding: '4px',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          color: 'black',
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+            borderColor: 'black',
+          },
         }}
       >
-        <Toolbar
-          sx={{
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            gap: isMobile ? 1 : 2,
-            paddingX: isMobile ? 1 : 3,
-            minHeight: '100%', 
-          }}
-        >
-          <Button
-            sx={{
-              color: 'black',
-              fontSize: isMobile ? '0.7rem' : isTablet ? '0.85rem' : '1rem',
-              minWidth: isMobile ? 60 : 90,
+        <ArrowForwardIosIcon fontSize="small" />
+      </IconButton>
+
+      {/* הטקסט שמחליף את שדה התאריך עם אייקון לוח שנה */}
+      <Typography
+        variant="body2"
+        onClick={(e) => setAnchorEl(e.currentTarget)}
+        sx={{
+          fontSize: '0.9rem',
+          cursor: 'pointer',
+        
+          userSelect: 'none',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 0.5,
+        }}
+      >
+        <CalendarMonthIcon fontSize="small" />
+        {`יום ${dayjs(currentDisplayDate).locale('he').format('dddd DD [ב]MMMM')}`}
+      </Typography>
+
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="he">
+          <DateCalendar
+            value={dayjs(currentDisplayDate)}
+            onChange={(newValue) => {
+              handleDateChange(null, newValue);
+              setAnchorEl(null);
             }}
-          >
-            יום קודם
-          </Button>
+          />
+        </LocalizationProvider>
+      </Popover>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={['DatePicker']}>
-              <DatePicker
-                format="DD/MM/YYYY"
-                sx={{
-                  
-                  '& .MuiInputBase-root': {
-                    padding: isMobile ? '2px' : '6px',
+      <IconButton
+        onClick={() => handleDateChange('next')}
+        sx={{
+          padding: '4px',
+          border: '1px solid #ccc',
+          borderRadius: '8px',
+          color: 'black',
+          '&:hover': {
+            backgroundColor: '#f5f5f5',
+            borderColor: 'black',
+          },
+        }}
+      >
+        <ArrowBackIosNewIcon fontSize="small" />
+      </IconButton>
 
-                    fontSize: isMobile ? '0.8rem' : '1rem',
-                  },
-                  '& input': {
-                    padding: 0, 
-                  },
-                }}
-                slotProps={{
-                  textField: {
-                    inputProps: { style: { height: '100%', overflow: 'hidden' } },
-                  },
-                }}
-              />
-            </DemoContainer>
-          </LocalizationProvider>
-
-          <Button
-            sx={{
-              color: 'black',
-              fontSize: isMobile ? '0.7rem' : isTablet ? '0.85rem' : '1rem',
-              minWidth: isMobile ? 60 : 90,
-            }}
-          >
-            יום הבא
-          </Button>
-
-          <Button
-            sx={{
-              color: 'black',
-              fontSize: isMobile ? '0.7rem' : isTablet ? '0.85rem' : '1rem',
-              minWidth: isMobile ? 60 : 90,
-            }}
-          >
-            היום
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Button
+  onClick={() => handleDateChange('today')}
+  sx={{
+    minWidth: 'unset',
+    width: 46,
+    height: 30,
+    padding: 0,
+    border: '1px solid #ccc',
+    borderRadius: '8px',
+    color: 'black',
+    fontSize: '0.75rem',
+    '&:hover': {
+      backgroundColor: '#f5f5f5',
+      borderColor: '#999',
+    },
+  }}
+>
+  היום
+</Button>
     </Box>
-     <RoomScheduleGrid/>
+    <RoomsScheduleGrid/>
      </>
 
   );
