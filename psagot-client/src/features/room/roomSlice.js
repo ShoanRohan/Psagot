@@ -10,6 +10,10 @@ const initialState = {
     viewMode: 'rooms',
     displayDate:new Date().toLocaleDateString('en-GB'),
     // displayDate: new Date().toISOString().split('T')[0],
+    roomSchedule: [],
+    viewMode: 'rooms',
+    displayDate:new Date().toLocaleDateString('en-GB'),
+    // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
      searchRoom:{roomName:'',mic:'false',projector:'false',computer:'false',numOfSeats:0},
@@ -27,6 +31,12 @@ const roomSlice = createSlice({
     reducers: {
         setRoom: (state, action) => {
             
+        },
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
+        },
+        setRoomSchedule: (state, action) => {
+            state.roomSchedule = action.payload; 
         },
         setDisplayDate: (state, action) => {
             state.displayDate = action.payload;
@@ -57,8 +67,11 @@ const roomSlice = createSlice({
         builder
             .addCase(fetchAllRooms.pending, (state) => {
                 state.roomsStatus = 'loading';
+                state.roomsStatus = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
+                console.log(action.payload)
+                state.roomsStatus = 'succeeded';
                 console.log(action.payload)
                 state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
@@ -67,6 +80,7 @@ const roomSlice = createSlice({
                 console.log(state.roomsWithPagination)
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
+                state.roomsStatus = 'failed';
                 state.roomsStatus = 'failed';
                 state.error = action.error.message;
             })
@@ -85,6 +99,7 @@ const roomSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchRoomsScheduleByDate.fulfilled, (state, action) => {
+                // console.log('payload:', action.payload);
                 // console.log('payload:', action.payload);
                 state.status = 'succeeded';
                 state.roomSchedule = action.payload;

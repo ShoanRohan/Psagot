@@ -3,7 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CoursesPage from '../pages/CoursesPage';
+import CoursesPage from '../pages/CoursesPage';
 import Login from '../components/Login';
+import Register from '../components/Register';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
@@ -30,7 +32,9 @@ const AppRouter = () => {
 
             </Route>
 
+
         </Routes>
+       
        
     );
 };
