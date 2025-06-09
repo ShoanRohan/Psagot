@@ -39,6 +39,12 @@ namespace Psagot
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddSingleton(sp =>
+            {
+                string apiKey = "0155d51e84851c21136c7a0b50d07f31"; // החליפי במפתח ה-API שלך
+                return new NovuService(apiKey);
+            });
+
             var app = builder.Build();
             app.UseCors((service) => service.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
