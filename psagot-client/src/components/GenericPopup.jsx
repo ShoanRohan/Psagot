@@ -1,44 +1,50 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, DialogActions, DialogContent, DialogContentText, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { DialogGeneric, TitleGeneric, XButton } from "../style/GenericPopupStyle";
+import { DialogContent } from "@mui/material";
+import { Grid2 } from '@mui/material';
+import {
+  DialogGeneric,
+  TitleGeneric,
+  XButton,
+  ContentTextBold,
+  ContentTextRegular,
+  CancelButton,
+  SaveButton,
+  ActionsContainer
+} from "../styles/GenericPopupStyle";
 
 const GenericPopup = ({ open, onClose, onSave, onCancel }) => {
   return (
     <DialogGeneric open={open} onClose={onClose}>
-      {/* כותרת הדיאלוג */}
       <TitleGeneric>
         שמירת מפגש
         <XButton onClick={onClose}>
           <CloseIcon />
         </XButton>
       </TitleGeneric>
-
-      {/* תוכן הפופאפ */}
       <DialogContent>
-        <Grid container justifyContent="center" textAlign="center">
-          <DialogContentText sx={{ fontSize: "18px", fontWeight: "500" }}>
+        <Grid2 container justifyContent="center" textAlign="center">
+          <ContentTextBold>
             האם לשמור את המפגש למרות שלא נמצא חדר מתאים?
-            <br />
-            תקבל על כך התראה בכניסה למערכת.
-          </DialogContentText>
-        </Grid>
+          </ContentTextBold>
+          <ContentTextRegular>
+            תקבל על כך התראה בכניסה למערכת
+          </ContentTextRegular>
+        </Grid2>
       </DialogContent>
-
-      {/* כפתורים */}
-      <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+      <ActionsContainer>
         {onCancel && (
-          <Button variant="outlined" onClick={onCancel} sx={{ borderRadius: "20px" }}>
+          <CancelButton variant="outlined" onClick={onCancel}>
             ביטול
-          </Button>
+          </CancelButton>
         )}
         {onSave && (
-          <Button variant="contained" onClick={onSave} sx={{ borderRadius: "20px" }}>
+          <SaveButton variant="contained" onClick={onSave}>
             שמור
-          </Button>
+          </SaveButton>
         )}
-      </DialogActions>
+      </ActionsContainer>
     </DialogGeneric>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react'
-import RoomsSearchBar from "./RoomsSearchBar"
-import TempRoomsList from './TempRoomsList'
+import RoomsSearchBar from "../components/RoomsSearchBar"
+import TempRoomsList from '../components/TempRoomsList'
+import ExampleUseGenericPopup from '../components/ExampleUseGenericPopup'
 
 const Rooms = () => {
   return (
@@ -8,6 +9,7 @@ const Rooms = () => {
         <RoomsSearchBar/>
         {/* תוספת זמנית של רשימת כל החדרים */}
         <TempRoomsList/>
+        <ExampleUseGenericPopup/>
     </div>
   )
 }

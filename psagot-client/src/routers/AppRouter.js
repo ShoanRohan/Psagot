@@ -4,7 +4,7 @@ import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
 import CourseScreen from "../components/CourseScreen";
-import Rooms from '../components/Rooms';
+import Rooms from '../pages/Rooms';
 
 const AppRouter = () => {
     return (
