@@ -15,41 +15,47 @@ import { useNavigate } from 'react-router-dom';
 
 const signIn = async (email, password, setError) => {
 	try {
-		console.log('email:', email, 'password:', password);
 		const response = await api.post('/User/login', {
-			email: email,
-			password: password,
+			email,
+			password,
 		});
-
-		console.log('Login response:', response);
-
-		if (response.data?.token) {
-			localStorage.setItem('token', response.data.token);
+         localStorage.removeItem('userId'); // Ensure to clear any previous userId
+		debugger
+		if (response.status === 200) {
+			
+			// localStorage.setItem('token', response.data.token);
 			localStorage.setItem(
 				'userId',
 				response.data.user?.id || response.data.user?.userId
 			);
 			return { success: true, user: response.data.user };
-		} else {
-			setError('התחברות נכשלה, אנא בדוק את הפרטים.');
-			return { success: false };
 		}
-	} catch (error) {
+		
+	} catch (error) {debugger
 		if (error.response && error.response.status === 401) {
-			setError('שם משתמש או סיסמה שגויים');
-			const confirmRegister = window.confirm(
-				'לא נמצא משתמש במערכת. האם ברצונך להירשם?'
-			);
-			if (confirmRegister) {
-				window.location.href = '/register';
+			const { errorCode, message } = error.response.data;
+
+			if (errorCode === 'EMAIL_NOT_FOUND') {
+				const confirmRegister = window.confirm(
+					'המייל לא קיים במערכת. האם ברצונך להירשם?'
+				);
+				if (confirmRegister) {
+					window.location.href = '/register';
+				}
+			} else if (errorCode === 'WRONG_PASSWORD') {
+				const confirmRegister = window.confirm('הסיסמה שגויה. נסה שוב.');
+			} else {
+				const confirmRegister = window.confirm(message || 'שגיאה לא מזוהה');
 			}
 		} else {
-			console.error('שגיאה בלתי צפויה:', error);
-			setError('שגיאה בלתי צפויה. נסה שוב מאוחר יותר.');
+			
+			const confirmRegister = window.confirm('שגיאה בלתי צפויה. נסה שוב מאוחר יותר.');
 		}
 		return { success: false };
 	}
 };
+
+
 
 export default function Login() {
 	const theme = useTheme();

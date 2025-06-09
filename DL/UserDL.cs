@@ -103,6 +103,11 @@ namespace DL
                                  .Select(u => u.Name)
                                  .ToListAsync();
         }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
 
     }
 }

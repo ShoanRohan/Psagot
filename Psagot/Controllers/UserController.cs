@@ -86,38 +86,33 @@ namespace Psagot.Controllers
             return Ok(user);
         }
 
-        [HttpGet("GetAllUsers")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            var (users, errorMessage) = await _userBL.GetAllUsers();
-            if (users == null) return BadRequest(errorMessage);
-
-            return Ok(users);
-        }
-
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
-            if (login == null)
-                return BadRequest("Invalid login request");
-
             try
             {
                 var user = await _userBL.UserLoginAsync(login.Email, login.Password);
-
-                if (user == null)
-                    return Unauthorized("Invalid email or password");
-                return Ok(new
-                { 
-                    user = user,
-                });
+                return Ok(new { success = true, user = user });
             }
             catch (Exception ex)
             {
+                if (ex.Message == "EMAIL_NOT_FOUND")
+                {
+                    return Unauthorized(new { success = false, errorCode = "EMAIL_NOT_FOUND", message = "המייל לא קיים" });
+                }
 
-                return StatusCode(500, "Internal server error");
+                if (ex.Message == "WRONG_PASSWORD")
+                {
+                    return Unauthorized(new { success = false, errorCode = "WRONG_PASSWORD", message = "סיסמה שגויה" });
+                }
+
+                return StatusCode(500, new { success = false, errorCode = "SERVER_ERROR", message = "שגיאה בשרת", details = ex.Message });
             }
         }
+
+
+
+
 
         [HttpGet("GetUserNamesByUserTypeId/{userTypeId}")]
         public async Task<IActionResult> GetUserNamesByUserTypeId(int userTypeId)

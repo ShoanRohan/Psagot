@@ -15,6 +15,8 @@ namespace BL
         Task<UserDTO> UserLoginAsync(string email, string password);
         Task<(IEnumerable<UserDTO> User, string ErrorMessage)> GetAllUsers();
         Task<IEnumerable<string>> GetUserNamesByUserTypeId(int userTypeId);
+        Task<bool> DoesEmailExistAsync(string email);
+
 
     }
 }
