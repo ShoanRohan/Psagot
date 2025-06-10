@@ -92,5 +92,19 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> AddScheduleForTopic(ScheduleForTopic scheduleForTopic)
+        {
+            try
+            {
+                await _context.Set<ScheduleForTopic>().AddAsync(scheduleForTopic);
+                await _context.SaveChangesAsync();
+                return (scheduleForTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

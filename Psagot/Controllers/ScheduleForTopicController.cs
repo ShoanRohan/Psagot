@@ -61,8 +61,19 @@ namespace Psagot.Controllers
         public async Task<IActionResult> DeleteScheduleForTopic([FromRoute] int id)
         {
             var (isDeleted, errorMessage) = await _scheduleForTopicBL.DeleteScheduleForTopic(id);
-            if(!isDeleted) return NotFound (new { Message = errorMessage });
+            if (!isDeleted) return NotFound(new { Message = errorMessage });
             return Ok(new { Id = id });
         }
+
+
+        [HttpPost("AddScheduleForTopic")]
+        public async Task<IActionResult> AddScheduleForTopic([FromBody] ScheduleForTopicDTO scheduleForTopicDTO)
+        {
+            var (addedSchedule, errorMessage) = await _scheduleForTopicBL.AddScheduleForTopic(scheduleForTopicDTO);
+            if (addedSchedule == null) return BadRequest(errorMessage);
+            return Ok(addedSchedule);
+
+        }
+            
     }
 }
