@@ -7,6 +7,7 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import RoomsPage from '../pages/RoomsPage';
 
 const AppRouter = () => {
     return (
@@ -15,6 +16,7 @@ const AppRouter = () => {
                 <Route index element={<HomePage />} />
                 <Route path='courses' element={<CoursesPage />} />
                 {/* <Route path='meetings' element={<MeetingsPage />} /> */}
+                <Route path='rooms'  element= {<RoomsPage/>}/>
             </Route>
 
             <Route path='' element={<LoginPage />}>
