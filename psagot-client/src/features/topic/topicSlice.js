@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicForCourseByCourseId } from './topicActions';
 import { Topic } from '@mui/icons-material';
+import { deleteTopicAction } from './topicActions';
 
 const initialState = {
     topics: [],
@@ -96,7 +97,21 @@ const topicSlice = createSlice({
             .addCase(fetchAllTopicForCourseByCourseId.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            });
+            })
+
+            .addCase(deleteTopicAction.pending, (state) => {
+                state.status = 'loading';
+              })
+              .addCase(deleteTopicAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                // מוחקים את הנושא מהרשימה
+                state.topics = state.topics.filter(topic => topic.id !== action.payload);
+                state.filtersTopics = state.filtersTopics.filter(topic => topic.id !== action.payload);
+              })
+              .addCase(deleteTopicAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+              });
     },
 });
 

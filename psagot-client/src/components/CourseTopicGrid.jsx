@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,7 +11,7 @@ import { Box, IconButton, Typography, Grid2, MenuItem } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
-import { fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
+import { deleteTopicAction, fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
 import { fetchAllTopic} from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
@@ -23,6 +23,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TopicDialog from './TopicDialog';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -49,7 +50,7 @@ export default function CourseTopicGrid() {
     const topics = useSelector(selectFilteredTopics);
     //const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
     const courseId = 1;
-    const topicId = 1;
+    
 
     useEffect(() => {
         if (courseId) {
@@ -68,39 +69,11 @@ export default function CourseTopicGrid() {
 
     const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
     const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
+    const [selectedTopic, setSelectedTopic] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
     const [showWarning, setShowWarning] = React.useState(false);
     const [topicToDelete, setTopicToDelete] = React.useState(null);
-
-    const handleDeleteClick = async (topicId) => {
-        try {
-            const response = await fetch(`http://localhost:33444/api/Topic/DeleteTopic/${topicId}`);
-            const data = await response.json();
-            if (data.Warning) {
-                setTopicToDelete(topicId);
-                setShowWarning(true);
-            } else {
-                dispatch(fetchAllTopicForCourseByCourseId(courseId)); // רענון
-            }
-        } catch (error) {
-            console.error("שגיאה במחיקת נושא:", error);
-        }
-    };
-
-    const handleConfirmDelete = async () => {
-        try {
-            await fetch(`http://localhost:33444/api/Topic/DeleteTopic/${topicToDelete}?forceDelete=true`, { method: 'DELETE' });
-            setShowWarning(false);
-            setTopicToDelete(null);
-            dispatch(fetchAllTopicForCourseByCourseId(courseId)); // רענון
-        } catch (error) {
-            console.error("שגיאה במחיקה הסופית:", error);
-        }
-    };
-
-    const handleCancelDelete = () => {
-        setShowWarning(false);
-        setTopicToDelete(null);
-    };
+    
 
     const paginatedTopics = topics.slice(
         (currentPage - 1) * pageSize,
@@ -123,6 +96,31 @@ export default function CourseTopicGrid() {
         setSelectedTopic(null);
     };
 
+
+    const handleDeleteClick = (topicId) => {
+        // כאן תציגי את האזהרה
+        setTopicToDelete(topicId);
+        setShowWarning(true);
+      };
+      
+      const handleConfirmDelete = async () => {
+        if (topicToDelete !== null) {
+          // מחיקה דרך ה-slice
+          await dispatch(deleteTopicAction({ topicId: topicToDelete, forceDelete: true }));
+      
+          // רענון הנושאים אחרי מחיקה
+          dispatch(fetchAllTopicForCourseByCourseId(courseId));
+        }
+        // סגירת האזהרה
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
+      const handleCancelDelete = () => {
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
             <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px',
@@ -195,7 +193,7 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
+            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: 'unset', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
                 <Grid2 container>
                     {/* עמודים */}
                     <Grid2 xs={3}>
@@ -239,13 +237,12 @@ export default function CourseTopicGrid() {
                 </Grid2>
             </Box>
             <Dialog open={showWarning} onClose={handleCancelDelete}>
-                <DialogTitle>אזהרה</DialogTitle>
                 <DialogContent>
-                    <Typography>נושא זה משויך למפגשים קיימים. האם את/ה בטוח/ה שברצונך למחוק אותו?</Typography>
+                    <Typography>לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancelDelete}>ביטול</Button>
-                    <Button onClick={handleConfirmDelete} variant="contained" color="error">מחק</Button>
+                    <Button onClick={handleConfirmDelete} variant="contained" >אישור</Button>
                 </DialogActions>
             </Dialog>
             <TopicDialog

@@ -26,13 +26,26 @@ export const updateTopicAction = createAsyncThunk('topic/updateTopicAction', asy
 });
 
 //delete topic
-export const deleteTopicAction = createAsyncThunk('topic/deleteTopic',async(topicId) =>{
-    const data = await deleteTopic(topicId);
-    return data;
-});
+export const deleteTopicAction = createAsyncThunk('topic/deleteTopic',
+  async ({ topicId, forceDelete }, thunkAPI) => {
+    try {
+      const response = await fetch(`http://localhost:33444/api/Topic/DeleteTopic/${topicId}${forceDelete ? '?forceDelete=true' : ''}`, {
+        method: 'DELETE'
+      });
+      if (!response.ok) {
+        throw new Error('שגיאה במחיקה');
+      }
+      // מחזירים את ה-id כדי לעדכן את הסטייט
+      return topicId;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 // getting All Topics For Course By Course Id
 export const fetchAllTopicForCourseByCourseId = createAsyncThunk('topic/fetchAllTopicFotCourseByCourseId', async (CourseId) => {
     const data = await getAllTopicsForCourseByCourseId(CourseId);
     return data;
   });
+
