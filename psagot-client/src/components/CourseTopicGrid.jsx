@@ -11,7 +11,7 @@ import { Box, IconButton, Typography, Grid2, MenuItem } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { DeleteOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTopicById } from '../features/topic/topicActions';
+import { fetchTopicById, updateTopicAction } from '../features/topic/topicActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
@@ -85,11 +85,63 @@ const handleDialogClose = () => {
   setSelectedTopic(null);
 };
 
-const handleDialogSubmit = (formData) => {
-  console.log("נתוני עריכה:", formData);
-  
-  setDialogOpen(false);
-  setSelectedTopic(null);
+
+const handleDialogSubmit = async (formData) => {
+    console.log("נתוני עריכה שהתקבלו מהפופ-אפ:", formData);
+
+    // מפת המרה מהלייבל הטקסטואלי של הסטטוס ל-ID המספרי שלו
+    const statusMap = {
+        "פעיל": 1,
+        "ממתין": 2,
+        "מושהה": 3,
+        "הסתיים": 4
+    };
+
+    // וודאי ש-selectedTopic אינו null ויש לו topicId (או TopicId)
+    if (!selectedTopic || (!selectedTopic.topicId && !selectedTopic.TopicId)) {
+        console.error("No topic selected for update or missing topicId.");
+        return;
+    }
+
+    // יצירת אובייקט הנושא המעודכן לשליחה ל-Redux ולבקאנד
+    // שימי לב: השתמשתי ב-selectedTopic.topicId מכיוון שזהו השם הנפוץ,
+    // אך בקוד שלך הוא מופיע לפעמים כ-TopicId (עם T גדולה). וודאי שאת משתמשת בשם הנכון.
+    const topicToUpdate = {
+        // שמירה על ה-ID המקורי של הנושא (חשוב לעדכון בבקאנד וב-Redux)
+        topicId: selectedTopic.topicId || selectedTopic.TopicId, // שימוש בשני המקרים
+        courseId: selectedTopic.courseId || courseId, // שמירה על ה-courseId המקורי
+        
+        name: formData.topic, // שם הנושא
+        teacherName: formData.lecturerName,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        numberOfMeetings: formData.numberOfMeetings,
+        
+        // עדכון שדות הציוד
+        computers: formData.equipment.computers,
+        microphone: formData.equipment.microphone,
+        projector: formData.equipment.projector,
+        
+        statusId: statusMap[formData.status], // המרת הסטטוס מהלייבל הטקסטואלי ל-ID
+        // אם יש לך courseDays ב-formData, תוכלי להוסיף אותם כאן:
+        // courseDays: formData.courseDays, 
+    };
+
+    try {
+        // נשלח את פעולת העדכון ל-Redux.
+        // אם פעולת ה-Redux שלך היא asyncThunk שמטפלת בקריאת API,
+        // היא תעדכן את הסטייט באופן אוטומטי לאחר קבלת התגובה מהשרת.
+        // .unwrap() מאפשר לטפל בשגיאות מה-thunk באמצעות try...catch
+        await dispatch(updateTopicAction(topicToUpdate)).unwrap(); 
+        console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
+        dispatch(fetchAllTopicForCourseByCourseId(courseId));
+    } catch (error) {
+        console.error("שגיאה בעדכון הנושא:", error);
+        // כאן ניתן להציג הודעת שגיאה למשתמש, למשל באמצעות הודעת טוסט/סנקבר
+    }
+
+    setDialogOpen(false);
+    setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
 };
 
     return (

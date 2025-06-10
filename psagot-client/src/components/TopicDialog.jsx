@@ -12,7 +12,8 @@ import deleteSvg from '../assets/icons/deleteIcon.svg';
 //import CheckIcon from "@mui/icons-material/Check";
 //import ClearIcon from "@mui/icons-material/Clear";
 import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
-import AddDayErrorDialog from './AddDayErrorDialog';
+import { useDispatch, useSelector } from "react-redux";
+// import AddDayErrorDialog from './AddDayErrorDialog';
 
 const sharedStyles = {
   width: "150px",
@@ -89,6 +90,11 @@ const addDayButtonStyle = {
 };
 
 const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
+  const dispatch = useDispatch();
+  // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
+  // *** וודא שהנתיב 'state.user.allLecturersAndCoordinators' הוא הנתיב הנכון בסטייט של Redux עבורך ***
+  const allUsers = useSelector(state => state.user.allLecturersAndCoordinators); 
+
   const [formData, setFormData] = useState({
     topic: "",
     lecturerName: "",
@@ -102,6 +108,10 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     },
     status: "",
   });
+
+  const [lecturers, setLecturers] = useState([]); // מצב מקומי לרשימת המרצים המסוננת
+  const LECTURER_USER_TYPE_ID = 2; // *** שנה את זה ל-UserTypeId הנכון של מרצים במערכת שלך ***
+
 
   useEffect(() => {
     if (initialData) {
@@ -137,6 +147,19 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     }
   }, [initialData]); 
 
+   // אפקט לטעינת כל המשתמשים (מרצים ורכזות) באמצעות ה-thunk של Redux,
+  // כאשר הקומפוננטה נטענת או ה-initialData משתנה.
+  useEffect(() => {
+    console.log("All users from Redux:", allUsers); // לוג לבדיקה - מה מגיע מ-Redux
+    if (allUsers && Array.isArray(allUsers) && allUsers.length > 0) {
+      const filteredLecturers = allUsers.filter(user => user.userTypeId === LECTURER_USER_TYPE_ID);
+      setLecturers(filteredLecturers);
+      console.log("Filtered lecturers:", filteredLecturers); // לוג לבדיקה - מה נשמר כמרצים
+    } else {
+      setLecturers([]); // אם אין משתמשים או שהם לא מערך, נשמור מערך ריק
+    }
+  }, [allUsers, LECTURER_USER_TYPE_ID]);
+
   const [startDateType, setStartDateType] = useState("text");
   const [endDateType, setEndDateType] = useState("text");
   const [courseDays, setCourseDays] = useState([
@@ -164,13 +187,13 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const [isAddDayErrorOpen, setIsAddDayErrorOpen] = useState(false);
 
   // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
-  useEffect(() => {
-    // רק נבדוק אם יש ימים שלא שמורים
-    if (courseDays.some(day => day.saved)) {
-      // אם יש לפחות אחד עם saved=true, נשאיר
-      // אך אם השתנה משהו מחוץ לשמירה צריך להגדיר מה לעשות - כאן אנחנו לא עושים שינוי כי saved מתעדכן בלולאה למטה
-    }
-  }, [courseDays]);
+  // useEffect(() => {
+  //   // רק נבדוק אם יש ימים שלא שמורים
+  //   if (courseDays.some(day => day.saved)) {
+  //     // אם יש לפחות אחד עם saved=true, נשאיר
+  //     // אך אם השתנה משהו מחוץ לשמירה צריך להגדיר מה לעשות - כאן אנחנו לא עושים שינוי כי saved מתעדכן בלולאה למטה
+  //   }
+  // }, [courseDays]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -561,11 +584,11 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
           </Button>
         </Box>
       </DialogContent>
-
+{/* 
       <AddDayErrorDialog
       open={isAddDayErrorOpen}
       onClose={() => setIsAddDayErrorOpen(false)}
-    />
+    /> */}
     </Dialog>
   );
 };
