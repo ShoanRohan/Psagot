@@ -4,7 +4,7 @@
     margin-right: 8px;
     margin-top: 24px;
     direction: rtl;
-  }
+     }
 /* 
   .helpBox{
 
@@ -14,7 +14,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 71vw;
+    padding-left: 20px;
   }
   
   
@@ -49,6 +49,10 @@
     border-radius: 25px !important;
     padding: 8px 16px !important;
     gap: 8px !important;
+    width: 151px;
+    height: 44px;
+    margin-left: 20%;
+
   }
 /* 
   .course-container {

@@ -90,7 +90,26 @@ namespace DL
                 return (null, ex.Message); // אם קרתה שגיאה
             }
         }
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 4 && u.IsActive) // סינון רק מורות פעילות
+                    .Select(u => new TeacherDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
 
+                return (teachers, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
         public async Task<User> UserLoginAsync(string email, string password)
         {
             var user = await _context.Users
