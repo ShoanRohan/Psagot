@@ -285,5 +285,17 @@ namespace BL
                 return (null, $"שגיאה בהוספת המפגש: {ex.Message}");
             }
         }
+
+
+    
+        public async Task<(MeetingDTO Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        {
+            var (meeting, errorMessage) = await _meetingDL.DeleteMeeting(meetingId);
+            if (meeting == null) return (null, errorMessage);
+
+            return (_mapper.Map<MeetingDTO>(meeting), null);
+        }
+
+
     }
 }

@@ -53,6 +53,7 @@ namespace DL
             }
         }
 
+
         public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
         {
             try
@@ -86,6 +87,31 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+
+
+
+        public async Task<(Meeting Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        {
+            try
+            {
+                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                if (meeting == null)
+                {
+                    return (null, "Meeting not found.");
+                }
+
+                _context.Set<Meeting>().Remove(meeting);
+                await _context.SaveChangesAsync();
+                return (meeting, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
     }
 }
 
