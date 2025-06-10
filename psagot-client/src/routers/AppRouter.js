@@ -12,7 +12,7 @@ const AppRouter = () => {
     return (
         <Routes>
             <Route path='/' element={<Layout />}>
-                <Route path='/' element={<AddTopic />} />
+                <Route path='/' element={<AddTopic open={true}/>} />
                 <Route path='/courses' element={<CoursePage/>} />
                 <Route path='/course/:id' element={<CourseScreen/>} />  
                 <Route path='/meetings' element={<span>page Meetings</span>} />
