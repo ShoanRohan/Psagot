@@ -1,17 +1,19 @@
+import React, { useEffect, useRef,useState  } from 'react';
+import { Box, useMediaQuery, useTheme,IconButton, Modal, Button, Typography } from '@mui/material';
 import FullCalendar from "@fullcalendar/react";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Box, IconButton, Modal, Button, Typography } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
+
 
 export default function RoomsScheduleGrid() {
-  const calendarRef = useRef(null);
   const dispatch = useDispatch();
+  const calendarRef = useRef(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const { displayDate, roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
 
