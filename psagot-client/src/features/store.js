@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userTypeReducer from './userType/userTypeSlice';
-import dayReducer from './day/daySlice';
 import roomReducer from './room/roomSlice';
+import dayReducer from './day/daySlice';
 import userReduser from './user/userSlice';
 import scheduleForTopicReducer from './scheduleForTopic/scheduleForTopicSlice';
 import meetingReducer from './meeting/meetingSlice';
@@ -10,6 +10,7 @@ import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
 import CoursesGrid from '../components/CoursesGrid';
 import CoursesPage from '../pages/CoursesPage';
+
 
 const store = configureStore({
   reducer: {
@@ -26,5 +27,7 @@ const store = configureStore({
 });
 
 export default store;
+
+
 
 
