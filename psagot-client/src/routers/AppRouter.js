@@ -18,7 +18,6 @@ const AppRouter = () => {
                 <Route index element={<HomePage />} />
                 <Route path='courses' element={<CoursesPage />} />
                 <Route path='users' element={<UserManagement />} />
-                <Route path='rooms' element={<RoomsGrid />} />
                 {/* <Route path='meetings' element={<MeetingsPage />} /> */}
                 <Route path='rooms'  element= {<RoomsPage/>}/>
             </Route>
