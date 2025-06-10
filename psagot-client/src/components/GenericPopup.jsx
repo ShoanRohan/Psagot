@@ -2,44 +2,46 @@ import React from "react";
 import PropTypes from "prop-types";
 import CloseIcon from "@mui/icons-material/Close";
 import { DialogContent } from "@mui/material";
-import { Grid2 } from '@mui/material';
+import { Grid2 } from "@mui/material";
 import {
   DialogGeneric,
   TitleGeneric,
   XButton,
-  ContentTextBold,
-  ContentTextRegular,
   CancelButton,
   SaveButton,
-  ActionsContainer
+  ActionsContainer,
 } from "../styles/GenericPopupStyle";
 
-const GenericPopup = ({ open, onClose, onSave, onCancel }) => {
+const GenericPopup = ({
+  open,
+  onClose,
+  onSave,
+  onCancel,
+  title,
+  children,
+  showCancelButton = true,
+  showSaveButton = true,
+}) => {
   return (
     <DialogGeneric open={open} onClose={onClose}>
       <TitleGeneric>
-        שמירת מפגש
+        {title}
         <XButton onClick={onClose}>
           <CloseIcon />
         </XButton>
       </TitleGeneric>
       <DialogContent>
-        <Grid2 container justifyContent="center" textAlign="center">
-          <ContentTextBold>
-            האם לשמור את המפגש למרות שלא נמצא חדר מתאים?
-          </ContentTextBold>
-          <ContentTextRegular>
-            תקבל על כך התראה בכניסה למערכת
-          </ContentTextRegular>
+        <Grid2 container direction="column" alignItems="center" textAlign="center">
+          {children}
         </Grid2>
       </DialogContent>
       <ActionsContainer>
-        {onCancel && (
+        {showCancelButton && (
           <CancelButton variant="outlined" onClick={onCancel}>
             ביטול
           </CancelButton>
         )}
-        {onSave && (
+        {showSaveButton && (
           <SaveButton variant="contained" onClick={onSave}>
             שמור
           </SaveButton>
@@ -54,6 +56,10 @@ GenericPopup.propTypes = {
   onClose: PropTypes.func.isRequired,
   onSave: PropTypes.func,
   onCancel: PropTypes.func,
+  title: PropTypes.string,
+  children: PropTypes.node,
+  showCancelButton: PropTypes.bool,
+  showSaveButton: PropTypes.bool,
 };
 
 export default GenericPopup;
