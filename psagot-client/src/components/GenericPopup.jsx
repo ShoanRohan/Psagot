@@ -4,6 +4,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import { DialogContent } from "@mui/material";
 import { Grid2 } from "@mui/material";
 import {
+  Button,
+  DialogActions,
+  DialogContent,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {
   DialogGeneric,
   TitleGeneric,
   XButton,

@@ -1,43 +1,50 @@
-.Stack1 {
+
+
+.sideBarStyle {
+  box-sizing: border-box;
+  height: 100vh;
   background-color: #1A237E;
-  width: 240px;
-  border-top-left-radius: 40px;
-  border-bottom-left-radius: 40px;
-  padding: 16px;
+  width: 12%;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding: 8px;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.logo {
+.mainContentStyle {
+  box-sizing: border-box;
+  width: 88%;
+  height: 100vh;
+  padding: 16px;
+  overflow: hidden;
+  display: block;
+}
+
+.sidebar-logo {
   width: 80%;
   max-height: 60px;
   object-fit: contain;
-  margin-top: 100px; 
+  margin-top: 50px;
 }
 
-.Stack2 {
-  text-decoration: none;
-  width: 100%;
-  margin-bottom: 10px; 
-}
-
-.navItems{
+.navItems {
   padding-top: 25%;
 }
 
 .styledButton {
   justify-content: flex-start !important;
   align-items: center !important;
-  padding: 12px;
+  padding: 8px;
   color: white !important;
   text-align: right !important;
   width: 100%;
-  gap: 12px;
-  font: 'Rubik' ;
-  font-size: 22px !important;
-  line-height: 33px !important;
+  gap: 8px;
+  font: 'Rubik';
+  font-size: 15px !important;
+  line-height: 24px !important;
   background: none;
   border: none;
   display: flex;
@@ -45,7 +52,7 @@
   transition: background-color 0.3s ease;
 }
 
-.navLink{
+.navLink {
   width: 100%;
 }
 
@@ -61,17 +68,17 @@ img {
   width: 80%;
   max-height: 60px;
   object-fit: contain;
-  margin-top: 50px; 
+  margin-top: 50px;
+  padding: 6px;
 }
 
 .user-profile-container {
   display: flex;
   align-items: center;
-  padding: 15px;
-  margin-top: auto;
+  padding-top: 80px;
   flex-direction: row-reverse;
-  justify-content: flex-end; 
-  gap: 10px; 
+  justify-content: flex-end;
+  gap: 6px;
 }
 
 .user-info {
@@ -83,21 +90,22 @@ img {
 .user-avatar {
   background-color: #c8e459 !important;
   color: white !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0; 
+  width: 30px !important;
+  height: 30px !important;
+  flex-shrink: 0;
 }
 
 .user-name {
   font-weight: bold;
   color: white;
-  font-size: 16px;
+  font-size: 12px !important;
   font-family: 'Rubik', sans-serif;
+  white-space: nowrap;
 }
 
 .user-role {
   color: white;
   opacity: 0.8;
-  font-size: 10px;
+  font-size: 10px !important;
   font-family: 'Rubik', sans-serif;
 }

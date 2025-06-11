@@ -1,10 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators } from "../../utils/userUtil";
+import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators, getFilteredUsers } from "../../utils/userUtil";
 
-export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
+export const fetchAllUsers = createAsyncThunk(
+  "user/fetchAllUsers",
+  async () => {
     const data = await getAllUsers();
     return data;
-});
+  }
+);
 
 export const fetchAllCoordinators = createAsyncThunk('user/fetchAllCoordinators', async () => {
     const data = await getAllCoordinators();
@@ -14,9 +17,20 @@ export const fetchAllCoordinators = createAsyncThunk('user/fetchAllCoordinators'
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id) =>{
     const data = await getUserById(id);
     return data;
-});
+  }
+);
 
-export const addUserAction = createAsyncThunk('user/addUserAction' , async(newUser)=>{
+export const fetchFilteredUseres = createAsyncThunk(
+  "user/fetchFilteredUseres",
+  async (filteredUsersParamaters) => {
+    const data = await getFilteredUsers(filteredUsersParamaters);
+    return data;
+  }
+);
+
+export const addUserAction = createAsyncThunk(
+  "user/addUserAction",
+  async (newUser) => {
     const data = await addUser(newUser);
     return data;
 });
@@ -24,7 +38,8 @@ export const addUserAction = createAsyncThunk('user/addUserAction' , async(newUs
 export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
     const data = await updatedUser(updateUser);
     return data;
-});
+  }
+);
 
 export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", async () => {
         const data = await getCoordinators();
@@ -34,4 +49,5 @@ export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", asyn
 export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
     const data = await getAllLecturersAndCoordinators();
     return data;
-});
+  }
+);
