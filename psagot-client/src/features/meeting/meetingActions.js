@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,GetMeetingsByPage,getMeetingsByRange} from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,GetMeetingsByPage, getMeetingsByRange} from '../../utils/meetingUtil';
 
 export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async () => {
     const data = await getAllMeetings();
@@ -18,8 +18,8 @@ export const updateMeetingAction = createAsyncThunk(
     }
 );
 
-export const addMeetingAction = createAsyncThunk('meeting/addMeetingAction', async (addNewMeeting) => {
-    const data = await addMeeting(addNewMeeting);
+export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", async (id) => {
+    const data = await getMeetingeById(id);
     return data;
 });
 
