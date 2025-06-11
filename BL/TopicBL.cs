@@ -79,16 +79,16 @@ namespace BL
         */
 
         public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId, bool forceDelete = false)
-        {           
+        {
             var topic = await _topicDL.GetTopicById(topicId);
-            if (topic == null)
+            if (topic.Topic == null)
             {
                 return (false, "הנושא לא נמצא");
             }
 
-            if ((topic.NumberOfMeetings ?? 0) > 0 && !forceDelete)
+            if ((topic.Topic.NumberOfMeetings ?? 0) > 0 && !forceDelete)
             {
-                return (false, "לנושא זה משובצים מפגשים. במחיקת הנושא יימחקו גם המפגשים.");
+                return (false, "לנושא זה משובצים מפגשים. במחיקת הנושא המפגשים יימחקו גם .");
             }
 
             var (isDeleted, errorMessage) = await _topicDL.DeleteTopicAndMeetings(topicId);
