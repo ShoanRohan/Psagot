@@ -1,6 +1,5 @@
 import { Dialog, styled, Typography, IconButton, Button, DialogActions } from "@mui/material";
 
-// דיאלוג רספונסיבי
 export const DialogGeneric = styled(Dialog)(({ theme }) => ({
   "& .MuiDialog-paper": {
     width: "90% !important",
@@ -19,7 +18,6 @@ export const DialogGeneric = styled(Dialog)(({ theme }) => ({
   },
 }));
 
-// כותרת עליונה עם כפתור סגירה
 export const TitleGeneric = styled(Typography)(({ theme }) => ({
   display: "flex !important",
   justifyContent: "space-between !important",
@@ -31,7 +29,6 @@ export const TitleGeneric = styled(Typography)(({ theme }) => ({
   fontWeight: "500 !important",
 }));
 
-// כפתור X
 export const XButton = styled(IconButton)(({ theme }) => ({
   padding: "0.3rem !important",
   "& svg": {
@@ -41,7 +38,6 @@ export const XButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-// טקסט מודגש פחות
 export const ContentTextBold = styled(Typography)(({ theme }) => ({
   fontSize: "clamp(1.3rem, 3vw, 1.6rem) !important",
   fontWeight: "400 !important",
@@ -50,7 +46,6 @@ export const ContentTextBold = styled(Typography)(({ theme }) => ({
   textAlign: "center !important",
 }));
 
-// טקסט רגיל
 export const ContentTextRegular = styled(Typography)(({ theme }) => ({
   fontSize: "clamp(1rem, 2.5vw, 1.2rem) !important",
   fontFamily: "Rubik, sans-serif !important",
@@ -87,8 +82,6 @@ export const SaveButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-
-// מיכל כפתורים
 export const ActionsContainer = styled(DialogActions)(({ theme }) => ({
   display: "flex !important",
   justifyContent: "center !important",
