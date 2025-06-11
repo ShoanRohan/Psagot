@@ -20,7 +20,7 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-const getAllMeetingsBySubject = async(subject) => {
+const getMeetingsByTopicId = async(subject) => {
     const response = await api.get(`/Meeting/GetAllMeetingsBySubject/${subject}`);
     return response.data;
 };

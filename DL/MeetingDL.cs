@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using Entities.Contexts;
+using AutoMapper;
 using AutoMapper.Internal;
-using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +18,9 @@ namespace DL
     public class MeetingDL : IMeetingDL
     {
         private readonly PsagotDbContext _context;
-        private readonly IMapper _mapper;
-
         public MeetingDL(PsagotDbContext context, IMapper mapper)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
