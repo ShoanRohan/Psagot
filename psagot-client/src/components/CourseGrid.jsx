@@ -9,6 +9,7 @@ import { fetchCourseById } from '../features/course/courseActions';
 import editSvg from '../assets/icons/edit.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
+
 const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
         //backgroundColor: theme.palette.common.Neutral / 20,
