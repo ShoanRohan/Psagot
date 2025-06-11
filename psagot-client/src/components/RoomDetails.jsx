@@ -1,83 +1,15 @@
-//19.5.25
-import React from "react";
-import { TextField, MenuItem, Typography, Box } from "@mui/material";
-import "./RoomDetails.css";
-const RoomDetails = ({ name, setName, number, setNumber, capacity, setCapacity, equipment, setEquipment }) => {
-  const handleEquipmentChange = (event) => {
-    setEquipment(event.target.value);
-  };
-
-  return (
-    <Box className="page-container">
-      <Box className="room-details-container">
-        <Typography className="room-details-title">פרטים טכניים</Typography>
-
-        <Box className="room-details-form">
-          <TextField
-            label="שם חדר"
-            variant="standard"
-            className="text-field"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            InputProps={{ className: "text-input" }}
-          />
-          <TextField
-            label="מספר חדר"
-            variant="standard"
-            type="number"
-            className="text-field"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-            InputProps={{ className: "text-input" }}
-          />
-          <TextField
-            label="מספר מקומות"
-            variant="standard"
-            type="number"
-            className="text-field"
-            value={capacity}
-            onChange={(e) => setCapacity(e.target.value)}
-            InputProps={{ className: "text-input" }}
-          />
-          <TextField
-            select
-            label="ציוד"
-            variant="standard"
-            className="text-field"
-            SelectProps={{ multiple: true }}
-            value={equipment}
-            onChange={handleEquipmentChange}
-            InputProps={{ className: "text-input" }}
-          >
-            <MenuItem value="מקרן">מקרן</MenuItem>
-            <MenuItem value="לוח">לוח</MenuItem>
-            <MenuItem value="מחשב">מחשב</MenuItem>
-          </TextField>
-        </Box>
-      </Box>
-    </Box>
-  );
-};
-
-export default RoomDetails;
-
-
-
-
-
-
-
-
-// import React, { useState } from "react";
+// //19.5.25
+// import React from "react";
 // import { TextField, MenuItem, Typography, Box } from "@mui/material";
-// import "./RoomDetails.css"; 
-
-// const RoomDetails = () => {
-//   const [equipment, setEquipment] = useState([]);
-
-//   const handleEquipmentChange = (event) => {
-//     setEquipment(event.target.value);
-//   };
+// import "./RoomDetails.css";
+// const RoomDetails = ({ name, setName, number, setNumber, capacity, setCapacity, equipment, setEquipment }) => {
+//     const handleEquipmentChange = (event) => {
+//       const { name, checked } = event.target;
+//       setEquipment((prev) => ({
+//         ...prev,
+//         [name]: checked,
+//       }));
+//     };
 
 //   return (
 //     <Box className="page-container">
@@ -85,10 +17,32 @@ export default RoomDetails;
 //         <Typography className="room-details-title">פרטים טכניים</Typography>
 
 //         <Box className="room-details-form">
-//           <TextField label="שם חדר" variant="standard" className="text-field" InputProps={{ className: "text-input" }} />
-//           <TextField label="מספר חדר" variant="standard" type="number" className="text-field" InputProps={{ className: "text-input" }} />
-//           <TextField label="מספר מקומות" variant="standard" type="number" className="text-field" InputProps={{ className: "text-input" }} />
-          
+//           <TextField
+//             label="שם חדר"
+//             variant="standard"
+//             className="text-field"
+//             value={name}
+//             onChange={(e) => setName(e.target.value)}
+//             InputProps={{ className: "text-input" }}
+//           />
+//           <TextField
+//             label="מספר חדר"
+//             variant="standard"
+//             type="number"
+//             className="text-field"
+//             value={number}
+//             onChange={(e) => setNumber(e.target.value)}
+//             InputProps={{ className: "text-input" }}
+//           />
+//           <TextField
+//             label="מספר מקומות"
+//             variant="standard"
+//             type="number"
+//             className="text-field"
+//             value={capacity}
+//             onChange={(e) => setCapacity(e.target.value)}
+//             InputProps={{ className: "text-input" }}
+//           />
 //           <TextField
 //             select
 //             label="ציוד"
@@ -99,9 +53,9 @@ export default RoomDetails;
 //             onChange={handleEquipmentChange}
 //             InputProps={{ className: "text-input" }}
 //           >
-//             <MenuItem value="מקרן">מקרן</MenuItem>
-//             <MenuItem value="לוח">לוח</MenuItem>
-//             <MenuItem value="מחשב">מחשב</MenuItem>
+//             <MenuItem value="projector">מקרן</MenuItem>
+//             <MenuItem value="computer">מחשב</MenuItem>
+//             <MenuItem value="speaker"> רמקול</MenuItem>
 //           </TextField>
 //         </Box>
 //       </Box>
@@ -110,3 +64,53 @@ export default RoomDetails;
 // };
 
 // export default RoomDetails;
+
+
+
+
+
+
+
+
+// // import React, { useState } from "react";
+// // import { TextField, MenuItem, Typography, Box } from "@mui/material";
+// // import "./RoomDetails.css"; 
+
+// // const RoomDetails = () => {
+// //   const [equipment, setEquipment] = useState([]);
+
+// //   const handleEquipmentChange = (event) => {
+// //     setEquipment(event.target.value);
+// //   };
+
+// //   return (
+// //     <Box className="page-container">
+// //       <Box className="room-details-container">
+// //         <Typography className="room-details-title">פרטים טכניים</Typography>
+
+// //         <Box className="room-details-form">
+// //           <TextField label="שם חדר" variant="standard" className="text-field" InputProps={{ className: "text-input" }} />
+// //           <TextField label="מספר חדר" variant="standard" type="number" className="text-field" InputProps={{ className: "text-input" }} />
+// //           <TextField label="מספר מקומות" variant="standard" type="number" className="text-field" InputProps={{ className: "text-input" }} />
+          
+// //           <TextField
+// //             select
+// //             label="ציוד"
+// //             variant="standard"
+// //             className="text-field"
+// //             SelectProps={{ multiple: true }}
+// //             value={equipment}
+// //             onChange={handleEquipmentChange}
+// //             InputProps={{ className: "text-input" }}
+// //           >
+// //             <MenuItem value="מקרן">מקרן</MenuItem>
+// //             <MenuItem value="לוח">לוח</MenuItem>
+// //             <MenuItem value="מחשב">מחשב</MenuItem>
+// //           </TextField>
+// //         </Box>
+// //       </Box>
+// //     </Box>
+// //   );
+// // };
+
+// // export default RoomDetails;
