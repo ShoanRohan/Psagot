@@ -1,7 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import CloseIcon from "@mui/icons-material/Close";
-import { DialogContent } from "@mui/material";
 import { Grid2 } from "@mui/material";
 import {
   Button,
