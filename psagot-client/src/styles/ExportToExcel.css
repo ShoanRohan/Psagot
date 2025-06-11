@@ -1,0 +1,29 @@
+.xlsxButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 44px;
+  height: 44px;
+  background-color: #F0F1F3 !important;
+  border-radius: 7px !important;
+  padding: 0 !important;
+  position: absolute;
+  left: 414px;
+  top: 84px;
+  box-shadow: none !important;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.xlsxButton:hover {
+  background-color: #f7f7f7 !important; /* בהיר יותר בעת מעבר עכבר */
+}
+
+.xlsxButton:active {
+  background-color: #dcdcdc !important; /* כהה יותר בעת לחיצה */
+}
+
+.xlsxButton img {
+  width: 28px;
+  height: 28px;
+}
