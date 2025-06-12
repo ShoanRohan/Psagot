@@ -8,54 +8,45 @@ import {
 	Link,
 	IconButton,
 	InputAdornment,
+	Snackbar,
+	Alert,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 
-const signIn = async (email, password, setError) => {
+const signIn = async (email, password, setError, showSnackbar) => {
 	try {
 		const response = await api.post('/User/login', {
 			email,
 			password,
 		});
-         localStorage.removeItem('userId'); // Ensure to clear any previous userId
-		debugger
+		localStorage.removeItem('userId');
+
 		if (response.status === 200) {
-			
-			// localStorage.setItem('token', response.data.token);
 			localStorage.setItem(
 				'userId',
 				response.data.user?.id || response.data.user?.userId
 			);
 			return { success: true, user: response.data.user };
 		}
-		
-	} catch (error) {debugger
+	} catch (error) {
 		if (error.response && error.response.status === 401) {
 			const { errorCode, message } = error.response.data;
 
 			if (errorCode === 'EMAIL_NOT_FOUND') {
-				const confirmRegister = window.confirm(
-					'המייל לא קיים במערכת. האם ברצונך להירשם?'
-				);
-				if (confirmRegister) {
-					window.location.href = '/register';
-				}
+				showSnackbar('המייל לא קיים במערכת. אנא הירשם.');
 			} else if (errorCode === 'WRONG_PASSWORD') {
-				const confirmRegister = window.confirm('הסיסמה שגויה. נסה שוב.');
+				showSnackbar('הסיסמה שגויה. נסה שוב.');
 			} else {
-				const confirmRegister = window.confirm(message || 'שגיאה לא מזוהה');
+				showSnackbar(message || 'שגיאה לא מזוהה');
 			}
 		} else {
-			
-			const confirmRegister = window.confirm('שגיאה בלתי צפויה. נסה שוב מאוחר יותר.');
+			showSnackbar('שגיאה בלתי צפויה. נסה שוב מאוחר יותר.');
 		}
 		return { success: false };
 	}
 };
-
-
 
 export default function Login() {
 	const theme = useTheme();
@@ -68,8 +59,19 @@ export default function Login() {
 	const [isSubmitting, setIsSubmitting] = React.useState(false);
 	const [showPassword, setShowPassword] = React.useState(false);
 
+	// Snackbar states
+	const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+	const [snackbarMessage, setSnackbarMessage] = React.useState('');
+	const [snackbarSeverity, setSnackbarSeverity] = React.useState('error');
+
+	const showSnackbar = (message, severity = 'error') => {
+		setSnackbarMessage(message);
+		setSnackbarSeverity(severity);
+		setSnackbarOpen(true);
+	};
+
 	const validateEmail = (value) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 		if (!value) return 'שדה חובה';
 		if (!emailRegex.test(value)) return 'אימייל לא תקין';
 		return '';
@@ -82,12 +84,6 @@ export default function Login() {
 	};
 
 	const handleSubmit = async (e) => {
-		console.log(
-			'Submitting form with email:',
-			email,
-			'and password):',
-			password
-		);
 		e.preventDefault();
 		setFormError('');
 		setIsSubmitting(true);
@@ -104,9 +100,9 @@ export default function Login() {
 			return;
 		}
 
-		const result = await signIn(email, password, setFormError);
+		const result = await signIn(email, password, setFormError, showSnackbar);
 		if (result.success) {
-			navigate('/home'); // הפניה לעמוד הבית לאחר התחברות
+			navigate('/home');
 		} else {
 			setIsSubmitting(false);
 		}
@@ -151,32 +147,17 @@ export default function Login() {
 					fontFamily: 'Rubik',
 				}}
 			>
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						width: '100%',
-						height: '53%',
-						gap: 1,
-					}}
-				>
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							width: '100%',
-							gap: 2,
-						}}
-					>
+				<Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '53%', gap: 1 }}>
+					<Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 2 }}>
 						<TextField
-							label="שם משתמש"
+							label="אימייל"
 							name="email"
 							variant="standard"
 							fullWidth
 							value={email}
 							onChange={(e) => {
 								setEmail(e.target.value);
-								setEmailError(validateEmail(e.target.value)); // ← בדיקה מיידית
+								setEmailError(validateEmail(e.target.value));
 							}}
 							onBlur={() => setEmailError(validateEmail(email))}
 							error={!!emailError}
@@ -230,15 +211,7 @@ export default function Login() {
 						/>
 					</Box>
 
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							width: '100%',
-							height: '4%',
-							justifyContent: 'center',
-						}}
-					>
+					<Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '4%', justifyContent: 'center' }}>
 						<Link
 							href="/forgot-password"
 							sx={{
@@ -254,22 +227,11 @@ export default function Login() {
 					</Box>
 				</Box>
 
-				<Box
-					sx={{
-						display: 'flex',
-						flexDirection: 'column',
-						alignItems: 'center',
-						width: '99%',
-						height: '27%',
-						gap: 2,
-					}}
-				>
+				<Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '99%', height: '27%', gap: 2 }}>
 					<Button
 						type="submit"
 						variant="contained"
-						disabled={
-							isSubmitting || !email || !password || emailError || passwordError
-						}
+						disabled={isSubmitting || !email || !password || emailError || passwordError}
 						sx={{
 							backgroundColor: '#1976d2',
 							color: '#fff',
@@ -289,16 +251,7 @@ export default function Login() {
 						{isSubmitting ? 'מתחבר...' : 'כניסה למערכת'}
 					</Button>
 
-					<Box
-						sx={{
-							display: 'flex',
-							flexDirection: 'column',
-							width: '100%',
-							height: '4%',
-							justifyContent: 'center',
-							alignItems: 'center',
-						}}
-					>
+					<Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '4%', justifyContent: 'center', alignItems: 'center' }}>
 						<Button
 							variant="text"
 							sx={{
@@ -324,6 +277,22 @@ export default function Login() {
 					</Box>
 				</Box>
 			</Box>
+
+			{/* Snackbar component */}
+			<Snackbar
+				open={snackbarOpen}
+				autoHideDuration={4000}
+				onClose={() => setSnackbarOpen(false)}
+				anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+			>
+				<Alert
+					onClose={() => setSnackbarOpen(false)}
+					severity={snackbarSeverity}
+					sx={{ width: '100%', direction: 'rtl' }}
+				>
+					{snackbarMessage}
+				</Alert>
+			</Snackbar>
 		</Box>
 	);
 }
