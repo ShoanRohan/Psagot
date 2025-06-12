@@ -12,14 +12,11 @@ public class UserDTO
 
     public string Password { get; set; } = null!;
 
-        public int UserTypeId { get; set; }
+    public int UserTypeId { get; set; }
         
-        public string? UserTypeName { get; set; }
+    public string? UserTypeName { get; set; }
 
-        public bool IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public string? Role { get; set; }
-
-
-    public virtual UserTypeDTO UserTypes { get; set; } = null!;
 }
