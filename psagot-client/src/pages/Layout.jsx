@@ -13,10 +13,10 @@ const Layout = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Header />
             <Section />
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            {/* <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
             <MeetingButton />
-            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-           <footer />
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/> */}
+           {/* <footer /> */}
             
             <Footer />
         </Box>

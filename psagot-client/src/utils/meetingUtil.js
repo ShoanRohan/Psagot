@@ -25,7 +25,8 @@ const getMeetingeById = async (id) => {
 const getMeetings = async ({ userName, courseName, subjectName,  date,  page, rows}) => {
     const stringToSend = '/Meeting/GetMeetings/?UserName=' + userName + '&courseName=' + courseName + '&subjectName=' + subjectName + '&date=' + date + '&page=' + page + '&rows=' + rows
     console.log(stringToSend);
-    const response = await api.get(stringToSend);   
+    const response = await api.get(stringToSend); 
+    console.log (response)  
     return response.data;
 };
 const deleteMeetingById = async (meetingId) => {

@@ -6,6 +6,7 @@ const initialState = {
     selectedUser: null,
     status: 'idle',
     error: null,
+    currentUser: null,//:אמור להכנס מה login
 };
 
 const userSlice = createSlice({

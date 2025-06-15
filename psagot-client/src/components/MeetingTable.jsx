@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTable from './CustomTable';
-import { fetchAllMeetings, updateMeetingAction, deleteMeetingAction } from '../features/meeting/meetingActions';
+import { fetchMeetings, updateMeetingAction, deleteMeetingAction } from '../features/meeting/meetingActions';
 import {
   Chip,
   Dialog,
@@ -23,7 +23,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const MeetingTable = ({ onEdit }) => {
   const dispatch = useDispatch();
-  const { meetings, status, error } = useSelector((state) => state.meeting);
+  const { meetings, pageNumber, pageSize, status, error , searchFilters } = useSelector((state) => state.meeting);
  
   const [localMeetings, setLocalMeetings] = useState([]);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -33,28 +33,42 @@ const MeetingTable = ({ onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
-  // סטייטים לדיאלוג מחיקה
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (status === 'idle') {
-      dispatch(fetchAllMeetings());
+        const fetchParams = {
+            page: pageNumber,
+            rows: pageSize,
+            userName: searchFilters?.userName || '',
+            courseName: searchFilters?.courseName || '',
+            subjectName: searchFilters?.subjectName || '',
+            date: searchFilters?.date || ''
+        };
+        dispatch(fetchMeetings(fetchParams));
     } else if (status === 'succeeded') {
-      setLocalMeetings(meetings); // שמירה לסטייט מקומי
-      setIsInitialLoading(false);
+        setLocalMeetings(meetings);
+        setIsInitialLoading(false);
     } else if (status === 'failed') {
-      setIsInitialLoading(false);
+        setIsInitialLoading(false);
     }
-  }, [status, dispatch, meetings]);
+}, [status, dispatch, meetings, searchFilters]);
 
   useEffect(() => {
     if (!openDeleteDialog) {
-     dispatch(fetchAllMeetings());
+        const fetchParams = {
+            page: pageNumber,
+            rows: pageSize,
+            userName: searchFilters?.userName || '',
+            courseName: searchFilters?.courseName || '',
+            subjectName: searchFilters?.subjectName || '',
+            date: searchFilters?.date || ''
+        };
+        dispatch(fetchMeetings(fetchParams));
     }
-  }, [openDeleteDialog, dispatch]);
-
+}, [openDeleteDialog, dispatch, searchFilters]);
 
 
   const handleOpenDescriptionDialog = (meeting) => {
@@ -86,7 +100,6 @@ const MeetingTable = ({ onEdit }) => {
       };
       dispatch(updateMeetingAction(updatedMeeting))
         .then(() => {
-          // עדכון מקומי במקום שליחת fetchAllMeetings
           const updatedMeetings = localMeetings.map((m) =>
             m.meetingId === updatedMeeting.meetingId ? updatedMeeting : m
           );
@@ -101,7 +114,6 @@ const MeetingTable = ({ onEdit }) => {
     }
   };
 
-  // פונקציות לטיפול במחיקה
   const handleDeleteClick = (meeting) => {
     setMeetingToDelete(meeting);
     setOpenDeleteDialog(true);
@@ -119,7 +131,6 @@ const MeetingTable = ({ onEdit }) => {
       setIsDeleting(true);
       dispatch(deleteMeetingAction(meetingToDelete.meetingId))
         .then(() => {
-          // המחיקה מהסטייט המקומי תתבצע אוטומטית דרך הרדיוסר
           setIsDeleting(false);
           handleCloseDeleteDialog();
         })
@@ -130,6 +141,7 @@ const MeetingTable = ({ onEdit }) => {
     }
   };
 
+  
   const columns = [
     'שם קורס',
     'נושא',
@@ -225,7 +237,6 @@ const MeetingTable = ({ onEdit }) => {
         }
       }
     },
-    // קונפיגורציה לעמודת מחיקה
     'מחיקה': {
       render: (row) => (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -262,7 +273,7 @@ const MeetingTable = ({ onEdit }) => {
         keyMap={keyMap}
       />
       
-      {/* דיאלוג תיאור */}
+      {/* שאר הדיאלוגים נשארים זהים... */}
       <Dialog
         open={openDescriptionDialog}
         onClose={handleCloseDescriptionDialog}
@@ -345,7 +356,6 @@ const MeetingTable = ({ onEdit }) => {
         </DialogActions>
       </Dialog>
 
-      {/* דיאלוג אישור מחיקה */}
       <Dialog
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}

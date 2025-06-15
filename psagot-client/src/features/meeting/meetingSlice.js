@@ -11,14 +11,30 @@ const initialState = {
   error: null,
   totalRecords: 0, // Add totalRecords to track pagination info
   pageNumber: 1, 
-  pageSize:10
+  pageSize:10,
+  searchFilters: {
+    userName: '',
+    courseName: '',
+    subjectName: '',
+    date: '',
+  }
+
   
 };
 
 const meetingSlice = createSlice({
     name: 'meeting',
     initialState,
-    reducers: {
+    reducers: { 
+        setSearchFilters: (state, action) => {
+            state.searchFilters = action.payload;
+        },
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload;
+        },
+        setPageSize: (state, action) => {
+            state.pageSize = action.payload;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -104,3 +120,4 @@ const meetingSlice = createSlice({
 
 export const {} = meetingSlice.actions;
 export default meetingSlice.reducer;
+export const { setSearchFilters, setPageNumber, setPageSize } = meetingSlice.actions;
