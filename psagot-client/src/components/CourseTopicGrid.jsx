@@ -46,8 +46,8 @@ const statusColors = {
 export default function CourseTopicGrid() {
     const dispatch = useDispatch();
     const topics = useSelector(selectFilteredTopics);
-    //const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
-    const courseId = 1;
+    const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
+    // const courseId = 1;
 
     useEffect(() => {
         if (courseId) {
@@ -73,17 +73,17 @@ export default function CourseTopicGrid() {
     );
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
-const [selectedTopic, setSelectedTopic] = React.useState(null);
+    const [selectedTopic, setSelectedTopic] = React.useState(null);
 
-const handleEditClick = (topic) => {
-  setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
-  setDialogOpen(true);     // פותחים את הדיאלוג
-};
+    const handleEditClick = (topic) => {
+        setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
+        setDialogOpen(true);     // פותחים את הדיאלוג
+    };
 
-const handleDialogClose = () => {
-  setDialogOpen(false);
-  setSelectedTopic(null);
-};
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setSelectedTopic(null);
+    };
 
 
 const handleDialogSubmit = async (formData) => {
@@ -146,7 +146,7 @@ const handleDialogSubmit = async (formData) => {
 
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
-            <TableContainer component={Paper} sx={{width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
+            <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -200,10 +200,10 @@ const handleDialogSubmit = async (formData) => {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-  <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
-    <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
-  </IconButton>
-</StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
+                                        <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
+                                    </IconButton>
+                                </StyledTableCell>
                                 <StyledTableCell>
                                     <IconButton sx={{ bgcolor: '#F4F4F4' }}>
                                         <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
@@ -258,11 +258,11 @@ const handleDialogSubmit = async (formData) => {
                 </Grid2>
             </Box>
             <TopicDialog
-  open={dialogOpen}
-  onClose={handleDialogClose}
-  onSubmit={handleDialogSubmit}
-  initialData={selectedTopic}
-/>
+                open={dialogOpen}
+                onClose={handleDialogClose}
+                onSubmit={handleDialogSubmit}
+                initialData={selectedTopic}
+            />
         </Box>
     );
 }
