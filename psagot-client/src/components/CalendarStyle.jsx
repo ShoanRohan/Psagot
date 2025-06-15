@@ -24,7 +24,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     backgroundColor: "#FFFFFF",
     borderRadius: "10px",
     padding: "12px",
-    boxShadow: "0px 4px 20px rgba(0, 0, 255, 0.4) !important",
+    // border:"0.1px solid rgba(211, 211, 251, 0.4)",
     position: "relative",
     zIndex: 1,
     flexShrink: "1",

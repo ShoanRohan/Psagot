@@ -64,7 +64,6 @@ const handleEventContent = (eventInfo) => {
   const isDayView = viewType === "timeGridDay";
   const fontSize = isMonthView ? "6px" : isWeekView ? "12px" : "16px";
 
-  console.log(eventInfo);
   return (
     <StyledEventBox
       color={eventInfo.event.extendedProps.color}
@@ -104,7 +103,7 @@ const Calendar = ({ currentDate, view, events }) => {
 
   return (
     <CalendarStyle>
-      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden', height: "calc(100vh - 112px)", }} id="calendar-container">
+      <Box sx={{ display: "grid", placeItems: "center", width: "100%", overflow: 'hidden', height: "calc(100vh - 112px)", }}>
         <FullCalendar
           key={`${currentDate.toString()}-${view}`}
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
