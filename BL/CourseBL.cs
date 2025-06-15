@@ -45,10 +45,10 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
-      
 
-
-
-
+        public Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
