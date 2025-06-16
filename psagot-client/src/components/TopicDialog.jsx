@@ -103,6 +103,9 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const [editingDayIndex, setEditingDayIndex] = useState(null); 
   const dispatch = useDispatch();
   const { teachers} = useSelector(state => state.user)
+  const [isEditingMain, setIsEditingMain] = useState(false);
+  const statuses = useSelector((state) => state.status.coursesStatuses);
+  console.log("statuses", statuses);
 
 
   // // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
@@ -143,7 +146,7 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
           microphone: initialData?.microphone || false,
           projector: initialData?.projector || false,
         },
-        status: ""
+        status:initialData?.status || ""
       });
     } else {
       // אם initialData הוא null (כאשר הפופ-אפ נסגר או נפתח ללא נתונים), נאפס את הטופס
@@ -188,16 +191,15 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
 },[])
 
 
-const statuses = useSelector((state) => state.status.topicsStatuses);
 useEffect(() => {
   dispatch(fetchAllStatuses());
 }, [dispatch]);
 
-useEffect(() => {
-  if (formData.status && !statuses.find(s => s.statusId === formData.status)) {
-    setFormData(prev => ({ ...prev, status: "" }));
-  }
-}, [statuses, formData.status]);
+// useEffect(() => {
+//   if (formData.status && !statuses.find(s => s.statusId === formData.status)) {
+//     setFormData(prev => ({ ...prev, status: "" }));
+//   }
+// }, [statuses, formData.status]);
   // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
   // useEffect(() => {
   //   // רק נבדוק אם יש ימים שלא שמורים
@@ -207,7 +209,9 @@ useEffect(() => {
   //   }
   // }, [courseDays]);
 
-
+  const isLecturerValid = teachers.some(
+    (teacher) => teacher.name === formData.lecturerName
+  );
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -225,6 +229,7 @@ useEffect(() => {
         [name]: type === "checkbox" ? checked : value,
       }));
     }
+    
     // ביטול מצב שמור ראשי כשיש שינוי
     if (mainSaved) {
       setMainSaved(false);
@@ -340,128 +345,155 @@ useEffect(() => {
             pr: 3,
           }}
         >
-          <Box display="flex" justifyContent="space-between" alignItems="center" mt={-1} mb={1}>
-            <Typography fontWeight="bold">פרטים טכניים</Typography>
-            <Box display="flex" gap={1}>
-              <Button onClick={onClose} variant="outlined" sx={cancelButtonStyle}>ביטול</Button>
-              <Button
-                onClick={handleSave}
-                variant="contained"
-                sx={mainSaved ? disabledSaveButtonStyle : saveButtonStyle}
-                disabled={mainSaved}
-              >
-                שמור
-              </Button>
-            </Box>
-          </Box>
+ <Box display="flex" justifyContent="space-between" alignItems="center" mt={-1} mb={1}>
+  <Typography fontWeight="bold">פרטים טכניים</Typography>
+  <Box display="flex" gap={1}>
+    {isEditingMain ? (
+      <>
+        <Button onClick={() => { setIsEditingMain(false); onClose(); }} variant="outlined" sx={cancelButtonStyle}>
+          ביטול
+        </Button>
+        <Button
+          onClick={handleSave}
+          variant="contained"
+          sx={mainSaved ? disabledSaveButtonStyle : saveButtonStyle}
+          disabled={mainSaved}
+        >
+          שמור
+        </Button>
+      </>
+    ) : (
+      isLecturerValid && (
+        <IconButton
+          onClick={() => setIsEditingMain(true)}
+          sx={{
+            bgcolor: "#F4F4F4",
+            p: "6px",
+            width: "36px",
+            height: "36px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <img src={editSvg} alt="edit_icon" style={{ marginTop: "-1px" }} />
+        </IconButton>
+      )
+    )}
+  </Box>
+</Box>
 
-          <Box
-            sx={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, max-content)",
-              columnGap: "24px",
-            }}
-          >
-           <TextField label="קוד קורס" name="topicId" value={formData.topicId} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }}  disabled />
 
-            <TextField label="נושא" name="topic" value={formData.topic} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
-            <FormControl variant="standard" sx={{ ...sharedStyles, mr: -17 , style: {  textAlign: 'right', direction: 'rtl',style:{textAlign:'right'}  }}}>
-  <InputLabel id="lecturer-label">שם מרצה</InputLabel>
-  <Select
-    labelId="lecturer-label"
-    name="lecturerName"
-    value={formData.lecturerName}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(3, max-content)",
+          columnGap: "24px",
+        }}
+      >
+
+  <TextField label="קוד קורס" name="topicId" value={formData.topicId} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} disabled={true} />
+
+  <TextField label="נושא" name="topic" value={formData.topic} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} disabled={!isEditingMain} />
+  <FormControl variant="standard" sx={{ ...sharedStyles, mr: -17, style: { textAlign: 'right', direction: 'rtl', style: { textAlign: 'right' } } }}>
+    <InputLabel id="lecturer-label">שם מרצה</InputLabel>
+    <Select
+      labelId="lecturer-label"
+      name="lecturerName"
+      value={formData.lecturerName}
+      onChange={handleChange}
+      disabled={!isEditingMain} // הוסף disabled
+    >
+      {teachers?.map((teacher) => (
+        <MenuItem key={teacher.Id} value={teacher.name}>
+          {teacher.name}
+        </MenuItem>
+      ))}
+    </Select>
+  </FormControl>
+  <TextField label="מספר מפגשים" name="numberOfMeetings" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} disabled={!isEditingMain} />
+
+  <TextField
+    label="תאריך התחלה"
+    name="startDate"
+    type={startDateType}
+    onFocus={() => setStartDateType("date")}
+    onBlur={() => !formData.startDate && setStartDateType("text")}
+    value={formData.startDate}
     onChange={handleChange}
-  
-   
-  >
+    variant="standard"
+    sx={{ ...sharedStyles }}
+    disabled={!isEditingMain} // הוסף disabled
+  />
 
-    {teachers?.map((teacher) => (
-      <MenuItem key={teacher.Id} value={teacher.name}>
-        {teacher.name}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
-            <TextField label="מספר מפגשים" name="numberOfMeetings" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
-
-            <TextField
-              label="תאריך התחלה"
-              name="startDate"
-              type={startDateType}
-              onFocus={() => setStartDateType("date")}
-              onBlur={() => !formData.startDate && setStartDateType("text")}
-              value={formData.startDate}
-              onChange={handleChange}
-              variant="standard"
-              sx={{ ...sharedStyles }}
-            />
-
-            <TextField
-              label="תאריך סיום"
-              name="endDate"
-              type={endDateType}
-              onFocus={() => setEndDateType("date")}
-              onBlur={() => !formData.endDate && setEndDateType("text")}
-              value={formData.endDate}
-              onChange={handleChange}
-              variant="standard"
-              sx={{ ...sharedStyles, mr: -17 }}
-            />
-
-<FormControl variant="standard" sx={{ ...sharedStyles }}>
-  <InputLabel id="status-label">סטטוס</InputLabel>
-  <Select
-    labelId="status-label"
-    name="status"          
-    value={formData.status}
+  <TextField
+    label="תאריך סיום"
+    name="endDate"
+    type={endDateType}
+    onFocus={() => setEndDateType("date")}
+    onBlur={() => !formData.endDate && setEndDateType("text")}
+    value={formData.endDate}
     onChange={handleChange}
-  >
-    {statuses.map((status) => (
-      <MenuItem key={status.statusId} value={status.statusId}>
-        {status.name}
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
+    variant="standard"
+    sx={{ ...sharedStyles, mr: -17 }}
+    disabled={!isEditingMain} // הוסף disabled
+  />
 
-            <Box
-              sx={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                columnGap: "24px",
-                rowGap: "8px",
-                justifyItems: "end",
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "14px",
-                  alignItems: "center",
-                  gridColumn: "1 / -1",
-                  justifySelf: "start",
-                  mt: 1,
-                }}
-              >
-                <FormControlLabel
-                  control={<Checkbox name="computers" checked={formData.equipment.computers} onChange={handleChange} />}
-                  label="מחשבים"
-                  sx={{ m: 0, mr: -1 }}
-                />
-                <FormControlLabel
-                  control={<Checkbox name="microphone" checked={formData.equipment.microphone} onChange={handleChange} />}
-                  label="מיקרופון"
-                  sx={{ m: 0 }}
-                />
-                <FormControlLabel
-                  control={<Checkbox name="projector" checked={formData.equipment.projector} onChange={handleChange} />}
-                  label="מקרן"
-                  sx={{ m: 0 }}
-                />
-              </Box>
-            </Box>
-          </Box>
+  <FormControl variant="standard" sx={{ ...sharedStyles }}>
+    <InputLabel id="status-label">סטטוס</InputLabel>
+    <Select
+      labelId="status-label"
+      name="status"
+      value={formData.status}
+      onChange={handleChange}
+      disabled={!isEditingMain} // הוסף disabled
+    >
+      {statuses.map((status) => (
+        <MenuItem key={status.statusCourseId} value={status.name}>
+          {status.name}
+        </MenuItem>
+        
+      ))}
+    </Select>
+  </FormControl>
+
+  <Box
+    sx={{
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      columnGap: "24px",
+      rowGap: "8px",
+      justifyItems: "end",
+    }}
+  >
+    <Box
+      sx={{
+        display: "flex",
+        gap: "14px",
+        alignItems: "center",
+        gridColumn: "1 / -1",
+        justifySelf: "start",
+        mt: 1,
+      }}
+    >
+      <FormControlLabel
+        control={<Checkbox name="computers" checked={formData.equipment.computers} onChange={handleChange} disabled={!isEditingMain} />} // הוסף disabled
+        label="מחשבים"
+        sx={{ m: 0, mr: -1 }}
+      />
+      <FormControlLabel
+        control={<Checkbox name="microphone" checked={formData.equipment.microphone} onChange={handleChange} disabled={!isEditingMain} />} // הוסף disabled
+        label="מיקרופון"
+        sx={{ m: 0 }}
+      />
+      <FormControlLabel
+        control={<Checkbox name="projector" checked={formData.equipment.projector} onChange={handleChange} disabled={!isEditingMain} />} // הוסף disabled
+        label="מקרן"
+        sx={{ m: 0 }}
+      />
+    </Box>
+  </Box>
+</Box>
         </Box>
 
         <Box
