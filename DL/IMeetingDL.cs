@@ -17,7 +17,7 @@ namespace DL
     
 
 
-}
+
         Task<(IEnumerable<Meeting> Meetings, int totalRecords, string ErrorMessage)> GetMeetings(
            string userName, string courseName, string subjectName, string date, int page, int rows);
 

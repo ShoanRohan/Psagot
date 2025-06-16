@@ -79,8 +79,13 @@ namespace Psagot.Controllers
             var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
             if (meetings == null) return BadRequest(errorMessage);
 
+            return Ok(meetings);
+            
+        }
+
+
         [HttpDelete("DeleteMeeting/{id}")]
-        public async Task<IActionResult> DeleteMeeting([FromRoute] int id)
+       public async Task<IActionResult> DeleteMeeting([FromRoute] int id)
         {
             if (id <= 0)
             {
