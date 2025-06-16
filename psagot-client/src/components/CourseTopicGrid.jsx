@@ -22,6 +22,7 @@ import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import TopicDialog from './TopicDialog';
+import { fetchTeachers } from '../features/user/userAction';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -53,7 +54,11 @@ export default function CourseTopicGrid() {
         if (courseId) {
             dispatch(fetchAllTopicForCourseByCourseId(courseId));
         }
+        dispatch(fetchTeachers()); // חשוב!
+
     }, [dispatch, courseId]);
+
+
 
     console.log("טופיקס:", topics)
     const formatDate = (dateString) => {

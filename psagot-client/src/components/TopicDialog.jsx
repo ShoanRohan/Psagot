@@ -13,6 +13,8 @@ import deleteSvg from '../assets/icons/deleteIcon.svg';
 //import ClearIcon from "@mui/icons-material/Clear";
 import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
 import { useDispatch, useSelector } from "react-redux";
+import { fetchTeachers } from "../features/user/userAction";
+import { fetchAllStatuses } from "../features/status/statusActions";
 // import AddDayErrorDialog from './AddDayErrorDialog';
 
 const sharedStyles = {
@@ -90,12 +92,25 @@ const addDayButtonStyle = {
 };
 
 const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
+  const [startDateType, setStartDateType] = useState("text");
+  const [endDateType, setEndDateType] = useState("text");
+  const [courseDays, setCourseDays] = useState([
+    { day: "", startHour: "", endHour: "", saved: false },
+  ]);
+  const [isAddDayErrorOpen, setIsAddDayErrorOpen] = useState(false);
+
+  const [mainSaved, setMainSaved] = useState(false);
+  const [editingDayIndex, setEditingDayIndex] = useState(null); 
   const dispatch = useDispatch();
-  // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
-  // *** וודא שהנתיב 'state.user.allLecturersAndCoordinators' הוא הנתיב הנכון בסטייט של Redux עבורך ***
-  const allUsers = useSelector(state => state.user.allLecturersAndCoordinators); 
+  const { teachers} = useSelector(state => state.user)
+
+
+  // // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
+  // // *** וודא שהנתיב 'state.user.allLecturersAndCoordinators' הוא הנתיב הנכון בסטייט של Redux עבורך ***
+  // const allUsers = useSelector(state => state.user.allLecturersAndCoordinators); 
 
   const [formData, setFormData] = useState({
+    topicId:"",
     topic: "",
     lecturerName: "",
     startDate: "",
@@ -109,15 +124,16 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     status: "",
   });
 
-  const [lecturers, setLecturers] = useState([]); // מצב מקומי לרשימת המרצים המסוננת
-  const LECTURER_USER_TYPE_ID = 2; // *** שנה את זה ל-UserTypeId הנכון של מרצים במערכת שלך ***
+  // const [lecturers, setLecturers] = useState([]); // מצב מקומי לרשימת המרצים המסוננת
+  // const LECTURER_USER_TYPE_ID = 2; // *** שנה את זה ל-UserTypeId הנכון של מרצים במערכת שלך ***
 
 
   useEffect(() => {
     if (initialData) {
       setFormData({
+        topicId:initialData?.topicId||"",
         topic: initialData?.name || "", // שינוי ל-initialData.name
-        lecturerName: initialData?.teacherName || "",
+        lecturerName: initialData?.teacherName || '', 
         // פורמט התאריך: אם initialData.startDate קיים, נמיר אותו לפורמט YYYY-MM-DD
         startDate: initialData?.startDate ||"",
         endDate: initialData?.endDate || "",
@@ -127,11 +143,12 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
           microphone: initialData?.microphone || false,
           projector: initialData?.projector || false,
         },
-        status: initialData?.statusId ? (initialData.statusId === 1 ? "פעיל" : initialData.statusId === 2 ? "ממתין" : initialData.statusId === 3 ? "מושהה" : initialData.statusId === 4 ? "הסתיים" : "") : "",
+        status: ""
       });
     } else {
       // אם initialData הוא null (כאשר הפופ-אפ נסגר או נפתח ללא נתונים), נאפס את הטופס
       setFormData({
+        topicId:"",
         topic: "",
         lecturerName: "",
         startDate: "",
@@ -147,24 +164,8 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     }
   }, [initialData]); 
 
-   // אפקט לטעינת כל המשתמשים (מרצים ורכזות) באמצעות ה-thunk של Redux,
-  // כאשר הקומפוננטה נטענת או ה-initialData משתנה.
-  useEffect(() => {
-    console.log("All users from Redux:", allUsers); // לוג לבדיקה - מה מגיע מ-Redux
-    if (allUsers && Array.isArray(allUsers) && allUsers.length > 0) {
-      const filteredLecturers = allUsers.filter(user => user.userTypeId === LECTURER_USER_TYPE_ID);
-      setLecturers(filteredLecturers);
-      console.log("Filtered lecturers:", filteredLecturers); // לוג לבדיקה - מה נשמר כמרצים
-    } else {
-      setLecturers([]); // אם אין משתמשים או שהם לא מערך, נשמור מערך ריק
-    }
-  }, [allUsers, LECTURER_USER_TYPE_ID]);
 
-  const [startDateType, setStartDateType] = useState("text");
-  const [endDateType, setEndDateType] = useState("text");
-  const [courseDays, setCourseDays] = useState([
-    { day: "", startHour: "", endHour: "", saved: false },
-  ]);
+
 
   // useEffect(() => {
   //   if (initialData && initialData.courseDays) {
@@ -175,8 +176,6 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   // }, [initialData]);
 
 
-  const [mainSaved, setMainSaved] = useState(false);
-  const [editingDayIndex, setEditingDayIndex] = useState(null); 
   // אם משתנה כלשהו בטופס הראשי - מבטל את מצב השמירה (אפשר לערוך)
   useEffect(() => {
     if (mainSaved) {
@@ -184,8 +183,21 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     }
   }, [formData]);
 
-  const [isAddDayErrorOpen, setIsAddDayErrorOpen] = useState(false);
+  useEffect(()=>{
+    dispatch(fetchTeachers())
+},[])
 
+
+const statuses = useSelector((state) => state.status.topicsStatuses);
+useEffect(() => {
+  dispatch(fetchAllStatuses());
+}, [dispatch]);
+
+useEffect(() => {
+  if (formData.status && !statuses.find(s => s.statusId === formData.status)) {
+    setFormData(prev => ({ ...prev, status: "" }));
+  }
+}, [statuses, formData.status]);
   // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
   // useEffect(() => {
   //   // רק נבדוק אם יש ימים שלא שמורים
@@ -194,6 +206,8 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   //     // אך אם השתנה משהו מחוץ לשמירה צריך להגדיר מה לעשות - כאן אנחנו לא עושים שינוי כי saved מתעדכן בלולאה למטה
   //   }
   // }, [courseDays]);
+
+
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -348,8 +362,27 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
               columnGap: "24px",
             }}
           >
+           <TextField label="קוד קורס" name="topicId" value={formData.topicId} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }}  disabled />
+
             <TextField label="נושא" name="topic" value={formData.topic} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
-            <TextField label="שם מרצה" name="lecturerName" value={formData.lecturerName} onChange={handleChange} variant="standard" sx={{ ...sharedStyles, mr: -17 }} />
+            <FormControl variant="standard" sx={{ ...sharedStyles, mr: -17 , style: {  textAlign: 'right', direction: 'rtl',style:{textAlign:'right'}  }}}>
+  <InputLabel id="lecturer-label">שם מרצה</InputLabel>
+  <Select
+    labelId="lecturer-label"
+    name="lecturerName"
+    value={formData.lecturerName}
+    onChange={handleChange}
+  
+   
+  >
+
+    {teachers?.map((teacher) => (
+      <MenuItem key={teacher.Id} value={teacher.name}>
+        {teacher.name}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
             <TextField label="מספר מפגשים" name="numberOfMeetings" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} />
 
             <TextField
@@ -376,14 +409,21 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
               sx={{ ...sharedStyles, mr: -17 }}
             />
 
-            <FormControl variant="standard" sx={{ ...sharedStyles }}>
-              <InputLabel>סטטוס</InputLabel>
-              <Select name="status" value={formData.status} onChange={handleChange}>
-                <MenuItem value=""><em>בחר</em></MenuItem>
-                <MenuItem value="פעיל">פעיל</MenuItem>
-                <MenuItem value="לא פעיל">לא פעיל</MenuItem>
-              </Select>
-            </FormControl>
+<FormControl variant="standard" sx={{ ...sharedStyles }}>
+  <InputLabel id="status-label">סטטוס</InputLabel>
+  <Select
+    labelId="status-label"
+    name="status"          
+    value={formData.status}
+    onChange={handleChange}
+  >
+    {statuses.map((status) => (
+      <MenuItem key={status.statusId} value={status.statusId}>
+        {status.name}
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
 
             <Box
               sx={{
