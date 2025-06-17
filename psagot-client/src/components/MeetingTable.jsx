@@ -22,14 +22,19 @@ import {
   Alert
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom';
+import { clearError, resetStatus } from '../features/meeting/meetingSlice';
+import MeetingForm from './MeetingForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-const MeetingTable = React.memo(({ onEdit }) => {
+const MeetingTable = React.memo(({ onEdit  }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { meetings, status, error } = useSelector((state) => state.meeting);
-
   const [refreshKey, setRefreshKey] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -86,7 +91,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
   const handleConfirmDelete = useCallback(async () => {
     if (meetingToDelete) {
       setIsDeleting(true);
-
       try {
         await dispatch(deleteMeetingAction(meetingToDelete.meetingId)).unwrap();
         showSnackbar('מפגש נמחק בהצלחה', 'success');
@@ -100,7 +104,7 @@ const MeetingTable = React.memo(({ onEdit }) => {
     }
   }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
-  // Memoized static data
+  // עמודות הטבלה
   const columns = useMemo(() => [
     'שם קורס',
     'נושא',
@@ -117,6 +121,7 @@ const MeetingTable = React.memo(({ onEdit }) => {
     'מחיקה'
   ], []);
 
+  // מיפוי המפתחות
   const keyMap = useMemo(() => ({
     'שם קורס': 'courseName',
     'נושא': 'topicName',
@@ -127,11 +132,13 @@ const MeetingTable = React.memo(({ onEdit }) => {
     'שעת סיום': 'endTime',
     'תאריך': 'date',
     'חדר': 'roomId',
+    'האם השיבוץ תקין?': 'isValid',
+    'חלק מהמערכת?': 'isPartOfSchedule',
     'מזהה מפגש': 'meetingId',
     'מזהה נושא': 'scheduleForTopicId'
   }), []);
 
-  // Memoized column renderers
+  // פונקציות עזר לרינדור
   const renderScheduleChip = useCallback((row) => (
     <Chip
       label={row.isPartOfSchedule ? 'כן' : 'לא'}
@@ -150,7 +157,11 @@ const MeetingTable = React.memo(({ onEdit }) => {
 
   const renderEditButton = useCallback((row) => (
     <Tooltip title="ערוך מפגש">
-      <IconButton onClick={() => onEdit && onEdit(row)} size="small" color="primary">
+      <IconButton 
+        onClick={() => onEdit && onEdit(row)} 
+        size="small" 
+        color="primary"
+      >
         <EditIcon />
       </IconButton>
     </Tooltip>
@@ -158,12 +169,17 @@ const MeetingTable = React.memo(({ onEdit }) => {
 
   const renderDeleteButton = useCallback((row) => (
     <Tooltip title="מחק מפגש">
-      <IconButton onClick={() => handleDelete(row)} size="small" color="error">
+      <IconButton 
+        onClick={() => handleDelete(row)} 
+        size="small" 
+        color="error"
+      >
         <DeleteIcon />
       </IconButton>
     </Tooltip>
   ), [handleDelete]);
 
+  // הגדרת העמודות המיוחדות
   const columnConfig = useMemo(() => ({
     'חלק מהמערכת?': { render: renderScheduleChip },
     'האם השיבוץ תקין?': { render: renderValidChip },
@@ -171,7 +187,7 @@ const MeetingTable = React.memo(({ onEdit }) => {
     'מחיקה': { render: renderDeleteButton }
   }), [renderScheduleChip, renderValidChip, renderEditButton, renderDeleteButton]);
 
-  // Memoized loading component
+  // רכיב טעינה
   const loadingComponent = useMemo(() => (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
       <CircularProgress size={60} />
@@ -179,12 +195,23 @@ const MeetingTable = React.memo(({ onEdit }) => {
     </Box>
   ), []);
 
-  // Memoized error component
+  // רכיב שגיאה
   const errorComponent = useMemo(() => (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-      <Typography variant="h6" color="error" textAlign="center">שגיאה בטעינת המפגשים</Typography>
-      <Typography variant="body2" color="text.secondary" textAlign="center">{error}</Typography>
-      <Button variant="contained" onClick={handleManualRefresh} startIcon={<RefreshIcon />} size="large">נסה שוב</Button>
+      <Typography variant="h6" color="error" textAlign="center">
+        שגיאה בטעינת המפגשים
+      </Typography>
+      <Typography variant="body2" color="text.secondary" textAlign="center">
+        {error}
+      </Typography>
+      <Button 
+        variant="contained" 
+        onClick={handleManualRefresh} 
+        startIcon={<RefreshIcon />} 
+        size="large"
+      >
+        נסה שוב
+      </Button>
     </Box>
   ), [error, handleManualRefresh]);
 
@@ -199,13 +226,25 @@ const MeetingTable = React.memo(({ onEdit }) => {
   return (
     <Paper elevation={3} sx={{ p: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5" component="h2">טבלת מפגשים</Typography>
-        <Button variant="outlined" onClick={handleManualRefresh} startIcon={<RefreshIcon />} disabled={status === 'loading'}>
+        <Typography variant="h5" component="h2">
+          טבלת מפגשים
+        </Typography>
+        <Button 
+          variant="outlined" 
+          onClick={handleManualRefresh} 
+          startIcon={<RefreshIcon />} 
+          disabled={status === 'loading'}
+        >
           רענן
         </Button>
       </Box>
 
-      <CustomTable columns={columns} data={meetings} keyMap={keyMap} columnConfig={columnConfig} />
+      <CustomTable 
+        columns={columns} 
+        data={meetings || []} 
+        keyMap={keyMap} 
+        columnConfig={columnConfig} 
+      />
 
       {/* דיאלוג מחיקה */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
@@ -214,7 +253,7 @@ const MeetingTable = React.memo(({ onEdit }) => {
           <Typography>
             האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" מהקורס "{meetingToDelete?.courseName}"?
           </Typography>
-          {!meetingToDelete?.isValid && (
+          {meetingToDelete && !meetingToDelete.isValid && (
             <Box mt={2} display="flex" alignItems="center" color="error.main">
               <EventBusyIcon sx={{ mr: 1 }} />
               <Typography>המפגש מסומן כשגוי.</Typography>
@@ -222,8 +261,19 @@ const MeetingTable = React.memo(({ onEdit }) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteDialog} disabled={isDeleting} color="inherit">ביטול</Button>
-          <Button onClick={handleConfirmDelete} variant="contained" color="error" disabled={isDeleting}>
+          <Button 
+            onClick={handleCloseDeleteDialog} 
+            disabled={isDeleting} 
+            color="inherit"
+          >
+            ביטול
+          </Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            variant="contained" 
+            color="error" 
+            disabled={isDeleting}
+          >
             {isDeleting ? <CircularProgress size={24} color="inherit" /> : 'מחק'}
           </Button>
         </DialogActions>
