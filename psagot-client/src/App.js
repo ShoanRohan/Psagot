@@ -1,24 +1,16 @@
-import React from 'react';
-import UserProfileEditor from './components/UserProfileEditor';
-import Popup from './components/Popup';
-import MeetingLocatorBar from './components/MeetingLocatorBar';
-import From from './components/From'; // if you have a From.js component
-import Mifgash from './components/Mifgash';
-import UserProfile from './components/UserProfile';  // נתיב נכון לפי מיקום הקובץ שלך
-import UserTabel from './components/UserTabel';
-
-
-
+import './App.css';
+import store from './features/store';
+import AppRouter from './routers/AppRouter';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 function App() {
   return (
-    <div className="App">
-      <h1>ברוך הבא</h1>
-      <UserTabel></UserTabel>
-    
-    </div>
-     
+    <Provider store={store}>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+    </Provider>
   );
 }
-
 export default App;
-
