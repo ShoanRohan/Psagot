@@ -15,7 +15,7 @@ import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions
 import { setFilterTopic } from "../features/topic/topicSlice";
 import { fetchAllStatusesTopics } from "../features/status/statusActions";
 import { fetchTeachers } from "../features/user/userAction";
-
+import { selectSelectedCourse } from '../features/course/courseSlice';
 const sharedStyles = {
   width: "150px",
   height: "43px",
@@ -42,9 +42,11 @@ const buttonStyles = {
   textTransform: "none",
 };
 
-const TopicsSearch = ({ id }) => {
+const TopicsSearch = () => {
   const dispatch = useDispatch();
   const { topics, status } = useSelector((state) => state.topic);
+  // const{selectedCourse} = useSelector((state) => state.course);
+   const selectedCourse = useSelector(selectSelectedCourse)
   const { teachers } = useSelector((state) => state.user);
   const { topicsStatuses } = useSelector((state) => state.status);
   const initialState = {
@@ -56,10 +58,10 @@ const TopicsSearch = ({ id }) => {
   const [filters, setFilters] = useState(initialState);
   const [activeButton, setActiveButton] = useState(true);
   useEffect(() => {
-    if (status === "idle" && id) {
-      dispatch(fetchAllTopicForCourseByCourseId(id));
+    if ( selectedCourse?.courseId) {
+      dispatch(fetchAllTopicForCourseByCourseId(selectedCourse.courseId));
     }
-  }, [status, dispatch, id]);
+  }, [dispatch, selectedCourse?.courseId]);
    useEffect(() => {
     if (status === "idle") {
       dispatch(fetchAllStatusesTopics());

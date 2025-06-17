@@ -48,8 +48,8 @@ const statusColors = {
 export default function CourseTopicGrid() {
     const dispatch = useDispatch();
     const topics = useSelector(selectFilteredTopics);
-    const courseId = 1//useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
-    //const { courseId } = useParams();
+    const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
+    // const courseId = 1;
 
     useEffect(() => {
         if (courseId) {
