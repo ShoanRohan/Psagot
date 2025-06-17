@@ -41,6 +41,25 @@ namespace Psagot.Controllers
             if (addedCourse == null) return BadRequest(errorMessage);
             return Ok(addedCourse);
         }
+        // DELETE api/<CourseController>/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteCourse( int id)
+        {
+            try
+            {
+                bool isDelete = await _courseBL.DeleteCourse(id);
+                return isDelete;
+            }
+            catch (Exception ex) { return StatusCode(500, ex.Message); }
+        }
+        [HttpPut("UpdateCourse")]
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
+        {
+            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(courseDTO);
+            if (updatedCourse == null) return BadRequest(errorMessage);
+
+            return Ok(updatedCourse);
+        }
 
     }
 }

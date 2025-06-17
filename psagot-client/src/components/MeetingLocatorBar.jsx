@@ -14,28 +14,7 @@ const MeetingLocatorBar = () => {
 
   return (
     <div>
-      <label htmlFor="topic-select">בחר נושא:</label>
-      {status === "loading" && <p>טוען נושאים...</p>}
-      {error && <p style={{ color: "red" }}>שגיאה: {error}</p>}
-      <select
-        id="topic-select"
-        value={selectedTopics}
-        onChange={(e) => setSelectedTopics(e.target.value)}
-        disabled={status === "loading"}
-      >
-        <option value="">בחר נושא</option>
-        {topics?.length > 0 ? (
-          topics.map((topic) => (
-            <option key={topic.id} value={topic.id}>
-              {topic.name}
-            </option>
-          ))
-        ) : (
-          <option disabled>אין נושאים זמינים</option>
-        )}
-      </select>
     </div>
   );
 };
 
-export default MeetingLocatorBar;

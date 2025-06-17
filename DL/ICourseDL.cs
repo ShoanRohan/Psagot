@@ -14,6 +14,8 @@ namespace DL
 
         Task<(Course Course, string ErrorMessage)> GetCourseById(int id);
         Task<(Course Course, string ErrorMessage)> AddCourse(Course course);
-        Task<(Course Course, string errorMessage)> UpdateCourse(Course course);
+        Task<bool> DeleteCourse(int id);
+        Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course);
+
     }
 }
