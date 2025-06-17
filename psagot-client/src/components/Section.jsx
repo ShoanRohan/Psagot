@@ -4,11 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 const Section = () => {
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <Container component="main">
-                <Outlet />
-            </Container>
-        </Box>
+        <Box><Outlet /></Box>
     );
 };
 
