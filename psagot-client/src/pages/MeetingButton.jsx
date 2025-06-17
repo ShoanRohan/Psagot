@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,4 +39,4 @@ const MeetingButton = () => {
     );
 };
 
-export default MeetingButton;
+export default MeetingButton;*/
