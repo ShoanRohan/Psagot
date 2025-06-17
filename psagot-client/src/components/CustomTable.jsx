@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, TableHead, TableRow, TableCell, TableBody, IconButton, Chip } from '@mui/material';
+import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -20,18 +20,7 @@ const CustomTable = ({
     console.error('Table component: data prop must be an array');
     return <div>Error: Invalid data configuration</div>;
   }
-  
-  // הוספת לוגים לבדיקה
-  console.log('CustomTable props - columns:', columns);
-  console.log('CustomTable props - data:', data);
-  console.log('CustomTable props - columnConfig:', columnConfig);
-  
-  // מציאת האינדקסים של העמודות הקבועות
-  const deleteColumnIndex = columns.findIndex(col => col === 'מחיקה');
-  const editColumnIndex = columns.findIndex(col => col === 'עריכה');
-  const inSystemColumnIndex = columns.findIndex(col => col === 'חלק מהמערכת?');
-  const validScheduleColumnIndex = columns.findIndex(col => col === 'האם השיבוץ תקין?');
-  
+
   return (
     <Table stickyHeader sx={{ direction: 'rtl' }}>
       <TableHead>
@@ -48,8 +37,8 @@ const CustomTable = ({
           <TableRow key={i}>
             {columns.map((col, colIndex) => {
               const cellKey = `${i}-${colIndex}`;
-              
-              // בדיקה אם יש קונפיגורציה מותאמת אישית לעמודה זו
+
+              // Custom rendering if applicable
               if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
                 return (
                   <TableCell key={cellKey} align="center">
@@ -57,69 +46,36 @@ const CustomTable = ({
                   </TableCell>
                 );
               }
-              
-              // עמודת מחיקה
-              if (colIndex === deleteColumnIndex) {
+
+              // Edit column
+              if (col === 'עריכה') {
                 return (
                   <TableCell key={cellKey} align="center">
-                    <IconButton 
-                      color="error" 
-                      onClick={() => onDelete ? onDelete(row) : console.log('Delete', row)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
-                );
-              }
-              
-              // עמודת עריכה
-              if (colIndex === editColumnIndex) {
-                return (
-                  <TableCell key={cellKey} align="center">
-                    <IconButton 
-                      color="primary" 
-                      onClick={() => onEdit ? onEdit(row) : console.log('Edit', row)}
-                    >
+                    <IconButton color="primary" onClick={() => onEdit?.(row)}>
                       <EditIcon />
                     </IconButton>
                   </TableCell>
                 );
               }
-              
-              // עמודת חלק מהמערכת
-              if (colIndex === inSystemColumnIndex) {
+
+              // Delete column
+              if (col === 'מחיקה') {
                 return (
                   <TableCell key={cellKey} align="center">
-                    <Chip 
-                      label={row.isPartOfSchedule ? 'כן' : 'לא'} 
-                      color={row.isPartOfSchedule ? 'success' : 'default'} 
-                      variant="outlined" 
-                    />
+                    <IconButton color="error" onClick={() => onDelete?.(row)}>
+                      <DeleteIcon />
+                    </IconButton>
                   </TableCell>
                 );
               }
-              
-              // עמודת תקינות השיבוץ
-              if (colIndex === validScheduleColumnIndex) {
-                return (
-                  <TableCell key={cellKey} align="center">
-                    <Chip 
-                      label={row.isValid ? 'תקין' : 'שגוי'} 
-                      color={row.isValid ? 'success' : 'error'} 
-                      variant="outlined" 
-                    />
-                  </TableCell>
-                );
-              }
-              
-              // עמודות דינמיות לפי המידע שקיים
+
+              // Default dynamic content
               const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
-              if (row[dataKey] !== undefined) {
-                return <TableCell key={cellKey} align="center">{row[dataKey]}</TableCell>;
-              }
-              
-              // אם אין התאמה, מציג תא ריק
-              return <TableCell key={cellKey} align="center">-</TableCell>;
+              return (
+                <TableCell key={cellKey} align="center">
+                  {row[dataKey] !== undefined ? row[dataKey] : '-'}
+                </TableCell>
+              );
             })}
           </TableRow>
         ))}
