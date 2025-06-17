@@ -18,6 +18,9 @@ namespace BL
         Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
             int page, int pageSize, int? courseId, string courseName, string coordinatorName, int? year);
 
+        // ✅ חדש – לסינון מלא ללא פאג'ינציה
+        Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetFilteredCourses(
+            int? courseId, string courseName, string coordinatorName, int? year);
     }
 
 }
