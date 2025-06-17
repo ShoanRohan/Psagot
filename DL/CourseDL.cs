@@ -78,6 +78,9 @@ namespace DL
             {
                 var query = _context.Set<Course>().AsQueryable();
 
+                if (filter.CourseId.HasValue)
+                    query = query.Where(c => c.CourseId == filter.CourseId.Value);
+
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                     query = query.Where(c => c.Name.Contains(filter.Name));
 
