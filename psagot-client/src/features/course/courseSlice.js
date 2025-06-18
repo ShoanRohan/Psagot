@@ -5,7 +5,7 @@ const initialState = {
     courses: [],
     filterPaginatedCourses: [],
     currentPage: 1,
-    pageSize: 1,
+    pageSize: 10,
     totalCount: 0,
     selectedCourse: null,
     status: 'idle', // מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
@@ -62,21 +62,28 @@ const courseSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-
-
             .addCase(addCourseAction.fulfilled, (state, action) => {
                 state.courses.push(action.payload);
-            })
+            }) 
             .addCase(updateCourseAction.fulfilled, (state, action) => {
-                const index = state.courses.findIndex((course) => course.id === action.payload.id);
+                const index = state.courses.findIndex((course) => course.courseId === action.payload.courseId); 
                 if (index !== -1) {
                     state.courses[index] = action.payload;
                 }
-            });
-
-         
-
-
+                if (state.selectedCourse && state.selectedCourse.courseId === action.payload.courseId) {
+                    state.selectedCourse = action.payload;
+                }
+                state.status = 'succeeded';
+                state.error = null;
+            })
+            .addCase(updateCourseAction.rejected, (state, action) => {
+                state.status = 'failed';
+                if (action.payload && typeof action.payload === 'object' && action.payload.isConflict) {
+                    state.error = null;
+                } else {
+                    state.error = action.payload || action.error.message; 
+                }
+            });       
     },
 });
 

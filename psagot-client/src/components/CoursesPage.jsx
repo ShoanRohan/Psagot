@@ -128,7 +128,7 @@ const CoursesPage = () => {
   }, [dispatch, currentPage, pageSize]);
 
   return (
-<Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3 }}>
+<Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3,bgcolor: '#FAFCFF' }}>
 {/* Header row: title on right, buttons on left */}
       <Box
         sx={{
@@ -185,14 +185,12 @@ const CoursesPage = () => {
           </IconButton>
         </Stack>
       </Box>
-
       <CourseSearch
         filters={filters}
         setFilters={setFilters}
         onSearch={handleSearch}
         initialState={initialState}
       />
-
       <CourseGrid
         totalCount={totalCount}
         currentPage={currentPage}

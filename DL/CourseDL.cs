@@ -58,26 +58,83 @@ namespace DL
             }
         }
 
-        public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
+        public async Task<(Course Course, string ErrorMessage, bool hasFutureMeetings)> UpdateCourse(Course course)
         {
             try
             {
-                _context.Set<Course>().Update(course);
+                var originalStatusId = await _context.Set<Course>()
+                                               .Where(c => c.CourseId == course.CourseId)
+                                               .Select(c => c.StatusId)
+                                               .FirstOrDefaultAsync();
+
+                bool isStatusChangeFromActive = (originalStatusId == 1 && course.StatusId != 1);
+                bool hasFutureMeetings = false;
+                if (isStatusChangeFromActive)
+                {
+                    var futureMeetings = await _context.Set<Meeting>()
+                                   .Where(m => m.CourseId == course.CourseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now.AddDays(-15)))
+                                   .AsNoTracking()
+                                   .ToListAsync();
+
+                    if (futureMeetings.Any())
+                    {
+                        hasFutureMeetings = true;
+                        return (course, "לקורס קיימים מפגשים עתידיים. יש לאשר מחיקה.", hasFutureMeetings);
+                    }
+                }
+
+                _context.Entry(course).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                return (course, null);
+
+                var activeTopics = await _context.Set<Topic>()
+                                 .Where(t => t.CourseId == course.CourseId && t.StatusId == 1)
+                                 .ToListAsync();
+                if (activeTopics.Any())
+                {
+                    var newStatusIdForTopics = course.StatusId;
+
+                    foreach (var topic in activeTopics)
+                    {
+                        topic.StatusId = newStatusIdForTopics;
+                        _context.Entry(topic).State = EntityState.Modified;
+                    }
+                    await _context.SaveChangesAsync();
+                }
+                return (course, null, false);
             }
             catch (Exception ex)
             {
-                return (null, ex.Message);
+                var innerExMessage = ex.InnerException?.Message ?? ex.Message;
+                return (null, $"שגיאה בעדכון קורס: {innerExMessage}", false);
+            }
+        }
+
+        public async Task<string> DeleteFutureMeetingsForCourse(int courseId)
+        {
+            try
+            {
+                var futureMeetings = await _context.Set<Meeting>()
+                                                   .Where(m => m.CourseId == courseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now.AddDays(-15)))
+                                                   /*DateOnly.FromDateTime(DateTime.Now))*/
+                                                   .ToListAsync();
+
+                if (futureMeetings.Any())
+                {
+                    _context.Set<Meeting>().RemoveRange(futureMeetings);
+                    await _context.SaveChangesAsync();
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                var innerExMessage = ex.InnerException?.Message ?? ex.Message;
+                return $"שגיאה במחיקת מפגשים עתידיים: {innerExMessage}";
             }
         }
 
         public async Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
             int skip, int pageSize,
-           int? courseId,
-           string courseName,
-           string coordinatorName,
-           int? year)
+           int? courseId, string courseName, string coordinatorName, int? year)
         {
             try
             {
@@ -87,24 +144,16 @@ namespace DL
                     .AsQueryable();
 
                 if (courseId.HasValue)
-                {
-                    query = query.Where(c => c.CourseId == courseId.Value);
-                }
+                { query = query.Where(c => c.CourseId == courseId.Value); }
 
                 if (!string.IsNullOrEmpty(courseName))
-                {
-                    query = query.Where(c => c.Name.Contains(courseName));
-                }
+                { query = query.Where(c => c.Name.Contains(courseName)); }
 
                 if (!string.IsNullOrEmpty(coordinatorName))
-                {
-                    query = query.Where(c => c.Coordinator.Name.Contains(coordinatorName));
-                }
+                { query = query.Where(c => c.Coordinator.Name.Contains(coordinatorName)); }
 
                 if (year.HasValue)
-                {
-                    query = query.Where(c => c.Year == year.Value);
-                }
+                { query = query.Where(c => c.Year == year.Value); }
 
                 var totalCount = query.Count();
                 var courses = await query.Skip(skip).Take(pageSize).ToListAsync();
@@ -116,11 +165,7 @@ namespace DL
             {
                 return (null, 0, ex.Message);
             }
-
-
-
         }
-
       
     }
 }

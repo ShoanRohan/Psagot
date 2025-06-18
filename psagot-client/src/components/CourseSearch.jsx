@@ -32,12 +32,12 @@ const buttonStyles = {
   lineHeight: "18.96px",
 };
 
-const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
+const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
   const filterCourse = useSelector((state) => state.course.filterPaginatedCourses);
-  
+
 
   useEffect(() => {
     dispatch(fetchCoordinators());
@@ -78,7 +78,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState } ) => {
         margin: "auto",
         //position: "relative",
         gap: 10,
-        borderRadius: "4px",
+        borderRadius: "10px",
         padding: "25px 24px",
         backgroundColor: "white",
         display: "flex",

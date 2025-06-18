@@ -3,7 +3,7 @@ import { fetchAllScheduleForTopics, fetchScheduleForTopicById, fetchAllScheduleF
 
 const initialState = {
     scheduleForTopics: [],
-    status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+    status: 'idle',
     error: null,
 };
 
@@ -22,7 +22,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchAllScheduleForTopics.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.userTypes = action.payload;
+                state.scheduleForTopic = action.payload;
             })
             .addCase(fetchAllScheduleForTopics.rejected, (state, action) => {
                 state.status = 'failed';

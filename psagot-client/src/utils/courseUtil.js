@@ -15,20 +15,41 @@ const addCourse = async (courseDTO) => {
   return response.data;
 };
 
-const updateCourse = async (courseDTO) => {
-  const response = await api.put("/Course/UpdateCourse", courseDTO);
-  return response.data;
+const updateCourse = async (courseDTO, confirmDeleteFutureMeetings = false) => {
+  try {
+    const url = confirmDeleteFutureMeetings
+      ? `/Course/UpdateCourse?confirmDeleteFutureMeetings=true`
+      : `/Course/UpdateCourse`;
+
+    const response = await api.put(url, courseDTO);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 409) {
+      return Promise.reject({
+        isConflict: true,
+        message:
+          error.response.data.message ||
+          "לקורס קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס מפגשים אלו ימחקו האם להמשיך בשמירה?",
+        statusCode: 409,
+      });
+    }
+    return Promise.reject(error.response?.data?.message || error.message);
+  }
 };
 
 const getFilterPaginatedCourses = async (filterObject, page, pageSize) => {
-    console.log(filterObject)
-    const params = new URLSearchParams(filterObject).toString();
-    console.log(params)
-    const queryString = params ? `?${params}` : '';
-    console.log(queryString)
-    const response = await api.get(`/Course/GetPaginatedFilteredCourses/${page}/${pageSize}${queryString}`);
-    console.log(response.data)
-    return response.data;
-  };
+  const params = new URLSearchParams(filterObject).toString();
+  const queryString = params ? `?${params}` : "";
+  const response = await api.get(
+    `/Course/GetPaginatedFilteredCourses/${page}/${pageSize}${queryString}`
+  );
+  return response.data;
+};
 
-export { getCourseById, getAllCourses, addCourse, updateCourse, getFilterPaginatedCourses, };
+export {
+  getCourseById,
+  getAllCourses,
+  addCourse,
+  updateCourse,
+  getFilterPaginatedCourses,
+};

@@ -14,7 +14,8 @@ namespace BL
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses();
         Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
-        Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
+        Task<(CourseDTO Course, string ErrorMessage, bool hasFutureMeetings)> UpdateCourse(CourseDTO courseDTO);
+        Task<string> ConfirmAndDeleteFutureMeetings(int courseId);
         Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
             int page, int pageSize, int? courseId, string courseName, string coordinatorName, int? year);
 

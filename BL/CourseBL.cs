@@ -48,40 +48,38 @@ namespace BL
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
 
-        public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
+        public async Task<(CourseDTO Course, string ErrorMessage, bool hasFutureMeetings)> UpdateCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
-            var (updatedCourse, errorMessage) = await _courseDL.UpdateCourse(course);
+            var (updatedCourse, errorMessage, hasFutureMeetings) = await _courseDL.UpdateCourse(course);
 
-            if (updatedCourse == null) return (null, errorMessage);
+            if (hasFutureMeetings)
+            {
+                return (null, errorMessage, true);
 
-            return (_mapper.Map<CourseDTO>(updatedCourse), null);
+            }
+
+            if (updatedCourse == null) return (null, errorMessage, false);
+
+            return (_mapper.Map<CourseDTO>(updatedCourse), null, false);
         }
-        
-        public async Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
-            int page,
-            int pageSize,
-           int? courseId,
-           string courseName,
-           string coordinatorName,
-           int? year)
+        public async Task<string> ConfirmAndDeleteFutureMeetings(int courseId)
+        {
+            return await _courseDL.DeleteFutureMeetingsForCourse(courseId);
+        }
 
+        public async Task<(IEnumerable<CourseDTO> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
+           int page, int pageSize,
+           int? courseId, string courseName, string coordinatorName, int? year)
         {
             var skip = (page - 1) * pageSize;
 
-            var (courses,totalCount, ErrorMessage) = await _courseDL.GetPaginatedFilteredCourses(skip, pageSize, courseId, courseName, coordinatorName, year);
+            var (courses, totalCount, ErrorMessage) = await _courseDL.GetPaginatedFilteredCourses(skip, pageSize, courseId, courseName, coordinatorName, year);
 
-
-            if (courses == null) return (null,0, ErrorMessage);
-
+            if (courses == null) return (null, 0, ErrorMessage);
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), totalCount, null);
-
         }
 
-       
-
-
-
-        }
+    }
 }

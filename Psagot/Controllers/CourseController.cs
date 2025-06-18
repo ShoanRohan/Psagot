@@ -1,5 +1,7 @@
 ﻿using BL;
+using DL;
 using Entities.DTO;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -60,20 +62,35 @@ namespace Psagot.Controllers
             return Ok(addedCourse);
         }
 
-     
-
         [HttpPut("UpdateCourse")]
-        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
+        public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO, [FromQuery] bool confirmDeleteFutureMeetings = false)
         {
-            var (updatedCourse, errorMessage) = await _courseBL.UpdateCourse(courseDTO);
-            if (updatedCourse == null) return BadRequest(errorMessage);
+            if (confirmDeleteFutureMeetings)
+            {
+                var deleteError = await _courseBL.ConfirmAndDeleteFutureMeetings(courseDTO.CourseId);
+                if (deleteError != null)
+                {
+                    return StatusCode(500, $"שגיאה בביצוע מחיקת מפגשים: {deleteError}");
+                }
 
+                var (updatedCourseAfterConfirm, errorAfterConfirm,_) = await _courseBL.UpdateCourse(courseDTO);
+                if (updatedCourseAfterConfirm == null)
+                {
+                    return BadRequest($"שגיאה בעדכון הקורס לאחר אישור מחיקה: {errorAfterConfirm}");
+                }
+                return Ok(updatedCourseAfterConfirm);
+            }
+
+            var (updatedCourse, errorMessage, hasFutureMeetings) = await _courseBL.UpdateCourse(courseDTO);
+            if (updatedCourse == null)
+            {
+                if (errorMessage != null && errorMessage.Contains("מפגשים עתידיים") && errorMessage.Contains("לאשר מחיקה"))
+                {
+                    return Conflict(new { message = errorMessage, requiresConfirmation = true });
+                }
+                return BadRequest(errorMessage);
+            }
             return Ok(updatedCourse);
         }
-
-
-
-
-
     }
 }

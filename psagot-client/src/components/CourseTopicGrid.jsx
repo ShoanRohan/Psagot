@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, IconButton, Typography, Grid2, MenuItem } from '@mui/material';
+import { Box, IconButton, Typography, Grid, MenuItem } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { DeleteOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -143,19 +143,19 @@ export default function CourseTopicGrid() {
                 </Table>
             </TableContainer>
             <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
-                <Grid2 container>
+                <Grid container>
                     {/* עמודים */}
-                    <Grid2 xs={3}>
+                    <Grid xs={3}>
                         <Pagination
                             count={Math.ceil(topics.length / pageSize)} // מספר עמודים כולל
                             page={currentPage} // עמוד נוכחי
                             onChange={(event, value) => setCurrentPage(value)} // שינוי עמוד
                             sx={{ '& .MuiPaginationItem-root': { fontSize: 12 } }}
                         />
-                    </Grid2>
+                    </Grid>
 
                     {/* בחירת מספר שורות */}
-                    <Grid2 xs={9} textAlign="right" margin="auto">
+                    <Grid xs={9} textAlign="right" margin="auto">
                         <Select
                             value={pageSize} // הערך שנבחר (10/20/50)
                             onChange={(e) => {
@@ -182,8 +182,8 @@ export default function CourseTopicGrid() {
 
                         {/* טקסט שמסביר מה בחרת */}
                         <Typography display="inline" fontFamily="Rubik" fontSize="14px">:שורות לעמוד</Typography>
-                    </Grid2>
-                </Grid2>
+                    </Grid>
+                </Grid>
             </Box>
 
         </Box>
