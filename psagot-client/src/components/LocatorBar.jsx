@@ -17,20 +17,21 @@ import { fetchAllTopic } from '../features/topic/topicActions';
 import { fetchAllUsers } from '../features/user/userAction';
 import { format } from 'date-fns';
 import { fetchMeetings } from '../features/meeting/meetingActions';
+import { setSearchFilters } from '../features/meeting/meetingSlice';
 
 
 const LocatorBar = () => {
   const [course, setCourse] = useState('');
   const [topic, setTopic] = useState('');
   const today = new Date();
-  const [selectedDate, setSelectedDate] = useState(format(today, 'yyyy-MM-dd'));
+  const [selectedDate, setSelectedDate] = useState('');
   const [lecturer, setLecturer] = useState('');
   const dispatch = useDispatch();
   const { topics } = useSelector((state) => state.topic);
   const { courses } = useSelector((state) => state.course);
   const {pageNumber, pageSize} =useSelector((state) => state.meeting);
   const users = useSelector((state) => state.user.user || []);
-
+  
   useEffect(() => {
     dispatch(fetchAllCourses());
     dispatch(fetchAllTopic());
@@ -41,23 +42,23 @@ const LocatorBar = () => {
     setCourse('');
     setTopic('');
     setLecturer('');
-    setSelectedDate(format(today, 'yyyy-MM-dd'));
+    setSelectedDate('');
   };
   const handleSubmit = () => {
-    debugger;
     dispatch(fetchMeetings({
       courseName: course,
       subjectName: topic,
       userName: lecturer,
-      date: selectedDate,
+      date: selectedDate =='' ? format(today, 'yyyy-MM-dd') : selectedDate,
       page : pageNumber,
       rows: pageSize
     }));
-   
-      
-       
-      
-  };
+    dispatch(setSearchFilters({
+       courseName: course,
+      subjectName: topic,
+      userName: lecturer,
+      date: selectedDate}))
+    };
 
   return (
     <Paper
@@ -68,9 +69,9 @@ const LocatorBar = () => {
         justifyContent: 'space-between',
         padding: 2,
         borderRadius: '16px',
-        border: '1px solid ',
+        border: '1px solid #2196f3',
         minHeight: 80,
-        backgroundColor: '#ffffff',
+        backgroundColor: '#f5faff',
         flexDirection: 'row',
       }}
     >
@@ -86,11 +87,11 @@ const LocatorBar = () => {
             onChange={(e) => setCourse(e.target.value)}
             IconComponent={ExpandMoreIcon}
           >
-{courses.map((course) => (
-  <MenuItem key={course.id || course.name} value={course.name}>
-    {course.name}
-  </MenuItem>
-))}
+            {courses.map((course, index) => (
+              <MenuItem key={index} value={course.name}>
+                {course.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -102,11 +103,11 @@ const LocatorBar = () => {
             onChange={(e) => setTopic(e.target.value)}
             IconComponent={ExpandMoreIcon}
           >
-{topics.map((topic) => (
-  <MenuItem key={topic.id || topic.name} value={topic.name}>
-    {topic.name}
-  </MenuItem>
-))}
+            {topics.map((topic, index) => (
+              <MenuItem key={index} value={topic.name}>
+                {topic.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -119,13 +120,13 @@ const LocatorBar = () => {
             IconComponent={ExpandMoreIcon}
           >
            
-{users
-  .filter((user) => user.userTypeId === 4)
-  .map((lecturer) => (
-    <MenuItem key={lecturer.id || lecturer.name} value={lecturer.name}>
-      {lecturer.name}
-    </MenuItem>
-))}
+            {users
+              .filter((user) => user.userTypeId === 4)
+              .map((lecturer) => (
+                <MenuItem value={lecturer.name}>
+              {lecturer.name} 
+                </MenuItem>
+              ))}
           </Select>
         </FormControl>
 
@@ -161,6 +162,7 @@ const LocatorBar = () => {
         <Button
         onClick={handleSubmit}
           variant="contained"
+          disabled = {course === '' && topic === '' && lecturer === '' && selectedDate === ''}
           sx={{
             borderRadius: '25px',
             minWidth: 100,
@@ -168,7 +170,8 @@ const LocatorBar = () => {
             color: '#fff',
             fontWeight: 'bold',
             '&:hover': {
-              backgroundColor: '#1976d2',
+            backgroundColor: '#1976d2',
+            
             },
           }}
         >
@@ -176,6 +179,7 @@ const LocatorBar = () => {
           חיפוש
         </Button>
       </Box>
+     
     </Paper>
   );
 };

@@ -40,11 +40,17 @@ export const deleteMeetingAction = createAsyncThunk(
     }
 );
 
-export const fetchMeetings   = createAsyncThunk(
+export const fetchMeetings = createAsyncThunk(
     "meeting/fetchMeetings",
-    async ({userName, courseName, subjectName, date, page, rows }) => {
-        const response = await getMeetings();
-        debugger;
-        return response;
+    async (params = {}) => {
+        try {
+            const { userName = '', courseName = '', subjectName = '', date = '', page = 1, rows = 10 } = params;
+            console.log('Sending params to getMeetings:', { userName, courseName, subjectName, date, page, rows });
+            const response = await getMeetings({ userName, courseName, subjectName, date, page, rows });
+            return response;
+        } catch (error) {
+            console.error('Error in fetchMeetings:', error);
+            throw error;
+        }
     }
 );

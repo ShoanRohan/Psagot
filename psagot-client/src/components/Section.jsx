@@ -9,8 +9,9 @@ const Section = () => {
         <Box sx={{ flexGrow: 1 }}>
             <Container component="main">
                 <Outlet />
-                <MeetingLocatorBar/>
-                <MeetingTable/>
+                {/* <MeetingLocatorBar/>
+                <MeetingTable/> */}
+                
 
             </Container>
         </Box>
