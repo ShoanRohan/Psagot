@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
 
 const initialState = {
-    user: [],
+    users: [],
     selectedUser: null,
     status: 'idle',
     error: null,
@@ -23,7 +23,7 @@ const userSlice = createSlice({
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) =>{
             state.status ='succeeded';
-            state.user =action.payload;
+            state.users =action.payload;
         })
         .addCase(fetchAllUsers.rejected, (state, action) => {
             state.status = 'failed';
@@ -45,9 +45,9 @@ const userSlice = createSlice({
             state.user.puse(action.payload);
         })
         .addCase(updateUserAction.fulfilled, (state, action)=> {
-            const index = state.user.findIndex((user)=> user.id===action.payload.id);
+            const index = state.users.findIndex((user)=> user.id===action.payload.id);
             if (index !== -1) {
-                state.user[index]=action.payload;
+                state.users[index]=action.payload;
             }
         });
 
