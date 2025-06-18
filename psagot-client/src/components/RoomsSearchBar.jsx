@@ -20,7 +20,7 @@ const RoomsSearchBar = () => {
   const roomSearchEmpty = {
     roomName: "",
     equipment: [],
-    capacity: 0
+    capacity: ""
   };
   const [capacityError, setCapacityError] = useState("");
   const [roomSearch, setRoomeSearch] = useState(roomSearchEmpty);
@@ -54,7 +54,7 @@ const RoomsSearchBar = () => {
   return (
       <Box className="rooms-search-bar">
         <TextField
-          placeholder="שם חדר"
+          label="שם חדר"
           variant="outlined"
           size="small"
           className="textField"
@@ -62,26 +62,30 @@ const RoomsSearchBar = () => {
           value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
         />
-        <FormControl size="small" className="textField">
-          <InputLabel id="equipment-label">ציוד</InputLabel>
-          <Select
-            labelId="equipment-label"
-            multiple
-            name="equipment"
-            value={roomSearch?.equipment}
-            onChange={handleChangeRoomSearch}
-            renderValue={(selected) => selected.join(', ')}
-          >
-            {myEequipment.map((item) => (
-              <MenuItem key={item} value={item}>
-                <Checkbox checked={roomSearch?.equipment.indexOf(item) > -1} />
-                <ListItemText primary={item} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <FormControl size="small" className="textField equipment-select">
+  <Select
+    multiple
+    displayEmpty
+    name="equipment"
+    value={roomSearch?.equipment}
+    onChange={handleChangeRoomSearch}
+    renderValue={(selected) =>
+      selected.length ? selected.join(", ") : "ציוד"
+    }
+    inputProps={{ 'aria-label': 'ציוד' }}
+  >
+    {myEequipment.map((item) => (
+      <MenuItem key={item} value={item}>
+        <Checkbox checked={roomSearch?.equipment.indexOf(item) > -1} />
+        <ListItemText primary={item} />
+      </MenuItem>
+    ))}
+  </Select>
+</FormControl>
+
+
         <TextField
-          placeholder="מספר מקומות"
+          label="מספר מקומות"
           variant="outlined"
           size="small"
           type="number"
@@ -92,6 +96,13 @@ const RoomsSearchBar = () => {
           error={!!capacityError}
           helperText={capacityError}
         />
+         <Button
+          variant="outlined"
+          color="primary"
+          onClick={clean}
+        >
+          ניקוי
+        </Button>
         <Button
           variant="contained"
           color="primary"
@@ -100,14 +111,6 @@ const RoomsSearchBar = () => {
           onClick={() => findRooms()}
         >
           חיפוש
-        </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          startIcon={<RestartAltIcon />}
-          onClick={clean}
-        >
-          ניקוי
         </Button>
       </Box>
   );
