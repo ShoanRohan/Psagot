@@ -9,9 +9,6 @@ import "./CourseScreen.css";
 import exlIcon from "../assets/icons/exl.svg";
 import { useParams } from 'react-router-dom';
 
-
-
-
 const CourseScreen = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
@@ -27,19 +24,14 @@ const CourseScreen = () => {
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
   };
-  console.log(course)
-  return (
+    return (
     <Box className="course-container">
       {/* כותרת הקורס */}
       <Box className="course-header" sx={{ display: "flex", alignItems: "center", gap: "10px" }}>
-
         <Typography className="course-title">
           {course ? course.name : "טוען..."}
         </Typography>
-        {/* <Typography className="course-status">סטטוס הקורס: {course ? course.status : "טוען..."}</Typography> */}
-
-
-        {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
+     {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
         {tabIndex === 1 &&
         <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
           <IconButton>
@@ -52,21 +44,7 @@ const CourseScreen = () => {
         }
       </Box>
       <Typography className="course-status">סטטוס הקורס: {course ? course.statusName : "טוען..."}</Typography>
-
-      {/* <Box
-        className="helpBox"
-        component="section"
-        sx={{
-          position: "relative",
-          left: "50%",
-          right: "50%",
-          marginLeft: "-50vw",
-          marginRight: "-50vw",
-          width: "100vw",
-          pt: 2,     // אם תרצה קצת ריווח למעלה
-        }}
-      > */}
-
+    
       {/* בר ניווט */}
       <Tabs value={tabIndex} onChange={handleTabChange} className="course-tabs">
         <Tab label="פרטי קורס" className="course-tab" />
@@ -78,7 +56,6 @@ const CourseScreen = () => {
         {tabIndex === 0 && <CourseDetails />}
         {tabIndex === 1 && <CourseTopics />}
       </Box>
-
     </Box>
   );
 };

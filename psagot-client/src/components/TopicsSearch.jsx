@@ -56,7 +56,7 @@ const TopicsSearch = () => {
   };
 
   const [filters, setFilters] = useState(initialState);
-  const [activeButton, setActiveButton] = useState(true);
+  const [disActiveButton, setDisActiveButton] = useState(true);
   useEffect(() => {
     if ( selectedCourse?.courseId) {
       dispatch(fetchAllTopicForCourseByCourseId(selectedCourse.courseId));
@@ -71,7 +71,7 @@ const TopicsSearch = () => {
 
   const handleFilterData = () => {
     dispatch(setFilterTopic(filters))
-    setActiveButton(true)
+    setDisActiveButton(true)
   }
   
   return (
@@ -99,7 +99,7 @@ const TopicsSearch = () => {
               value={filters.topicName}
               onChange={(e) => {
                 setFilters({ ...filters, topicName: e.target.value });
-                setActiveButton(false);
+                setDisActiveButton(false);
               }}
               sx={sharedStyles}
             >
@@ -117,7 +117,7 @@ const TopicsSearch = () => {
               value={filters.teacherName}
               onChange={(e) => {
                 setFilters({ ...filters, teacherName: e.target.value })
-                setActiveButton(false);
+                setDisActiveButton(false);
               }}
               sx={sharedStyles}
             >
@@ -134,7 +134,7 @@ const TopicsSearch = () => {
               value={filters.statusName}
               onChange={(e) => {
                 setFilters({ ...filters, statusName: e.target.value })
-                setActiveButton(false);
+                setDisActiveButton(false);
               }}
               sx={sharedStyles}
             >
@@ -157,26 +157,23 @@ const TopicsSearch = () => {
             onClick={() => {
               setFilters(initialState)
               dispatch(setFilterTopic(initialState));
-              setActiveButton(true)
+              setDisActiveButton(true)
 
             }}
           >
             ניקוי
           </Button>
-
           <Button
-
             variant="contained"
             sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
             startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
-            disabled={activeButton} // הכפתור מושבת
+            disabled={disActiveButton} 
             onClick={() => {
               handleFilterData();
             }}
           >
             חיפוש
           </Button>
-
         </Box>
       </Box>
     </Box>
