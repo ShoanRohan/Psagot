@@ -165,9 +165,20 @@ const CourseSearch = () => {
                 placeholder: 'תאריך התחלה',
                 variant: 'standard',
                 sx: {
-                  width: 120,
+                  width: 125,
                   borderBottom: '1px solid #C6C6C6',
                   input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                    top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root':{
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root':{
+                    marginTop:0
+                  }
                 },
               },
             }}
@@ -188,9 +199,21 @@ const CourseSearch = () => {
                 placeholder: 'תאריך סיום',
                 variant: 'standard',
                 sx: {
-                  width: 120,
+                  width: 125,
                   borderBottom: '1px solid #C6C6C6',
                   input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                     top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root':{
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root':{
+                    marginTop:0
+                  }
                 },
               },
             }}
