@@ -21,6 +21,7 @@ export const addTopicAction = createAsyncThunk('topic/addTopicAction', async (ne
 
 // updated topic
 export const updateTopicAction = createAsyncThunk('topic/updateTopicAction', async (updatedTopic) => {
+  console.log(updatedTopic)
   const data = await updateTopic(updatedTopic);
   return data;
 });

@@ -17,7 +17,7 @@ const addTopic = async (newTopic) => {
 };
 
 const updateTopic = async (updateTopic) => {
-    const response = await api.put(`/Topic/UpdateTopic/${updateTopic.id}`, updateTopic);
+    const response = await api.put(`/Topic/UpdateTopic`, updateTopic);
     return response.data;
 };
 

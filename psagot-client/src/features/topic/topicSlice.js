@@ -80,6 +80,8 @@ const topicSlice = createSlice({
                 }
             })
             .addCase(updateTopicAction.rejected, (state, action) => {
+                console.log("Redux קיבל נושא מעודכן:", action.payload);
+
                 state.status = 'failed';
                 state.error = action.error.message;
             })

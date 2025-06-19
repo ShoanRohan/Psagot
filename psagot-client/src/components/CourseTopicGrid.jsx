@@ -117,10 +117,11 @@ const handleDialogSubmit = async (formData) => {
         courseId: selectedTopic.courseId || courseId, // שמירה על ה-courseId המקורי
         
         name: formData.topic, // שם הנושא
+        teacherId:formData.teacherId,
         teacherName: formData.lecturerName,
         startDate: formData.startDate,
         endDate: formData.endDate,
-        numberOfMeetings: formData.numberOfMeetings,
+        numberOfMeetings:Number (formData.numberOfMeetings),
         
         // עדכון שדות הציוד
         computers: formData.equipment.computers,
@@ -131,6 +132,7 @@ const handleDialogSubmit = async (formData) => {
         // אם יש לך courseDays ב-formData, תוכלי להוסיף אותם כאן:
         // courseDays: formData.courseDays, 
     };
+   
 
     try {
         // נשלח את פעולת העדכון ל-Redux.
@@ -139,7 +141,7 @@ const handleDialogSubmit = async (formData) => {
         // .unwrap() מאפשר לטפל בשגיאות מה-thunk באמצעות try...catch
         await dispatch(updateTopicAction(topicToUpdate)).unwrap(); 
         console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
-        dispatch(fetchAllTopicForCourseByCourseId(courseId));
+        dispatch(fetchAllTopicForCourseByCourseId(selectedTopic.courseId));
     } catch (error) {
         console.error("שגיאה בעדכון הנושא:", error);
         // כאן ניתן להציג הודעת שגיאה למשתמש, למשל באמצעות הודעת טוסט/סנקבר

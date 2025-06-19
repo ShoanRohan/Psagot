@@ -53,7 +53,10 @@ namespace DL
 
         public async Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic)
         {
+
+
             try
+
             {
                 _context.Set<Topic>().Update(topic);
                 await _context.SaveChangesAsync();

@@ -17,7 +17,7 @@ namespace Entities.DTO
 
         public int TeacherId { get; set; }
         
-        public string TeacherName { get; set; }
+        public string? TeacherName { get; set; }
 
         public DateOnly StartDate { get; set; }
 
@@ -30,8 +30,8 @@ namespace Entities.DTO
         public bool Projector { get; set; }
 
         public bool Microphone { get; set; }
-        public int? StatusId { get; set; }
+        public int StatusId { get; set; }
 
-        public string Status { get; set; }
+        public string? StatusName { get; set; }
     }
 }

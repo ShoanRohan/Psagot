@@ -105,12 +105,19 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const { teachers} = useSelector(state => state.user)
   const [isEditingMain, setIsEditingMain] = useState(false);
   const statuses = useSelector((state) => state.status.coursesStatuses);
-  console.log("statuses", statuses);
+  // console.log("statuses", statuses);
 
 
   // // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
   // // *** וודא שהנתיב 'state.user.allLecturersAndCoordinators' הוא הנתיב הנכון בסטייט של Redux עבורך ***
   // const allUsers = useSelector(state => state.user.allLecturersAndCoordinators); 
+
+  // const formatDate = (dateString) => {
+  //   if (!dateString) return "";
+  //   const d = new Date(dateString);
+  //   if (isNaN(d)) return "";
+  //   return d.toISOString().split("T")[0];
+  // };
 
   const [formData, setFormData] = useState({
     topicId:"",
@@ -133,25 +140,25 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
 
   useEffect(() => {
     if (initialData) {
+
+    
       setFormData({
-        topicId:initialData?.topicId||"",
-        topic: initialData?.name || "", // שינוי ל-initialData.name
-        lecturerName: initialData?.teacherName || '', 
-        // פורמט התאריך: אם initialData.startDate קיים, נמיר אותו לפורמט YYYY-MM-DD
-        startDate: initialData?.startDate ||"",
-        endDate: initialData?.endDate || "",
+        topicId: initialData?.topicId || "",
+        topic: initialData?.name || "",
+        lecturerName: initialData?.teacherName || '',
+        startDate: initialData?.startDate,
+        endDate: initialData?.endDate,
         numberOfMeetings: initialData?.numberOfMeetings || "",
         equipment: {
           computers: initialData?.computers || false,
           microphone: initialData?.microphone || false,
           projector: initialData?.projector || false,
         },
-        status:initialData?.status || ""
+        status: initialData?.statusName || ""
       });
     } else {
-      // אם initialData הוא null (כאשר הפופ-אפ נסגר או נפתח ללא נתונים), נאפס את הטופס
       setFormData({
-        topicId:"",
+        topicId: "",
         topic: "",
         lecturerName: "",
         startDate: "",
@@ -165,7 +172,10 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
         status: "",
       });
     }
-  }, [initialData]); 
+
+//     console.log("startDate in formData:", formData.startDate);
+// console.log("endDate in formData:", formData.endDate);
+  }, [initialData]);
 
 
 
@@ -257,7 +267,9 @@ useEffect(() => {
   };
 
   const handleSave = () => {
-    onSubmit({ ...formData, courseDays });
+    const teacherId = teachers.find(teacher => teacher.name.includes(formData.lecturerName)).userId;
+    console.log(teacherId)
+    onSubmit({ ...formData,teacherId:teacherId });// צריך ליצור לימים פונקציה נפרדת
     setMainSaved(true);
   };
   const handleEditDay = (index) => {
@@ -411,7 +423,7 @@ useEffect(() => {
       ))}
     </Select>
   </FormControl>
-  <TextField label="מספר מפגשים" name="numberOfMeetings" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} disabled={!isEditingMain} />
+  <TextField  label="מספר מפגשים" name="numberOfMeetings"   type="number" value={formData.numberOfMeetings} onChange={handleChange} variant="standard" sx={{ ...sharedStyles }} disabled={!isEditingMain} />
 
   <TextField
     label="תאריך התחלה"
