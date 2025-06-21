@@ -36,10 +36,6 @@ const CoursesPage = () => {
     saveAs(data, "Courses.xlsx");
   };
 
-  const NoPaddingBox = styled(Box)({
-    padding: '0 !important',
-    margin: '0 !important',
-  });
 
   return (
     <Container
@@ -52,13 +48,13 @@ const CoursesPage = () => {
         flexDirection: "column",
         background: "var(--Brand-10, #FAFCFF)",
         position: "relative",
-        margin: 0,
         
+
       }}
     >
 <Box
   sx={{
-    marginTop: "5%",
+    marginTop: "3%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -66,7 +62,6 @@ const CoursesPage = () => {
     width: "100%",
     padding: "2% 1.25%", 
     boxSizing: "border-box",
-
   }}
 >
  

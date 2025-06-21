@@ -73,7 +73,7 @@ const CourseSearch = () => {
         dir="rtl"
         sx={{
           position: "absolute",
-          top: "19.44%",
+          top: "18.5%",
           left: "50%",
           transform: "translateX(-50%)",
           width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
