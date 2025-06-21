@@ -7,6 +7,7 @@ const Section = () => {
 		<Box sx={{ flexGrow: 1 }}>
 			<Container
 				component="main"
+				maxWidth={false}
 				// disableGutters
 			>
 				<Outlet />
