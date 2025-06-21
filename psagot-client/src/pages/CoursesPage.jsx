@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography, Container } from "@mui/material";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import CourseGrid from "../components/CoursesGrid";
@@ -9,6 +9,7 @@ import CourseSearch from "../components/CourseSearch";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
 import { styled } from "@mui/system";
+
 
 const CoursesPage = () => {
   const dispatch = useDispatch();
@@ -41,16 +42,18 @@ const CoursesPage = () => {
   });
 
   return (
-    <NoPaddingBox
+    <Container
+      maxWidth={false} 
       sx={{
         maxWidth: "none !important",
         width: "100%",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        backgroundColor: "#FFFFFF",
+        background: "var(--Brand-10, #FAFCFF)",
         position: "relative",
         margin: 0,
+        
       }}
     >
 <Box
@@ -63,9 +66,10 @@ const CoursesPage = () => {
     width: "100%",
     padding: "2% 1.25%", 
     boxSizing: "border-box",
+
   }}
 >
-  {/* כותרת */}
+ 
   <Typography
     variant="h1"
     sx={{
@@ -148,7 +152,7 @@ const CoursesPage = () => {
       <CourseSearch  />
 
       <CourseGrid courses={courses} />
-    </NoPaddingBox>
+     </Container>
   );
 };
 

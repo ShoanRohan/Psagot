@@ -10,6 +10,7 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import editIcon from "../assets/icons/editIcon.png";
+import Scrolling from "../assets/icons/Scrolling.png";
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -119,11 +120,15 @@ const CourseGrid = ({ courses }) => {
     return (
       <Box
         sx={{
-          display: "flex",
-          width: "100%",
-          padding: "1% 2%",
-          alignItems: "center",
-          justifyContent: "space-between",
+    borderRadius: "8px",
+    background: "#FFF",
+    boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
+    display: "flex",
+    padding: "1% 0.5%",
+    alignItems: "center",
+    alignSelf: "stretch",
+    marginTop: "1%", 
+    width: "95%",
         }}
       >
 
@@ -152,7 +157,7 @@ const CourseGrid = ({ courses }) => {
         <Box sx={{ flexGrow: 1 }} />
 
         <Pagination
-        dir="rtl"
+        dir="rtl" 
           count={pageCount}
           page={paginationModel.page + 1}
           onChange={(e, value) =>
@@ -161,6 +166,7 @@ const CourseGrid = ({ courses }) => {
           shape="rounded"
           siblingCount={0}
           size="small"
+          
         />
       </Box>
   );
@@ -168,90 +174,145 @@ const CourseGrid = ({ courses }) => {
 
 
   return (
+    <Box sx={{ width: '100%', direction: 'rtl' }}>
     <Box
       sx={{
-        direction: 'rtl',
-        height: "65%",
-        width: 'calc(100% - 48px)',
-        display: 'flex',
-        flexGrow: 1,
-        position: 'absolute',
-        top: '29.72%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 1,
-        boxSizing: 'border-box',
-        boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
-        backgroundColor: "#FFFFFF",
-        borderRadius: '10px',
-        border: '1px solid #E5E7EB',
-        flexDirection: 'column',
+      direction: 'rtl',
+      height: "60%",
+      width: 'calc(100% - 48px)',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      alignSelf: 'stretch',
+      padding: "1.2% 1% 2% 2%",
+      borderRadius: '10px',
+      backgroundColor: "#FFF",
+      boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
+      position: 'absolute',
+      top: '30%',
+      zIndex: 1,
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+      border: "none",
+      "& .MuiDataGrid-root": {
+    border: "none",
+  },
       }}
+      
     >
+      <Box sx={{ flexGrow: 1, width: '100%' ,position: 'relative',}}>
+       
+  <Box sx={{
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    bottom: 0,
+    width: '2px',
+    zIndex: 3
+  }}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="2"ש
+      height="100%"
+      viewBox="0 0 2 100"
+      preserveAspectRatio="none"
+      fill="none"
+      style={{ height: '100%' }}
+    >
+      <path d="M1 0L1 100" stroke="#326DEF" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  </Box>
+  <Box
+    sx={{
+      width: '100%',
+      maxHeight: '20%',
+      overflowY: 'auto',
+    }}
+  ></Box>
       <DataGrid
-        sx={{
-          "& .MuiDataGrid-columnHeaders": {
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: "1% 2%",
-            height: "6%",
-            borderBottom: "2px solid var(--Neutral-20, #F0F1F3)",
-            backgroundColor: "#FFFFFF",
-          },
-          "& .MuiDataGrid-columnHeader": {
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            fontFamily: "Rubik",
-            fontSize: "0.8vw",
-            fontWeight: 500,
-            color: "#2A2A2A",
-          },
-          "& .MuiDataGrid-columnSeparator": {
-            display: "none",
-          },
-          "& .MuiDataGrid-cell": {
-            border: "none",
-            whiteSpace: "normal",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            padding: "1.5% 1%",
-            fontSize: "0.8vw",
-            fontFamily: "Rubik",
-          },
-          "& .MuiDataGrid-row": {
-            display: "flex",
-            width: "100%",
-            height: "7%",
-            padding: "0.2% 0 0.2% 0.2%",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderBottom: "0.1% solid #F0F1F3",
-            background: "#FFFFFF",
-            "&:nth-of-type(even)": {
-              backgroundColor: "#FAFCFF",
-            },
-            "&:nth-of-type(odd)": {
-              backgroundColor: "#FFFFFF",
-            },
-          }
-        }}
-        rows={rows}
+  sx={{
+    
+"& .MuiDataGrid-columnHeader": {
+  display: "grid",
+  placeItems: "center",
+  textAlign: "center",
+},
+
+ "& .MuiDataGrid-footerContainer": {
+      borderTop: "none",
+    },
+
+    "& .MuiDataGrid-columnHeaderTitle": {
+  fontWeight: "bold",
+  textAlign: "center",
+  justifyContent: "center",
+  display: "flex",
+  fontFamily: "Rubik",
+  fontSize: "0.7vw",
+  color: "#2A2A2A",
+},
+
+    "& .MuiDataGrid-columnSeparator": {
+      display: "none",
+    },
+    "& .MuiDataGrid-cell": {
+      whiteSpace: "normal",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      textAlign: "center",
+      padding: "1.5% 1%",
+      fontSize: "0.7vw",
+      fontFamily: "Rubik",
+      border: "none",
+      outline: "none",
+    },
+    "& .MuiDataGrid-row": {
+      display: "flex",
+      width: "100%",
+      height: "auto", 
+      padding: "0.3% 0 0.3% 0.3%",
+      justifyContent: "space-between",
+      alignItems: "center",
+
+    
+      background: "#FFFFFF",
+      "&:nth-of-type(even)": {
+        backgroundColor: "#FAFCFF",
+      },
+      "&:nth-of-type(odd)": {
+        backgroundColor: "#FFFFFF",
+      },
+      
+    },
+  }}
+
+       rows={rows}
         columns={columns}
         getRowId={(row) => row.courseId}
-        rowModesModel={rowModesModel}
         pagination
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
         pageSizeOptions={[10, 20, 50]}
-        slots={{ pagination: CustomPagination }}
+        hideFooter 
       />
     </Box>
+  </Box>
+
+   <Box sx={{ 
+    position: "absolute",
+    bottom: "2.5%",
+    width: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    left: "0.02%"
+    
+     }}>
+    <CustomPagination />
+  </Box>
+
+  </Box>
   );
 };
 
