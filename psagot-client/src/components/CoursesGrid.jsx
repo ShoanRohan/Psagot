@@ -10,7 +10,6 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import editIcon from "../assets/icons/editIcon.png";
-import Scrolling from "../assets/icons/Scrolling.png";
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -128,8 +127,8 @@ const CourseGrid = ({ courses }) => {
           <GridActionsCellItem icon={<SaveIcon />} label="Save" />,
           <GridActionsCellItem icon={<CancelIcon />} label="Cancel" />,
         ] : [
-          <GridActionsCellItem icon={<img src={editIcon} alt='עריכה' />} label="Edit" onClick={handleEditClick(id)} />,
-        ];
+            <GridActionsCellItem icon={<img src={editIcon} alt='עריכה' />} label="Edit" onClick={handleEditClick(id)} />,
+          ];
       },
     },
   ];
@@ -287,17 +286,17 @@ const CourseGrid = ({ courses }) => {
         }}
 
       >
-        <Box sx={{ flexGrow: 1, width: '100%', position: 'relative', }}>
+        <Box sx={{ flexGrow: 1, width: '100%', position: 'relative', height: '100%' }}>
 
           <Box sx={{
             position: 'absolute',
             right: 0,
             top: 0,
             bottom: 0,
-            width: '2px',
+            width: '0px',
             zIndex: 3
           }}>
-            <svg
+            {/* <svg
               xmlns="http://www.w3.org/2000/svg"
               width="2"
               height="100%"
@@ -307,18 +306,10 @@ const CourseGrid = ({ courses }) => {
               style={{ height: '12%' }}
             >
               <path d="M1 0L1 100" stroke="#326DEF" strokeWidth="2" strokeLinecap="round" />
-            </svg>
+            </svg> */}
           </Box>
-          <Box
-            sx={{
-              width: '100%',
-              maxHeight: '20%',
-              overflowY: 'auto',
-            }}
-          ></Box>
           <DataGrid
             sx={{
-
               "& .MuiDataGrid-columnHeader": {
                 display: "grid",
                 placeItems: "center",
@@ -369,9 +360,8 @@ const CourseGrid = ({ courses }) => {
                 },
                 "&:nth-of-type(odd)": {
                   backgroundColor: "#FFFFFF",
-                },
-
-              },
+                }
+              }
             }}
 
             rows={rows}
