@@ -24,11 +24,15 @@ const sharedStyles = {
   '& .MuiInputLabel-root': {
     right: '0',
     transformOrigin: 'top right',
+    fontFamily: 'Rubik'
   },
   '& .MuiSelect-icon': {
     right: 'unset',
     left: '0px',
   },
+  fontFamily: 'Rubik',
+  input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+
 };
 
 const buttonStyles = {
@@ -39,6 +43,25 @@ const buttonStyles = {
   fontWeight: 400,
   fontSize: '16px',
   textTransform: 'none',
+  input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+
+};
+const scrollBar = {
+  maxHeight: 48 * 4.5,
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#888',
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#555',
+  },
 };
 
 const defaultFilters = {
@@ -59,8 +82,8 @@ const getInitialFilters = () => {
       return {
         ...defaultFilters,
         ...parsed,
-        startDate: parsed.startDate? dayjs(parsed.startDate): null,
-        endDate: parsed.endtDate? dayjs(parsed.endDate): null,
+        startDate: parsed.startDate ? dayjs(parsed.startDate) : null,
+        endDate: parsed.endtDate ? dayjs(parsed.endDate) : null,
       };
     } catch {
       return defaultFilters;
@@ -108,9 +131,6 @@ const CourseSearch = () => {
       statusId: filters.status || null,
     };
 
-    // שמירת הפילטרים ב-localStorage
-    localStorage.setItem('courseFilters', JSON.stringify(filters));
-
     setLastSearchedFilters(filters);
     dispatch(filterCourses(filterDto));
     setHasSearched(true);
@@ -118,8 +138,6 @@ const CourseSearch = () => {
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    localStorage.removeItem('courseFilters'); // נקה את ה-localStorage
-    dispatch(filterCourses({ statusId: 1 }));
     setLastSearchedFilters(defaultFilters);
     setHasSearched(false);
   };
@@ -129,15 +147,23 @@ const CourseSearch = () => {
       <Box
         dir="rtl"
         sx={{
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: '30px 32px',
-          backgroundColor: 'white',
-          fontFamily: 'Rubik',
+          position: "absolute",
+          top: "18.5%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100% - 48px)",
+          height: '72px',
+          background: '#fff',
+          boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
           borderRadius: '10px',
-          boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
+          padding: '16px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          fontFamily: 'Rubik',
+          border: '1px solid #E5E7EB',
+          boxSizing: 'border-box',
+          zIndex: 2,
         }}
       >
         <Box sx={{ display: 'flex', gap: '20px' }}>
@@ -180,7 +206,16 @@ const CourseSearch = () => {
 
           <FormControl variant="standard" sx={sharedStyles}>
             <InputLabel>רכזת</InputLabel>
-            <Select value={filters.coordinator} onChange={handleChange('coordinator')} sx={sharedStyles}>
+            <Select
+              value={filters.coordinator}
+              onChange={handleChange('coordinator')}
+              sx={sharedStyles}
+              MenuProps={{
+                PaperProps: {
+                  sx: { ...scrollBar }
+                },
+              }}
+            >
               {coordinators?.map((c) => (
                 <MenuItem key={c.userId} value={c.userId}>
                   {c.name}
@@ -189,9 +224,19 @@ const CourseSearch = () => {
             </Select>
           </FormControl>
 
+
           <FormControl variant="standard" sx={sharedStyles}>
             <InputLabel>שנה</InputLabel>
-            <Select value={filters.year} onChange={handleChange('year')} sx={sharedStyles}>
+            <Select
+              value={filters.year}
+              onChange={handleChange('year')}
+              sx={sharedStyles}
+              MenuProps={{
+                PaperProps: {
+                  sx: { ...scrollBar }
+                },
+              }}
+            >
               {years?.map((year) => (
                 <MenuItem key={year} value={year}>
                   {year}
@@ -199,6 +244,7 @@ const CourseSearch = () => {
               ))}
             </Select>
           </FormControl>
+
 
           <DatePicker
             label="תאריך התחלה"
@@ -228,10 +274,10 @@ const CourseSearch = () => {
           </FormControl>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: '10px' }}>
-            <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
-              ניקוי
-            </Button>
+        <Box sx={{ display: 'flex', gap: '16px', marginRight: 'auto' }}>
+          <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
+            ניקוי
+          </Button>
           <Button
             variant="contained"
             onClick={handleSearch}
