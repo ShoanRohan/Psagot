@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAvailableYears, fetchCourseStatuses, filterCourses } from '../features/course/courseActions';
 import { fetchCoordinators } from '../features/user/userAction';
+import dayjs from 'dayjs';
 
 const sharedStyles = {
   width: '150px',
@@ -54,7 +55,13 @@ const getInitialFilters = () => {
   const saved = localStorage.getItem('courseFilters');
   if (saved) {
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      return {
+        ...defaultFilters,
+        ...parsed,
+        startDate: parsed.startDate? dayjs(parsed.startDate): null,
+        endDate: parsed.endtDate? dayjs(parsed.endDate): null,
+      };
     } catch {
       return defaultFilters;
     }
