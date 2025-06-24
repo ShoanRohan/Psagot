@@ -1,3 +1,4 @@
+```js
 import React, { useState } from 'react';
 import GenericPopup from '../components/GenericPopup';
 import Button from '@mui/material/Button';
@@ -41,3 +42,4 @@ const ExampleUseGenericPopup = () => {
 };
 
 export default ExampleUseGenericPopup;
+```
