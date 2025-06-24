@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GenericPopup from '../components/GenericPopup';
-import { Button } from '@mui/material';
+import Button from '@mui/material/Button';
 import { ContentTextBold, ContentTextRegular } from '../styles/GenericPopupStyle';
 
 const ExampleUseGenericPopup = () => {

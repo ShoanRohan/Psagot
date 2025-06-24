@@ -1,11 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Grid2 } from "@mui/material";
-import {
-  Button,
-  DialogActions,
-  DialogContent,
-} from "@mui/material";
+import Grid2 from "@mui/material/Grid2";
+import DialogContent from "@mui/material/DialogContent";
 import CloseIcon from "@mui/icons-material/Close";
 import {
   DialogGeneric,
