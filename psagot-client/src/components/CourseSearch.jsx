@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAvailableYears, fetchCourseStatuses, filterCourses } from '../features/course/courseActions';
 import { fetchCoordinators } from '../features/user/userAction';
+import dayjs from 'dayjs';
 
 const sharedStyles = {
   width: '150px',
@@ -54,7 +55,12 @@ const getInitialFilters = () => {
   const saved = localStorage.getItem('courseFilters');
   if (saved) {
     try {
-      return JSON.parse(saved);
+      const parsed = JSON.parse(saved);
+      return {
+        ...parsed,
+        startDate: parsed.startDate ? dayjs(parsed.startDate) : null,
+        endDate: parsed.endDate ? dayjs(parsed.endDate) : null,
+      };
     } catch {
       return defaultFilters;
     }
@@ -122,15 +128,24 @@ const CourseSearch = () => {
       <Box
         dir="rtl"
         sx={{
-          width: '100%',
+          position: "absolute",
+          top: "18.5%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
+          height: '72px',
+          background: '#fff',
+          boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
+          borderRadius: '10px',
+          padding: '16px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: '30px 32px',
-          backgroundColor: 'white',
+          gap: '16px',
           fontFamily: 'Rubik',
-          borderRadius: '10px',
-          boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.80)',
+          border: '1px solid #E5E7EB',
+          boxSizing: 'border-box', // Ensure padding is included in width
+          zIndex: 2,
         }}
       >
         <Box sx={{ display: 'flex', gap: '20px' }}>
@@ -197,16 +212,69 @@ const CourseSearch = () => {
             label="תאריך התחלה"
             value={filters.startDate}
             onChange={handleDateChange('startDate')}
-            slotProps={{ textField: { variant: 'standard' } }}
-            sx={sharedStyles}
+            sx={{
+              width: 120,
+              borderBottom: '1px solid #C6C6C6',
+              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+            }}
+            slotProps={{
+              textField: {
+                placeholder: 'תאריך התחלה',
+                variant: 'standard',
+                sx: {
+                  width: 125,
+                  margin: '15px 0',
+                  borderBottom: '1px solid #C6C6C6',
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                    top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root': {
+                    marginTop: 0
+                  },
+                },
+              },
+            }}
           />
 
           <DatePicker
             label="תאריך סיום"
             value={filters.endDate}
             onChange={handleDateChange('endDate')}
-            slotProps={{ textField: { variant: 'standard' } }}
-            sx={sharedStyles}
+            sx={{
+              width: 120,
+              borderBottom: '1px solid #C6C6C6',
+              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+            }}
+            slotProps={{
+              textField: {
+                placeholder: 'תאריך סיום',
+                variant: 'standard',
+                sx: {
+                  width: 125,
+                  margin: '15px 0',
+                  borderBottom: '1px solid #C6C6C6',
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                    top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root': {
+                    marginTop: 0
+                  }
+                },
+              },
+            }}
           />
 
           <FormControl variant="standard" sx={sharedStyles}>
@@ -222,8 +290,8 @@ const CourseSearch = () => {
         </Box>
 
         <Box sx={{ display: 'flex', gap: '10px' }}>
-            <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
-              ניקוי
+          <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
+            ניקוי
             </Button>
           <Button
             variant="contained"
