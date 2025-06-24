@@ -8,11 +8,9 @@ import { Box } from "@mui/material";
 
 const Layout = () => {
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%'}}>
-            <SideBar />
-            <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                <Section />
-            </Box>
+        <Box sx={{ display: 'flex', width: '100vw', height: '100vh' }}>
+            <Box className="sideBarStyle"><SideBar/></Box>
+            <Box className="mainContentStyle"><Section/></Box>
         </Box>
     );
 }
