@@ -1,7 +1,7 @@
 .rooms-search-bar {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: flex-end;
   flex-wrap: wrap;
   gap: 12px;
   background-color: #f9fbfd;
@@ -11,6 +11,8 @@
   direction: rtl;
   width: 100%;
   max-width: 100%;
+  overflow-x: auto; /* או hidden */
+  box-sizing: border-box;
 }
 
 /* שדה טקסט כללי */
@@ -24,6 +26,13 @@
 .textField.equipment-select {
   width: 20% !important;
   min-width: 180px !important;
+}
+.textField.equipment-select .MuiSelect-select.MuiSelect-outlined {
+  padding-right: 30px !important;
+}
+.textField label.MuiInputLabel-root {
+  right: 25px !important;
+  left: auto !important;
 }
 
 /* יישור טקסט לשדה קלט */
@@ -123,5 +132,31 @@
   background-color: #f9f9f9;
   border-radius: 12px;
   margin-bottom: 1rem;
+}
+
+.search-button.Mui-disabled {
+  background-color: #a39bc0 !important;
+  color: white !important;
+  cursor: not-allowed !important;
+  opacity: 0.6;
+}
+
+
+/* שדות חיפוש */
+.search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  flex: 1;
+  justify-content: flex-start; /* מיושרים לימין (ב־RTL) */
+  padding-right: 12px;
+}
+
+/* כפתורים */
+.search-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end; /* מיושרים לשמאל (ב־RTL) */
+  padding-left: 20px;
 }
 

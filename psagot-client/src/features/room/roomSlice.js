@@ -4,10 +4,12 @@ import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction } from '.
 const initialState = {
     rooms: [],
     selectedRoom: null,
-    status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+    status: 'idle', 
     filteredRooms: null,
     loading: false,
     error: null,
+    pageIndex: 0, // חדש
+    pageSize: 2,  // כמה תוצאות בעמוד
 };
 
 const roomSlice = createSlice({
@@ -18,18 +20,28 @@ const roomSlice = createSlice({
 
         },
         filterRooms: (state, action) => {
-            const { roomName, capacity, projector, speakers, computers, array } = action.payload;
-            state.filteredRooms = state.rooms.filter(room =>
-                (roomName ? room.name.includes(roomName) : true) &&
-                (capacity ? room.capacity >= capacity : true) &&
-                (projector ? room.projector : true) &&
-                (speakers ? room.speakers : true) &&
-                (computers ? room.computers : true)
-            );
-        },
+  const { roomName, capacity, projector, speakers, computers, pageIndex = 0 } = action.payload;
+  
+  const allFiltered = state.rooms.filter(room =>
+    (roomName ? room.name.includes(roomName) : true) &&
+    (capacity ? room.capacity >= capacity : true) &&
+    (projector ? room.projector : true) &&
+    (speakers ? room.speakers : true) &&
+    (computers ? room.computers : true)
+  );
+
+  state.pageIndex = pageIndex; // 🔹 שומר את העמוד הנוכחי ב־state
+
+  const start = pageIndex * state.pageSize; // 🔹 חישוב התחלה
+  const end = start + state.pageSize;       // 🔹 חישוב סוף
+
+  state.filteredRooms = allFiltered.slice(start, end); // 🔹 שמירה רק של העמוד הנוכחי
+}
+,
         resetFilter: (state) => {
-            state.filteredRooms = null;
-        }
+  state.filteredRooms = null;
+  state.pageIndex = 0; // ✨ מאפס גם את העמוד הנוכחי
+}
     },
     extraReducers: (builder) => {
         builder

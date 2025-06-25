@@ -6,53 +6,57 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
-import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { useDispatch } from "react-redux";
 import { filterRooms } from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
 
-const myEequipment = ["מקרן", "רמקולים", "מחשבים"]
+const myEequipment = ["מקרן", "רמקולים", "מחשבים"];
 
 const RoomsSearchBar = () => {
   const roomSearchEmpty = {
     roomName: "",
     equipment: [],
-    capacity: ""
+    capacity: "",
   };
   const [capacityError, setCapacityError] = useState("");
   const [roomSearch, setRoomeSearch] = useState(roomSearchEmpty);
 
+
   const dispatch = useDispatch();
   const validate = () => {
-    const isValid = !roomSearch?.capacity || (!isNaN(roomSearch?.capacity) && roomSearch?.capacity > 0);
+    const isValid =
+      !roomSearch?.capacity ||
+      (!isNaN(roomSearch?.capacity) && roomSearch?.capacity > 0);
     setCapacityError(isValid ? "" : "מספר המקומות חייב להיות מספר חיובי");
     return isValid;
   };
   const clean = () => {
     setRoomeSearch(roomSearchEmpty);
     dispatch(filterRooms({}));
-  }
+  };
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
     setRoomeSearch({ ...roomSearch, [name]: value });
-  }
+  };
   const findRooms = () => {
     if (!validate()) return;
     const projector = roomSearch.equipment.includes("מקרן");
     const speakers = roomSearch.equipment.includes("רמקולים");
     const computers = roomSearch.equipment.includes("מחשבים");
-    dispatch(filterRooms({
-      ...roomSearch,
-      projector,
-      speakers,
-      computers,
-    }));
-  }
+    dispatch(
+      filterRooms({
+        ...roomSearch,
+        projector,
+        speakers,
+        computers,
+      })
+    );
+  };
   return (
-      <Box className="rooms-search-bar">
+    <Box className="rooms-search-bar">
+      <div className="search-fields">
         <TextField
           label="שם חדר"
           variant="outlined"
@@ -63,27 +67,25 @@ const RoomsSearchBar = () => {
           onChange={handleChangeRoomSearch}
         />
         <FormControl size="small" className="textField equipment-select">
-  <Select
-    multiple
-    displayEmpty
-    name="equipment"
-    value={roomSearch?.equipment}
-    onChange={handleChangeRoomSearch}
-    renderValue={(selected) =>
-      selected.length ? selected.join(", ") : "ציוד"
-    }
-    inputProps={{ 'aria-label': 'ציוד' }}
-  >
-    {myEequipment.map((item) => (
-      <MenuItem key={item} value={item}>
-        <Checkbox checked={roomSearch?.equipment.indexOf(item) > -1} />
-        <ListItemText primary={item} />
-      </MenuItem>
-    ))}
-  </Select>
-</FormControl>
-
-
+          <Select
+            multiple
+            displayEmpty
+            name="equipment"
+            value={roomSearch?.equipment}
+            onChange={handleChangeRoomSearch}
+            renderValue={(selected) =>
+              selected.length ? selected.join(", ") : "ציוד"
+            }
+            inputProps={{ "aria-label": "ציוד" }}
+          >
+            {myEequipment.map((item) => (
+              <MenuItem key={item} value={item}>
+                <Checkbox checked={roomSearch?.equipment.indexOf(item) > -1} />
+                <ListItemText primary={item} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           label="מספר מקומות"
           variant="outlined"
@@ -96,24 +98,31 @@ const RoomsSearchBar = () => {
           error={!!capacityError}
           helperText={capacityError}
         />
-         <Button
-          variant="outlined"
-          color="primary"
-          onClick={clean}
-        >
-          ניקוי
-        </Button>
+      </div>
+      <div className="search-buttons">
+        {(roomSearch.roomName ||
+          roomSearch.capacity ||
+          roomSearch.equipment.length > 0) && (
+          <Button variant="outlined" color="primary" onClick={clean}>
+            ניקוי
+          </Button>
+        )}
         <Button
           variant="contained"
           color="primary"
           startIcon={<SearchIcon />}
-          disabled={!roomSearch?.capacity?.length && !roomSearch?.roomName?.length && !roomSearch?.equipment?.length}
-          onClick={() => findRooms()}
+          disabled={
+            !roomSearch?.capacity?.length &&
+            !roomSearch?.roomName?.length &&
+            !roomSearch?.equipment?.length
+          }
+          onClick={findRooms}
+          className="search-button"
         >
           חיפוש
         </Button>
-      </Box>
+    </div>
+    </Box>
   );
 };
-
-export default RoomsSearchBar
+export default RoomsSearchBar;
