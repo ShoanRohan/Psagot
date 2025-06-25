@@ -9,7 +9,6 @@ import { fetchCourseById } from '../features/course/courseActions';
 import editSvg from '../assets/icons/edit.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 const StyledTableCell = styled(TableCell)(() => ({
     [`&.${tableCellClasses.head}`]: {
         //backgroundColor: theme.palette.common.Neutral / 20,
@@ -34,7 +33,6 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     const dispatch = useDispatch();
     const [selectSize, setSelectSize] = useState(pageSize);
     const courses = useSelector(selectCourses);
-
     const handlePageChange = (event, newPage) => {
         onPageChange(newPage);
     };
