@@ -302,7 +302,7 @@ function lightenColor(hexColor, percent) {
 
 // עיצוב הרכיב
 const StyledEventBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "isMonthView" && prop !== "color",
+  shouldForwardProp: (prop) => prop !== "isMonthView" && prop !== "color" && prop !== "isPast",
 })(({ color = "#808080", isMonthView, isPast = false }) => {
   const borderColor = isPast ? lightenColor(color, 0.7) : darkenColor(color, 0.1);
   const backgroundColor = isPast ? lightenColor(color, 0.9) : lightenColor(color, 0.65);
