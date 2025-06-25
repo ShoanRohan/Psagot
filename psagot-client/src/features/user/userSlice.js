@@ -1,11 +1,15 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchAllUser, fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchAllCoordinators, fetchAllLecturersAndCoordinators, fetchFilteredUseres, fetchUsersByPage } from './userAction';
 
 const initialState = {
-    user: [],
+    coordinators:[],
+    users: [],
     selectedUser: null,
     status: 'idle',
     error: null,
+    pageNumber: 1,
+    pageSize: 10,
+    totalUsers: 0,
 };
 
 const userSlice = createSlice({
@@ -14,15 +18,22 @@ const userSlice = createSlice({
     reducers:{
         setUser: (state, action) =>{
 
+        },
+        setPageNumber: (state, action) =>{
+            state.pageNumber = action.payload
+        },
+        setPageSize: (state, action) =>{
+            state.pageSize = action.payload
         }
     },
+    
     extraReducers: (builder) =>{
         builder.addCase(fetchAllUsers.pending, (state) =>{
             state.status = 'loading';
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) =>{
             state.status ='succeeded';
-            state.user =action.payload;
+            state.users =action.payload;
         })
         .addCase(fetchAllUsers.rejected, (state, action) => {
             state.status = 'failed';
@@ -41,17 +52,61 @@ const userSlice = createSlice({
             state.error =action.error.message;
         })
         .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.puse(action.payload);
+            state.users.puse(action.payload);
         })
         .addCase(updateUserAction.fulfilled, (state, action)=> {
-            const index = state.user.findIndex((user)=> user.id===action.payload.id);
+            const index = state.users.findIndex((user)=> user.id===action.payload.id);
             if (index !== -1) {
-                state.user[index]=action.payload;
+                state.users[index]=action.payload;
             }
-        });
+        }).addCase(fetchAllLecturersAndCoordinators.pending, (state) =>{
+            state.status = 'loading';
+        })
+        .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) =>{
+            state.status ='succeeded';
+            state.users =action.payload;
+        })
+        .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        
+        .addCase(fetchUsersByPage.pending, (state) =>{
+            state.status = 'loading';
+        })
+        .addCase(fetchUsersByPage.fulfilled, (state, action)=> {
+            state.status ='succeeded';
+            state.users =action.payload.users;
+            state.totalUsers=action.payload.countUsers;
+        })
+        .addCase(fetchUsersByPage.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(fetchAllCoordinators.fulfilled, (state, action) =>{
+            state.status = 'succeeded';
+            state.coordinators = action.payload;
+        })
+        .addCase(fetchAllCoordinators.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
+        .addCase(fetchAllCoordinators.pending, (state) =>{
+            state.status ='loading';
 
+        }).addCase(fetchFilteredUseres.pending, (state) => {
+            state.status = "loading";
+        })
+        .addCase(fetchFilteredUseres.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.user = action.payload.users;
+        })
+        .addCase(fetchFilteredUseres.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+        });
     },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser,setPageNumber,setPageSize } = userSlice.actions;
 export default userSlice.reducer;

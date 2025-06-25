@@ -1,0 +1,173 @@
+[data-testid="EditOutlinedIcon"]{
+  background-image:url('../assets/icons/pen-to-square.svg') ;
+  background-size: 17px;
+  background-repeat: no-repeat; 
+  background-position: center; 
+  width: 10px;
+  height: 10px;
+  fill: transparent;  
+  color: transparent;
+  display: block;
+  background-color: #F6F7F9; 
+  border-radius:6px;
+}
+[data-testid="EditOutlinedIcon"] path {
+  display: none; 
+}
+[data-testid="DeleteOutlineIcon"]{
+  background-image:url('../assets/icons/trash.svg') ;
+  background-size: 15px;
+  background-repeat: no-repeat; 
+  background-position: center; 
+  width: 10px;
+  height: 10px;
+  fill: transparent;  
+  color: transparent;
+  display: block;
+  background-color: #F6F7F9; 
+  border-radius: 6px;
+}
+[data-testid="DeleteOutlineIcon"] path {
+  display: none; 
+}
+
+.table-container {
+  width: 950px;
+  margin-top:30px;
+}
+
+/* טבלה */
+.meetings-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* עיצוב כותרות הטבלה */
+.meetings-table th {
+  font-weight: bold;
+  font-family:"Rubik",sans-serif;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  background-color: #ffffff; 
+  color: #000000; 
+}
+
+/* עיצוב שורות */
+.table-row:nth-of-type(odd) {
+  background-color: #F0F1F3;
+}
+
+/* עיצוב תאים */
+.meetings-table td {
+  font-size: 0.7rem;
+  text-align: center;
+  padding: 10px;
+}
+
+/* צבעים לצ'יפים */
+.status-chip {
+  border-radius: 68.31px;
+  font-size: 0.4rem;
+  font-family: "Rubik", sans-serif;
+  font-weight: 200;
+  text-transform: capitalize;
+}
+
+/* צבעים נכונים */
+.status-chip.active {
+  background-color: #DAF8E6; /* ירוק לפעיל */
+  color: #1A8245;
+}
+
+.status-chip.inactive {
+  background-color: #f0f0f0; /* אפור להסתיים */
+  color: #333;
+}
+
+/* אייקונים */
+.icon-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+
+.edit-button,
+.delete-button {
+  background-color: #f0f0f0; 
+  border-radius: 5px;
+  width: 32px; 
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.highlighted-box {
+background-color: #ffffff; /* רקע בהיר */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* צללים */
+padding:10px;
+margin-top:20px;
+width: auto;
+
+}
+
+.highlighted-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.ml-1 {
+  margin-left: 1rem;
+}
+
+.custom-select {
+  height: 28px;
+  min-width: 50px;
+  font-size: 0.5rem;
+  padding: 2px 8px;
+}
+
+.custom-select .MuiSelect-icon {
+  display: none;
+}
+
+.icon-container {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pagination {
+  direction: ltr;
+}
+
+.pagination .MuiPaginationItem-root {
+  border-radius: 0; /* מבטל את המעוגלות של הפינות */
+  background-color: transparent; /* צבע רקע שקוף */
+  color: #333; /* צבע טקסט אפור כהה */
+}
+
+.pagination .MuiPaginationItem-root.Mui-selected {
+  background-color: #f0f0f0; /* רקע אפור בהיר לעמוד הנבחר */
+  color: #000; /* צבע טקסט שחור */
+  font-weight: bold; /* הדגשה של הטקסט */
+}
+
+.pagination .MuiPaginationItem-root:hover {
+  background-color: #e0e0e0; /* רקע אפור כהה יותר בהעברת עכבר */
+  cursor: pointer;
+}
+
+
+
+

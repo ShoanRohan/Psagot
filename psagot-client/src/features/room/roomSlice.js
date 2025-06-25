@@ -5,6 +5,8 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+    filteredRooms: null,
+    loading: false,
     error: null,
 };
 
@@ -12,9 +14,21 @@ const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        
         setRoom: (state, action) => {
-            
+
+        },
+        filterRooms: (state, action) => {
+            const { roomName, capacity, projector, speakers, computers, array } = action.payload;
+            state.filteredRooms = state.rooms.filter(room =>
+                (roomName ? room.name.includes(roomName) : true) &&
+                (capacity ? room.capacity >= capacity : true) &&
+                (projector ? room.projector : true) &&
+                (speakers ? room.speakers : true) &&
+                (computers ? room.computers : true)
+            );
+        },
+        resetFilter: (state) => {
+            state.filteredRooms = null;
         }, 
         setSelectedRoom: (state, action) => {
             state.selectedRoom=null
@@ -56,5 +70,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom,setSelectedRoom } = roomSlice.actions;
+export const { setRoom, filterRooms,setSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;

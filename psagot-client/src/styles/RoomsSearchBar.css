@@ -1,0 +1,118 @@
+/* ספציפיות גבוהה יותר עבור class של החיפוש */
+.rooms-search-bar {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 16px;
+    background-color: #f9fbfd;
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+  
+  /* ספציפיות גבוהה יותר עבור TextField ו-FormControl */
+  .rooms-search-bar .MuiTextField-root,
+  .rooms-search-bar .MuiFormControl-root {
+    min-width: 160px !important;
+  }
+  
+  /* עיצוב כפתור החיפוש */
+  .rooms-search-bar .MuiButton-root {
+    height: 40px !important;
+  }
+  
+  /* ספציפיות גבוהה יותר עבור box */
+  .box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+    justify-content: start;
+    direction: rtl;
+    padding: 1rem;
+    width: 100%;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  /* ספציפיות גבוהה יותר עבור textField */
+  .textField {
+    width: 20% !important;
+    min-width: 150px !important;
+  }
+  
+  /* סגנון ספציפי לשדה הקלט */
+  .textField .MuiInputBase-root {
+    border-bottom: 1px solid #ccc !important;
+    border-radius: 0 !important;
+  }
+  
+  /* הסרת גבולות מקטגורית ה-OutlinedInput */
+  .textField .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  
+  /* עיצוב ממוקד עבור ה-OutlinedInput */
+  .textField .Mui-focused .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  
+  /* שינוי גודל הפונט עבור שדה הקלט */
+  .textField input {
+    padding-bottom: 4px !important;
+    font-size: 0.9rem !important;
+  }
+  
+  /* עיצוב ספציפי עבור FormControl */
+  .MuiFormControl-root.textField {
+    background-color: transparent !important;
+  }
+  
+  /* עיצוב ל-MuiSelect */
+  .MuiSelect-select {
+    padding: 8px 12px !important;
+    direction: rtl !important;
+  }
+  
+  /* עיצוב ספציפי לכפתור */
+  .MuiButton-root {
+    border-radius: 999px !important;
+    padding: 6px 16px !important;
+    font-size: 0.9rem !important;
+    text-transform: none !important;
+    min-width: 100px !important;
+  }
+  
+  /* עיצוב ספציפי לכפתור מוכל */
+  .MuiButton-contained {
+    background-color: #1976d2 !important;
+    color: white !important;
+  }
+  
+  /* עיצוב ספציפי לכפתור עם קו מתאר */
+  .MuiButton-outlined {
+    border-color: #1976d2 !important;
+    color: #1976d2 !important;
+  }
+  /* שינוי צבע הקו התחתון */
+.textField .MuiInputBase-root {
+    border-bottom: 1px solid #555 !important; /* צבע שחור לא בהיר */
+    border-radius: 0 !important;
+  }
+  
+  /* שינוי צבע המלל */
+  .textField .MuiInputLabel-root {
+    color: #555 !important; /* צבע שחור לא בהיר */
+  }
+  
+  /* שינוי צבע של המלל כאשר השדה ממוקד */
+  .textField .Mui-focused .MuiInputLabel-root {
+    color: #555 !important; /* צבע שחור לא בהיר */
+  }
+  
+  /* שינוי צבע הקו התחתון כאשר השדה ממוקד */
+  .textField .Mui-focused .MuiInputBase-root {
+    border-bottom: 2px solid #555 !important; /* צבע שחור לא בהיר */
+  }
+  

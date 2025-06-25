@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Typography, Button, Container, Stack } from '@mui/material';
 import RoomForm from '../pages/RoomForm'; // ודא שהנתיב נכון
+import UserSearchBar from "../components/UserSearchBar";
 
 const HomePage = () => {
   const [showForm, setShowForm] = useState(false);
@@ -61,11 +62,3 @@ const HomePage = () => {
 };
 
 export default HomePage;
-
-
-
-
-
-
-
-

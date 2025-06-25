@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById } from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById ,GetMeetingsByPage, getMeetingsByRange} from '../../utils/meetingUtil';
 
-export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
+export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async () => {
     const data = await getAllMeetings();
     return data;
 });
@@ -11,7 +11,6 @@ export const updateMeetingAction = createAsyncThunk(
     async (updatedMeeting) => {
         try {
             const data = await updateMeeting(updatedMeeting);
-            console.log(data);
             return data;
         } catch (error) {
             console.log(error);
@@ -30,4 +29,18 @@ export const addMeetingAction = createAsyncThunk(
         const data = await addMeeting(addNewMeeting);
         return data;
     }
+);
+export const fetchMeetingsByPage = createAsyncThunk(
+    'meeting/fetchMeetingsByPage',
+    async ({ page, pageSize }) => {
+       const data = await GetMeetingsByPage(page, pageSize);
+       return data;
+    }
+);
+export const fetchMeetingsByRange = createAsyncThunk(
+  'meeting/fetchMeetingsByRange',
+  async ({ startDate, endDate }) => {
+    const data = await getMeetingsByRange(startDate, endDate);
+    return data;
+  }
 );

@@ -66,5 +66,48 @@ namespace BL
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
 
+        public async Task<(IEnumerable<UserDTO> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
+            string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
+        {
+            var (users, totalCount, errorMessage) = await _userDL.GetFilteredPagedUsers(username, phone, role, isActive, pageNumber, pageSize);
+
+            if (users == null) return (null, 0, errorMessage);
+
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), totalCount, null);
+        }
+
+        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userDL.GetAllCoordinators();
+            if (users == null) return (null, errorMessage);
+
+            return (_mapper.Map<List<UserDTO>>(users), null);
+        }
+
+        public async Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers()
+        {
+            var (users, errorMessage) = await _userDL.GetCoordinatorsAndLecturers();
+            if (users == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
+        }
+
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            var(coordinators, errorMessage)=await _userDL.GetCoordinators();
+            if (coordinators == null) return (null, errorMessage);
+
+            return (coordinators, null); ;
+        }
+        
+
+        public async Task<(List<UserTableDTO> UsertableDto, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return (null, countUsers, errorMessage);
+
+            var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
+            return (userDTOs, countUsers, null);
+        }
     }
 }
