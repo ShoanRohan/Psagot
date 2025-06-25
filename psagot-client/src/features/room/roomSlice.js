@@ -17,6 +17,9 @@ const roomSlice = createSlice({
         setRoom: (state, action) => {
 
         },
+        setSelectedRoom: (state, action) => {
+            state.selectedRoom = null
+        },
         filterRooms: (state, action) => {
             const { roomName, capacity, projector, speakers, computers, array } = action.payload;
             state.filteredRooms = state.rooms.filter(room =>
@@ -67,5 +70,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom, filterRooms } = roomSlice.actions;
+export const { setRoom, filterRooms, setSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;
