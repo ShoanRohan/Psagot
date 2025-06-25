@@ -1,24 +1,19 @@
 ﻿using Entities.Contexts;
-using AutoMapper;
-using AutoMapper.Internal;
-using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Globalization;
 
 namespace DL
 {
     public class MeetingDL : IMeetingDL
     {
         private readonly PsagotDbContext _context;
-        public MeetingDL(PsagotDbContext context, IMapper mapper)
+        public MeetingDL(PsagotDbContext context)
         {
             _context = context;
         }
