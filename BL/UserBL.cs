@@ -100,5 +100,14 @@ namespace BL
             return (coordinators, null); ;
         }
         
+
+        public async Task<(List<UserTableDTO> UsertableDto, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return (null, countUsers, errorMessage);
+
+            var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
+            return (userDTOs, countUsers, null);
+        }
     }
 }
