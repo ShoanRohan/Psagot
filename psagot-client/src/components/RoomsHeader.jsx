@@ -1,19 +1,21 @@
 import { useState } from "react";
 import dayjs from "dayjs";
 import NavigationBar from "./NavigationBar";
-import { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton , PdfLogo } from "./RoomsHeaderStyle";
+import { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton , PdfLogo } from "../styles/RoomsHeaderStyle";
 import pdfIcon from "../assets/imgs/pdf.png";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import RoomTable from "./RoomTable"; 
+import { Box } from "@mui/system";
 
-const RoomsHeader = () => {
-    const [currentDate, setCurrentDate] = useState(dayjs()); // התאריך הנוכחי
-    const [view, setView] = useState("timeGridDay"); // ברירת מחדל: תצוגת יום
+
+const RoomsHeader = ({currentDate, setCurrentDate}) => {
+    const [view, setView] = useState("timeGridDay");
 
     const handleExportToPDF = () => {
-        const input = document.getElementById("calendar-container");/////מי שעושה את עיצוב הטבלה עצמה לשנות פה כדי שהייצוא לPDF יתפוס את כל הטבלה
+        const input = document.getElementById("calendar-container");
         html2canvas(input, {
             scale: 3,
             useCORS: true,
@@ -29,6 +31,7 @@ const RoomsHeader = () => {
     };
 
     return (
+        <Box>
         <HeaderContainer>
             <Title component="h1">חדרים</Title>
             <NavigationBar
@@ -44,13 +47,14 @@ const RoomsHeader = () => {
                 <ListViewButton variant="outlined">
                     <CalendarTodayIcon sx={{ fontSize: "1rem !important" }} /> תצוגת רשימה
                 </ListViewButton>
-
                 <AddRoomButton variant="contained">
                     <AddCircleOutlineIcon sx={{ fontSize: "1rem !important" }} /> הוספת חדר
                 </AddRoomButton>
-
             </ButtonsWrapper>
         </HeaderContainer>
+     
+       
+       </Box>
     );
 };
 

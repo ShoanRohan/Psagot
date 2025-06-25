@@ -2,20 +2,19 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById, fetchMeetingsByPage,fetchMeetingsByRange} from '../meeting/meetingActions';
 
 const initialState = {
-  meetings: [],
-  meetingsByRange:[],
+  meetings: [], //תוצאת fetchMeetingsByPage
+  meetingsByRange: [], //תוצאת fetchMeetingsByRange
   meeting: null,
   status: 'idle',// state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל 
   rangeStatus: 'idle',
   error: null,
-  totalCount: 0, 
-
+  totalCount: 0
 };
 
 const meetingSlice = createSlice({
     name: 'meeting',
     initialState,
-    reducers: { 
+    reducers: {
     },
     extraReducers: (builder) => {
         builder
@@ -29,31 +28,7 @@ const meetingSlice = createSlice({
             .addCase(fetchAllMeetings.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            }).addCase(updateMeetingAction.rejected, (state, action) => {
-                state.status = "failed";
-                state.error = action.error.message;
             })
-            .addCase(updateMeetingAction.pending, (state) => {
-                state.status = "loading";
-            })
-            .addCase(updateMeetingAction.fulfilled, (state, action) => {
-                const index = state.meetings.findIndex(
-                    (meeting) => meeting.meetingId === action.payload.meetingId
-                );
-                if (index !== -1) {
-                    state.meetings[index] = action.payload;
-                }
-            })
-            .addCase(addMeetingAction.pending, (state) => {
-                state.status = "loading";
-              })
-            .addCase(addMeetingAction.fulfilled, (state, action) => {
-                state.meetings.push(action.payload)
-              })
-           .addCase(addMeetingAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-              })
             .addCase(fetchMeetingById.pending, (state) => {
                 state.status = 'loading';
             })
@@ -65,8 +40,32 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
+            .addCase(addMeetingAction.pending, (state) => {
+                state.status = "loading";
+              })
+            .addCase(addMeetingAction.fulfilled, (state, action) => {
+                state.meetings.push(action.payload)
+              })
+           .addCase(addMeetingAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(updateMeetingAction.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(updateMeetingAction.fulfilled, (state, action) => {
+                const index = state.meetings.findIndex((meeting) => meeting.meetingId === action.payload.meetingId);
+                if (index !== -1) {
+                    state.meetings[index] = action.payload;
+                }
+            })
+            .addCase(updateMeetingAction.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            })
             .addCase(fetchMeetingsByPage.pending, (state) => {
                 state.status = 'loading';
+                state.error = null;
             })
             .addCase(fetchMeetingsByPage.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -79,7 +78,9 @@ const meetingSlice = createSlice({
                 state.error = action.error.message;
             })
            .addCase(fetchMeetingsByRange.pending, (state) => {
-                state.rangeStatus = 'loading';  
+                state.rangeStatus = 'loading'; 
+                state.meetingsByRange = []; 
+                state.error = null;  
                })
             .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
                state.rangeStatus = 'succeeded';
