@@ -7,7 +7,7 @@ import MeetingsTable from '../components/MeetingsTable';
 import RoomTable from '../components/RoomTable';
 import RoomsHeader from '../components/RoomsHeader';
 import CourseScreen from "../components/CourseScreen";
-import Rooms from '../components/Rooms';
+import Rooms from '../pages/Rooms';
 
 const AppRouter = () => {
     return (

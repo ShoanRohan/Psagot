@@ -8,7 +8,6 @@ const initialState = {
   rangeStatus: 'idle',
   error: null,
   totalCount: 0, 
-
 };
 
 const meetingSlice = createSlice({
