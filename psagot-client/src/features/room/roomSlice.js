@@ -5,11 +5,11 @@ const initialState = {
     rooms: [],
     selectedRoom: null,
     status: 'idle', 
-    filteredRooms: null,
+    filteredRooms: [],
     loading: false,
     error: null,
-    pageIndex: 0, // חדש
-    pageSize: 2,  // כמה תוצאות בעמוד
+    pageIndex: 1, 
+    pageSize: 10,  
 };
 
 const roomSlice = createSlice({
