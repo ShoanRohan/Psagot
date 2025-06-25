@@ -60,10 +60,11 @@ const UsersPage = () => {
 
     return (
         <Box>
-            <Box className="tablesize" >
+            <Box className="tablesize" sx={{overflowY:"auto"}} >
                 <Typography className="titleRow" variant="h4" component="h2" >משתמשים</Typography>
                 {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-                <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
+                <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '550px', overflowY: 'auto' }}>
+
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -122,6 +123,7 @@ const UsersPage = () => {
                                 onChange={handleChangePageSize}
                                 displayEmpty
                             >
+                                 <MenuItem value={3}>3</MenuItem>
                                 <MenuItem value={10}>10</MenuItem>
                                 <MenuItem value={20}>20</MenuItem>
                                 <MenuItem value={50}>50</MenuItem>

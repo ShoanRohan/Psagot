@@ -1,11 +1,12 @@
  .tablesize {
-   Height: 100%;
-   width: 100%;
-   margin: "auto";
+  
+   width: 95%;
+   margin: auto;
    padding-top: 30px;
    padding-right: 20px;
    padding-bottom: 10px;
    padding-left: 20px;
+   overflow-y: auto;
  }
 
  .bigtable {
@@ -13,12 +14,12 @@
    font-weight: bold !important;
    font-size: 16px !important;
    width: 1442px !important;
-   height: 79px !important;
+
    display: flex;
  }
 
  .boxError {
-   color: "red";
+   color: red;
    margin-bottom: 16;
  }
 
