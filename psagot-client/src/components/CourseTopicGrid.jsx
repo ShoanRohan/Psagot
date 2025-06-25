@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,18 +9,22 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Box, IconButton, Typography, Grid2, MenuItem } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
-import { DeleteOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTopicById, updateTopicAction } from '../features/topic/topicActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
-import { fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
-import { fetchAllTopic } from '../features/topic/topicActions';
+import { deleteTopicAction, fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
+import { fetchAllTopic} from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import TopicDialog from './TopicDialog';
 import { fetchTeachers } from '../features/user/userAction';
 
@@ -71,14 +75,16 @@ export default function CourseTopicGrid() {
 
     const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
     const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
+    const [selectedTopic, setSelectedTopic] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [showWarning, setShowWarning] = React.useState(false);
+    const [topicToDelete, setTopicToDelete] = React.useState(null);
+    
 
     const paginatedTopics = topics.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
-
-    const [dialogOpen, setDialogOpen] = React.useState(false);
-    const [selectedTopic, setSelectedTopic] = React.useState(null);
 
     const handleEditClick = (topic) => {
         setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
@@ -151,9 +157,36 @@ const handleDialogSubmit = async (formData) => {
     setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
 };
 
+
+    const handleDeleteClick = (topicId) => {
+        // כאן תציגי את האזהרה
+        setTopicToDelete(topicId);
+        setShowWarning(true);
+      };
+      
+      const handleConfirmDelete = async () => {
+        if (topicToDelete !== null) {
+          // מחיקה דרך ה-slice
+          await dispatch(deleteTopicAction({ topicId: topicToDelete, forceDelete: true }));
+      
+          // רענון הנושאים אחרי מחיקה
+          dispatch(fetchAllTopicForCourseByCourseId(courseId));
+        }
+        // סגירת האזהרה
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
+      const handleCancelDelete = () => {
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
-            <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
+            <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px',
+               p: "30px 20px 10px 20px" 
+                }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -210,10 +243,10 @@ const handleDialogSubmit = async (formData) => {
                                     <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
                                         <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
-                                        <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4'}} onClick={() => handleDeleteClick(topic?.topicId)}>
+                                        <img src={deleteSvg} alt='delete_icon' style={{marginTop: '0px'}} />
                                     </IconButton>
                                 </StyledTableCell>
                             </TableRow>
@@ -221,7 +254,7 @@ const handleDialogSubmit = async (formData) => {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
+            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: 'unset', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
                 <Grid2 container>
                     {/* עמודים */}
                     <Grid2 xs={3}>
@@ -264,6 +297,15 @@ const handleDialogSubmit = async (formData) => {
                     </Grid2>
                 </Grid2>
             </Box>
+            <Dialog open={showWarning} onClose={handleCancelDelete}>
+                <DialogContent>
+                    <Typography>לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete}>ביטול</Button>
+                    <Button onClick={handleConfirmDelete} variant="contained" >אישור</Button>
+                </DialogActions>
+            </Dialog>
             <TopicDialog
                 open={dialogOpen}
                 onClose={handleDialogClose}
