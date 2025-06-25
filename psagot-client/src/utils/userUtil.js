@@ -16,7 +16,7 @@ const getUserById = async (id) => {
 };
 
 const addUser = async (newUser) => {
-    const response = await api.post('/User/AddUser', newUser);
+    const response = await api.post('/User/Register', newUser);
     return response.data;
 };
 
