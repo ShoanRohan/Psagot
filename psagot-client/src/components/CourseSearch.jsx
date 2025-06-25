@@ -138,8 +138,6 @@ const CourseSearch = () => {
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    localStorage.removeItem('courseFilters'); // נקה את ה-localStorage
-    dispatch(filterCourses({ statusId: 1 }));
     setLastSearchedFilters(defaultFilters);
     setHasSearched(false);
   };
@@ -252,69 +250,16 @@ const CourseSearch = () => {
             label="תאריך התחלה"
             value={filters.startDate}
             onChange={handleDateChange('startDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
-            slotProps={{
-              textField: {
-                placeholder: 'תאריך התחלה',
-                variant: 'standard',
-                sx: {
-                  width: 125,
-                  margin: '15px 0',
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                    top: '-15px'
-                  },
-                  '& .MuiInputAdornment-root': {
-                    marginLeft: 0,
-                  },
-                  '& .MuiPickersInputBase-root': {
-                    marginTop: 0
-                  },
-                },
-              },
-            }}
+            slotProps={{ textField: { variant: 'standard' } }}
+            sx={sharedStyles}
           />
 
           <DatePicker
             label="תאריך סיום"
             value={filters.endDate}
             onChange={handleDateChange('endDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
-            slotProps={{
-              textField: {
-                placeholder: 'תאריך סיום',
-                variant: 'standard',
-                sx: {
-                  width: 125,
-                  margin: '15px 0',
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                    top: '-15px'
-                  },
-                  '& .MuiInputAdornment-root': {
-                    marginLeft: 0,
-                  },
-                  '& .MuiPickersInputBase-root': {
-                    marginTop: 0
-                  }
-                },
-              },
-            }}
+            slotProps={{ textField: { variant: 'standard' } }}
+            sx={sharedStyles}
           />
 
           <FormControl variant="standard" sx={sharedStyles}>
@@ -329,7 +274,7 @@ const CourseSearch = () => {
           </FormControl>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: '10px' }}>
+        <Box sx={{ display: 'flex', gap: '16px', marginRight: 'auto' }}>
           <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
             ניקוי
           </Button>
