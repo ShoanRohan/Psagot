@@ -45,8 +45,7 @@ const buttonStyles = {
 const TopicsSearch = () => {
   const dispatch = useDispatch();
   const { topics, status } = useSelector((state) => state.topic);
-  // const{selectedCourse} = useSelector((state) => state.course);
-   const selectedCourse = useSelector(selectSelectedCourse)
+  const selectedCourse = useSelector(selectSelectedCourse)
   const { teachers } = useSelector((state) => state.user);
   const { topicsStatuses } = useSelector((state) => state.status);
   const initialState = {
