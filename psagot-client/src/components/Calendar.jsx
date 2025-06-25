@@ -40,7 +40,6 @@ const handleDayCellContent = (args, view) => {
 
 const handleEventClick = (info, navigate) => {
   const eventId = info.event.id;
-  console.log("ID של האירוע:", eventId); // בדיקה
   navigate(`/meetings/${eventId}`);
 };
 
@@ -87,16 +86,16 @@ const handleEventContent = (eventInfo) => {
 
 const Calendar = ({ currentDate, view, events }) => {
   const navigate = useNavigate();
-  const [aspectRatio, setAspectRatio] = useState(1.5); // ברירת מחדל
+  const [aspectRatio, setAspectRatio] = useState(1.5);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      const height = window.innerHeight - 112; // הגובה שהגדרת
+      const height = window.innerHeight - 112;
       setAspectRatio(width / height);
     };
 
-    handleResize(); // חישוב ראשוני
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -112,12 +111,12 @@ const Calendar = ({ currentDate, view, events }) => {
           direction="rtl"
           headerToolbar={false}
           initialDate={currentDate.format("YYYY-MM-DD")}
-          height="100%" // מתפרש לגובה של המכולה (Box)
+          height="100%" 
           slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
           slotDuration="01:00:00" // שורה אחת לכל שעה
           slotMinTime="08:00:00" // השעה הראשונה בתצוגת שבוע ויום
           slotMaxTime="23:00:00" // השעה האחרונה בתצוגת שבוע ויום
-          allDaySlot={false}//משמיט את השורה "כל היום" 
+          allDaySlot={false}//משמיט את השורה כל היום 
           dayHeaderContent={handleDayHeaderContent}
           dayCellContent={(args) => handleDayCellContent(args, view)}//תאריכים עברי ולועזי
           eventClick={(info) => handleEventClick(info, navigate)}

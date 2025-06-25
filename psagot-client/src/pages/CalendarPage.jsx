@@ -41,7 +41,6 @@ const CalendarPage = () => {
     return (
         <Box id="calendar-container">
             <CalendarHeader currentDate={currentDate} setCurrentDate={setCurrentDate} view={view} setView={setView} />
-            {/* <Box sx={{ overflow: 'auto' }}> */}
             <Box>
                     <Calendar
                         currentDate={currentDate}
