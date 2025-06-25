@@ -48,8 +48,8 @@ const statusColors = {
 export default function CourseTopicGrid() {
     const dispatch = useDispatch();
     const topics = useSelector(selectFilteredTopics);
-    const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
-    // const courseId = 1;
+    const courseId = useSelector(state => state.course.selectedCourse?.courseId); // קבלת ID מה-Redux
+    const error = useSelector(state => state.topic.error)
 
     useEffect(() => {
         if (courseId) {
@@ -57,7 +57,13 @@ export default function CourseTopicGrid() {
         }
     }, [dispatch, courseId]);
 
-    console.log("טופיקס:", topics)
+    useEffect(() => {
+        if(error) {
+            setShowWarning(true)
+        }
+    },[error])
+
+    
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -96,10 +102,10 @@ export default function CourseTopicGrid() {
     };
 
 
-    const handleDeleteClick = (topicId) => {
+    const handleDeleteClick = async (topicId) => {
         // כאן תציגי את האזהרה
         setTopicToDelete(topicId);
-        setShowWarning(true);
+        await dispatch(deleteTopicAction({ topicId: topicId }));        
       };
       
       const handleConfirmDelete = async () => {
