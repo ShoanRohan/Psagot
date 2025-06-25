@@ -15,6 +15,9 @@ const roomSlice = createSlice({
         
         setRoom: (state, action) => {
             
+        }, 
+        setSelectedRoom: (state, action) => {
+            state.selectedRoom=null
         }
     },
     extraReducers: (builder) => {
@@ -35,7 +38,7 @@ const roomSlice = createSlice({
             })
             .addCase(fetchRoomById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.selectedRoom = action.payload;
             })
             .addCase(fetchRoomById.rejected, (state, action) => {
                 state.status = 'failed';
@@ -53,5 +56,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom } = roomSlice.actions;
+export const { setRoom,setSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;

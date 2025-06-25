@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Typography, Button, Container } from '@mui/material';
+import { Typography, Button, Container, Stack } from '@mui/material';
 import RoomForm from '../pages/RoomForm'; // ודא שהנתיב נכון
 
 const HomePage = () => {
   const [showForm, setShowForm] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState({});
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [userRole] = useState('manager'); // כאן אתה מגדיר את תפקיד המשתמש
 
   const handleAddRoomClick = () => {
     setIsEdit(false);
@@ -13,8 +14,21 @@ const HomePage = () => {
     setShowForm(true);
   };
 
+  const handleEditRoomClick = () => {
+    setIsEdit(true);
+    setSelectedRoom({
+      roomId: 1,
+      name: '106',
+      projector: true,
+      computers: false,
+      speakers: true,
+      capacity: 30, // שים לב לתיקון: copacity => capacity
+    });
+    setShowForm(true);
+  };
+
   const handleRoomSubmit = (roomData) => {
-    console.log(isEdit ? 'Room edited:' : 'Room submitted:', roomData);
+     console.log(isEdit ? 'Room edited:' : 'Room submitted:', roomData);
     setShowForm(false);
   };
 
@@ -24,27 +38,30 @@ const HomePage = () => {
         ברוכים הבאים למערכת פסגות
       </Typography>
 
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddRoomClick}
-        sx={{ mt: 3 }}
-      >
-        הוסף חדר
-      </Button>
+      <Stack direction="row" spacing={2} justifyContent="center" sx={{ mt: 3 }}>
+        <Button variant="contained" color="primary" onClick={handleAddRoomClick}>
+          הוסף חדר
+        </Button>
+
+        <Button variant="outlined" color="secondary" onClick={handleEditRoomClick}>
+          ערוך חדר
+        </Button>
+      </Stack>
 
       <RoomForm
         isEdit={isEdit}
         initialData={selectedRoom}
         onSave={handleRoomSubmit}
         open={showForm}
-        onClose={() => setShowForm(false)}
+        onClose={() =>{setShowForm(false); setSelectedRoom(null)} }
+        userRole={userRole}
       />
     </Container>
   );
 };
 
 export default HomePage;
+
 
 
 
