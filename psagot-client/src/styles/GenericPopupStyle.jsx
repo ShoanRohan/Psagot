@@ -1,4 +1,9 @@
-import { Dialog, styled, Typography, IconButton, Button, DialogActions } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
+import styled from "@mui/material/styles/styled";
+import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
+import Button from "@mui/material/Button";
+import DialogActions from "@mui/material/DialogActions";
 
 export const DialogGeneric = styled(Dialog)(({ theme }) => ({
   "& .MuiDialog-paper": {
