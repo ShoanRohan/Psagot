@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
+import UserSearchBar from "../components/UserSearchBar";
 
 const HomePage = () => {
   const dispatch = useDispatch();

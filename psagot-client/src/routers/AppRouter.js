@@ -3,8 +3,11 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
+import MeetingsTable from '../components/MeetingsTable';
+import RoomTable from '../components/RoomTable';
+import RoomsHeader from '../components/RoomsHeader';
 import CourseScreen from "../components/CourseScreen";
-import Rooms from '../components/Rooms';
+import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
 
 const AppRouter = () => {
@@ -13,10 +16,12 @@ const AppRouter = () => {
             <Route path='/' element={<Layout />}>
                 <Route path='/' element={<HomePage />} />
                 <Route path='/courses' element={<span>page Courses</span>} />
-                <Route path='/meetings' element={<span>page Meetings</span>} />
+                <Route path='/meetings' element={<MeetingsTable />} />
                 <Route path='/users' element={<UsersPage />} />
                 <Route path='/rooms' element={<Rooms />} />
                 <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
+                <Route path="/roomsHeader" element={<RoomsHeader/>} />
             </Route>
         </Routes>
     );

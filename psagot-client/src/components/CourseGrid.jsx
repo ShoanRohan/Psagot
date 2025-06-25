@@ -6,7 +6,7 @@ import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCourses } from '../features/course/courseSlice';
 import { fetchCourseById } from '../features/course/courseActions';
-import editSvg from '../assets/icons/edit.svg'
+import editSvg from '../assets/icons/edit.svg';
 import { Link, useNavigate } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -33,7 +33,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     const dispatch = useDispatch();
     const [selectSize, setSelectSize] = useState(pageSize);
     const courses = useSelector(selectCourses);
-
+    
     const handlePageChange = (event, newPage) => {
         onPageChange(newPage);
     };
