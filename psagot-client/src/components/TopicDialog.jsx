@@ -15,6 +15,7 @@ import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeachers } from "../features/user/userAction";
 import { fetchAllStatuses } from "../features/status/statusActions";
+import { updateTopic } from "../utils/topicUtil";
 // import AddDayErrorDialog from './AddDayErrorDialog';
 
 const sharedStyles = {
@@ -105,6 +106,8 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const { teachers} = useSelector(state => state.user)
   const [isEditingMain, setIsEditingMain] = useState(false);
   const statuses = useSelector((state) => state.status.coursesStatuses);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+const [pendingUpdateData, setPendingUpdateData] = useState(null);
   // console.log("statuses", statuses);
 
 
@@ -272,6 +275,60 @@ useEffect(() => {
     onSubmit({ ...formData,teacherId:teacherId });// צריך ליצור לימים פונקציה נפרדת
     setMainSaved(true);
   };
+
+//   const handleSave = async () => {
+//     console.log("handleSave start", formData);
+//     const teacherId = teachers.find(teacher => teacher.name.includes(formData.lecturerName))?.userId;
+  
+//     if (!teacherId) {
+//       console.error("Teacher not found!");
+//       return;
+//     }
+  
+//     // const updateData = {
+//     //   ...formData,
+//     //   teacherId: teacherId,
+//     //   statusId: statuses.find(s => s.name === formData.status)?.statusCourseId,
+//     //   ForceUpdate: false,
+
+//     // };
+
+//     const { lecturerName, status, equipment, ...rest } = formData;
+
+// const updateData = {
+//   ...rest,
+//   teacherId,
+//   statusId: statuses.find(s => s.name === status)?.statusCourseId,
+//   computers: equipment.computers,
+//   microphone: equipment.microphone,
+//   projector: equipment.projector,
+//   ForceUpdate: false,
+// };
+
+//     console.log("🟢 updateData:", updateData); // ← פה להדפיס
+
+//     try {
+//       const result = await updateTopic(updateData);
+//       console.log("updateTopic result:", result);
+  
+//       if (typeof result === "string" && result.includes("מפגשים עתידיים")) {
+//         setPendingUpdateData(updateData);
+//         setShowConfirmDialog(true);
+//         return;
+//       }
+  
+//       setMainSaved(true);
+//       if (onSubmit) onSubmit({ ...formData, teacherId: teacherId });
+//     }  catch (error) {
+//       console.error("❌ Error in handleSave:", error);
+//       if (error.response) {
+//         console.error("🔴 Server response:", error.response.data);
+//       }
+    
+//     }
+//   };
+  
+  
   const handleEditDay = (index) => {
     setEditingDayIndex(index);
   };
@@ -507,6 +564,46 @@ useEffect(() => {
   </Box>
 </Box>
         </Box>
+
+        {/* דיאלוג האישור למחיקת מפגשים עתידיים */}
+<Dialog
+  open={showConfirmDialog}
+  onClose={() => setShowConfirmDialog(false)}
+  aria-labelledby="confirm-dialog-title"
+  aria-describedby="confirm-dialog-description"
+>
+  <DialogContent>
+    <Typography id="confirm-dialog-description" sx={{ mb: 2 }}>
+      לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך בשמירה?
+    </Typography>
+    <Box display="flex" justifyContent="flex-end" gap={1}>
+      <Button
+        variant="outlined"
+        onClick={() => setShowConfirmDialog(false)}
+      >
+        ביטול
+      </Button>
+      <Button
+        variant="contained"
+        onClick={async () => {
+          if (!pendingUpdateData) return;
+          const updateWithForce = { ...pendingUpdateData, ForceUpdate: true };
+          try {
+            await updateTopic(updateWithForce);  // פה קוראים לפונקציית הקריאה ל-API
+            setShowConfirmDialog(false);
+            setMainSaved(true);
+            onSubmit(updateWithForce);
+          } catch (error) {
+            console.error("שגיאה בשמירת עדכון עם ForceUpdate:", error);
+          }
+        }}
+      >
+        אישור
+      </Button>
+    </Box>
+  </DialogContent>
+</Dialog>
+
 
         <Box
           sx={{

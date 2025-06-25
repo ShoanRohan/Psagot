@@ -20,11 +20,30 @@ export const addTopicAction = createAsyncThunk('topic/addTopicAction', async (ne
 });
 
 // updated topic
-export const updateTopicAction = createAsyncThunk('topic/updateTopicAction', async (updatedTopic) => {
-  console.log(updatedTopic)
-  const data = await updateTopic(updatedTopic);
-  return data;
-});
+// export const updateTopicAction = createAsyncThunk('topic/updateTopicAction', async (updatedTopic, { rejectWithValue }) => {
+//   console.log(updatedTopic)
+//  const data = await updateTopic(updatedTopic);
+//   return data; 
+// });
+
+export const updateTopicAction = createAsyncThunk(
+  'topic/updateTopicAction',
+  async (updatedTopic, { rejectWithValue }) => {
+    try {
+      const data = await updateTopic(updatedTopic);
+
+      // אם השרת מחזיר מחרוזת עם האזהרה - זורקים שגיאה עם ההודעה
+      if (typeof data === 'string' && data.includes('לנושא קיימים מפגשים עתידיים')) {
+        // מחזירים reject עם הערך הזה כדי לטפל בו בextraReducers
+        return rejectWithValue(data);
+      }
+
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
 
 //delete topic
 export const deleteTopicAction = createAsyncThunk('topic/deleteTopic',async(topicId) =>{

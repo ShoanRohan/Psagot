@@ -53,20 +53,46 @@ namespace DL
 
         public async Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic)
         {
-
-
             try
-
             {
-                _context.Set<Topic>().Update(topic);
+                var existingTopic = await _context.Topics
+                    .Include(t => t.Meetings)
+                    .FirstOrDefaultAsync(t => t.TopicId == topic.TopicId);
+
+                if (existingTopic == null)
+                    return (null, "Topic not found");
+
+                bool isStatusChangedFromActive = existingTopic.StatusId == 1 && topic.StatusId != 1;
+
+                if (isStatusChangedFromActive)
+                {
+                    var today = DateOnly.FromDateTime(DateTime.Now);
+                    var futureMeetings = existingTopic.Meetings
+                        .Where(m => m.MeetingDate > today)
+                        .ToList();
+
+                    if (futureMeetings.Any() && !topic.ForceUpdate)
+                    {
+                        return (null, "לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך?");
+                    }
+
+                    if (futureMeetings.Any())
+                    {
+                        _context.Meetings.RemoveRange(futureMeetings);
+                    }
+                }
+
+                _context.Entry(existingTopic).CurrentValues.SetValues(topic);
+
                 await _context.SaveChangesAsync();
-                return (topic, null);
+                return (existingTopic, null);
             }
             catch (Exception ex)
             {
-                return (null, ex.Message);
+                return (null, "שגיאה בעדכון נושא: " + ex.Message);
             }
         }
+
         public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId)
         {
             try
