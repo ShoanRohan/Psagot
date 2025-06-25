@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMeetingsByRange } from "../features/meeting/meetingActions"
 
-
 // הצגת לוח השנה, כותרות ושליפת האירועים
 const CalendarPage = () => {
     const [currentDate, setCurrentDate] = useState(dayjs());
@@ -52,4 +51,4 @@ const CalendarPage = () => {
             );
 };
 
-            export default CalendarPage;
+export default CalendarPage;
