@@ -7,7 +7,6 @@ import CourseScreen from "../components/CourseScreen";
 import Rooms from '../components/Rooms';
 import UsersPage from '../pages/UsersPage';
 
-
 const AppRouter = () => {
     return (
         <Routes>
