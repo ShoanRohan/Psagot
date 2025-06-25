@@ -3,6 +3,7 @@ import { fetchCourseStatuses } from './statusCourseActions';
 
 const initialState = {
   statuses: [],
+  selectedStatus: null,
   status: 'idle',
   error: null,
 };
@@ -19,6 +20,7 @@ const statusCourseSlice = createSlice({
       .addCase(fetchCourseStatuses.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.statuses = action.payload;
+        console.log('state', state.statuses)
       })
       .addCase(fetchCourseStatuses.rejected, (state, action) => {
         state.status = 'failed';

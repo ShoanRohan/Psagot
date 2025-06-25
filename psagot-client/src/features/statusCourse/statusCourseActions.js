@@ -1,10 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getStatusCourse } from '../../utils/statusCourseUtil';
+import { getAllStatusCourse } from '../../utils/statusCourseUtil';
 
-export const fetchCourseStatuses = createAsyncThunk(
-  'statusCourse/fetchCourseStatuses',
-  async () => {
-    const data = await getStatusCourse();
+export const fetchCourseStatuses = createAsyncThunk('statusCourse/fetchCourseStatuses', async () => {
+    const data = await getAllStatusCourse();
     return data;
   }
 );

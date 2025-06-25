@@ -8,7 +8,7 @@ import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
 import RegisterPage from '../pages/RegisterPage';
-import AddCoursePage from '../pages/addCoursePage';
+import AddCoursePage from '../pages/AddCoursePage';
 
 const AppRouter = () => {
     return (

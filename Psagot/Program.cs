@@ -36,9 +36,13 @@ namespace Psagot
             builder.Services.AddScoped<ITopicDL, TopicDL>();
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
+            builder.Services.AddScoped<IStatusCourseDL, StatusCourseDL>();
+            builder.Services.AddScoped<IStatusCourseBL, StatusCourseBL>();
+
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new NullableDateOnlyJsonConverter());
             });
 
             builder.Services.AddCors();

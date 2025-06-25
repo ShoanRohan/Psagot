@@ -113,7 +113,7 @@ const CourseSearch = () => {
             input: { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         />
-        <TextField
+        {/* <TextField
           select
           variant="standard"
           placeholder="רכזת"
@@ -130,7 +130,7 @@ const CourseSearch = () => {
               {coordinator}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
         <TextField
           variant="standard"
           select
@@ -208,7 +208,7 @@ const CourseSearch = () => {
             '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
           }}
         >
-          {statuses.map((status) => (
+          {statuses?.map((status) => (
             <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
               {status}
             </MenuItem>

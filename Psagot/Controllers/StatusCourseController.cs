@@ -15,7 +15,7 @@ namespace Psagot.Controllers
             _statusBL = statusBL;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllStatusCourses")]
         public async Task<IActionResult> GetAllStatuses()
         {
             var (statuses, errorMessage) = await _statusBL.GetAllStatuses();

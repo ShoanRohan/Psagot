@@ -9,7 +9,7 @@ namespace Entities.DTO
     public class StatusCourseDTO
     {
         
-            public int Id { get; set; }
+            public int StatusCourseId { get; set; }
             public string Name { get; set; }
     }
 }
