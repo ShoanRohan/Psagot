@@ -21,9 +21,7 @@ const addUser = async (newUser) => {
 };
 
 const updatedUser = async (updateUser) => {
-    console.log(updateUser)
     const response = await api.put('/User/UpdateUser',updateUser);
-    console.log(response)
     return response.data;
 };
 

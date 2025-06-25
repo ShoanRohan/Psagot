@@ -64,7 +64,7 @@ const UsersPage = () => {
                 <Typography className="titleRow" variant="h4" component="h2" >משתמשים</Typography>
                 {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
                 <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table >
+                    <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell className="bigtable">קוד משתמש</TableCell>
