@@ -1,17 +1,7 @@
 import api from "./api"
 
-const getAllMeetings = async() => {
+const getAllMeetings = async () => {
     const response = await api.get('/Meeting/GetAllMeetings');
-    return response.data;
-};
-
-const updateMeeting = async (updateMeeting) => {
-    const response = await api.put("/Meeting/UpdateMeeting", updateMeeting);
-    return response.data;
-};
-
-const addMeeting = async (addNewMeeting) => {
-    const response = await api.post("/Meeting/AddMeeting", addNewMeeting);
     return response.data;
 };
 
@@ -20,8 +10,27 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-const getMeetingsByTopicId = async(subject) => {
-    const response = await api.get(`/Meeting/GetAllMeetingsBySubject/${subject}`);
+const addMeeting = async (addNewMeeting) => {
+    const response = await api.post('/Meeting/AddMeeting', addNewMeeting);
     return response.data;
 };
+
+const updateMeeting = async (updateMeeting) => {
+    const response = await api.put('/Meeting/UpdateMeeting', updateMeeting);
+    return response.data;
+};
+
+const GetMeetingsByPage = async (page, pageSize) => {
+    const response = await api.get(`/Meeting/GetMeetingsByPage?page=${page}&pageSize=${pageSize}`);
+    return response.data;
+};
+const getMeetingsByRange = async (startDate, endDate) => {
+  const response = await api.get(`/Meeting/GetMeetingsByRange?startDate=${startDate}&endDate=${endDate}`);
+  return response.data;
+};
+
+const response = await api.get(`/Meeting/GetAllMeetingsBySubject/${subject}`);
+return response.data;
+};
+
 export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, getAllMeetingsBySubject };

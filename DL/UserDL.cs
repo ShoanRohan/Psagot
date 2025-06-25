@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -68,6 +69,80 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            try
+            {
+                var coordinators = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 9 && u.IsActive) // סינון רק רכזות פעילות
+                    .Select(u => new CoordinatorDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
+
+                return (coordinators, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
+
+
+        public async Task<(IEnumerable<User> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
+            string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var query = _context.Set<User>().AsQueryable();
+
+                // סינון לפי הפרמטרים שהתקבלו, תוך בדיקה שהם לא NULL כמחרוזת
+                if (!string.IsNullOrEmpty(username) && username.ToUpper() != "NULL")
+                {
+                    query = query.Where(u => u.Name.Contains(username));
+                }
+
+                if (!string.IsNullOrEmpty(phone) && phone.ToUpper() != "NULL")
+                {
+                    query = query.Where(u => u.Phone.Contains(phone));
+                }
+
+                if (!string.IsNullOrEmpty(role) && role.ToUpper() != "NULL")
+                {
+                    query = query.Join(
+                        _context.UserTypes, // טבלת ה-UserType
+                        user => user.UserTypeId, // השדה בטבלת Users שמצביע על ה-UserType
+                        userType => userType.UserTypeId, // השדה המזהה של UserType
+                        (user, userType) => new { User = user, UserType = userType }) // שילוב הנתונים
+                        .Where(u => u.UserType.Name == role) // סינון לפי שם ה-Role
+                        .Select(u => u.User); // חזרה לאובייקט המקורי של ה-User
+                }
+
+                if (isActive.HasValue)
+                {
+                    query = query.Where(u => u.IsActive == isActive);
+                }
+
+                // חישוב כמות כללית של המשתמשים שמתאימים לחיפוש
+                int totalCount = await query.CountAsync();
+
+                // דפדוף (Pagination)
+                var users = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (users, totalCount, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
+            }
+        }
+
         public async Task<User> UserLoginAsync(string email, string password)
         {
             var user = await _context.Users
@@ -76,5 +151,35 @@ namespace DL
             return user;
         }
 
-    }
+        public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            try
+            {
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+                    .Include(user => user.UserType).ToListAsync();
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Where(u => u.UserType != null && (u.UserType.Name == "Coordinator" || u.UserType.Name == "Lecturer"))
+                    .Include(u => u.UserType)
+                    .ToListAsync();
+
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+        }
 }
