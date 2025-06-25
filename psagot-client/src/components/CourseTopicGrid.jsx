@@ -241,7 +241,7 @@ export default function CourseTopicGrid() {
             </Box>
             <Dialog open={showWarning} onClose={handleCancelDelete}>
                 <DialogContent>
-                    <Typography>לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם</Typography>
+                    <Typography>{error}</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancelDelete}>ביטול</Button>
