@@ -80,23 +80,33 @@ namespace BL
 
         public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId, bool forceDelete = false)
         {
-            var topic = await _topicDL.GetTopicById(topicId);
-            if (topic.Topic == null)
-            {
-                return (false, "הנושא לא נמצא");
-            }
+            try {
+                var topic = await _topicDL.GetTopicById(topicId);
+                if (topic.Topic == null)
+                {
+                    return (false, "הנושא לא נמצא");
+                }
 
-            if ((topic.Topic.NumberOfMeetings ?? 0) > 0 && !forceDelete)
-            {
-                return (false, "לנושא זה משובצים מפגשים. במחיקת הנושא המפגשים יימחקו גם .");
-            }
+                if ((topic.Topic.NumberOfMeetings ?? 0) > 0 && !forceDelete)
+                {
+                    return (false, "לנושא זה משובצים מפגשים. במחיקת הנושא המפגשים יימחקו גם .");
+                }
 
-            var (isDeleted, errorMessage) = await _topicDL.DeleteTopicAndMeetings(topicId);
-            if (!isDeleted)
-            {
+                var (isDeleted, errorMessage) = await _topicDL.DeleteTopicAndMeetings(topicId);
+                if (!isDeleted)
+                {
+                    Console.WriteLine("שגיאה מ-DL: " + errorMessage);
+                    return (false, errorMessage);
+                }
+            }
+            
+             catch (Exception ex)
+    {
+                // במקרה שהשגיאה כן בורחת החוצה
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
+                Console.WriteLine("שגיאה כללית ב-BL: " + errorMessage);
                 return (false, errorMessage);
             }
-
             return (true, null);
         }
 

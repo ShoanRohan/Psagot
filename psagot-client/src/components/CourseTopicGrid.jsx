@@ -21,12 +21,12 @@ import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import TopicDialog from './TopicDialog';
 import { fetchTeachers } from '../features/user/userAction';
+import { useParams } from 'react-router-dom';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -51,8 +51,8 @@ const statusColors = {
 export default function CourseTopicGrid() {
     const dispatch = useDispatch();
     const topics = useSelector(selectFilteredTopics);
-    const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
-    // const courseId = 1;
+    const courseId = useSelector(state => state.course.selectedCourse?.courseId); // קבלת ID מה-Redux
+    const error = useSelector(state => state.topic.error)
 
     useEffect(() => {
         if (courseId) {
@@ -62,9 +62,13 @@ export default function CourseTopicGrid() {
 
     }, [dispatch, courseId]);
 
+    useEffect(() => {
+        if(error) {
+            setShowWarning(true)
+        }
+    },[error])
 
-
-    console.log("טופיקס:", topics)
+    
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -158,10 +162,10 @@ const handleDialogSubmit = async (formData) => {
 };
 
 
-    const handleDeleteClick = (topicId) => {
+    const handleDeleteClick = async (topicId) => {
         // כאן תציגי את האזהרה
         setTopicToDelete(topicId);
-        setShowWarning(true);
+        await dispatch(deleteTopicAction({ topicId: topicId }));        
       };
       
       const handleConfirmDelete = async () => {
@@ -265,7 +269,6 @@ const handleDialogSubmit = async (formData) => {
                             sx={{ '& .MuiPaginationItem-root': { fontSize: 12 } }}
                         />
                     </Grid2>
-
                     {/* בחירת מספר שורות */}
                     <Grid2 xs={9} textAlign="right" margin="auto">
                         <Select
@@ -288,10 +291,9 @@ const handleDialogSubmit = async (formData) => {
                             }}
                         >
                             <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={2}>20</MenuItem>
+                            <MenuItem value={20}>20</MenuItem>
                             <MenuItem value={50}>50</MenuItem>
                         </Select>
-
                         {/* טקסט שמסביר מה בחרת */}
                         <Typography display="inline" fontFamily="Rubik" fontSize="14px">:שורות לעמוד</Typography>
                     </Grid2>
@@ -299,7 +301,7 @@ const handleDialogSubmit = async (formData) => {
             </Box>
             <Dialog open={showWarning} onClose={handleCancelDelete}>
                 <DialogContent>
-                    <Typography>לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם</Typography>
+                    <Typography>{error}</Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancelDelete}>ביטול</Button>

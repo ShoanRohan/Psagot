@@ -21,10 +21,15 @@ const updateTopic = async (updateTopic) => {
     return response.data;
 };
 
-const deleteTopic = async (id) => {
-    const response = await api.delete(`/Topic/DeleteTopic/${id}`);
-    return response.data;
-};
+const deleteTopic = async ({ topicId, forceDelete }) => {
+    try {
+      const response = await api.delete(`/Topic/DeleteTopic/${topicId}${forceDelete ? '?forceDelete=true' : ''}`);
+      return response.data;
+    } catch (error) {
+      const msg = error?.response?.data?.message || 'שגיאה כללית במחיקה'   
+      throw new Error(msg);  
+    }
+  };
 
 const getAllTopicsForCourseByCourseId = async (CourseId) => {
     const response = await api.get(`/Topic/GetAllTopicsForCourseByCourseId/${CourseId}`);
