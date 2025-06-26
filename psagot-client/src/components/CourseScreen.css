@@ -1,7 +1,14 @@
-.course-container {
+/* .course-container {
     width: 100%;
     margin-left: 0px;
     margin-right: 8px;
+    margin-top: 24px;
+    direction: rtl;
+  } */
+  .course-container {
+    max-width: calc(100% - 60px); /* 100% minus 20px on each side */
+    margin-left: auto;
+    margin-right: auto;
     margin-top: 24px;
     direction: rtl;
   }

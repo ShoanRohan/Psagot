@@ -40,6 +40,7 @@ namespace DL
                 var topics = await _context.Topics
                            .Include(t => t.Teacher)
                            .Include(s => s.Status)
+                           .Include(t => t.ScheduleForTopics)
                            .Where(t => t.CourseId == courseId)
                            .ToListAsync();
                     

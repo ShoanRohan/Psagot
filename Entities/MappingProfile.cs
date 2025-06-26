@@ -26,6 +26,11 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name));
         CreateMap<CourseDTO, Course>();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
+        CreateMap<DaysForCourse, DaysForCourseDTO>()
+            .ForMember(dest => dest.DayName, opt => opt.MapFrom(src => src.Day.Descr));
+        CreateMap<DaysForCourseRequestDTO, DaysForCourse>()
+            .ForMember(dest => dest.Day, opt => opt.Ignore()) 
+            .ForMember(dest => dest.Course, opt => opt.Ignore());
 
     }
 }

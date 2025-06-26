@@ -1,4 +1,5 @@
 ﻿using BL;
+using DL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,9 +19,9 @@ namespace Psagot.Controllers
         }
 
         [HttpPost("AddDaysForCourse")]
-        public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseDTO daysForCourseDTO)
+        public async Task<IActionResult> AddDaysForCourse([FromBody]DaysForCourseRequestDTO requestDTO)
         {
-            var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(daysForCourseDTO);
+            var (addedDaysForCourse, errorMessage) = await _daysForCourseBL.AddDaysForCourse(requestDTO);
             if (addedDaysForCourse == null) return BadRequest(errorMessage);
 
             return Ok(addedDaysForCourse);
@@ -36,9 +37,9 @@ namespace Psagot.Controllers
         }
 
         [HttpPut("UpdateDaysForCourse")]
-        public async Task<IActionResult> UpdateDaysForCourse([FromBody] DaysForCourseDTO daysForCourseDTO)
+        public async Task<IActionResult> UpdateDaysForCourse([FromBody] DaysForCourseRequestDTO requestDTO)
         {
-            var (updateDaysForCourse, errorMessage) = await _daysForCourseBL.UpdateDaysForCourse(daysForCourseDTO);
+            var (updateDaysForCourse, errorMessage) = await _daysForCourseBL.UpdateDaysForCourse(requestDTO);
             if (updateDaysForCourse == null) return BadRequest(errorMessage);
 
             return Ok(updateDaysForCourse);
@@ -61,5 +62,23 @@ namespace Psagot.Controllers
 
             return Ok(DaysForCourse);
         }
+
+        [HttpDelete("DeleteDaysForCourse/{id}")]
+        public async Task<IActionResult> DeleteDaysForCourse([FromRoute] int id)
+        {
+            var (isDeleted, errorMessage) = await _daysForCourseBL.DeleteDaysForCourse(id);
+            if (!isDeleted)
+                return NotFound(new { Message = errorMessage });
+            return Ok(new { Id = id });
+
+        }
+
+        [HttpPost("CheckTopicsConflicts")]
+        public async Task<IActionResult> CheckTopicsConflicts([FromBody] CheckTopicsConflictRequestDTO request)
+        {
+            var (hasConflicts, message) = await _daysForCourseBL.CheckTopicsConflicts(request.CourseId, request.NewDays);
+            return Ok(new { hasConflicts, message });
+        }
+
     }
 }

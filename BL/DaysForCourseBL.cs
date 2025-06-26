@@ -13,17 +13,19 @@ namespace BL
     public class DaysForCourseBL : IDaysForCourseBL
     {
         private readonly IDaysForCourseDL _daysForCourseDL;
+        private readonly ITopicDL _topicDL;
         private readonly IMapper _mapper;
 
-        public DaysForCourseBL(IDaysForCourseDL daysForCourseDL, IMapper mapper)
+        public DaysForCourseBL(IDaysForCourseDL daysForCourseDL, ITopicDL topicDL, IMapper mapper)
         {
             _daysForCourseDL = daysForCourseDL;
+            _topicDL = topicDL;
             _mapper = mapper;
         }
 
-        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourseDTO daysForCourseDTO)
+        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> AddDaysForCourse(DaysForCourseRequestDTO requestDTO)
         {
-            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(daysForCourseDTO);
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(requestDTO);
             var (addedDaysForCourse, errorMessage) = await _daysForCourseDL.AddDaysForCourse(daysForCourse);
 
             if (addedDaysForCourse == null) return (null, errorMessage);
@@ -55,14 +57,64 @@ namespace BL
             return (_mapper.Map<IEnumerable<DaysForCourseDTO>>(DaysForCourse), null);
         }
 
-        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> UpdateDaysForCourse(DaysForCourseDTO daysForCourseDTO)
+        public async Task<(DaysForCourseDTO DaysForCourse, string ErrorMessage)> UpdateDaysForCourse(DaysForCourseRequestDTO requestDTO)
         {
-            var daysForCourse = _mapper.Map<DaysForCourse>(daysForCourseDTO);
+            DaysForCourse daysForCourse = _mapper.Map<DaysForCourse>(requestDTO);
             var (updateDaysForCourse, errorMessage) = await _daysForCourseDL.UpdateDaysForCourse(daysForCourse);
 
             if (updateDaysForCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<DaysForCourseDTO>(updateDaysForCourse), null);
+        }
+
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteDaysForCourse(int daysForCourseId)
+        {
+            var (isDeleted, errorMessage) = await _daysForCourseDL.DeleteDaysForCourse(daysForCourseId);
+
+            if (!isDeleted)
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
+
+        public async Task<(bool HasConflicts, string Message)> CheckTopicsConflicts(int courseId, List<DaysForCourseRequestDTO> newDays)
+        {
+            var (topicsList, topicErrorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(courseId);
+
+            if (topicsList == null)
+            {
+                return (true, $"שגיאה בשליפת נושאים: {topicErrorMessage}");
+            }
+
+            foreach (var topic in topicsList)
+            {
+                var schedules = topic.ScheduleForTopics;
+
+                if (schedules == null || !schedules.Any())
+                {
+                    continue;
+                }
+
+                foreach (var schedule in schedules)
+                {
+                    var matchingNewDay = newDays.FirstOrDefault(d => d.DayId == schedule.DayId);
+
+                    if (matchingNewDay != null)
+                    {
+                        if (schedule.StartTime < matchingNewDay.StartTime || schedule.EndTime > matchingNewDay.EndTime)
+                        {
+                            return (true, "בעקבות השינוי בימים יש נושאים שמשובצים בצורה לא תקינה האם לשמור בכל זאת?");
+                        }
+                    }
+                    else
+                    {
+                        return (true, "בעקבות השינוי בימים יש נושאים שמשובצים בצורה לא תקינה האם לשמור בכל זאת?");
+                    }
+                }
+            }
+            return (false, null);
         }
     }
 }

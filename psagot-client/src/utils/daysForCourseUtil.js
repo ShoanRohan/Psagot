@@ -25,4 +25,14 @@ const updateDaysForCourse = async (updateDaysForCourse) => {
     return response.data;
 };
 
-export { gelAllDaysForCourse, getDaysForCourseById, getDaysForCourseByCourseId, addDaysForCourse, updateDaysForCourse };
+const deleteDaysForCourse = async (id) => {
+    const response = await api.delete(`/DaysForCourse/DeleteDaysForCourse/${id}`); // נניח שיש נקודת קצה כזו
+    return response.data;
+};
+
+const checkTopicsConflicts = async (request) => {
+    const response = await api.post(`/DaysForCourse/CheckTopicsConflicts`, request)
+    return response.data;
+}
+
+export { gelAllDaysForCourse, getDaysForCourseById, getDaysForCourseByCourseId, addDaysForCourse, updateDaysForCourse, deleteDaysForCourse, checkTopicsConflicts };

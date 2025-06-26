@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { addDaysForCourse, getDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse } from '../../utils/daysForCourseUtil';
+import { addDaysForCourse, getDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse , deleteDaysForCourse, checkTopicsConflicts } from '../../utils/daysForCourseUtil';
+
 
 export const fetchAllDaysForCourse = createAsyncThunk('/daysForCourse/fetchAllDaysForCourse', async () => {
     const data = await gelAllDaysForCourse();
@@ -21,7 +22,28 @@ export const addDaysForCourseAction = createAsyncThunk('daysForCourse/addDaysFor
     return data;
 });
 
-export const updateDaysForCourseAction = createAsyncThunk('daysForCourse/updateDaysForCourseAction', async (updateDaysForCourse) => {
-    const data = await updateDaysForCourse(updateDaysForCourse);
+export const updateDaysForCourseAction = createAsyncThunk('daysForCourse/updateDaysForCourseAction', async (updatedDaysForCourse) => {
+    const data = await updateDaysForCourse(updatedDaysForCourse);
     return data;
 });
+
+export const deleteDaysForCourseAction = createAsyncThunk('daysForCourse/deleteDaysForCourseAction', async (daysForCourseId, { rejectWithValue }) => {
+    try {
+        await deleteDaysForCourse(daysForCourseId);
+        return daysForCourseId;
+    } catch (error) {
+        return rejectWithValue(error.response?.data || error.message);
+    }
+});
+
+export const checkTopicsConflictAction = createAsyncThunk(
+    'daysForCourse/checkTopicsConflict',
+    async ({ courseId, newDays }, { rejectWithValue }) => {
+        try {
+            const response = await checkTopicsConflicts({ courseId, newDays });
+            return response;
+        } catch (error) {
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);

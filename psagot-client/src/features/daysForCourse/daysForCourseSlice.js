@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllDaysForCourse, fetchDaysForCourseById, fetchDaysForCourseByCourseId, addDaysForCourseAction, updateDaysForCourseAction } from './daysForCourseActions';
+import { fetchAllDaysForCourse, fetchDaysForCourseById, fetchDaysForCourseByCourseId, addDaysForCourseAction, updateDaysForCourseAction, deleteDaysForCourseAction, checkTopicsConflictAction } from './daysForCourseActions';
 
 const initialState = {
     daysForCourses: [],
@@ -70,6 +70,27 @@ const daysForCourseSlice = createSlice({
                 }
             })
             .addCase(updateDaysForCourseAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(deleteDaysForCourseAction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(deleteDaysForCourseAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.daysForCourseByCourseId = state.daysForCourseByCourseId.filter(day => day.daysForCourseId !== action.payload);
+            })
+            .addCase(deleteDaysForCourseAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            })
+            .addCase(checkTopicsConflictAction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(checkTopicsConflictAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+            })
+            .addCase(checkTopicsConflictAction.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
             });

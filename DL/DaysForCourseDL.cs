@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class DaysForCourseDL: IDaysForCourseDL
+    public class DaysForCourseDL : IDaysForCourseDL
     {
         private readonly PsagotDbContext _context;
 
@@ -37,7 +37,10 @@ namespace DL
         {
             try
             {
-                var daysForCourse = await _context.Set<DaysForCourse>().ToListAsync();
+                var daysForCourse = await _context.Set<DaysForCourse>()
+                    .Include(dfc => dfc.Course)
+                    .Include(dfc => dfc.Day)
+                    .ToListAsync();
                 return (daysForCourse, null);
             }
             catch (Exception ex)
@@ -85,5 +88,26 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteDaysForCourse(int daysForCourseId)
+        {
+            try
+            {
+                var dayToDelete = await _context.Set<DaysForCourse>().FindAsync(daysForCourseId);
+                if (dayToDelete == null)
+                {
+                    return (false, "days for course not found");
+                }
+
+                _context.Set<DaysForCourse>().Remove(dayToDelete);
+                await _context.SaveChangesAsync();
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
     }
 }
