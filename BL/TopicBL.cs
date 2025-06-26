@@ -56,10 +56,10 @@ namespace BL
             return (_mapper.Map<IEnumerable<TopicDTO>>(topics), null);
         }
         
-        public async Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO)
+        public async Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO,bool forceUpdate)
         {
             var topic = _mapper.Map<Topic>(topicDTO);
-            var (updatedTopic, errorMessage) = await _topicDL.UpdateTopic(topic);
+            var (updatedTopic, errorMessage) = await _topicDL.UpdateTopic(topic,forceUpdate);
 
             if (updatedTopic == null) return (null, errorMessage);
 

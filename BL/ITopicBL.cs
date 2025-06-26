@@ -12,7 +12,7 @@ namespace BL
     {
         Task<(TopicDTO Topic, string ErrorMessage)> GetTopicById(int id);
         Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId);
-        Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO);
+        Task<(TopicDTO Topic, string ErrorMessage)> UpdateTopic(TopicDTO topicDTO, bool forceUpdate);
         Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId, bool forceDelete);
         Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
         Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics();

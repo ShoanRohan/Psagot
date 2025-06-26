@@ -34,7 +34,6 @@ namespace Entities.DTO
 
         public string? StatusName { get; set; }
 
-        public bool ForceUpdate { get; set; } = false;
 
     }
 }

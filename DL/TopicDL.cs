@@ -51,7 +51,7 @@ namespace DL
             }
         }
 
-        public async Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic)
+        public async Task<(Topic Topic, string ErrorMessage)> UpdateTopic(Topic topic , bool forceUpdate)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace DL
                         .Where(m => m.MeetingDate > today)
                         .ToList();
 
-                    if (futureMeetings.Any() && !topic.ForceUpdate)
+                    if (futureMeetings.Any() && !forceUpdate)
                     {
                         return (null, "לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך?");
                     }

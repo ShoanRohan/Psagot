@@ -566,7 +566,7 @@ useEffect(() => {
         </Box>
 
         {/* דיאלוג האישור למחיקת מפגשים עתידיים */}
-<Dialog
+{/* <Dialog
   open={showConfirmDialog}
   onClose={() => setShowConfirmDialog(false)}
   aria-labelledby="confirm-dialog-title"
@@ -602,7 +602,7 @@ useEffect(() => {
       </Button>
     </Box>
   </DialogContent>
-</Dialog>
+</Dialog> */}
 
 
         <Box
