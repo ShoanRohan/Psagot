@@ -6,7 +6,6 @@ import CoursesPage from '../pages/CoursesPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import MeetingPage from '../pages/MeetingPage';
-import UserManagement from '../pages/UserManagement';
 import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {

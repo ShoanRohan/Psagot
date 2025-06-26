@@ -1,9 +1,8 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CustomTable from './CustomTable';
 import {
   fetchAllMeetings,
-  deleteMeetingAction
+  deleteMeetingAction,
 } from '../features/meeting/meetingActions';
 import {
   Chip,
@@ -19,25 +18,24 @@ import {
   Box,
   Paper,
   Snackbar,
-  Alert
+  Alert,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-import SaveIcon from '@mui/icons-material/Save';
-import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
-import { clearError, resetStatus } from '../features/meeting/meetingSlice';
-import MeetingForm from './MeetingForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { useNavigate } from 'react-router-dom';
+import { clearError, resetStatus } from '../features/meeting/meetingSlice';
+import CustomTable from './CustomTable';
+import trash from '../assets/icons/trash.png';
+import penToSquare from '../assets/icons/penToSquare.png';
 
-const MeetingTable = React.memo(({ onEdit  }) => {
+const MeetingTable = React.memo(({ onEdit }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { meetings, status, error } = useSelector((state) => state.meeting);
   const [refreshKey, setRefreshKey] = useState(0);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -45,11 +43,11 @@ const MeetingTable = React.memo(({ onEdit  }) => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
-    severity: 'success'
+    severity: 'success',
   });
 
   const forceRefresh = useCallback(() => {
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
   }, []);
 
   const handleManualRefresh = useCallback(() => {
@@ -60,12 +58,12 @@ const MeetingTable = React.memo(({ onEdit  }) => {
     setSnackbar({
       open: true,
       message,
-      severity
+      severity,
     });
   }, []);
 
   const handleCloseSnackbar = useCallback(() => {
-    setSnackbar(prev => ({ ...prev, open: false }));
+    setSnackbar((prev) => ({ ...prev, open: false }));
   }, []);
 
   useEffect(() => {
@@ -104,149 +102,133 @@ const MeetingTable = React.memo(({ onEdit  }) => {
     }
   }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
-  // עמודות הטבלה
+  // עמודות בהתאמה לתמונה
   const columns = useMemo(() => [
+    'מספר מפגש',
     'שם קורס',
     'נושא',
-    'מספר מפגש',
-    'מרצה',
+    'שם מרצה',
+    'תאריך',
     'יום',
     'שעת התחלה',
     'שעת סיום',
-    'תאריך',
-    'חדר',
-    'האם השיבוץ תקין?',
-    'חלק מהמערכת?',
+    'מספר חדר',
+    'שיבוץ',
+    'סטטוס',
     'עריכה',
-    'מחיקה'
+    'מחיקה',
   ], []);
 
-  // מיפוי המפתחות
+
+//  {
+//     "meetingId": 44,
+//     "scheduleForTopicId": 5,
+//     "meetingNumberForTopic": 4,
+//     "roomId": 5,
+//     "isValid": false,
+//     "dayId": 1,
+//     "startTime": "10:00:00",
+  //   "endTime": "12:00:00",
+  //   "isPartOfSchedule": true,
+  //   "courseId": 1,
+  //   "topicId": 5,
+  //   "teacherId": 5,
+  //   "meetingDate": "2025-01-26",
+  //   "reason": "כמות התלמידים בקורס (25) גדולה מקיבולת החדר (20)",
+  //   "year": 0,
+  //   "statusCourseId": 0
+  // },
+
   const keyMap = useMemo(() => ({
+    'מספר מפגש': 'meetingId',
     'שם קורס': 'courseName',
     'נושא': 'topicName',
-    'מספר מפגש': 'meetingNumberForTopic',
-    'מרצה': 'lecturerName',
+    'שם מרצה': 'teacherName',
+    'תאריך': 'meetingDate',
     'יום': 'dayId',
     'שעת התחלה': 'startTime',
     'שעת סיום': 'endTime',
-    'תאריך': 'date',
-    'חדר': 'roomId',
-    'האם השיבוץ תקין?': 'isValid',
-    'חלק מהמערכת?': 'isPartOfSchedule',
-    'מזהה מפגש': 'meetingId',
-    'מזהה נושא': 'scheduleForTopicId'
+    'מספר חדר': 'roomId',
+    'שיבוץ': 'isValid',
+    'סטטוס': 'isPartOfSchedule',
   }), []);
 
-  // פונקציות עזר לרינדור
-  const renderScheduleChip = useCallback((row) => (
+  const renderStatusChip = useCallback((row) => (
     <Chip
-      label={row.isPartOfSchedule ? 'כן' : 'לא'}
+      label={row.isPartOfSchedule ? 'פעיל' : 'חסרים'}
       color={row.isPartOfSchedule ? 'success' : 'default'}
-      variant="outlined"
+      sx={{ fontWeight: 'bold', width: '60px', justifyContent: 'center' }}
     />
   ), []);
 
   const renderValidChip = useCallback((row) => (
-    <Chip
-      label={row.isValid ? 'תקין' : 'שגוי'}
-      color={row.isValid ? 'success' : 'error'}
-      variant="outlined"
-    />
+    <Typography>{row.isValid  ?  'V' : 'X'} </Typography>
   ), []);
 
   const renderEditButton = useCallback((row) => (
     <Tooltip title="ערוך מפגש">
-      <IconButton 
-        onClick={() => onEdit && onEdit(row)} 
-        size="small" 
-        color="primary"
-      >
-        <EditIcon />
+      <IconButton onClick={() => onEdit?.(row)} size="small" color="primary">
+        {/* <EditIcon /> */}
+          <img src={penToSquare} alt="Delete" style={{ width: '20px', height: '20px' }} />
       </IconButton>
     </Tooltip>
   ), [onEdit]);
 
   const renderDeleteButton = useCallback((row) => (
     <Tooltip title="מחק מפגש">
-      <IconButton 
-        onClick={() => handleDelete(row)} 
-        size="small" 
-        color="error"
-      >
-        <DeleteIcon />
+      <IconButton onClick={() => handleDelete(row)} size="small" color="error">
+        {/* <DeleteIcon /> */}
+        <img src={trash} alt="Delete" style={{ width: '20px', height: '20px' }} />
       </IconButton>
     </Tooltip>
   ), [handleDelete]);
 
-  // הגדרת העמודות המיוחדות
   const columnConfig = useMemo(() => ({
-    'חלק מהמערכת?': { render: renderScheduleChip },
-    'האם השיבוץ תקין?': { render: renderValidChip },
+    'סטטוס': { render: renderStatusChip },
+    'שיבוץ': { render: renderValidChip },
     'עריכה': { render: renderEditButton },
-    'מחיקה': { render: renderDeleteButton }
-  }), [renderScheduleChip, renderValidChip, renderEditButton, renderDeleteButton]);
-
-  // רכיב טעינה
-  const loadingComponent = useMemo(() => (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-      <CircularProgress size={60} />
-      <Typography variant="h6" color="text.secondary">טוען מפגשים...</Typography>
-    </Box>
-  ), []);
-
-  // רכיב שגיאה
-  const errorComponent = useMemo(() => (
-    <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-      <Typography variant="h6" color="error" textAlign="center">
-        שגיאה בטעינת המפגשים
-      </Typography>
-      <Typography variant="body2" color="text.secondary" textAlign="center">
-        {error}
-      </Typography>
-      <Button 
-        variant="contained" 
-        onClick={handleManualRefresh} 
-        startIcon={<RefreshIcon />} 
-        size="large"
-      >
-        נסה שוב
-      </Button>
-    </Box>
-  ), [error, handleManualRefresh]);
+    'מחיקה': { render: renderDeleteButton },
+  }), [renderStatusChip, renderValidChip, renderEditButton, renderDeleteButton]);
 
   if (isInitialLoading) {
-    return loadingComponent;
+    return (
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
+        <CircularProgress size={60} />
+        <Typography variant="h6" color="text.secondary">טוען מפגשים...</Typography>
+      </Box>
+    );
   }
 
   if (status === 'failed') {
-    return errorComponent;
+    return (
+      <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
+        <Typography variant="h6" color="error" textAlign="center">שגיאה בטעינת המפגשים</Typography>
+        <Typography variant="body2" color="text.secondary" textAlign="center">{error}</Typography>
+        <Button variant="contained" onClick={handleManualRefresh} startIcon={<RefreshIcon />} size="large">
+          נסה שוב
+        </Button>
+      </Box>
+    );
   }
 
   return (
     <Paper elevation={3} sx={{ p: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5" component="h2">
-          טבלת מפגשים
-        </Typography>
-        <Button 
-          variant="outlined" 
-          onClick={handleManualRefresh} 
-          startIcon={<RefreshIcon />} 
-          disabled={status === 'loading'}
-        >
+        <Typography variant="h5">טבלת מפגשים</Typography>
+        <Button variant="outlined" onClick={handleManualRefresh} startIcon={<RefreshIcon />}>
           רענן
         </Button>
       </Box>
 
-      <CustomTable 
-        columns={columns} 
-        data={meetings || []} 
-        keyMap={keyMap} 
-        columnConfig={columnConfig} 
+      <CustomTable
+        columns={columns}
+        data={meetings || []}
+        keyMap={keyMap}
+        columnConfig={columnConfig}
+        onEdit={onEdit}
+        onDelete={handleDelete}
       />
 
-      {/* דיאלוג מחיקה */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
         <DialogTitle>מחיקת מפגש</DialogTitle>
         <DialogContent dividers>
@@ -261,25 +243,15 @@ const MeetingTable = React.memo(({ onEdit  }) => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button 
-            onClick={handleCloseDeleteDialog} 
-            disabled={isDeleting} 
-            color="inherit"
-          >
+          <Button onClick={handleCloseDeleteDialog} disabled={isDeleting} color="inherit">
             ביטול
           </Button>
-          <Button 
-            onClick={handleConfirmDelete} 
-            variant="contained" 
-            color="error" 
-            disabled={isDeleting}
-          >
+          <Button onClick={handleConfirmDelete} variant="contained" color="error" disabled={isDeleting}>
             {isDeleting ? <CircularProgress size={24} color="inherit" /> : 'מחק'}
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* הודעות Snackbar */}
       <Snackbar
         open={snackbar.open}
         autoHideDuration={4000}
