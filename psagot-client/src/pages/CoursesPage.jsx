@@ -175,7 +175,7 @@ const CoursesPage = () => {
             startIcon={<AddCircleOutlineIcon />}
             onClick={() => setOpenDialog(true)}
           >
-            הוספת קורס
+            הוספת נושא
           </Button>
           <IconButton
             onClick={handleExportToExcel}

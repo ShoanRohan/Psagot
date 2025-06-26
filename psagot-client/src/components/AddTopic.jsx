@@ -14,6 +14,23 @@ import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 // import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CloseIcon from "@mui/icons-material/Close";
+
+const sharedStyles = {
+    textAlign: "right",
+    direction: "rtl",
+    "& .MuiInputLabel-root": {
+      right: "0",
+      transformOrigin: "top right",
+    },
+    "& .MuiSelect-icon": {
+      right: "unset",
+      left: "0px",
+    },
+    ".css-5lvf42-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-5lvf42-MuiSelect-select-MuiInputBase-input-MuiInput-input.css-5lvf42-MuiSelect-select-MuiInputBase-input-MuiInput-input":{
+        marginRight: "unset"
+    }
+  };
 
 const initialTechnicalDetails = {
     code: '',
@@ -40,12 +57,17 @@ const initialSchedule = [
     }
 ];
 
-export default function AddTopic({ open, onClose, topic }) {
+export default function AddTopic({ open, onClose, courseName }) {
     const dispatch = useDispatch();
     const [technicalDetails, setTechnicalDetails] = useState(initialTechnicalDetails);
     const [schedule, setSchedule] = useState(initialSchedule);
-    const [isEdit, setIsEdit] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [startDateType, setStartDateType] = useState("text");
+    const [endDateType, setEndDateType] = useState("text");
+    const [startDateError, setStartDateError] = useState('');
+    const [endDateError, setEndDateError] = useState('');
+    const [startHourError, setStartHourError] = useState('');
+    const [endHourError, setEndHourError] = useState('');
 
     const teachers = useSelector(state => state.user.teachers);
     const topicsStatuses = useSelector(state => state.status.topicsStatuses);
@@ -55,26 +77,10 @@ export default function AddTopic({ open, onClose, topic }) {
         dispatch(fetchTeachers());
         dispatch(fetchAllStatusesTopics());
         dispatch(fetchAllDays());
-        if (topic) {
-            setIsEdit(true);
-            setTechnicalDetails({
-                code: topic.code || '',
-                name: topic.name || '',
-                courseName: topic.courseName || '',
-                lecturer: topic.lecturer || '',
-                startDate: topic.startDate || '',
-                endDate: topic.endDate || '',
-                status: topic.status || '',
-                sessions: topic.sessions || '',
-                equipment: topic.equipment || {
-                    computers: false,
-                    projector: false,
-                    microphone: false
-                }
-            });
-            setSchedule(topic.schedule || initialSchedule);
-        }
-    }, [dispatch, topic]);
+    }, [dispatch]);
+    useEffect(()=>{
+    setTechnicalDetails({...technicalDetails,courseName:courseName})
+    },[open])
 
     const handleTechnicalChange = (field, value) => {
         setTechnicalDetails(prev => ({ ...prev, [field]: value }));
@@ -99,23 +105,14 @@ export default function AddTopic({ open, onClose, topic }) {
 
     const handleSaveTechnicalDetails = () => {
         // בדיקות ואימותים לפני השמירה
+        if(!setValidations())
+            return;
         if (!technicalDetails.name || !technicalDetails.courseName) {
             setErrorMessage('אנא מלא את כל השדות הנדרשים.');
             return;
         }
 
-        // שליחת הפעולה לשמירת פרטי הנושא
-        if (isEdit) {
-            dispatch(updateTopicAction(technicalDetails))
-                .then(() => {
-                    alert('שמירת פרטי הנושא הסתיימה בהצלחה.');
-                    onClose();
-                })
-                .catch(() => {
-                    setErrorMessage('אירעה שגיאה בשמירת פרטי הנושא.');
-                });
-        }
-        else {
+        // שליחת הפעולה לשמירת פרטי הנושא  
             dispatch(addTopicAction(technicalDetails))
                 .then(() => {
                     alert('שמירת פרטי הנושא הסתיימה בהצלחה.');
@@ -124,7 +121,6 @@ export default function AddTopic({ open, onClose, topic }) {
                 .catch(() => {
                     setErrorMessage('אירעה שגיאה בשמירת פרטי הנושא.');
                 });
-        }
     };
 
     const handleSaveSchedule = () => {
@@ -163,8 +159,112 @@ export default function AddTopic({ open, onClose, topic }) {
         return false;
     };
 
+    const setValidations = () => {
+        return startDateValidation() ||
+        endDateValidation() ||
+        startHourValidation() ||
+        endHourValidation();
+    };
+    
+    const startDateValidation = () => {
+        const today = new Date();
+        const startDate = new Date(technicalDetails.startDate);
+        const endDate = new Date(technicalDetails.endDate);
+    
+        if (!technicalDetails.startDate) {
+            setStartDateError('יש להזין תאריך התחלה.');
+        } else if (startDate < today.setHours(0, 0, 0, 0)) {
+            setStartDateError('תאריך ההתחלה צריך להיות גדול מהיום.');
+        } else if (technicalDetails.endDate && startDate > endDate) {
+            setStartDateError('תאריך ההתחלה צריך להיות קטן מתאריך הסיום.');
+        } else {
+            setStartDateError('');
+            return true;
+        }
+        return false;
+    };
+    
+    const endDateValidation = () => {
+        const startDate = new Date(technicalDetails.startDate);
+        const endDate = new Date(technicalDetails.endDate);
+    
+        if (!technicalDetails.endDate) {
+            setEndDateError('יש להזין תאריך סיום.');
+        } else if (technicalDetails.startDate && endDate <= startDate) {
+            setEndDateError('תאריך הסיום צריך להיות אחרי תאריך ההתחלה.');
+        } else {
+            setEndDateError('');
+            return true;
+        }
+        return false;    };
+    
+    const startHourValidation = () => {
+        const now = new Date();
+        const startDate = new Date(technicalDetails.startDate);
+        const startHour = technicalDetails.startHour;
+        const endHour = technicalDetails.endHour;
+    
+        if (!startHour) {
+            setStartHourError('יש להזין שעת התחלה.');
+            return false;
+        }
+    
+        const [startH, startM] = startHour.split(':').map(Number);
+        const startDateTime = new Date(startDate);
+        startDateTime.setHours(startH, startM, 0, 0);
+    
+        if (startDate.toDateString() === now.toDateString() && startDateTime < now) {
+            setStartHourError('שעת ההתחלה צריכה להיות מאוחרת מהשעה הנוכחית.');
+        } else if (endHour) {
+            const [endH, endM] = endHour.split(':').map(Number);
+            const endDateTime = new Date(startDate);
+            endDateTime.setHours(endH, endM, 0, 0);
+    
+            if (startDateTime >= endDateTime) {
+                setStartHourError('שעת ההתחלה צריכה להיות לפני שעת הסיום.');
+                return false;
+            }
+            setStartHourError('');
+            return true;
+        } else {
+            setStartHourError('');
+            return true;
+        }
+        return false;
+    };
+    
+    const endHourValidation = () => {
+        const startDate = new Date(technicalDetails.startDate);
+        const startHour = technicalDetails.startHour;
+        const endHour = technicalDetails.endHour;
+    
+        if (!endHour) {
+            setEndHourError('יש להזין שעת סיום.');
+            return;
+        }
+    
+        if (startHour) {
+            const [startH, startM] = startHour.split(':').map(Number);
+            const [endH, endM] = endHour.split(':').map(Number);
+    
+            const startDateTime = new Date(startDate);
+            const endDateTime = new Date(startDate);
+            startDateTime.setHours(startH, startM, 0, 0);
+            endDateTime.setHours(endH, endM, 0, 0);
+    
+            if (endDateTime <= startDateTime) {
+                setEndHourError('שעת הסיום צריכה להיות אחרי שעת ההתחלה.');
+                return;
+            }
+            setEndHourError('');
+        } else {
+            setEndHourError('');
+        }
+    };
+    
+
     return (
-        <Dialog open={open} onClose={onClose} fullWidth PaperProps={{
+        <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{
             sx: {
                 width: '80vw',
                 maxWidth: '80vw',
@@ -172,23 +272,44 @@ export default function AddTopic({ open, onClose, topic }) {
                 m: 'auto',
             },
         }}>
-            <Box sx={{ width: '100%', height: '100%' }} dir="rtl">
-                <DialogTitle>
-                    <Typography fontWeight="bold" fontSize={16}>
-                        הוספת נושא {technicalDetails.name && `- ${technicalDetails.name}`}
-                    </Typography>
-                </DialogTitle>
+            <IconButton
+        onClick={onClose}
+        sx={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          color: "#494747",
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+            <DialogTitle>
+                <Typography fontWeight="bold" fontSize={16}>
+                    הוספת נושא {technicalDetails.name && `- ${technicalDetails.name}`}
+                </Typography>
+            </DialogTitle>
 
-                <DialogContent sx={{ maxHeight: '90vh' }} dir="rtl">
+            <Box sx={{ width: '100%', height: '100%' }} dir="rtl">
+                <DialogContent sx={{ maxHeight: '90vh', overflowY: 'unset' }} dir="rtl">
                     <Grid container spacing={2} direction="column">
                         {/* פרטים טכניים */}
                         <Grid item xs={12}>
                             <Paper sx={{ p: 2 }}>
-                                <Typography variant="h6" fontWeight="bold" fontSize={14} mb={2}>
-                                    פרטים טכניים
-                                </Typography>
-                                <Grid container spacing={2} sx={{ maxWidth: '40%' }}>
-                                    {isEdit && <Grid item xs={4}>
+                                <Box display="flex" justifyContent="space-between" alignItems="center" mt={-1} mb={1}>
+                                    <Typography variant="h6" fontWeight="bold" fontSize={14} mb={2}>
+                                        פרטים טכניים
+                                    </Typography>
+                                    <Box display="flex" gap={2} sx={{ justifyContent: 'center', px: 3, pb: 2 }}>
+                                        <Typography sx={{ color: 'red', textAlign: 'center' }}>{errorMessage}</Typography>
+                                        <Button variant="contained" color="primary" onClick={handleSaveTechnicalDetails} sx={{ borderRadius: '32px' }}>
+                                            שמירה
+                                        </Button>
+                                        {/* <Button variant='outlined' onClick={onClose} sx={{ borderRadius: '32px' }}>ביטול</Button> */}
+                                    </Box>
+                                </Box>
+
+                                <Grid container spacing={2} sx={{ maxWidth: '80%' }}>
+                                    {/* { <Grid item xs={4}>
                                         <TextField
                                             label="קוד נושא"
                                             value={technicalDetails.code}
@@ -197,8 +318,8 @@ export default function AddTopic({ open, onClose, topic }) {
                                             variant="standard"
                                             InputLabelProps={{ sx: { textAlign: 'right', right: 0 } }}
                                         />
-                                    </Grid>}
-                                    <Grid item xs={4}>
+                                    </Grid>} */}
+                                    <Grid item xs={3}>
                                         <TextField
                                             label="שם נושא"
                                             value={technicalDetails.name}
@@ -206,9 +327,10 @@ export default function AddTopic({ open, onClose, topic }) {
                                             fullWidth
                                             variant="standard"
                                             InputLabelProps={{ sx: { textAlign: 'right', right: 0 } }}
+                                            sx={{ ...sharedStyles }}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <TextField
                                             label="שם קורס"
                                             value={technicalDetails.courseName}
@@ -216,29 +338,13 @@ export default function AddTopic({ open, onClose, topic }) {
                                             fullWidth
                                             variant="standard"
                                             InputLabelProps={{ sx: { textAlign: 'right', right: 0 } }}
+                                            sx={{ ...sharedStyles }}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
                                         <FormControl fullWidth variant="standard"
                                             sx={{
-                                                direction: 'rtl',
-                                                '& .MuiInputLabel-root': {
-                                                    right: 0,
-                                                    left: 'unset',
-                                                    fontSize: '0.9rem',
-                                                },
-                                                '& .MuiSelect-select': {
-                                                    textAlign: 'right',
-                                                    paddingRight: '0px',
-                                                },
-                                                '& .MuiInput-root': {
-                                                    fontSize: '0.95rem',
-                                                    paddingBottom: '4px',
-                                                },
-                                                '& .MuiSelect-icon': {
-                                                    left: 0, // החץ בצד שמאל
-                                                    right: 'unset',
-                                                },
+                                                ...sharedStyles
                                             }}
 
                                         >
@@ -256,7 +362,27 @@ export default function AddTopic({ open, onClose, topic }) {
                                             </Select>
                                         </FormControl>
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={3}>
+                                        <FormControl fullWidth variant="standard"
+                                            sx={{
+                                                ...sharedStyles
+                                            }}
+                                        >
+                                            <InputLabel>סטטוס</InputLabel>
+                                            <Select
+                                                value={technicalDetails.status}
+                                                onChange={(e) => handleTechnicalChange('status', e.target.value)}
+                                                IconComponent={ExpandMoreRoundedIcon}
+                                            >
+                                                {topicsStatuses.map(s => (
+                                                    <MenuItem key={s.statusTopicId} value={s.name}>
+                                                        {s.name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={3}>
                                         {/* <DatePicker
   label="תאריך התחלה"
   value={technicalDetails.startDate}
@@ -302,7 +428,7 @@ export default function AddTopic({ open, onClose, topic }) {
   }}
 /> */}
 
-                                        <TextField
+                                        {/* <TextField
                                             label="תאריך התחלה"
                                             InputLabelProps={{ shrink: true }}
                                             value={technicalDetails.startDate}
@@ -335,57 +461,44 @@ export default function AddTopic({ open, onClose, topic }) {
                                                     paddingRight: 0,
                                                 },
                                             }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
+                                        /> */}
                                         <TextField
+                                                      label="תאריך התחלה"
+                                                      name="startDate"
+                                                      type={startDateType}
+                                                      onFocus={() => setStartDateType("date")}
+                                                      onBlur={() => !technicalDetails.startDate && setStartDateType("text")}
+                                                      value={technicalDetails.startDate}
+                                                      onChange={(e) => handleTechnicalChange('startDate', e.target.value)}
+                                                      variant="standard"
+                                                      fullWidth
+                                                      sx={{ ...sharedStyles }}
+                                                    />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        {/* <TextField
                                             label="תאריך סיום"
                                             type="date"
                                             InputLabelProps={{ shrink: true }}
                                             value={technicalDetails.endDate}
                                             onChange={(e) => handleTechnicalChange('endDate', e.target.value)}
-                                            fullWidth
                                             variant="standard"
-                                        />
+                                            /> */}
+                                         <TextField
+                                                      label="תאריך סיום"
+                                                      name="endDate"
+                                                      type={endDateType}
+                                                      onFocus={() => setEndDateType("date")}
+                                                      onBlur={() => !technicalDetails.endDate && setEndDateType("text")}
+                                                      value={technicalDetails.endDate}
+                                                      onChange={(e) => handleTechnicalChange('endDate', e.target.value)}
+                                                      variant="standard"
+                                                      fullWidth
+                                                      sx={{ ...sharedStyles }}
+                                                    />
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <FormControl fullWidth variant="standard"
-                                            sx={{
-                                                direction: 'rtl',
-                                                '& .MuiInputLabel-root': {
-                                                    right: 0,
-                                                    left: 'unset',
-                                                    fontSize: '0.9rem',
-                                                },
-                                                '& .MuiSelect-select': {
-                                                    textAlign: 'right',
-                                                    paddingRight: '0px',
-                                                },
-                                                '& .MuiInput-root': {
-                                                    fontSize: '0.95rem',
-                                                    paddingBottom: '4px',
-                                                },
-                                                '& .MuiSelect-icon': {
-                                                    left: 0, // החץ בצד שמאל
-                                                    right: 'unset',
-                                                },
-                                            }}
-                                        >
-                                            <InputLabel>סטטוס</InputLabel>
-                                            <Select
-                                                value={technicalDetails.status}
-                                                onChange={(e) => handleTechnicalChange('status', e.target.value)}
-                                                IconComponent={ExpandMoreRoundedIcon}
-                                            >
-                                                {topicsStatuses.map(s => (
-                                                    <MenuItem key={s.statusTopicId} value={s.name}>
-                                                        {s.name}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={4}>
+
+                                    <Grid item xs={3}>
                                         <TextField
                                             label="מספר מפגשים"
                                             type="number"
@@ -426,7 +539,7 @@ export default function AddTopic({ open, onClose, topic }) {
 
                         {/* ימי לימוד */}
                         <Grid item xs={12}>
-                            <Paper variant="outlined" sx={{ p: 2 }}>
+                            <Paper sx={{ p: 2 }}>
                                 <Typography variant="h6" fontWeight="bold" fontSize={14}>
                                     ימי לימוד
                                 </Typography>
@@ -475,8 +588,12 @@ export default function AddTopic({ open, onClose, topic }) {
                                                 InputLabelProps={{ shrink: true }}
                                                 value={row.startHour}
                                                 onChange={(e) => handleScheduleChange(index, 'startHour', e.target.value)}
+                                                onBlur={() => startHourValidation()}
+                                                error={startHourError?.length>0}
+                                                helperText={startHourError}
                                                 fullWidth
                                                 variant="standard"
+                                                sx={{ ...sharedStyles }}
                                             />
                                         </Grid>
                                         <Grid item xs={2}>
@@ -488,6 +605,7 @@ export default function AddTopic({ open, onClose, topic }) {
                                                 onChange={(e) => handleScheduleChange(index, 'endHour', e.target.value)}
                                                 fullWidth
                                                 variant="standard"
+                                                sx={{ ...sharedStyles }}
                                             />
                                         </Grid>
                                         <Grid item xs={3}>
@@ -520,15 +638,9 @@ export default function AddTopic({ open, onClose, topic }) {
                 </DialogContent>
 
                 {/* כפתורים */}
-                <DialogActions sx={{ flexDirection: 'column' }}>
-                    <Typography sx={{ color: 'red', textAlign: 'center' }}>{errorMessage}</Typography>
-                    <Box display="flex" gap={2} sx={{ justifyContent: 'center', px: 3, pb: 2 }}>
-                        <Button variant="contained" color="primary" onClick={handleSaveTechnicalDetails} sx={{ borderRadius: '32px' }}>
-                            שמירה
-                        </Button>
-                        <Button variant='outlined' onClick={onClose} sx={{ borderRadius: '32px' }}>ביטול</Button>
-                    </Box>
-                </DialogActions>
+                {/* <DialogActions sx={{ flexDirection: 'column' }}> */}
+
+                {/* </DialogActions> */}
             </Box>
         </Dialog>
     );

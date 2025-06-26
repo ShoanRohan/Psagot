@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { Box, Button, Typography, Tabs, Tab, IconButton } from "@mui/material";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import CourseTopics from "./CourseTopics";
 import "./CourseScreen.css";
 import exlIcon from "../assets/icons/exl.svg";
 import { useParams } from 'react-router-dom';
+import AddTopic from "./AddTopic";
 
 
 
@@ -16,7 +17,8 @@ const CourseScreen = () => {
   const { courseId } = useParams();
   const dispatch = useDispatch();
   const course = useSelector((state) => state.course.selectedCourse);
-  const [tabIndex, setTabIndex] = React.useState(0);
+  const [tabIndex, setTabIndex] = useState(0);
+  const [addUserOpen,setAddUserOpen]=useState(false);
 
   useEffect(() => {
     if (courseId) {
@@ -27,6 +29,10 @@ const CourseScreen = () => {
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
   };
+
+  const onClose=()=>{
+    setAddUserOpen(false);
+  }
   console.log(course)
   return (
     <Box className="course-container">
@@ -45,7 +51,7 @@ const CourseScreen = () => {
           <IconButton>
             <img src={exlIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
           </IconButton>
-          <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
+          <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn" onClick={()=>{setAddUserOpen(true)}}>
             הוספת נושא
           </Button>
         </Box>
@@ -78,7 +84,7 @@ const CourseScreen = () => {
         {tabIndex === 0 && <CourseDetails />}
         {tabIndex === 1 && <CourseTopics />}
       </Box>
-
+     <AddTopic open={addUserOpen} courseName={course.name} onClose={onClose}/>
     </Box>
   );
 };
