@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicFotCourseByCourseId } from './topicActions';
+import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicFotCourseByCourseId, fetchAllTopics } from './topicActions';
 import { Topic } from '@mui/icons-material';
 
 const initialState = {
@@ -21,14 +21,14 @@ const topicSlice = createSlice({
     extraReducers: (builder) => {
         builder
             // Handle fetchAllTopic
-            .addCase(fetchAllTopic.pending, (state) => {
+            .addCase(fetchAllTopics.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchAllTopic.fulfilled, (state, action) => {
+            .addCase(fetchAllTopics.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.topics = action.payload;
             })
-            .addCase(fetchAllTopic.rejected, (state, action) => {
+            .addCase(fetchAllTopics.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             })

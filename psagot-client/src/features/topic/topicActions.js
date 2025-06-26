@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllTopics, getTopicById, addTopic, updateTopic, deleteTopic, getAllTopicsForCourseByCourseId } from '../../utils/topicUtil';
 
 // getting all topics
-export const fetchAllTopic = createAsyncThunk('topic/fetchAllTopic', async () => {
+export const fetchAllTopics = createAsyncThunk('topic/fetchAllTopics', async () => {
   const data = await getAllTopics();
   return data;
 });

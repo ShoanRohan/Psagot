@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById ,fetchAllMeetingsBySubject} from '../meeting/meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById ,fetchAllMeetingsBySearch} from '../meeting/meetingActions';
 
 const initialState = {
   meetings: [],
+  filteredMeetings:[],
   meeting: null,
   status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
   error: null,
+  pageNumber:1,
+  pageSize:10
 };
 
 const meetingSlice = createSlice({
@@ -61,21 +64,23 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(fetchAllMeetingsBySubject.pending, (state) => {
+            .addCase(fetchAllMeetingsBySearch.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchAllMeetingsBySubject.fulfilled, (state, action) => {
-                const indexes = state.meetings
-                  .map((meeting, index) => meeting.meetingSubject === action.payload.meetingSubject ? index : -1)
-                  .filter(index => index !== -1);
+            .addCase(fetchAllMeetingsBySearch.fulfilled, (state, action) => {
+                // const indexes = state.meetings
+                //   .map((meeting, index) => meeting.meetingSubject === action.payload.meetingSubject ? index : -1)
+                //   .filter(index => index !== -1);
 
-                const filteredMeetings = indexes.map(index => state.meetings[index]);
+                // const filteredMeetings = indexes.map(index => state.meetings[index]);
 
-                if (filteredMeetings.length > 0) {
-                  state.filteredMeetings = filteredMeetings;
-                }
+                // if (filteredMeetings.length > 0) {
+                //   state.filteredMeetings = filteredMeetings;
+                // }
+                state.status = 'succeeded';
+                state.filteredMeetings = action.payload;
               })
-            .addCase(fetchAllMeetingsBySubject.rejected, (state, action) => {
+            .addCase(fetchAllMeetingsBySearch.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             });

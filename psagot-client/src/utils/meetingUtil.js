@@ -20,8 +20,9 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-const getAllMeetingsBySubject = async(subject) => {
-    const response = await api.get(`/Meeting/GetAllMeetingsBySubject/${subject}`);
+const getMeetingsBySearch = async(search) => {
+    const {courseId,topicId,teacherName,date,pageNumber,pageSize}=search;
+   const response = await api.get(`/Meeting/SearchMeetings?courseId=${courseId}&topicId=${topicId}&teacherName=${teacherName}&date=${date}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
     return response.data;
 };
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, getAllMeetingsBySubject };
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, getMeetingsBySearch };
