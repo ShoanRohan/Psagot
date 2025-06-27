@@ -5,8 +5,8 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { fetchCoordinators } from '../features/user/userAction';
 import { updateCourseAction, fetchCourseById } from '../features/course/courseActions';
 import { selectSelectedCourse } from '../features/course/courseSlice';
-import { fetchAllStatuses } from '../features/statusCourse/statusCourseActions';
-import { selectStatuses } from '../features/statusCourse/statusCourseSlice';
+import { fetchAllStatuses } from '../features/status/statusActions';
+import { selectStatuses } from '../features/status/statusSlice';
 import CourseDaysManager from './CourseDaysManager';
 
 const CourseDetails = () => {

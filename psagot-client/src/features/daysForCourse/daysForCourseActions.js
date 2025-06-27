@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { addDaysForCourse, getDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse , deleteDaysForCourse, checkTopicsConflicts } from '../../utils/daysForCourseUtil';
 
-
 export const fetchAllDaysForCourse = createAsyncThunk('/daysForCourse/fetchAllDaysForCourse', async () => {
     const data = await gelAllDaysForCourse();
     return data;
@@ -22,8 +21,8 @@ export const addDaysForCourseAction = createAsyncThunk('daysForCourse/addDaysFor
     return data;
 });
 
-export const updateDaysForCourseAction = createAsyncThunk('daysForCourse/updateDaysForCourseAction', async (updatedDaysForCourse) => {
-    const data = await updateDaysForCourse(updatedDaysForCourse);
+export const updateDaysForCourseAction = createAsyncThunk('DaysForCourse/updateDaysForCourseAction', async (daysForCourse) => {
+    const data = await updateDaysForCourse(daysForCourse);
     return data;
 });
 

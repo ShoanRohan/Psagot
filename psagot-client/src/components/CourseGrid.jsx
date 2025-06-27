@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow,
-  Table, TableBody, Select, MenuItem, Grid} from '@mui/material';
+import {
+  Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow,
+  Table, TableBody, Select, MenuItem, Grid2
+} from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { format } from 'date-fns';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
@@ -16,7 +18,7 @@ const StyledTableCell = styled(TableCell)(() => ({
     borderWidth: '2px',
     fontWeight: 'bold',
     fontFamily: 'Rubik',
-},
+  },
   [`&.${tableCellClasses.body}`]: {
     fontFamily: 'Rubik',
   },
@@ -39,7 +41,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
   const courses = useSelector(selectCourses);
   const selectCourse = async (courseId) => {
     await dispatch(fetchCourseById(courseId));
-    navigate('/course/');
+    navigate(`/course/${courseId}`);
   };
   const handlePageChange = (event, newPage) => {
     onPageChange(newPage);
@@ -50,26 +52,20 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     onPageSizeChange(newPageSize);
   };
   return (
-    <Box
-      sx={{
-        //backgroundColor: '#FAFCFF',
-        mt: 1,
-        width: '100%',
-        //borderRadius: '10px',
-      }}
-    >
+    <Box sx={{ mt: 2, width: '100%',overflow: 'hidden', }} >
       <TableContainer
         component={Paper}
         //elevation={0}
         sx={{
           width: 'unset',
-          //overflowX: 'auto',
           mx: 'auto',
           p: '10px 20px',
-          borderRadius: '10px'
+          borderRadius: '10px',
+          overflowX: 'auto',
+          boxShadow: '0px 0px 4px 0px #DCE2EC'
         }}
       >
-        <Table sx={{ width: '100%' }} aria-label="courses table">
+        <Table sx={{ width: '100%'/*, tableLayout: 'auto'*/ }} aria-label="courses table">
           <TableHead>
             <TableRow>
               {[
@@ -110,8 +106,10 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                   <StyledTableCell align="center">{course?.numberOfMeetings}</StyledTableCell>
                   <StyledTableCell align="center">{course?.numberOfStudents}</StyledTableCell>
                   <StyledTableCell align="center" sx={{ width: '120px', height: '39px' }}>
-                    <Box sx={{ color, bgcolor, borderRadius: '68.31px', p: '4.1px 20.49px',
-                     width: '60px', height: '30px', margin: 'auto', alignContent: 'center' }}>
+                    <Box sx={{
+                      color, bgcolor, borderRadius: '68.31px', p: '4.1px 20.49px',
+                      width: '60px', height: '30px', margin: 'auto', alignContent: 'center'
+                    }}>
                       <Typography fontFamily='Rubik' fontSize="14px">{course?.statusName}</Typography>
                     </Box>
                   </StyledTableCell>
@@ -136,32 +134,37 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
           width: 'unset',
           bgcolor: 'white',
           margin: '10px auto',
-          direction: 'ltr'
+          direction: 'ltr',
+          boxShadow: '0px 0px 4px 0px #DCE2EC'
         }}
       >
-        <Grid container justifyContent="space-between">
-          <Grid item xs={6}>
+        <Grid2 container justifyContent="space-between">
+          <Grid2 item xs={6}>
             <Pagination onChange={handlePageChange}
               count={Math.ceil(totalCount / pageSize)}
               page={currentPage}
               sx={{ direction: 'ltr', '& .MuiPaginationItem-root': { fontSize: 12 }, }} />
-          </Grid>
-          <Grid item xs={6} display="flex" alignItems="center">
+          </Grid2>
+          <Grid2 item xs={6} display="flex" alignItems="center">
             <Select
               IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
               displayEmpty onChange={handleSelectChange} value={selectSize}
-              sx={{ height: '26px', width: '49px', borderRadius: '4px', borderWidth: '0.5px',
+              sx={{
+                height: '26px', width: '49px', borderRadius: '4px', borderWidth: '0.5px',
                 borderColor: '#F0F1F3', p: '6px 10px', fontSize: '12px', ml: '8px',
                 '& .MuiSelect-select': {
-                  display: 'flex', justifyContent: 'center', textAlign: 'center' }, }} >
+                  display: 'flex', justifyContent: 'center', textAlign: 'center'
+                },
+              }}
+            >
               <MenuItem value={10} sx={{ justifyContent: 'center' }}>10</MenuItem>
               <MenuItem value={20} sx={{ justifyContent: 'center' }}>20</MenuItem>
               <MenuItem value={50} sx={{ justifyContent: 'center' }}>50</MenuItem>
             </Select>
             <Typography fontFamily="Rubik" fontSize="14px" sx={{ ml: 1 }} >
               :מספר שורות</Typography>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </Box >
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import CourseSearch from "./CourseSearch";
+import CourseSearch from "../components/CourseSearch";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,9 +18,11 @@ import {
   setCurrentPage,
   setPageSize,
 } from "../features/course/courseSlice";
-import CourseGrid from "./CourseGrid";
+import CourseGrid from "../components/CourseGrid";
+import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import api from "../utils/api";
 
 const buttonStyles = {
   height: "44px",
@@ -51,10 +53,11 @@ const CoursesPage = () => {
     courseCode: "",
     courseName: "",
     courseCoordinator: "",
-    year: "",
+    year: 2025,
   };
 
   const [filters, setFilters] = useState(initialState);
+  const [openDialog, setOpenDialog] = useState(false);
   const currentPage = useSelector(selectCurrentPage);
   const pageSize = useSelector(selectPageSize);
   const totalCount = useSelector(selectTotalCount);
@@ -64,9 +67,21 @@ const CoursesPage = () => {
     await dispatch(setCurrentPage(page));
   };
 
-  const handleExportToExcel = () => {
-    if (!courses || courses.length === 0) {
-      console.warn("אין נתונים לייצוא");
+  const exportAllCoursesToExcel = async () => {
+    const params = {
+      courseId: filters.courseCode,
+      courseName: filters.courseName,
+      coordinatorName: filters.courseCoordinator,
+      year: filters.year,
+    };
+  
+    const queryString = new URLSearchParams(params).toString();
+  
+    const response = await api.get(`/Course/GetFilteredCourses?${queryString}`);
+    const allCourses = response.data;
+  
+    if (!allCourses || allCourses.length === 0) {
+      console.warn("אין קורסים לייצוא");
       return;
     }
 
@@ -106,12 +121,18 @@ const CoursesPage = () => {
 
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
-    setFilters(initialState);
+    // setFilters(initialState);
   };
 
   const handlePageSizeChange = (newPageSize) => {
     dispatch(setCurrentPage(1));
     dispatch(setPageSize(newPageSize));
+  };
+
+  const handleAddCourse = (newCourseData) => {
+    console.log("קורס חדש:", newCourseData);
+    // כאן תוכל להוסיף קריאה ל־API בעתיד
+    setOpenDialog(false);
   };
 
   useEffect(() => {
@@ -128,8 +149,7 @@ const CoursesPage = () => {
   }, [dispatch, currentPage, pageSize]);
 
   return (
-<Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3,bgcolor: '#FAFCFF' }}>
-{/* Header row: title on right, buttons on left */}
+<Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3, overflowY: 'unset' }}>
       <Box
         sx={{
           display: "flex",
@@ -155,13 +175,14 @@ const CoursesPage = () => {
         <Stack direction="row" spacing={2} sx={{ direction: "ltr" }}>
           <Button
             variant="contained"
-            sx={buttonStyles}
+            sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
             startIcon={<AddCircleOutlineIcon />}
+            onClick={() => setOpenDialog(true)}
           >
             הוספת קורס
           </Button>
           <IconButton
-            onClick={handleExportToExcel}
+            onClick={exportAllCoursesToExcel}
             sx={{
               display: "flex",
               alignItems: "center",
@@ -197,6 +218,11 @@ const CoursesPage = () => {
         pageSize={pageSize}
         onPageChange={changePage}
         onPageSizeChange={handlePageSizeChange}
+      />
+      <TopicDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onSubmit={handleAddCourse}
       />
     </Container>
   );

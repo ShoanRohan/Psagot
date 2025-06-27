@@ -7,8 +7,13 @@ import CourseDetails from "./CourseDetails";
 import CourseTopics from "./CourseTopics";
 import "./CourseScreen.css";
 import exlIcon from "../assets/icons/exl.svg";
+import { useParams } from 'react-router-dom';
 
-const CourseScreen = ({ courseId }) => {
+
+
+
+const CourseScreen = () => {
+  const { courseId } = useParams();
   const dispatch = useDispatch();
   const course = useSelector((state) => state.course.selectedCourse);
   const [tabIndex, setTabIndex] = React.useState(0);
@@ -35,6 +40,7 @@ const CourseScreen = ({ courseId }) => {
 
 
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
+        {tabIndex === 1 &&
         <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
           <IconButton>
             <img src={exlIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
@@ -43,6 +49,7 @@ const CourseScreen = ({ courseId }) => {
             הוספת נושא
           </Button>
         </Box>
+        }
       </Box>
       <Typography className="course-status">סטטוס הקורס: {course ? course.statusName : "טוען..."}</Typography>
 

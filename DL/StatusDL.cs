@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore;
 using Entities.Models;
 namespace DL
 {
-    public class StatusCourseDL : IStatusCourseDL
+    public class StatusDL : IStatusDL
     {
         private readonly PsagotDbContext _context;
 
-        public StatusCourseDL(PsagotDbContext context)
+        public StatusDL(PsagotDbContext context)
         {
             _context = context;
         }
@@ -28,17 +28,17 @@ namespace DL
             }
         }
 
-        //public async Task<(IEnumerable<StatusTopic> statusTopic, string ErrorMessage)> GetAllStatusTopics()
-        //{
-        //    try
-        //    {
-        //        var statusTopic = await _context.Set<StatusTopic>().ToListAsync();
-        //        return (statusTopic, null);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return (null, ex.Message);
-        //    }
-        //}
+        public async Task<(IEnumerable<StatusTopic> statusTopic, string ErrorMessage)> GetAllStatusTopics()
+        {
+            try
+            {
+                var statusTopic = await _context.Set<StatusTopic>().ToListAsync();
+                return (statusTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

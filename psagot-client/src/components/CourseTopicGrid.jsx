@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,21 +7,26 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, IconButton, Typography, Grid, MenuItem } from '@mui/material';
+import { Box, IconButton, Typography, Grid2, MenuItem } from '@mui/material';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
-import { DeleteOutline } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTopicById } from '../features/topic/topicActions';
+import { fetchTopicById, updateTopicAction } from '../features/topic/topicActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
-import { fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
-import { fetchAllTopic } from '../features/topic/topicActions';
+import { deleteTopicAction, fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
+import { fetchAllTopic} from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
 import Select from '@mui/material/Select';
-
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import TopicDialog from './TopicDialog';
+import { fetchTeachers } from '../features/user/userAction';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -46,13 +51,15 @@ const statusColors = {
 export default function CourseTopicGrid() {
     const dispatch = useDispatch();
     const topics = useSelector(selectFilteredTopics);
-    //const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
-    const courseId = 1;
+    const courseId = useSelector(state => state.course.selectedCourse?.id); // קבלת ID מה-Redux
+    // const courseId = 1;
 
     useEffect(() => {
         if (courseId) {
             dispatch(fetchAllTopicForCourseByCourseId(courseId));
         }
+        dispatch(fetchTeachers()); // חשוב!
+
     }, [dispatch, courseId]);
 
     console.log("טופיקס:", topics)
@@ -66,15 +73,115 @@ export default function CourseTopicGrid() {
 
     const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
     const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
+    const [selectedTopic, setSelectedTopic] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [showWarning, setShowWarning] = React.useState(false);
+    const [topicToDelete, setTopicToDelete] = React.useState(null);
 
     const paginatedTopics = topics.slice(
         (currentPage - 1) * pageSize,
         currentPage * pageSize
     );
 
+    const handleEditClick = (topic) => {
+        setSelectedTopic(topic); // שומרים את נושא הקורס שנבחר לעריכה
+        setDialogOpen(true);     // פותחים את הדיאלוג
+    };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+        setSelectedTopic(null);
+    };
+
+
+const handleDialogSubmit = async (formData) => {
+    console.log("נתוני עריכה שהתקבלו מהפופ-אפ:", formData);
+
+    // מפת המרה מהלייבל הטקסטואלי של הסטטוס ל-ID המספרי שלו
+    const statusMap = {
+        "פעיל": 1,
+        "ממתין": 2,
+        "מושהה": 3,
+        "הסתיים": 4
+    };
+
+    // וודאי ש-selectedTopic אינו null ויש לו topicId (או TopicId)
+    if (!selectedTopic || (!selectedTopic.topicId && !selectedTopic.TopicId)) {
+        console.error("No topic selected for update or missing topicId.");
+        return;
+    }
+
+    // יצירת אובייקט הנושא המעודכן לשליחה ל-Redux ולבקאנד
+    // שימי לב: השתמשתי ב-selectedTopic.topicId מכיוון שזהו השם הנפוץ,
+    // אך בקוד שלך הוא מופיע לפעמים כ-TopicId (עם T גדולה). וודאי שאת משתמשת בשם הנכון.
+    const topicToUpdate = {
+        // שמירה על ה-ID המקורי של הנושא (חשוב לעדכון בבקאנד וב-Redux)
+        topicId: selectedTopic.topicId || selectedTopic.TopicId, // שימוש בשני המקרים
+        courseId: selectedTopic.courseId || courseId, // שמירה על ה-courseId המקורי
+        
+        name: formData.topic, // שם הנושא
+        teacherName: formData.lecturerName,
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+        numberOfMeetings: formData.numberOfMeetings,
+        
+        // עדכון שדות הציוד
+        computers: formData.equipment.computers,
+        microphone: formData.equipment.microphone,
+        projector: formData.equipment.projector,
+        
+        statusId: statusMap[formData.status], // המרת הסטטוס מהלייבל הטקסטואלי ל-ID
+        // אם יש לך courseDays ב-formData, תוכלי להוסיף אותם כאן:
+        // courseDays: formData.courseDays, 
+    };
+
+    try {
+        // נשלח את פעולת העדכון ל-Redux.
+        // אם פעולת ה-Redux שלך היא asyncThunk שמטפלת בקריאת API,
+        // היא תעדכן את הסטייט באופן אוטומטי לאחר קבלת התגובה מהשרת.
+        // .unwrap() מאפשר לטפל בשגיאות מה-thunk באמצעות try...catch
+        await dispatch(updateTopicAction(topicToUpdate)).unwrap(); 
+        console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
+        dispatch(fetchAllTopicForCourseByCourseId(courseId));
+    } catch (error) {
+        console.error("שגיאה בעדכון הנושא:", error);
+        // כאן ניתן להציג הודעת שגיאה למשתמש, למשל באמצעות הודעת טוסט/סנקבר
+    }
+
+    setDialogOpen(false);
+    setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
+};
+
+
+    const handleDeleteClick = (topicId) => {
+        // כאן תציגי את האזהרה
+        setTopicToDelete(topicId);
+        setShowWarning(true);
+      };
+      
+      const handleConfirmDelete = async () => {
+        if (topicToDelete !== null) {
+          // מחיקה דרך ה-slice
+          await dispatch(deleteTopicAction({ topicId: topicToDelete, forceDelete: true }));
+      
+          // רענון הנושאים אחרי מחיקה
+          dispatch(fetchAllTopicForCourseByCourseId(courseId));
+        }
+        // סגירת האזהרה
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
+      const handleCancelDelete = () => {
+        setShowWarning(false);
+        setTopicToDelete(null);
+      };
+      
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
-            <TableContainer component={Paper} sx={{width: 'unset', borderRadius: '10px', p: "30px 20px 10px 20px" }}>
+            <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px',
+               p: "30px 20px 10px 20px" 
+                }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -87,7 +194,7 @@ export default function CourseTopicGrid() {
                             <StyledTableCell align='center'>ציוד</StyledTableCell>
                             <StyledTableCell align="center">
                                 <Box>
-                                    <>סטטוס</>
+                                    סטטוס
                                     <IconButton sx={{ width: '20px', height: '20px' }}>
                                         <UnfoldMoreOutlinedIcon sx={{ height: '20px' }} />
                                     </IconButton>
@@ -128,13 +235,13 @@ export default function CourseTopicGrid() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
                                         <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                    <IconButton sx={{ bgcolor: '#F4F4F4' }}>
-                                        <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4'}} onClick={() => handleDeleteClick(topic?.topicId)}>
+                                        <img src={deleteSvg} alt='delete_icon' style={{marginTop: '0px'}} />
                                     </IconButton>
                                 </StyledTableCell>
                             </TableRow>
@@ -142,20 +249,20 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: '100%', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
-                <Grid container>
+            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: 'unset', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
+                <Grid2 container>
                     {/* עמודים */}
-                    <Grid xs={3}>
+                    <Grid2 xs={3}>
                         <Pagination
                             count={Math.ceil(topics.length / pageSize)} // מספר עמודים כולל
                             page={currentPage} // עמוד נוכחי
                             onChange={(event, value) => setCurrentPage(value)} // שינוי עמוד
                             sx={{ '& .MuiPaginationItem-root': { fontSize: 12 } }}
                         />
-                    </Grid>
+                    </Grid2>
 
                     {/* בחירת מספר שורות */}
-                    <Grid xs={9} textAlign="right" margin="auto">
+                    <Grid2 xs={9} textAlign="right" margin="auto">
                         <Select
                             value={pageSize} // הערך שנבחר (10/20/50)
                             onChange={(e) => {
@@ -182,10 +289,24 @@ export default function CourseTopicGrid() {
 
                         {/* טקסט שמסביר מה בחרת */}
                         <Typography display="inline" fontFamily="Rubik" fontSize="14px">:שורות לעמוד</Typography>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
             </Box>
-
+            <Dialog open={showWarning} onClose={handleCancelDelete}>
+                <DialogContent>
+                    <Typography>לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelDelete}>ביטול</Button>
+                    <Button onClick={handleConfirmDelete} variant="contained" >אישור</Button>
+                </DialogActions>
+            </Dialog>
+            <TopicDialog
+                open={dialogOpen}
+                onClose={handleDialogClose}
+                onSubmit={handleDialogSubmit}
+                initialData={selectedTopic}
+            />
         </Box>
     );
 }

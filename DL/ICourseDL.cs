@@ -16,5 +16,9 @@ namespace DL
         Task<string> DeleteFutureMeetingsForCourse(int courseId);
         Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
             int skip, int pageSize, int? courseId, string courseName, string coordinatorName, int? year);
+
+        // ✅ חדש – לסינון מלא ללא פאג'ינציה
+        Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetFilteredCourses(
+            int? courseId, string courseName, string coordinatorName, int? year);
     }
 }
