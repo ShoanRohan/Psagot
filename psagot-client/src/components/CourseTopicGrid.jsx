@@ -53,6 +53,14 @@ export default function CourseTopicGrid() {
     const topics = useSelector(selectFilteredTopics);
     const courseId = useSelector(state => state.course.selectedCourse?.courseId); // קבלת ID מה-Redux
     const error = useSelector(state => state.topic.error)
+    const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
+    const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
+    const [selectedTopic, setSelectedTopic] = useState(null);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [showWarning, setShowWarning] = React.useState(false);
+    const [topicToDelete, setTopicToDelete] = React.useState(null);
+    const [topicUpdate, setTopicUpdate] = React.useState(null);
+
 
     useEffect(() => {
         if (courseId) {
@@ -61,13 +69,19 @@ export default function CourseTopicGrid() {
         dispatch(fetchTeachers()); // חשוב!
 
     }, [dispatch, courseId]);
-
+    
     useEffect(() => {
-        if(error) {
-            setShowWarning(true)
+        if (error) {
+          if (!showWarning) {
+            setShowWarning(true);
+          }
+        } else {
+          if (showWarning) {
+            setShowWarning(false);
+          }
         }
-    },[error])
-
+      }, [error, showWarning]);
+      
     
     const formatDate = (dateString) => {
         if (!dateString) return '';
@@ -77,12 +91,7 @@ export default function CourseTopicGrid() {
         return `${day}/${month}`;
     };
 
-    const [currentPage, setCurrentPage] = React.useState(1); // עמוד נוכחי
-    const [pageSize, setPageSize] = React.useState(10); // מספר שורות להצגה בכל עמוד
-    const [selectedTopic, setSelectedTopic] = useState(null);
-    const [dialogOpen, setDialogOpen] = useState(false);
-    const [showWarning, setShowWarning] = React.useState(false);
-    const [topicToDelete, setTopicToDelete] = React.useState(null);
+
     
 
     const paginatedTopics = topics.slice(
@@ -144,22 +153,29 @@ const handleDialogSubmit = async (formData) => {
     };
    
 
-    try {
-        // נשלח את פעולת העדכון ל-Redux.
-        // אם פעולת ה-Redux שלך היא asyncThunk שמטפלת בקריאת API,
-        // היא תעדכן את הסטייט באופן אוטומטי לאחר קבלת התגובה מהשרת.
-        // .unwrap() מאפשר לטפל בשגיאות מה-thunk באמצעות try...catch
-        await dispatch(updateTopicAction(topicToUpdate)).unwrap(); 
+   setTopicUpdate(topicToUpdate)
+        await dispatch(updateTopicAction({topicUpdate : topicToUpdate}));
         console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
-        dispatch(fetchAllTopicForCourseByCourseId(selectedTopic.courseId));
-    } catch (error) {
-        console.error("שגיאה בעדכון הנושא:", error);
-        // כאן ניתן להציג הודעת שגיאה למשתמש, למשל באמצעות הודעת טוסט/סנקבר
-    }
+       dispatch(fetchAllTopicForCourseByCourseId(selectedTopic.courseId));
 
-    setDialogOpen(false);
-    setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
+    // setDialogOpen(false);
+    // setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
 };
+
+  const handleConfirmUpdate = async () =>{
+    setShowWarning(false);
+
+    if (topicUpdate !== null) {
+        // מחיקה דרך ה-slice
+        await dispatch(updateTopicAction({ topicUpdate, forceUpdate: true }));
+    
+        // רענון הנושאים אחרי מחיקה
+        dispatch(fetchAllTopicForCourseByCourseId(courseId));
+      }
+      // סגירת האזהרה
+      setTopicUpdate(null);
+    };
+
 
 
     const handleDeleteClick = async (topicId) => {
@@ -181,9 +197,9 @@ const handleDialogSubmit = async (formData) => {
         setTopicToDelete(null);
       };
       
-      const handleCancelDelete = () => {
+      const handleCancel = () => {
         setShowWarning(false);
-        setTopicToDelete(null);
+         dialogOpen? setTopicUpdate(null) : setTopicToDelete(null);
       };
       
     return (
@@ -299,13 +315,13 @@ const handleDialogSubmit = async (formData) => {
                     </Grid2>
                 </Grid2>
             </Box>
-            <Dialog open={showWarning} onClose={handleCancelDelete}>
+            <Dialog open={showWarning} onClose={handleCancel}>
                 <DialogContent>
                     <Typography>{error}</Typography>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCancelDelete}>ביטול</Button>
-                    <Button onClick={handleConfirmDelete} variant="contained" >אישור</Button>
+                    <Button onClick={handleCancel}>ביטול</Button>
+                    <Button onClick={dialogOpen? handleConfirmUpdate : handleConfirmDelete} variant="contained" >אישור</Button>
                 </DialogActions>
             </Dialog>
             <TopicDialog
@@ -317,4 +333,5 @@ const handleDialogSubmit = async (formData) => {
         </Box>
     );
 }
+
 

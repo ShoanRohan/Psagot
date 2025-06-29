@@ -49,7 +49,8 @@ namespace Psagot.Controllers
         public async Task<IActionResult> UpdateTopic([FromBody] TopicDTO topicDTO,[FromQuery] bool forceUpdate = false)
         {
             var (updatedTopic, errorMessage) = await _topicBL.UpdateTopic(topicDTO, forceUpdate);
-            if (updatedTopic == null) return BadRequest(errorMessage);
+            if (updatedTopic == null)
+                return BadRequest(new { Message = errorMessage });
 
             return Ok(updatedTopic);
         }

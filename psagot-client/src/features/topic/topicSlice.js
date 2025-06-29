@@ -25,7 +25,9 @@ const topicSlice = createSlice({
            return   ( !topicName || course.name.includes(topicName)) // התאמה לשם הנושא
             && ( !teacherName || course.teacherName.includes(teacherName))// התאמה לשם המרצה
              && ( !statusName || course.status === statusName) // התאמה לסטטוס
-              })}
+              })},
+             
+            
     },
     extraReducers: (builder) => {
         builder
@@ -90,7 +92,6 @@ const topicSlice = createSlice({
             .addCase(updateTopicAction.pending, (state) => {
                 state.status = 'loading';
                 state.error = null;
-                state.showConfirmationDialog = false; // נסגור דיאלוג אם פתוח
               })
               .addCase(updateTopicAction.fulfilled, (state, action) => {
                 state.status = 'succeeded';
@@ -98,21 +99,10 @@ const topicSlice = createSlice({
                 if (index !== -1) {
                   state.topics[index] = action.payload;
                 }
-                state.error = null;
-                state.showConfirmationDialog = false;
               })
               .addCase(updateTopicAction.rejected, (state, action) => {
-                if (action.payload && typeof action.payload === 'string' && action.payload.includes('לנושא קיימים מפגשים עתידיים')) {
-                  // מקרה של הצגת דיאלוג אישור
-                  state.showConfirmationDialog = true;
-                  state.pendingTopicUpdate = action.meta.arg; // נשמור את הנושא שמנסים לעדכן
-                  state.error = null;
-                } else {
-                  // מקרה שגיאה רגילה
-                  state.status = 'failed';
-                  state.error = action.payload || action.error.message;
-                  state.showConfirmationDialog = false;
-                }
+                state.status = 'failed';
+                state.error = action.error?.message; 
               })
               
 

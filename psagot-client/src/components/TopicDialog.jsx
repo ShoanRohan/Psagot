@@ -276,58 +276,7 @@ useEffect(() => {
     setMainSaved(true);
   };
 
-//   const handleSave = async () => {
-//     console.log("handleSave start", formData);
-//     const teacherId = teachers.find(teacher => teacher.name.includes(formData.lecturerName))?.userId;
-  
-//     if (!teacherId) {
-//       console.error("Teacher not found!");
-//       return;
-//     }
-  
-//     // const updateData = {
-//     //   ...formData,
-//     //   teacherId: teacherId,
-//     //   statusId: statuses.find(s => s.name === formData.status)?.statusCourseId,
-//     //   ForceUpdate: false,
 
-//     // };
-
-//     const { lecturerName, status, equipment, ...rest } = formData;
-
-// const updateData = {
-//   ...rest,
-//   teacherId,
-//   statusId: statuses.find(s => s.name === status)?.statusCourseId,
-//   computers: equipment.computers,
-//   microphone: equipment.microphone,
-//   projector: equipment.projector,
-//   ForceUpdate: false,
-// };
-
-//     console.log("🟢 updateData:", updateData); // ← פה להדפיס
-
-//     try {
-//       const result = await updateTopic(updateData);
-//       console.log("updateTopic result:", result);
-  
-//       if (typeof result === "string" && result.includes("מפגשים עתידיים")) {
-//         setPendingUpdateData(updateData);
-//         setShowConfirmDialog(true);
-//         return;
-//       }
-  
-//       setMainSaved(true);
-//       if (onSubmit) onSubmit({ ...formData, teacherId: teacherId });
-//     }  catch (error) {
-//       console.error("❌ Error in handleSave:", error);
-//       if (error.response) {
-//         console.error("🔴 Server response:", error.response.data);
-//       }
-    
-//     }
-//   };
-  
   
   const handleEditDay = (index) => {
     setEditingDayIndex(index);

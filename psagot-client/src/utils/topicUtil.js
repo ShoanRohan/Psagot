@@ -16,9 +16,14 @@ const addTopic = async (newTopic) => {
     return response.data;
 };
 
-const updateTopic = async (updateTopic) => {
-    const response = await api.put(`/Topic/UpdateTopic`, updateTopic);
+const updateTopic = async ({topicUpdate , forceUpdate}) => {  
+  try{
+    const response = await api.put(`/Topic/UpdateTopic${forceUpdate ? '?forceUpdate=true' : ''}`, topicUpdate  );
     return response.data;
+  } catch (error) {
+    const msg = error?.response?.data?.message 
+    throw new Error(msg);  
+  }
 };
 
 const deleteTopic = async ({ topicId, forceDelete }) => {

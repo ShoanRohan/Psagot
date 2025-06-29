@@ -67,9 +67,12 @@ namespace DL
         {
             try
             {
-                var existingTopic = await _context.Topics
-                    .Include(t => t.Meetings)
-                    .FirstOrDefaultAsync(t => t.TopicId == topic.TopicId);
+                //var existingTopic = await _context.Topics
+                //    .Include(t => t.Meetings)
+                //    .FirstOrDefaultAsync(t => t.TopicId == topic.TopicId);
+
+                var existingTopic = await _context.Set<Topic>().FindAsync(topic.TopicId);
+
 
                 if (existingTopic == null)
                     return (null, "Topic not found");
@@ -78,19 +81,33 @@ namespace DL
 
                 if (isStatusChangedFromActive)
                 {
-                    var today = DateOnly.FromDateTime(DateTime.Now);
-                    var futureMeetings = existingTopic.Meetings
-                        .Where(m => m.MeetingDate > today)
-                        .ToList();
+                    //var today = DateOnly.FromDateTime(DateTime.Now);
+                    //var futureMeetings = existingTopic.Meetings
+                    //    .Where(m => m.MeetingDate > today)
+                    //    .ToList();
 
-                    if (futureMeetings.Any() && !forceUpdate)
+                    if ((existingTopic.NumberOfMeetings ?? 0) > 0 && !forceUpdate)
                     {
                         return (null, "לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך?");
                     }
 
-                    if (futureMeetings.Any())
+
+                    var schedules = await _context.Set<ScheduleForTopic>()
+                  .Where(s => s.TopicId == existingTopic.TopicId)
+                  .ToListAsync();
+                    // מחיקת השיבוצים
+                    if (schedules.Any())
                     {
-                        _context.Meetings.RemoveRange(futureMeetings);
+                        _context.Set<ScheduleForTopic>().RemoveRange(schedules);
+                    }
+                    // שליפת המפגשים של הנושא
+                    var meetings = await _context.Set<Meeting>()
+                        .Where(m => m.TopicId == existingTopic.TopicId)
+                        .ToListAsync();
+                    // מחיקת המפגשים
+                    if (meetings.Any())
+                    {
+                        _context.Set<Meeting>().RemoveRange(meetings);
                     }
                 }
 
