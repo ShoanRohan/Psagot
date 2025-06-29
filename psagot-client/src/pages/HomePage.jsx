@@ -4,7 +4,6 @@ import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
 import CourseTopicGrid from "../components/CourseTopicGrid";
 import TopicsSearch from "../components/TopicsSearch"
-import UserSearchBar from "../components/UserSearchBar";
 
 const HomePage = () => {
   const dispatch = useDispatch();
