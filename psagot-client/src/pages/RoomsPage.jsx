@@ -6,6 +6,7 @@ import RoomSchedule from '../components/RoomsScheduleGrid';
 import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
 import ExcelIcon from '../assets/icons/excelIcon.svg';
 import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
+import RoomsGrid from '../components/RoomsGrid';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
@@ -119,7 +120,7 @@ const RoomsPage = () => {
             transition: 'all 0.3s ease',
           }}
         >
-          {/* תצוגת רשימה */}
+          <RoomsGrid/>
         </Box>
 
         <Box

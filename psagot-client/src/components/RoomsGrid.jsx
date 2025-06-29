@@ -51,7 +51,6 @@ export default function RoomsGrid() {
       border: 0,
     },
   }));
-
   return (
     <Box
       dir="rtl"
@@ -75,7 +74,7 @@ export default function RoomsGrid() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {roomsWithPagination?.map((row) => (
+            {roomsWithPagination.map((row) => (
               <StyledTableRow key={row.roomId}>
                 <StyledTableCell align="center">{row.name}</StyledTableCell>
                 <StyledTableCell align="center">{row.roomId}</StyledTableCell>
