@@ -64,6 +64,7 @@ const daysForCourseSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(updateDaysForCourseAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 const index = state.daysForCourses.findIndex((daysForCourse) => daysForCourse.id === action.payload.id);
                 if (index !== -1) {
                     state.daysForCourses[index] = action.payload;

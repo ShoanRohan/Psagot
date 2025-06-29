@@ -3,6 +3,7 @@ import { fetchAllScheduleForTopics, fetchScheduleForTopicById, fetchAllScheduleF
 
 const initialState = {
     scheduleForTopics: [],
+    selectedScheduleForTopic: null,
     status: 'idle',
     error: null,
 };
@@ -22,7 +23,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchAllScheduleForTopics.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.scheduleForTopic = action.payload;
+                state.selectedScheduleForTopic = action.payload;
             })
             .addCase(fetchAllScheduleForTopics.rejected, (state, action) => {
                 state.status = 'failed';
@@ -33,7 +34,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchScheduleForTopicById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.scheduleForTopic = action.payload;
             })
             .addCase(fetchScheduleForTopicById.rejected, (state, action) => {
                 state.status = 'failed';
@@ -44,7 +45,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchAllScheduleForTopicByTopicId.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.scheduleForTopics = action.payload;
             })
             .addCase(fetchAllScheduleForTopicByTopicId.rejected, (state, action) => {
                 state.status = 'failed';
@@ -54,6 +55,7 @@ const scheduleForTopicSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(addScheduleForTopicAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 state.scheduleForTopics.push(action.payload);
             })
             .addCase(addScheduleForTopicAction.rejected, (state, action) => {
@@ -64,6 +66,7 @@ const scheduleForTopicSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(updateScheduleForTopicAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
                 const index = state.scheduleForTopics.findIndex((scheduleForTopic) => scheduleForTopic.id === action.payload.id);
                 if (index !== -1) {
                     state.scheduleForTopics[index] = action.payload;

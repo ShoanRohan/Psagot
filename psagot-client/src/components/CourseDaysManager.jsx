@@ -24,10 +24,8 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
     const [dayToSaveAfterConflict, setDayToSaveAfterConflict] = useState(null);
 
     const commonTextFieldSx = { width: '200px', height: '45px', ml: '20px', mb: '15px', fontSize: '16px', fontFamily: 'Rubik' };
-    const commonInputLabelPropsSx = {
-        width: '150%', fontFamily: 'Rubik',
-        sx: { fontFamily: 'Rubik', left: 'unset', transformOrigin: 'top right' }
-    };
+    const commonInputLabelPropsSx = { width: '150%', fontFamily: 'Rubik',
+        sx: { fontFamily: 'Rubik', left: 'unset', transformOrigin: 'top right' } };
     const commonInputPropsSx = { fontFamily: 'Rubik' };
 
     const validateDayFields = (dataToValidate, isNew = false) => {
@@ -54,12 +52,9 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
         const currentDaysToCheckAgainst = daysForCourse.filter(d => d.daysForCourseId !== dataToValidate.daysForCourseId);
         currentDaysToCheckAgainst.forEach(existingDay => {
             if (dataToValidate.dayId === existingDay.dayId) {
-                if (
-                    (dataToValidate.startTime < existingDay.endTime && existingDay.startTime < dataToValidate.endTime) ||
-                    (existingDay.startTime < dataToValidate.endTime && dataToValidate.startTime < existingDay.endTime)
-                ) {
-                    if (!errors.endTime.includes('שעות חופפות עם יום קיים.')) {
-                        errors.endTime = errors.endTime ? errors.endTime + ' | ' + 'שעות חופפות עם יום קיים.' : 'שעות חופפות עם יום קיים.';
+                if (dataToValidate.startTime < existingDay.endTime && existingDay.startTime < dataToValidate.endTime) {
+                    if (!errors.dayId.includes('יום זה חופף ליום קיים בשעות אלו.')) {
+                        errors.dayId = errors.dayId ? errors.dayId + ' | ' + 'יום זה חופף ליום קיים בשעות אלו.' : 'יום זה חופף ליום קיים בשעות אלו.';
                     }
                     isValid = false;
                 }
@@ -76,13 +71,10 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
         if (addDay) {
             const { errors } = validateDayFields(newDayForm, true);
             setFieldErrors(errors);
-        } else if (editingDayId) {
-            const { errors } = validateDayFields(tempDayData, false);
-            setFieldErrors(errors);
-        }
+        } 
     };
 
-    const handleNewDayChange = (field, value) => {
+    const handleNewDayChange = (field, value) => {      
         setNewDayForm(prev => {
             const updatedForm = { ...prev, [field]: value };
             const { errors } = validateDayFields(updatedForm, true);
@@ -94,12 +86,18 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
 
     const handleTempDayChange = (field, value) => {
         setTempDayData(prev => {
-            const updatedData = { ...prev, [field]: value };
-            const { errors } = validateDayFields(updatedData, false);
-            setFieldErrors(errors);
-            return updatedData;
+        const updatedData = { ...prev, [field]: value };
+        const { errors } = validateDayFields(updatedData, false);
+        setFieldErrors(errors); 
+
+        setTouchedFields(prevTouched => {
+            const newTouched = { ...prevTouched, [field]: true };
+            if (errors.dayId) newTouched.dayId = true;
+            if (errors.endTime) newTouched.endTime = true;
+            return newTouched;
         });
-        setTouchedFields(prev => ({ ...prev, [field]: true }));
+        return updatedData;
+    });
     };
 
     const formatTimeForServer = (timeString) => {
@@ -151,6 +149,7 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
             endTime: newDayForm.endTime,
             courseId: selectedCourse.courseId,
         }, false, true);
+        
     };
 
     const saveIndividualDay = async (dayToSave, confirmConflict = false, isNewDay = false) => {
@@ -182,19 +181,19 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 if (checkTopicsConflictAction.fulfilled.match(conflictCheckResult)) {
                     if (conflictCheckResult.payload.hasConflicts) {
                         setDayToSaveAfterConflict(formattedDayForConflictCheck);
-                        showConfirmation(
-                            conflictCheckResult.payload.message || "בעקבות שינוי ביום זה יש נושאים שמשובצים בצורה לא תקינה. האם לשמור בכל זאת?",
+                        showConfirmation('עדכון יום',
+                            "בעקבות שינוי ביום זה יש נושאים שמשובצים בצורה לא תקינה.",
+                            "האם לשמור בכל זאת?",
                             () => saveIndividualDay(dayToSaveAfterConflict || formattedDayForConflictCheck, true, isNewDay)
                         );
                         return;
                     }
                 } else if (checkTopicsConflictAction.rejected.match(conflictCheckResult)) {
-                    showResult(conflictCheckResult.payload?.message || "אירעה שגיאה בבדיקת קונפליקט עם נושאים.");
+                    showResult('שגיאה', "אירעה שגיאה בבדיקת קונפליקט עם נושאים.");
                     return;
                 }
             } catch (error) {
-                console.error("שגיאה בלתי צפויה בבדיקת קונפליקט נושאים:", error);
-                showResult('אירעה שגיאה בלתי צפויה בעת בדיקת קונפליקט נושאים.');
+                showResult('שגיאה','אירעה שגיאה בלתי צפויה בעת בדיקת קונפליקט נושאים.');
                 return;
             }
         }
@@ -208,7 +207,7 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 actionResult = await dispatch(addDaysForCourseAction(dayToSend));
             }
             if (actionResult.meta.requestStatus === 'fulfilled') {
-                showResult('שמירת ימי הקורס הסתיימה בהצלחה.');
+                showResult('שמירת יום', 'שמירת ימי הקורס הסתיימה בהצלחה.');
                 setEditingDayId(null);
                 setTempDayData({});
                 setNewDayForm({ dayId: '', startTime: '', endTime: '' });
@@ -218,29 +217,26 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 setTouchedFields({ dayId: false, startTime: false, endTime: false });
                 dispatch(fetchDaysForCourseByCourseId(selectedCourse.courseId));
             } else if (actionResult.meta.requestStatus === 'rejected') {
-                const errorMessage = actionResult.payload?.message || actionResult.error?.message || "השמירה לא הצליחה. אנא נסה שוב.";
-                showResult(errorMessage);
+                showResult('שגיאה בשמירה', "השמירה לא הצליחה. אנא נסה שוב.");
             }
         } catch (error) {
-            console.error("שגיאה בלתי צפויה בעת שמירת יום:", error);
-            showResult('אירעה שגיאה בלתי צפויה בעת שמירת היום.');
+            showResult('שגיאה', 'אירעה שגיאה בלתי צפויה בעת שמירת היום.');
         }
     };
     const handleDeleteDay = async (daysForCourseId) => {
-        showConfirmation(
-            "האם אתה בטוח שברצונך למחוק? ייתכן שיש נושאים המשובצים ליום זה.",
+        showConfirmation('מחיקת יום',
+            "האם אתה בטוח שברצונך למחוק?",  "ייתכן שיש נושאים המשובצים ליום זה.",
             async () => {
                 try {
                     const actionResult = await dispatch(deleteDaysForCourseAction(daysForCourseId));
                     if (deleteDaysForCourseAction.fulfilled.match(actionResult)) {
-                        showResult('היום נמחק בהצלחה.');
+                        showResult('מחיקת יום', 'היום נמחק בהצלחה.');
                         dispatch(fetchDaysForCourseByCourseId(selectedCourse.courseId));
                     } else if (deleteDaysForCourseAction.rejected.match(actionResult)) {
-                        showResult(actionResult.payload?.message || actionResult.error?.message || 'המחיקה לא הצליחה. אנא נסה שוב.');
+                        showResult('שגיאה במחיקה', 'המחיקה לא הצליחה. אנא נסה שוב.');
                     }
                 } catch (error) {
-                    console.error("שגיאה במחיקת יום:", error);
-                    showResult('אירעה שגיאה בלתי צפויה בעת מחיקת היום.');
+                    showResult('שגיאה', 'אירעה שגיאה בלתי צפויה בעת מחיקת היום.');
                 }
             }
         );
@@ -272,7 +268,12 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 sx={commonTextFieldSx} select={isEditable || isNew}
                 SelectProps={(isEditable || isNew) ? {
                     IconComponent: ExpandMoreIcon,
-                    sx: { '.MuiSelect-icon': { right: 'unset', left: '0px', }, },
+                    sx: {
+                        '.MuiSelect-icon': { right: 'unset', left: '0px' },
+                        '.MuiSelect-select': {
+                            padding: '4.5px 2px !important',
+                        },
+                    },
                 } : undefined}
                 InputProps={inputPropsDirection}
                 InputLabelProps={{ ...commonInputLabelPropsSx, shrink: isEditable || isNew || !!valueForDayField }}
@@ -297,8 +298,7 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 InputProps={currentInputProps} sx={commonTextFieldSx}
                 InputLabelProps={{
                     shrink: true,
-                    sx:
-                        { ...commonInputLabelPropsSx.sx, }
+                    ...commonInputLabelPropsSx
                 }}
                 error={showError} helperText={showError ? errorText : ''} />
         );
@@ -311,7 +311,7 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
             </Box>
             <Box component={'form'}>
                 {daysForCourse.length === 0 && !addDay ? (
-                    <Typography fontSize={'14px'} fontFamily={'Rubik'}>עדיין לא נקבעו ימים לקורס זה</Typography>
+                    <Typography fontSize={'14px'} fontFamily={'Rubik'} pb={'10px'}>עדיין לא נקבעו ימים לקורס זה</Typography>
                 ) : (
                     daysForCourse?.map(day => (
                         <Box key={day?.daysForCourseId} display="flex" alignItems="center" mb={'15px'}>
@@ -330,10 +330,10 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                                     {renderTimeTextField('שעת סיום', 'endTime', day.endTime, () => { }, false)}
                                     {(user.userTypeId <= 2 || selectedCourse?.coordinatorId === user?.userId) && (
                                         <Box>
-                                            <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleDeleteDay(day.daysForCourseId)}>
+                                            <IconButton sx={{ bgcolor: '#F4F4F4', p:'3px' }} onClick={() => handleDeleteDay(day.daysForCourseId)}>
                                                 <Box component="img" src={deleteSvg} alt="delete_icon" sx={{ width: 20, height: 20, display: 'block', m: "0px" }} />
                                             </IconButton>
-                                            <IconButton sx={{ bgcolor: '#F4F4F4', mr: '5px' }} onClick={() => handleEditDay(day)}>
+                                            <IconButton sx={{ bgcolor: '#F4F4F4', mr: '5px', p:'3px' }} onClick={() => handleEditDay(day)}>
                                                 <Box component="img" src={editSvg} alt="edit_icon" sx={{ width: 20, height: 20, display: 'block', m: "0px" }} />
                                             </IconButton>
                                         </Box>

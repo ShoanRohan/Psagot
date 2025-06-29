@@ -1,6 +1,6 @@
 import api from "./api";
 
-const gelAllDaysForCourse = async () => {
+const getAllDaysForCourse = async () => {
     const response = await api.get('/DaysForCourse/GetAllDaysForCourse');
     return response.data;
 };
@@ -20,8 +20,8 @@ const addDaysForCourse = async (newDayForCourse) => {
     return response.data;
 };
 
-const updateDaysForCourse = async (updateDaysForCourse) => {
-    const response = await api.put('/DaysForCourse/UpdateDaysForCourse', updateDaysForCourse);
+const updateDaysForCourse = async (dayForCourse ) => {
+    const response = await api.put('/DaysForCourse/UpdateDaysForCourse', dayForCourse );
     return response.data;
 };
 
@@ -35,4 +35,4 @@ const checkTopicsConflicts = async (request) => {
     return response.data;
 }
 
-export { gelAllDaysForCourse, getDaysForCourseById, getDaysForCourseByCourseId, addDaysForCourse, updateDaysForCourse, deleteDaysForCourse, checkTopicsConflicts };
+export { getAllDaysForCourse, getDaysForCourseById, getDaysForCourseByCourseId, addDaysForCourse, updateDaysForCourse, deleteDaysForCourse, checkTopicsConflicts };
