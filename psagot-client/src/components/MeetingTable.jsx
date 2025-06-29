@@ -39,7 +39,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
-
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -115,29 +114,9 @@ const MeetingTable = React.memo(({ onEdit }) => {
     'מספר חדר',
     'שיבוץ',
     'סטטוס',
-    'עריכה',
     'מחיקה',
+    'עריכה',
   ], []);
-
-
-//  {
-//     "meetingId": 44,
-//     "scheduleForTopicId": 5,
-//     "meetingNumberForTopic": 4,
-//     "roomId": 5,
-//     "isValid": false,
-//     "dayId": 1,
-//     "startTime": "10:00:00",
-  //   "endTime": "12:00:00",
-  //   "isPartOfSchedule": true,
-  //   "courseId": 1,
-  //   "topicId": 5,
-  //   "teacherId": 5,
-  //   "meetingDate": "2025-01-26",
-  //   "reason": "כמות התלמידים בקורס (25) גדולה מקיבולת החדר (20)",
-  //   "year": 0,
-  //   "statusCourseId": 0
-  // },
 
   const keyMap = useMemo(() => ({
     'מספר מפגש': 'meetingId',
@@ -155,39 +134,55 @@ const MeetingTable = React.memo(({ onEdit }) => {
 
   const renderStatusChip = useCallback((row) => (
     <Chip
-      label={row.isPartOfSchedule ? 'פעיל' : 'חסרים'}
-      color={row.isPartOfSchedule ? 'success' : 'default'}
-      sx={{ fontWeight: 'bold', width: '60px', justifyContent: 'center' }}
+      label={row.isPartOfSchedule ? 'פעיל' : 'הסתיים'}
+      sx={{
+        width: '97px',
+        height: '39px',
+        borderRadius: '68.31px',
+        paddingTop: '4.1px',
+        paddingRight: '20.49px',
+        paddingBottom: '4.1px',
+        paddingLeft: '20.49px',
+        gap: '1.37px',
+        background: row.isPartOfSchedule ? '#DAF8E6' : '#E5E7EB80',
+        color: row.isPartOfSchedule ? '#000' : '#666',
+        border: 'none',
+        '&:hover': {
+          background: row.isPartOfSchedule ? '#DAF8E6' : '#E5E7EB80',
+        },
+        '& .MuiChip-label': {
+          padding: 0,
+          fontSize: '14px',
+        }
+      }}
     />
   ), []);
 
   const renderValidChip = useCallback((row) => (
-    <Typography>{row.isValid  ?  'V' : 'X'} </Typography>
+    <Typography>{row.isValid ? 'V' : 'X'} </Typography>
   ), []);
-
-  const renderEditButton = useCallback((row) => (
-    <Tooltip title="ערוך מפגש">
-      <IconButton onClick={() => onEdit?.(row)} size="small" color="primary">
-        {/* <EditIcon /> */}
-          <img src={penToSquare} alt="Delete" style={{ width: '20px', height: '20px' }} />
-      </IconButton>
-    </Tooltip>
-  ), [onEdit]);
 
   const renderDeleteButton = useCallback((row) => (
     <Tooltip title="מחק מפגש">
       <IconButton onClick={() => handleDelete(row)} size="small" color="error">
-        {/* <DeleteIcon /> */}
         <img src={trash} alt="Delete" style={{ width: '20px', height: '20px' }} />
       </IconButton>
     </Tooltip>
   ), [handleDelete]);
 
+  const renderEditButton = useCallback((row) => (
+    <Tooltip title="ערוך מפגש">
+      <IconButton onClick={() => onEdit?.(row)} size="small" color="primary">
+        <img src={penToSquare} alt="Edit" style={{ width: '20px', height: '20px' }} />
+      </IconButton>
+    </Tooltip>
+  ), [onEdit]);
+
   const columnConfig = useMemo(() => ({
     'סטטוס': { render: renderStatusChip },
     'שיבוץ': { render: renderValidChip },
-    'עריכה': { render: renderEditButton },
     'מחיקה': { render: renderDeleteButton },
+    'עריכה': { render: renderEditButton },
   }), [renderStatusChip, renderValidChip, renderEditButton, renderDeleteButton]);
 
   if (isInitialLoading) {
@@ -212,57 +207,74 @@ const MeetingTable = React.memo(({ onEdit }) => {
   }
 
   return (
-    <Paper elevation={3} sx={{ p: 2 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5">טבלת מפגשים</Typography>
-        <Button variant="outlined" onClick={handleManualRefresh} startIcon={<RefreshIcon />}>
-          רענן
-        </Button>
-      </Box>
-
-      <CustomTable
-        columns={columns}
-        data={meetings || []}
-        keyMap={keyMap}
-        columnConfig={columnConfig}
-        onEdit={onEdit}
-        onDelete={handleDelete}
-      />
-
-      <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
-        <DialogTitle>מחיקת מפגש</DialogTitle>
-        <DialogContent dividers>
-          <Typography>
-            האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" מהקורס "{meetingToDelete?.courseName}"?
-          </Typography>
-          {meetingToDelete && !meetingToDelete.isValid && (
-            <Box mt={2} display="flex" alignItems="center" color="error.main">
-              <EventBusyIcon sx={{ mr: 1 }} />
-              <Typography>המפגש מסומן כשגוי.</Typography>
-            </Box>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog} disabled={isDeleting} color="inherit">
-            ביטול
-          </Button>
-          <Button onClick={handleConfirmDelete} variant="contained" color="error" disabled={isDeleting}>
-            {isDeleting ? <CircularProgress size={24} color="inherit" /> : 'מחק'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      <Snackbar
-        open={snackbar.open}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    <Box sx={{ position: 'relative', width: '100%', height: '100vh' }}>
+      {/* כותרת מפגשים */}
+      <Typography
+        sx={{
+          position: 'absolute',
+          width: 137,
+          height: 47,
+          top: '81px',
+          left: '1425px',
+          fontFamily: '"Rubik", sans-serif',
+          fontWeight: 700,
+          fontSize: '40px',
+          lineHeight: '100%',
+          letterSpacing: '0%',
+          textAlign: 'right',
+          verticalAlign: 'middle',
+          textTransform: 'capitalize',
+          color: '#0D1783',
+        }}
       >
-        <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
-          {snackbar.message}
-        </Alert>
-      </Snackbar>
-    </Paper>
+        מפגשים
+      </Typography>
+
+      <Paper elevation={3} sx={{ p: 2 }}>
+        <CustomTable
+          columns={columns}
+          data={meetings || []}
+          keyMap={keyMap}
+          columnConfig={columnConfig}
+          onEdit={onEdit}
+          onDelete={handleDelete}
+        />
+
+        <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
+          <DialogTitle>מחיקת מפגש</DialogTitle>
+          <DialogContent dividers>
+            <Typography>
+              האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" מהקורס "{meetingToDelete?.courseName}"?
+            </Typography>
+            {meetingToDelete && !meetingToDelete.isValid && (
+              <Box mt={2} display="flex" alignItems="center" color="error.main">
+                <EventBusyIcon sx={{ mr: 1 }} />
+                <Typography>המפגש מסומן כשגוי.</Typography>
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseDeleteDialog} disabled={isDeleting} color="inherit">
+              ביטול
+            </Button>
+            <Button onClick={handleConfirmDelete} variant="contained" color="error" disabled={isDeleting}>
+              {isDeleting ? <CircularProgress size={24} color="inherit" /> : 'מחק'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Snackbar
+          open={snackbar.open}
+          autoHideDuration={4000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={handleCloseSnackbar} severity={snackbar.severity} sx={{ width: '100%' }}>
+            {snackbar.message}
+          </Alert>
+        </Snackbar>
+      </Paper>
+    </Box>
   );
 });
 

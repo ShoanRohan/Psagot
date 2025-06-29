@@ -9,9 +9,11 @@ import {
   TablePagination,
   Paper,
   Box,
+  Typography,
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import selector from '../assets/icons/selector.png'; // הוספת האיקון
 
 const CustomTable = ({
   columns,
@@ -22,6 +24,8 @@ const CustomTable = ({
   keyMap = {},
   rowsPerPageOptions = [10, 25, 50],
   defaultRowsPerPage = 50,
+  title, // הוספת prop לכותרת
+  headerActions, // הוספת prop לפעולות בכותרת (כפתורים)
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
@@ -63,10 +67,54 @@ const CustomTable = ({
         flexDirection: 'column'
       }}
     >
-      <Paper 
-        sx={{ 
-          direction: 'rtl', 
-          overflow: 'auto', 
+      {/* שורת כותרת עם כפתורים */}
+      {(title || headerActions) && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            height: '44px',
+            marginBottom: '16px',
+            direction: 'rtl'
+          }}
+        >
+          {/* כותרת בצד ימין */}
+          {title && (
+            <Typography
+              variant="h4"
+              sx={{
+                fontSize: '32px',
+                fontWeight: 700,
+                lineHeight: '44px',
+                color: '#000000',
+                textAlign: 'right'
+              }}
+            >
+              {title}
+            </Typography>
+          )}
+                   
+          {/* כפתורים בצד שמאל */}
+          {headerActions && (
+            <Box
+              sx={{
+                display: 'flex',
+                gap: '16px',
+                alignItems: 'center'
+              }}
+            >
+              {headerActions}
+            </Box>
+          )}
+        </Box>
+      )}
+
+      <Paper
+        sx={{
+          direction: 'rtl',
+          overflow: 'auto',
           width: '1481px',
           height: '660px',
           paddingTop: '35px',
@@ -80,8 +128,8 @@ const CustomTable = ({
       >
         <Table stickyHeader sx={{ minWidth: 1000 }}>
           <TableHead>
-            <TableRow 
-              sx={{ 
+            <TableRow
+              sx={{
                 backgroundColor: '#FFFFFF',
                 width: '1430px',
                 height: '42px'
@@ -100,7 +148,24 @@ const CustomTable = ({
                     height: '42px'
                   }}
                 >
-                  {col==='עריכה'||col==='מחיקה' ?"" : col}
+                  {/* הוספת האיקון ליד עמודת הסטטוס */}
+                 
+                  {col === 'סטטוס' ? (
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+                    
+                      <span>{col}</span>
+                        <img 
+                        src={selector} 
+                        alt="selector" 
+                        style={{ 
+                          width: '20px', 
+                          height: '20px' 
+                        }} 
+                      />
+                    </Box>
+                  ) : (
+                    col === 'עריכה' || col === 'מחיקה' ? "" : col
+                  )}
                 </TableCell>
               ))}
             </TableRow>
@@ -124,7 +189,7 @@ const CustomTable = ({
                     );
                   }
                   const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
-                                                       
+                                                                       
                   return (
                     <TableCell key={cellKey} align="center" sx={{ fontSize: 14 }}>
                       {row[dataKey] !== undefined ? row[dataKey] : '-'}
@@ -136,7 +201,7 @@ const CustomTable = ({
           </TableBody>
         </Table>
       </Paper>
-      
+           
       <Box sx={{ px: 2 }}>
         <TablePagination
           component="div"
