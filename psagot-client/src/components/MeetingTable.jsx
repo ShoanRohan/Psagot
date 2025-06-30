@@ -30,9 +30,11 @@ import MeetingForm from './MeetingForm';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { fetchAllCourses } from '../features/course/courseActions';
+import { fetchAllTopic } from '../features/topic/topicActions';
+import { fetchAllUsers } from '../features/user/userAction';
 
-
-const MeetingTable = React.memo(({ onEdit }) => {
+const MeetingTable = React.memo(({ onEdit  }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { meetings, status, error } = useSelector((state) => state.meeting);
@@ -42,7 +44,46 @@ const MeetingTable = React.memo(({ onEdit }) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const courses = useSelector(state => state.course.courses|| []);
+  const topics = useSelector(state => state.topic.topics|| []);
+  const users = useSelector(state => state.user.user || []);
+  const [statusOptions, setStatusOptions] = useState([]);
 
+   useEffect(() => {
+      const fetchStatuses = async () => {
+        try {                                   
+          const response = await fetch('https://localhost:44333/api/Course/status-courses');
+          const data = await response.json();
+          setStatusOptions(data);
+        } catch (error) {
+          console.error('Failed to fetch status options:', error);
+        }
+      };
+    
+      fetchStatuses();
+    }, []);
+  
+
+    useEffect(() => {
+    const loadData = async () => {
+      try {
+        await dispatch(fetchAllCourses()).unwrap();
+        await dispatch(fetchAllTopic()).unwrap();
+        await dispatch(fetchAllUsers()).unwrap();
+        await dispatch(fetchAllTopic()).unwrap();
+      } catch (error) {
+        console.error('Error loading data:', error);
+      } finally {
+        setIsInitialLoading(false);
+      }
+    };
+
+    if (status === 'idle') {
+      loadData();
+    } else if (status === 'succeeded' || status === 'failed') {
+      setIsInitialLoading(false);
+    }
+  }, [status, dispatch]);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: '',
@@ -69,8 +110,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
     setSnackbar(prev => ({ ...prev, open: false }));
   }, []);
 
-
-    
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchAllMeetings());
@@ -79,35 +118,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
     }
   }, [status, dispatch]);
 
-
-  const handleEditMeeting = (meetingId) => {
-    dispatch(clearError());
-    dispatch(resetStatus());
-    setInitialMeeting(meetingId);
-navigate(`/edit-meeting/${meetingId}`)
-    
-  };
-
-/*
-
-  const handleOpenDescriptionDialog = (meeting) => {
-    setCurrentMeeting(meeting);
-    setEditedDescription(meeting.description || '');
-    setIsEditing(false);
-    setOpenDescriptionDialog(true);
-  };
-
-  
-  const handleCloseDescriptionDialog = () => {
-    if (!isSaving) {
-      setOpenDescriptionDialog(false);
-      setCurrentMeeting(null);
-      setEditedDescription('');
-      setIsEditing(false);
-    }
-  }
-
-  */
   const handleDelete = useCallback((meeting) => {
     setMeetingToDelete(meeting);
     setOpenDeleteDialog(true);
@@ -117,14 +127,12 @@ navigate(`/edit-meeting/${meetingId}`)
     if (!isDeleting) {
       setOpenDeleteDialog(false);
       setMeetingToDelete(null);
-
     }
   }, [isDeleting]);
 
   const handleConfirmDelete = useCallback(async () => {
     if (meetingToDelete) {
       setIsDeleting(true);
-
       try {
         await dispatch(deleteMeetingAction(meetingToDelete.meetingId)).unwrap();
         showSnackbar('מפגש נמחק בהצלחה', 'success');
@@ -136,12 +144,10 @@ navigate(`/edit-meeting/${meetingId}`)
         showSnackbar('מחיקת מפגש נכשלה', 'error');
       }
     }
+  }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
-  },[meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
-
-  // Memoized static data
+  // עמודות הטבלה
   const columns = useMemo(() => [
-
     'שם קורס',
     'נושא',
     'מספר מפגש',
@@ -152,92 +158,31 @@ navigate(`/edit-meeting/${meetingId}`)
     'תאריך',
     'חדר',
     'האם השיבוץ תקין?',
+    'סטטוס',
     'חלק מהמערכת?',
     'עריכה',
     'מחיקה'
   ], []);
 
+  // מיפוי המפתחות
   const keyMap = useMemo(() => ({
     'שם קורס': 'courseName',
     'נושא': 'topicName',
     'מספר מפגש': 'meetingNumberForTopic',
-    'מרצה': 'lecturerName',
+    'מרצה': 'teacherName',
     'יום': 'dayId',
     'שעת התחלה': 'startTime',
     'שעת סיום': 'endTime',
     'תאריך': 'date',
     'חדר': 'roomId',
+    'האם השיבוץ תקין?': 'isValid',
+    'סטטוס' : 'statusCourse',
+    'חלק מהמערכת?': 'isPartOfSchedule',
     'מזהה מפגש': 'meetingId',
     'מזהה נושא': 'scheduleForTopicId'
   }), []);
 
-
-  /*
-  const columnConfig = {
-    'חלק מהמערכת?': {
-      render: (row) => (
-        <Chip
-          label={row.isPartOfSchedule ? 'כן' : 'לא'}
-          color={row.isPartOfSchedule ? 'success' : 'default'}
-          variant="outlined"
-        />
-      )
-    },
-    'האם השיבוץ תקין?': {
-      render: (row) => (
-        <Chip
-          label={row.isValid ? 'תקין' : 'שגוי'}
-          color={row.isValid ? 'success' : 'error'}
-          variant="outlined"
-        />
-      )
-    },
-    'תיאור': {
-      render: (row) => (
-        <div
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', maxWidth: '200px', cursor: 'pointer' }}
-          onClick={() => handleOpenDescriptionDialog(row)}
-        >
-          <Tooltip title="לחץ לצפייה/עריכה">
-            <Typography
-              variant="body2"
-              sx={{
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                maxWidth: '180px',
-                textAlign: 'right',
-                direction: 'rtl'
-              }}
-            >
-              {row.description || '—'}
-            </Typography>
-          </Tooltip>
-          <IconButton size="small" color="primary" sx={{ ml: 1 }}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </div>
-      )
-    },
-
-    'עריכה': {
-      render: (row) => (
-        <Tooltip title="עריכת מפגש">
-          <IconButton
-          color="primary"            
-          onClick={() => 
-            handleEditMeeting(row.meetingId)}
-          disabled={isLoading}
-            size="small"
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-      )
-    }
-  };
-*/
-  // Memoized column renderers
+  // פונקציות עזר לרינדור
   const renderScheduleChip = useCallback((row) => (
     <Chip
       label={row.isPartOfSchedule ? 'כן' : 'לא'}
@@ -248,7 +193,7 @@ navigate(`/edit-meeting/${meetingId}`)
 
   const renderValidChip = useCallback((row) => (
     <Chip
-      label={row.isValid ? 'תקין' : 'שגוי'}
+      label={row.isValid ? 'V' : 'X'}
       color={row.isValid ? 'success' : 'error'}
       variant="outlined"
     />
@@ -256,7 +201,11 @@ navigate(`/edit-meeting/${meetingId}`)
 
   const renderEditButton = useCallback((row) => (
     <Tooltip title="ערוך מפגש">
-      <IconButton onClick={() => onEdit && onEdit(row)} size="small" color="primary">
+      <IconButton 
+        onClick={() => onEdit && onEdit(row)} 
+        size="small" 
+        color="primary"
+      >
         <EditIcon />
       </IconButton>
     </Tooltip>
@@ -264,12 +213,17 @@ navigate(`/edit-meeting/${meetingId}`)
 
   const renderDeleteButton = useCallback((row) => (
     <Tooltip title="מחק מפגש">
-      <IconButton onClick={() => handleDelete(row)} size="small" color="error">
+      <IconButton 
+        onClick={() => handleDelete(row)} 
+        size="small" 
+        color="error"
+      >
         <DeleteIcon />
       </IconButton>
     </Tooltip>
   ), [handleDelete]);
 
+  // הגדרת העמודות המיוחדות
   const columnConfig = useMemo(() => ({
     'חלק מהמערכת?': { render: renderScheduleChip },
     'האם השיבוץ תקין?': { render: renderValidChip },
@@ -277,7 +231,7 @@ navigate(`/edit-meeting/${meetingId}`)
     'מחיקה': { render: renderDeleteButton }
   }), [renderScheduleChip, renderValidChip, renderEditButton, renderDeleteButton]);
 
-  // Memoized loading component
+  // רכיב טעינה
   const loadingComponent = useMemo(() => (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
       <CircularProgress size={60} />
@@ -285,12 +239,23 @@ navigate(`/edit-meeting/${meetingId}`)
     </Box>
   ), []);
 
-  // Memoized error component
+  // רכיב שגיאה
   const errorComponent = useMemo(() => (
     <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" minHeight="400px" gap={2}>
-      <Typography variant="h6" color="error" textAlign="center">שגיאה בטעינת המפגשים</Typography>
-      <Typography variant="body2" color="text.secondary" textAlign="center">{error}</Typography>
-      <Button variant="contained" onClick={handleManualRefresh} startIcon={<RefreshIcon />} size="large">נסה שוב</Button>
+      <Typography variant="h6" color="error" textAlign="center">
+        שגיאה בטעינת המפגשים
+      </Typography>
+      <Typography variant="body2" color="text.secondary" textAlign="center">
+        {error}
+      </Typography>
+      <Button 
+        variant="contained" 
+        onClick={handleManualRefresh} 
+        startIcon={<RefreshIcon />} 
+        size="large"
+      >
+        נסה שוב
+      </Button>
     </Box>
   ), [error, handleManualRefresh]);
 
@@ -305,13 +270,25 @@ navigate(`/edit-meeting/${meetingId}`)
   return (
     <Paper elevation={3} sx={{ p: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h5" component="h2">טבלת מפגשים</Typography>
-        <Button variant="outlined" onClick={handleManualRefresh} startIcon={<RefreshIcon />} disabled={status === 'loading'}>
+        <Typography variant="h5" component="h2">
+          טבלת מפגשים
+        </Typography>
+        <Button 
+          variant="outlined" 
+          onClick={handleManualRefresh} 
+          startIcon={<RefreshIcon />} 
+          disabled={status === 'loading'}
+        >
           רענן
         </Button>
       </Box>
 
-      <CustomTable columns={columns} data={meetings} keyMap={keyMap} columnConfig={columnConfig} />
+      <CustomTable 
+        columns={columns} 
+        data={meetings || []} 
+        keyMap={keyMap} 
+        columnConfig={columnConfig} 
+      />
 
       {/* דיאלוג מחיקה */}
       <Dialog open={openDeleteDialog} onClose={handleCloseDeleteDialog}>
@@ -320,7 +297,7 @@ navigate(`/edit-meeting/${meetingId}`)
           <Typography>
             האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" מהקורס "{meetingToDelete?.courseName}"?
           </Typography>
-          {!meetingToDelete?.isValid && (
+          {meetingToDelete && !meetingToDelete.isValid && (
             <Box mt={2} display="flex" alignItems="center" color="error.main">
               <EventBusyIcon sx={{ mr: 1 }} />
               <Typography>המפגש מסומן כשגוי.</Typography>
@@ -328,8 +305,19 @@ navigate(`/edit-meeting/${meetingId}`)
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteDialog} disabled={isDeleting} color="inherit">ביטול</Button>
-          <Button onClick={handleConfirmDelete} variant="contained" color="error" disabled={isDeleting}>
+          <Button 
+            onClick={handleCloseDeleteDialog} 
+            disabled={isDeleting} 
+            color="inherit"
+          >
+            ביטול
+          </Button>
+          <Button 
+            onClick={handleConfirmDelete} 
+            variant="contained" 
+            color="error" 
+            disabled={isDeleting}
+          >
             {isDeleting ? <CircularProgress size={24} color="inherit" /> : 'מחק'}
           </Button>
         </DialogActions>
@@ -351,6 +339,5 @@ navigate(`/edit-meeting/${meetingId}`)
 });
 
 MeetingTable.displayName = 'MeetingTable';
-
 
 export default MeetingTable;

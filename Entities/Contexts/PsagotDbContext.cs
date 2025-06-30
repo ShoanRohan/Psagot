@@ -182,8 +182,6 @@ public partial class PsagotDbContext : DbContext
 
                 .HasForeignKey(d => d.UserTypeId)
 
-                //.HasForeignKey(d => d.UserTypesId)
-
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Users__UserTypeI__412EB0B6");
         });

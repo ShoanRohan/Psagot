@@ -41,11 +41,6 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.isLoading = false;
                 state.error = action.payload || action.error.message;
-            }).addCase(updateMeetingAction.rejected, (state, action) => {
-                state.status = "failed";
-                state.isLoading = false;
-                state.error = action.payload || action.error.message;
-                state.error = action.error.message;
             })
             
             // Update Meeting
@@ -65,8 +60,11 @@ const meetingSlice = createSlice({
                 }
                 state.error = null;
             })
+
             .addCase(updateMeetingAction.rejected, (state, action) => {
                 state.status = "failed";
+                state.isLoading = false;
+                state.error = action.payload || action.error.message;
                 state.error = action.error.message;
             })
             
@@ -88,16 +86,6 @@ const meetingSlice = createSlice({
                 state.error = action.payload || action.error.message;
             })
 
-     
-            .addCase(addMeetingAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.meetings.push(action.payload);
-                state.error = null;
-            })
-            .addCase(addMeetingAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
             
             // Fetch Meeting By ID
             .addCase(fetchMeetingById.pending, (state) => {

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /*
 //import { fetchAllUsers } from '../features/user/userAction';
 //import { fetchAllCourses } from '../features/course/courseActions';
@@ -713,6 +712,4 @@ const AddMeeting = ({ existingMeeting, onClose }) => {
         
 
     
-=======
 // export default AddMeeting;
->>>>>>> 4dccfdd3d396db4d02df10d49b9aff1fefe91910
