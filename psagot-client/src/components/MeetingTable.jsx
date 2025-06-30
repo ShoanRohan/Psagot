@@ -17,14 +17,11 @@ import {
   Alert,
 } from '@mui/material';
 import {
-  Edit as EditIcon,
-  Delete as DeleteIcon,
   EventBusy as EventBusyIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
 
 import { fetchAllMeetings, deleteMeetingAction } from '../features/meeting/meetingActions';
-import { clearError, resetStatus } from '../features/meeting/meetingSlice';
 import CustomTable from './CustomTable';
 import trash from '../assets/icons/trash.png';
 import penToSquare from '../assets/icons/penToSquare.png';
@@ -141,15 +138,15 @@ const MeetingTable = React.memo(({ onEdit }) => {
   ), []);
 
   const renderValidChip = useCallback((row) => (
-   <Typography
-  sx={{
-    fontSize: 14,
-    fontWeight: 500,
-    color: '#393939', // רק צבע הטקסט
-    backgroundColor: 'transparent',
-  }}
->
-
+    <Typography
+      sx={{
+        fontSize: 14,
+        fontWeight: 500,
+        color: '#393939',
+        backgroundColor: 'transparent',
+        textAlign: 'center',
+      }}
+    >
       {row.isValid ? 'V' : 'X'}
     </Typography>
   ), []);
@@ -161,6 +158,10 @@ const MeetingTable = React.memo(({ onEdit }) => {
         size="small"
         sx={{
           color: 'error.main',
+          padding: '6px',
+          margin: '0 1px',
+          minWidth: '32px',
+          minHeight: '32px',
           '&:hover': {
             backgroundColor: 'error.light',
             opacity: 0.1,
@@ -172,8 +173,8 @@ const MeetingTable = React.memo(({ onEdit }) => {
           src={trash}
           alt="Delete"
           sx={{
-            width: 20,
-            height: 20,
+            width: 18,
+            height: 18,
           }}
         />
       </IconButton>
@@ -187,6 +188,10 @@ const MeetingTable = React.memo(({ onEdit }) => {
         size="small"
         sx={{
           color: 'primary.main',
+          padding: '6px',
+          margin: '0 1px',
+          minWidth: '32px',
+          minHeight: '32px',
           '&:hover': {
             backgroundColor: 'primary.light',
             opacity: 0.1,
@@ -198,8 +203,8 @@ const MeetingTable = React.memo(({ onEdit }) => {
           src={penToSquare}
           alt="Edit"
           sx={{
-            width: 20,
-            height: 20,
+            width: 18,
+            height: 18,
           }}
         />
       </IconButton>

@@ -6,7 +6,6 @@ import {
   TableCell,
   TableBody,
   TablePagination,
-  Paper,
   Box,
   Typography,
   Alert,
@@ -59,6 +58,38 @@ const CustomTable = ({
     page * rowsPerPage + rowsPerPage
   );
 
+  // פונקציה לעיבוד תאריך
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    try {
+      // המרה של תאריך מהבקנד לפורמט הרצוי
+      const date = new Date(dateString);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = String(date.getFullYear()).slice(-2); // לוקח רק 2 ספרות אחרונות
+      return `${day}/${month}/${year}`;
+    } catch {
+      return dateString;
+    }
+  };
+
+  // פונקציה לעיבוד שעה
+  const formatTime = (timeString) => {
+    if (!timeString) return '-';
+    try {
+      // אם השעה מגיעה בפורמט HH:MM:SS, נקצר את השניות
+      if (timeString.includes(':')) {
+        const timeParts = timeString.split(':');
+        if (timeParts.length >= 2) {
+          return `${timeParts[0]}:${timeParts[1]}`;
+        }
+      }
+      return timeString;
+    } catch {
+      return timeString;
+    }
+  };
+
   // סגנון כותרות העמודות
   const headerTextStyle = {
     fontFamily: '"Rubik", sans-serif',
@@ -97,11 +128,9 @@ const CustomTable = ({
         </Box>
       );
     }
-
     if (col === 'עריכה' || col === 'מחיקה') {
       return '';
     }
-
     return (
       <Typography sx={headerTextStyle}>
         {col}
@@ -111,7 +140,6 @@ const CustomTable = ({
 
   const renderCell = (row, col, index, colIndex) => {
     const cellKey = `${index}-${colIndex}`;
-
     if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
       return (
         <TableCell
@@ -121,15 +149,27 @@ const CustomTable = ({
             fontSize: { xs: 12, sm: 13, md: 14 },
             padding: { xs: '8px 4px', sm: '8px 16px' },
             fontFamily: '"Rubik", sans-serif',
+            // הוספת word-break לטקסט ארוך
+            wordBreak: 'break-word',
+            whiteSpace: 'normal',
+            maxWidth: '200px',
           }}
         >
           {columnConfig[col].render(row)}
         </TableCell>
       );
     }
-
+    
     const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
-
+    let cellValue = row[dataKey] !== undefined ? row[dataKey] : '-';
+    
+    // עיבוד מיוחד לפי סוג העמודה
+    if (col === 'תאריך') {
+      cellValue = formatDate(cellValue);
+    } else if (col === 'שעת התחלה' || col === 'שעת סיום') {
+      cellValue = formatTime(cellValue);
+    }
+    
     return (
       <TableCell
         key={cellKey}
@@ -138,9 +178,18 @@ const CustomTable = ({
           fontSize: { xs: 12, sm: 13, md: 14 },
           padding: { xs: '8px 4px', sm: '8px 16px' },
           fontFamily: '"Rubik", sans-serif',
+          // הוספת word-break לטקסט ארוך
+          wordBreak: 'break-word',
+          whiteSpace: 'normal',
+          maxWidth: '200px',
+          // עיצוב מיוחד לעמודות טקסט ארוכות
+          ...(col === 'שם קורס' || col === 'נושא' || col === 'שם מרצה' ? {
+            maxWidth: '150px',
+            minWidth: '120px',
+          } : {}),
         }}
       >
-        {row[dataKey] !== undefined ? row[dataKey] : '-'}
+        {cellValue}
       </TableCell>
     );
   };
@@ -148,9 +197,9 @@ const CustomTable = ({
   return (
     <Box
       sx={{
-        width: '90%',
-        maxWidth: 1496,
-        minWidth: 800,
+        width: '95%',
+        maxWidth: 1600,
+        minWidth: 900,
         minHeight: 776,
         mx: 'auto',
         mt: 2.5,
@@ -188,7 +237,6 @@ const CustomTable = ({
               {title}
             </Typography>
           )}
-
           {headerActions && (
             <Box
               sx={{
@@ -203,23 +251,22 @@ const CustomTable = ({
         </Box>
       )}
 
-      {/* Table Section */}
-      <Paper
+      {/* Table Section - ללא Paper */}
+      <Box
         sx={{
           direction: 'rtl',
           overflow: 'auto',
           minHeight: 660,
           p: { xs: '20px 10px', sm: '35px 20px' },
-          borderRadius: 2.5,
-          boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.8)',
           fontFamily: '"Rubik", sans-serif',
         }}
       >
         <Table
           stickyHeader
           sx={{
-            minWidth: { xs: 600, sm: 800, md: 1000 },
+            minWidth: { xs: 700, sm: 900, md: 1100 },
             fontFamily: '"Rubik", sans-serif',
+            tableLayout: 'auto',
           }}
         >
           <TableHead>
@@ -233,8 +280,23 @@ const CustomTable = ({
                     borderBottom: '1px solid #C6C6C6',
                     height: 42,
                     padding: { xs: '8px 4px', sm: '8px 16px' },
-                    minWidth: col === 'עריכה' || col === 'מחיקה' ? 60 : 'auto',
+                    minWidth: col === 'עריכה' || col === 'מחיקה' ? 80 : 'auto',
                     verticalAlign: 'middle',
+                    // רוחב מיוחד לעמודות טקסט ארוכות
+                    ...(col === 'שם קורס' || col === 'נושא' || col === 'שם מרצה' ? {
+                      minWidth: '120px',
+                      maxWidth: '150px',
+                    } : {}),
+                    // רוחב מיוחד לעמודות תאריך ושעות
+                    ...(col === 'תאריך' || col === 'שעת התחלה' || col === 'שעת סיום' ? {
+                      minWidth: '100px',
+                    } : {}),
+                    // קירוב אייקוני העריכה והמחיקה
+                    ...(col === 'עריכה' || col === 'מחיקה' ? {
+                      padding: { xs: '8px 6px', sm: '8px 8px' },
+                      minWidth: '80px',
+                      maxWidth: '80px',
+                    } : {}),
                   }}
                 >
                   {renderHeaderCell(col)}
@@ -242,7 +304,6 @@ const CustomTable = ({
               ))}
             </TableRow>
           </TableHead>
-
           <TableBody>
             {paginatedData.map((row, index) => (
               <TableRow
@@ -259,7 +320,7 @@ const CustomTable = ({
             ))}
           </TableBody>
         </Table>
-      </Paper>
+      </Box>
 
       {/* Pagination Section */}
       <Box sx={{ px: { xs: 1, sm: 2 } }}>
