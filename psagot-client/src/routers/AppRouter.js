@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
@@ -9,16 +9,16 @@ import Login from '../components/Login';
 const AppRouter = () => {
     return (
         <Routes>
+               <Route path="/" element={<Navigate to="/login" />} />
                 <Route path='/login' element={<Login/>}/>
                 <Route path='/register' element={<Login/>}/>
                 <Route path='/' element={<Layout />}>
-                <Route path='/' element={<HomePage />} />
-                <Route path='/courses' element={<span>page Courses</span>} />
-                <Route path='/meetings' element={<span>page Meetings</span>} />
-                <Route path='/users' element={<span>page Users</span>} />
-                <Route path='/rooms' element={<span>page Rooms</span>} />
-                <Route path="/calendar" element={<CalendarPage />} />
-
+                    <Route path='/' element={<HomePage />} />
+                    <Route path='/courses' element={<span>page Courses</span>} />
+                    <Route path='/meetings' element={<span>page Meetings</span>} />
+                    <Route path='/users' element={<span>page Users</span>} />
+                    <Route path='/rooms' element={<span>page Rooms</span>} />
+                    <Route path="/calendar" element={<CalendarPage />} />
             </Route>
         </Routes>
     );
