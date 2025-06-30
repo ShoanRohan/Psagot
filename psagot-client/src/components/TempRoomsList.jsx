@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchAllRooms } from "../features/room/roomActions";
 import { Typography, Box, Paper, Button } from "@mui/material";
@@ -14,39 +14,37 @@ const getRoomEquipment = (room) => {
 
 const TempRoomsList = () => {
   const dispatch = useDispatch();
-  const { rooms, filteredRooms, status, error } = useSelector((state) => state.room);
+  const {
+    rooms,
+    filteredRooms,
+    status,
+    error,
+    pageIndex,
+    pageSize,
+    isSearchActive,
+  } = useSelector((state) => state.room);
 
-  const [pageIndex, setPageIndex] = useState(0);
-  const pageSize = 2;
-
-  // טען חדרים מהשרת בהתחלה
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchAllRooms());
     }
   }, [status, dispatch]);
 
-  // תוצאות להצגה – או סינון או כל החדרים
   const activeRooms = filteredRooms ?? rooms;
-
-  // אפס עמוד כל פעם שהתוצאות משתנות
-  useEffect(() => {
-    setPageIndex(0);
-  }, [activeRooms]);
-
   const totalPages = Math.ceil(activeRooms.length / pageSize);
   const start = pageIndex * pageSize;
   const end = start + pageSize;
   const displayRooms = activeRooms.slice(start, end);
 
-  // מצבי טעינה / שגיאה
   if (status === "loading") return <Typography>טוען חדרים...</Typography>;
   if (status === "failed") return <Typography>שגיאה: {error}</Typography>;
 
   return (
     <Box mt={2}>
       {displayRooms.length === 0 ? (
-        <Typography>לא נמצאו חדרים מתאימים.</Typography>
+        <Typography>
+          {isSearchActive ? "לא נמצאו חדרים מתאימים." : "אין חדרים להצגה."}
+        </Typography>
       ) : (
         displayRooms.map((room) => (
           <Paper key={room.id} style={{ margin: "10px 0", padding: 10 }}>
@@ -70,7 +68,16 @@ const TempRoomsList = () => {
           <Button
             variant="outlined"
             disabled={pageIndex === 0}
-            onClick={() => setPageIndex((prev) => prev - 1)}
+            onClick={() =>
+              dispatch({
+                type: "room/filterRooms",
+                payload: {
+                  ...filteredRooms?.filters,
+                  pageIndex: pageIndex - 1,
+                  pageSize,
+                },
+              })
+            }
           >
             הקודם
           </Button>
@@ -80,7 +87,16 @@ const TempRoomsList = () => {
           <Button
             variant="outlined"
             disabled={pageIndex >= totalPages - 1}
-            onClick={() => setPageIndex((prev) => prev + 1)}
+            onClick={() =>
+              dispatch({
+                type: "room/filterRooms",
+                payload: {
+                  ...filteredRooms?.filters,
+                  pageIndex: pageIndex + 1,
+                  pageSize,
+                },
+              })
+            }
           >
             הבא
           </Button>

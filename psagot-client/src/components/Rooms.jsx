@@ -7,7 +7,7 @@ const Rooms = () => {
     <div>
         <RoomsSearchBar/>
         {/* תוספת זמנית של רשימת כל החדרים */}
-        <TempRoomsList/>
+        {/* <TempRoomsList/> */}
     </div>
   )
 }

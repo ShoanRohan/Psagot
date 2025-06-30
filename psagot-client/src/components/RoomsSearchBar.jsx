@@ -11,9 +11,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch } from "react-redux";
 import { filterRooms } from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
+import { InputLabel } from "@mui/material";
 
 const myEequipment = ["מקרן", "רמקולים", "מחשבים"];
-
 const RoomsSearchBar = () => {
   const roomSearchEmpty = {
     roomName: "",
@@ -21,24 +21,34 @@ const RoomsSearchBar = () => {
     capacity: "",
   };
   const [capacityError, setCapacityError] = useState("");
-  const [roomSearch, setRoomeSearch] = useState(roomSearchEmpty);
-
+  const [roomSearch, setRoomSearch] = useState(roomSearchEmpty);
 
   const dispatch = useDispatch();
   const validate = () => {
     const isValid =
       !roomSearch?.capacity ||
       (!isNaN(roomSearch?.capacity) && roomSearch?.capacity > 0);
-    setCapacityError(isValid ? "" : "מספר המקומות חייב להיות מספר חיובי");
+    setCapacityError(isValid ? "" : "חייב להיות מספר חיובי");
     return isValid;
   };
   const clean = () => {
-    setRoomeSearch(roomSearchEmpty);
-    dispatch(filterRooms({}));
-  };
+  setRoomSearch(roomSearchEmpty);
+  setCapacityError("");
+  dispatch(filterRooms({}));
+};
+
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
-    setRoomeSearch({ ...roomSearch, [name]: value });
+     if (name === "capacity") {
+    if (value === "") {
+      setCapacityError("");
+    } else if (isNaN(value) || Number(value) <= 0) {
+      setCapacityError("חייב להיות מספר חיובי");
+    } else {
+      setCapacityError("");
+    }
+  }
+    setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
     if (!validate()) return;
@@ -65,18 +75,19 @@ const RoomsSearchBar = () => {
           name="roomName"
           value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
+      
         />
         <FormControl size="small" className="textField equipment-select">
+          <InputLabel id="equipment-label">ציוד</InputLabel>
           <Select
+            labelId="equipment-label"
             multiple
-            displayEmpty
             name="equipment"
             value={roomSearch?.equipment}
             onChange={handleChangeRoomSearch}
             renderValue={(selected) =>
-              selected.length ? selected.join(", ") : "ציוד"
+              selected.length ? selected.join(", ") : ""
             }
-            inputProps={{ "aria-label": "ציוד" }}
           >
             {myEequipment.map((item) => (
               <MenuItem key={item} value={item}>
@@ -86,6 +97,7 @@ const RoomsSearchBar = () => {
             ))}
           </Select>
         </FormControl>
+
         <TextField
           label="מספר מקומות"
           variant="outlined"
@@ -96,14 +108,14 @@ const RoomsSearchBar = () => {
           value={roomSearch?.capacity}
           onChange={handleChangeRoomSearch}
           error={!!capacityError}
-          helperText={capacityError}
+          helperText={capacityError || " "}
         />
       </div>
       <div className="search-buttons">
         {(roomSearch.roomName ||
           roomSearch.capacity ||
           roomSearch.equipment.length > 0) && (
-          <Button variant="outlined" color="primary" onClick={clean}>
+          <Button variant="outlined" color="primary" onClick={clean} className="clear-button">
             ניקוי
           </Button>
         )}
@@ -119,9 +131,9 @@ const RoomsSearchBar = () => {
           onClick={findRooms}
           className="search-button"
         >
-          חיפוש
+          <span className="search-button-text">חיפוש</span>
         </Button>
-    </div>
+      </div>
     </Box>
   );
 };
