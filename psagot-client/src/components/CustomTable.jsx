@@ -5,39 +5,44 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  IconButton,
   TablePagination,
   Paper,
   Box,
   Typography,
+  Alert,
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import selector from '../assets/icons/selector.png'; // הוספת האיקון
+import selector from '../assets/icons/selector.png';
 
 const CustomTable = ({
   columns,
   data,
-  onEdit,
-  onDelete,
   columnConfig = {},
   keyMap = {},
   rowsPerPageOptions = [10, 25, 50],
   defaultRowsPerPage = 50,
-  title, // הוספת prop לכותרת
-  headerActions, // הוספת prop לפעולות בכותרת (כפתורים)
+  title,
+  headerActions,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
 
+  // Validation
   if (!Array.isArray(columns) || columns.length === 0) {
     console.error('columns prop must be a non-empty array');
-    return <div>שגיאה: עמודות אינן תקינות</div>;
+    return (
+      <Alert severity="error" sx={{ m: 2 }}>
+        שגיאה: עמודות אינן תקינות
+      </Alert>
+    );
   }
 
   if (!Array.isArray(data)) {
     console.error('data prop must be an array');
-    return <div>שגיאה: נתונים אינם תקינים</div>;
+    return (
+      <Alert severity="error" sx={{ m: 2 }}>
+        שגיאה: נתונים אינם תקינים
+      </Alert>
+    );
   }
 
   const handleChangePage = (_, newPage) => {
@@ -49,60 +54,147 @@ const CustomTable = ({
     setPage(0);
   };
 
-  const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  const paginatedData = data.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  // סגנון כותרות העמודות
+  const headerTextStyle = {
+    fontFamily: '"Rubik", sans-serif',
+    fontWeight: 500,
+    fontSize: 16,
+    lineHeight: 1,
+    letterSpacing: 0,
+    textAlign: 'center',
+    textTransform: 'capitalize',
+    color: '#393939',
+  };
+
+  const renderHeaderCell = (col) => {
+    if (col === 'סטטוס') {
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1,
+          }}
+        >
+          <Typography component="span" sx={headerTextStyle}>
+            {col}
+          </Typography>
+          <Box
+            component="img"
+            src={selector}
+            alt="selector"
+            sx={{
+              width: 20,
+              height: 20,
+            }}
+          />
+        </Box>
+      );
+    }
+
+    if (col === 'עריכה' || col === 'מחיקה') {
+      return '';
+    }
+
+    return (
+      <Typography sx={headerTextStyle}>
+        {col}
+      </Typography>
+    );
+  };
+
+  const renderCell = (row, col, index, colIndex) => {
+    const cellKey = `${index}-${colIndex}`;
+
+    if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
+      return (
+        <TableCell
+          key={cellKey}
+          align="center"
+          sx={{
+            fontSize: { xs: 12, sm: 13, md: 14 },
+            padding: { xs: '8px 4px', sm: '8px 16px' },
+            fontFamily: '"Rubik", sans-serif',
+          }}
+        >
+          {columnConfig[col].render(row)}
+        </TableCell>
+      );
+    }
+
+    const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
+
+    return (
+      <TableCell
+        key={cellKey}
+        align="center"
+        sx={{
+          fontSize: { xs: 12, sm: 13, md: 14 },
+          padding: { xs: '8px 4px', sm: '8px 16px' },
+          fontFamily: '"Rubik", sans-serif',
+        }}
+      >
+        {row[dataKey] !== undefined ? row[dataKey] : '-'}
+      </TableCell>
+    );
+  };
 
   return (
     <Box
       sx={{
-        width: '1496px',
-        height: '776px',
-        position: 'absolute',
-        top: '305px',
-        left: '73px',
-        paddingTop: '8px',
-        paddingRight: '8px',
-        paddingLeft: '8px',
-        gap: '24px',
+        width: '90%',
+        maxWidth: 1496,
+        minWidth: 800,
+        minHeight: 776,
+        mx: 'auto',
+        mt: 2.5,
+        p: 1,
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        gap: 3,
+        fontFamily: '"Rubik", sans-serif',
       }}
     >
-      {/* שורת כותרת עם כפתורים */}
+      {/* Header Section */}
       {(title || headerActions) && (
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            width: '100%',
-            height: '44px',
-            marginBottom: '16px',
-            direction: 'rtl'
+            height: 44,
+            mb: 2,
+            direction: 'rtl',
           }}
         >
-          {/* כותרת בצד ימין */}
           {title && (
             <Typography
               variant="h4"
               sx={{
-                fontSize: '32px',
+                fontSize: { xs: 24, sm: 28, md: 32 },
                 fontWeight: 700,
                 lineHeight: '44px',
-                color: '#000000',
-                textAlign: 'right'
+                color: 'text.primary',
+                textAlign: 'right',
+                fontFamily: '"Rubik", sans-serif',
               }}
             >
               {title}
             </Typography>
           )}
-                   
-          {/* כפתורים בצד שמאל */}
+
           {headerActions && (
             <Box
               sx={{
                 display: 'flex',
-                gap: '16px',
-                alignItems: 'center'
+                gap: 2,
+                alignItems: 'center',
               }}
             >
               {headerActions}
@@ -111,98 +203,66 @@ const CustomTable = ({
         </Box>
       )}
 
+      {/* Table Section */}
       <Paper
         sx={{
           direction: 'rtl',
           overflow: 'auto',
-          width: '1481px',
-          height: '660px',
-          paddingTop: '35px',
-          paddingRight: '20px',
-          paddingBottom: '10px',
-          paddingLeft: '20px',
-          borderRadius: '10px',
-          background: '#FFFFFF',
-          boxShadow: '0px 0px 4px 0px #DCE2ECCC'
+          minHeight: 660,
+          p: { xs: '20px 10px', sm: '35px 20px' },
+          borderRadius: 2.5,
+          boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.8)',
+          fontFamily: '"Rubik", sans-serif',
         }}
       >
-        <Table stickyHeader sx={{ minWidth: 1000 }}>
+        <Table
+          stickyHeader
+          sx={{
+            minWidth: { xs: 600, sm: 800, md: 1000 },
+            fontFamily: '"Rubik", sans-serif',
+          }}
+        >
           <TableHead>
-            <TableRow
-              sx={{
-                backgroundColor: '#FFFFFF',
-                width: '1430px',
-                height: '42px'
-              }}
-            >
+            <TableRow>
               {columns.map((col, index) => (
                 <TableCell
                   key={index}
                   align="center"
                   sx={{
-                    fontWeight: 'bold',
-                    backgroundColor: '#FFFFFF',
-                    color: '#333',
+                    backgroundColor: 'background.paper',
                     borderBottom: '1px solid #C6C6C6',
-                    fontSize: 15,
-                    height: '42px'
+                    height: 42,
+                    padding: { xs: '8px 4px', sm: '8px 16px' },
+                    minWidth: col === 'עריכה' || col === 'מחיקה' ? 60 : 'auto',
+                    verticalAlign: 'middle',
                   }}
                 >
-                  {/* הוספת האיקון ליד עמודת הסטטוס */}
-                 
-                  {col === 'סטטוס' ? (
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-                    
-                      <span>{col}</span>
-                        <img 
-                        src={selector} 
-                        alt="selector" 
-                        style={{ 
-                          width: '20px', 
-                          height: '20px' 
-                        }} 
-                      />
-                    </Box>
-                  ) : (
-                    col === 'עריכה' || col === 'מחיקה' ? "" : col
-                  )}
+                  {renderHeaderCell(col)}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {paginatedData.map((row, index) => (
               <TableRow
                 key={row.id || index}
                 hover
                 sx={{
-                  backgroundColor: index % 2 === 0 ? '#FAFCFF' : '#FFFFFF'
+                  backgroundColor: index % 2 === 0 ? '#FAFCFF' : 'background.paper',
                 }}
               >
-                {columns.map((col, colIndex) => {
-                  const cellKey = `${index}-${colIndex}`;
-                  if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
-                    return (
-                      <TableCell key={cellKey} align="center" sx={{ fontSize: 14 }}>
-                        {columnConfig[col].render(row)}
-                      </TableCell>
-                    );
-                  }
-                  const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
-                                                                       
-                  return (
-                    <TableCell key={cellKey} align="center" sx={{ fontSize: 14 }}>
-                      {row[dataKey] !== undefined ? row[dataKey] : '-'}
-                    </TableCell>
-                  );
-                })}
+                {columns.map((col, colIndex) =>
+                  renderCell(row, col, index, colIndex)
+                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Paper>
-           
-      <Box sx={{ px: 2 }}>
+
+      {/* Pagination Section */}
+      <Box sx={{ px: { xs: 1, sm: 2 } }}>
         <TablePagination
           component="div"
           rowsPerPageOptions={rowsPerPageOptions}
@@ -212,16 +272,26 @@ const CustomTable = ({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="שורות לעמוד:"
-          labelDisplayedRows={({ from, to, count }) => `${from}-${to} מתוך ${count}`}
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}-${to} מתוך ${count}`
+          }
           sx={{
             direction: 'rtl',
-            fontSize: 14,
-            '.MuiTablePagination-toolbar': {
+            fontSize: { xs: 12, sm: 13, md: 14 },
+            fontFamily: '"Rubik", sans-serif',
+            '& .MuiTablePagination-toolbar': {
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 1,
             },
-            '.MuiSelect-select': {
-              paddingRight: 2,
-              paddingLeft: 2,
+            '& .MuiSelect-select': {
+              pr: 2,
+              pl: 2,
+              fontFamily: '"Rubik", sans-serif',
+            },
+            '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
+              fontSize: { xs: 12, sm: 13, md: 14 },
+              fontFamily: '"Rubik", sans-serif',
             },
           }}
         />
