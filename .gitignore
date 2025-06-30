@@ -365,3 +365,8 @@ FodyWeavers.xsd
 FodyWeavers.xsd
 /Psagot/appsettings.Development.json
 /Psagot/appsettings.json
+/psagot-client/src/components/ExampleUseGenericPopup.jsx
+/psagot-client/src/components/RoomsSearchBar.jsx
+/psagot-client/src/features/room/roomSlice.js
+/.gitignore
+/.gitignore
