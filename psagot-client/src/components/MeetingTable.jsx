@@ -207,29 +207,38 @@ const MeetingTable = React.memo(({ onEdit }) => {
   }
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', height: '100vh' }}>
-      {/* כותרת מפגשים */}
-      <Typography
-        sx={{
-          position: 'absolute',
-          width: 137,
-          height: 47,
-          top: '81px',
-          left: '1425px',
-          fontFamily: '"Rubik", sans-serif',
-          fontWeight: 700,
-          fontSize: '40px',
-          lineHeight: '100%',
-          letterSpacing: '0%',
-          textAlign: 'right',
-          verticalAlign: 'middle',
-          textTransform: 'capitalize',
-          color: '#0D1783',
-        }}
-      >
-        מפגשים
-      </Typography>
+    <Box sx={{ width: '100%' }}>
+      {/* כותרת כחולה מצד ימין מעל הפס הלבן */}
+      <Box sx={{
+        position: 'relative',
+        top: '-24px', // להדביק לחלק העליון מעל הפדינג של main
+        marginBottom: '-10px',
+        textAlign: 'right', // יישור לימין
+        backgroundColor: 'transparent',
+        zIndex: 10,
+        paddingBottom: '15px',
+        paddingRight: '20px' // מרווח מהקצה הימני
+      }}>
+        <Typography
+          sx={{
+            fontFamily: '"Rubik", sans-serif',
+            fontWeight: 700,
+            fontSize: { xs: '28px', sm: '35px', md: '40px' },
+            lineHeight: '100%',
+            letterSpacing: '0%',
+            textAlign: 'right', // יישור הטקסט לימין
+            textTransform: 'capitalize',
+            color: '#0D1783',
+            textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
+            margin: 0,
+            display: 'inline-block' // כדי שהטקסט יתיישר נכון
+          }}
+        >
+          מפגשים
+        </Typography>
+      </Box>
 
+      {/* התוכן הקיים */}
       <Paper elevation={3} sx={{ p: 2 }}>
         <CustomTable
           columns={columns}
@@ -279,5 +288,4 @@ const MeetingTable = React.memo(({ onEdit }) => {
 });
 
 MeetingTable.displayName = 'MeetingTable';
-
 export default MeetingTable;
