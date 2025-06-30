@@ -76,14 +76,6 @@ namespace BL
             return (_mapper.Map<IEnumerable<UserDTO>>(users), totalCount, null);
         }
 
-        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
-        {
-            var (users, errorMessage) = await _userDL.GetAllCoordinators();
-            if (users == null) return (null, errorMessage);
-
-            return (_mapper.Map<List<UserDTO>>(users), null);
-        }
-
         public async Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers()
         {
             var (users, errorMessage) = await _userDL.GetCoordinatorsAndLecturers();
@@ -108,6 +100,14 @@ namespace BL
 
             var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
             return (userDTOs, countUsers, null);
+        }
+
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userDL.GetTeachers();
+            if (teachers == null) return (null, errorMessage);
+
+            return (teachers, null); ;
         }
     }
 }

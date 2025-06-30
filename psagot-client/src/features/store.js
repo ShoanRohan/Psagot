@@ -7,7 +7,7 @@ import meetingReducer from "../features/meeting/meetingSlice";
 import daysForCourseReducer from "../features/daysForCourse/daysForCourseSlice";
 import topicReducer from "../features/topic/topicSlice";
 import courseReducer from "./course/courseSlice";
-import statusCourseReducer from "./statusCourse/statusCourseSlice";
+import statusReducer from "./status/statusSlice";
 import dayReducer from "./day/daySlice";
 
 const store = configureStore({
@@ -20,7 +20,7 @@ const store = configureStore({
     meeting: meetingReducer, //Slice of meeting
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
     topic: topicReducer,
-    statusCourse: statusCourseReducer,
+    status: statusReducer,
     day: dayReducer,
   },
 });

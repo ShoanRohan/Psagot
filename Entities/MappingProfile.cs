@@ -6,6 +6,7 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        CreateMap<DateTime, DateOnly>().ConvertUsing(dt => DateOnly.FromDateTime(dt));
         CreateMap<UserType, UserTypeDTO>().ReverseMap();
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.UserTypeName, opt => opt.MapFrom(src => src.UserType.Name))
@@ -16,10 +17,14 @@ public class MappingProfile : Profile
         CreateMap<DaysForCourse, DaysForCourseDTO>().ForMember(dest => dest.DayName,
             opt => opt.MapFrom(src => src.Day.Descr)).ReverseMap();
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
-        CreateMap<Topic, TopicDTO>().ReverseMap();
+        CreateMap<Topic, TopicDTO>()
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.Name))
+            .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher.Name))
+            .ReverseMap();
         CreateMap<Course, CourseDTO>().ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name))
-            .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name)).ReverseMap();
+                    .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name)).ReverseMap();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
+        CreateMap<StatusTopic, StatusTopicDTO>().ReverseMap();
 
 
         CreateMap<Meeting, EventDTO>()
