@@ -9,6 +9,7 @@ import RoomsHeader from '../components/RoomsHeader';
 import CourseScreen from "../components/CourseScreen";
 import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
+import RoomsViewPage from '../pages/RoomsViewPage';
 
 const AppRouter = () => {
     return (
@@ -21,7 +22,8 @@ const AppRouter = () => {
                 <Route path='/rooms' element={<Rooms />} />
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
-                <Route path="/roomsHeader" element={<RoomsHeader/>} />
+                {/* <Route path='/rooms' element={<Rooms />} /> */}
+                {/*<Route path='/rooms' element={<RoomsViewPage />} />*/}
             </Route>
         </Routes>
     );
