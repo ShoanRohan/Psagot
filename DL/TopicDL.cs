@@ -67,12 +67,7 @@ namespace DL
         {
             try
             {
-                //var existingTopic = await _context.Topics
-                //    .Include(t => t.Meetings)
-                //    .FirstOrDefaultAsync(t => t.TopicId == topic.TopicId);
-
                 var existingTopic = await _context.Set<Topic>().FindAsync(topic.TopicId);
-
 
                 if (existingTopic == null)
                     return (null, "Topic not found");
@@ -81,11 +76,7 @@ namespace DL
 
                 if (isStatusChangedFromActive)
                 {
-                    //var today = DateOnly.FromDateTime(DateTime.Now);
-                    //var futureMeetings = existingTopic.Meetings
-                    //    .Where(m => m.MeetingDate > today)
-                    //    .ToList();
-
+                 
                     if ((existingTopic.NumberOfMeetings ?? 0) > 0 && !forceUpdate)
                     {
                         return (null, "לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך?");

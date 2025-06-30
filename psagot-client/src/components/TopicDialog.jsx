@@ -9,14 +9,11 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import CloseIcon from "@mui/icons-material/Close";
 import editSvg from '../assets/icons/editIcon.svg';
 import deleteSvg from '../assets/icons/deleteIcon.svg';
-//import CheckIcon from "@mui/icons-material/Check";
-//import ClearIcon from "@mui/icons-material/Clear";
 import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeachers } from "../features/user/userAction";
 import { fetchAllStatuses } from "../features/status/statusActions";
 import { updateTopic } from "../utils/topicUtil";
-// import AddDayErrorDialog from './AddDayErrorDialog';
 
 const sharedStyles = {
   width: "150px",
@@ -71,10 +68,7 @@ const disabledSaveButtonStyle = {
   textTransform: "none",
   cursor: "default",
   pointerEvents: "none",
-  //"&.Mui-disabled": {
-  //  color: "#fff",  // חובה כאן לכתוב במפורש את הצבע הלבן במצב disabled
-  //  opacity: 1,     // לבטל את השקיפות שה-MUI מוסיף כברירת מחדל
-  //},
+  
 };
 
 const addDayButtonStyle = {
@@ -99,28 +93,13 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
     { day: "", startHour: "", endHour: "", saved: false },
   ]);
   const [isAddDayErrorOpen, setIsAddDayErrorOpen] = useState(false);
-
   const [mainSaved, setMainSaved] = useState(false);
   const [editingDayIndex, setEditingDayIndex] = useState(null); 
   const dispatch = useDispatch();
   const { teachers} = useSelector(state => state.user)
   const [isEditingMain, setIsEditingMain] = useState(false);
   const statuses = useSelector((state) => state.status.coursesStatuses);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-const [pendingUpdateData, setPendingUpdateData] = useState(null);
-  // console.log("statuses", statuses);
 
-
-  // // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.
-  // // *** וודא שהנתיב 'state.user.allLecturersAndCoordinators' הוא הנתיב הנכון בסטייט של Redux עבורך ***
-  // const allUsers = useSelector(state => state.user.allLecturersAndCoordinators); 
-
-  // const formatDate = (dateString) => {
-  //   if (!dateString) return "";
-  //   const d = new Date(dateString);
-  //   if (isNaN(d)) return "";
-  //   return d.toISOString().split("T")[0];
-  // };
 
   const [formData, setFormData] = useState({
     topicId:"",
@@ -137,14 +116,11 @@ const [pendingUpdateData, setPendingUpdateData] = useState(null);
     status: "",
   });
 
-  // const [lecturers, setLecturers] = useState([]); // מצב מקומי לרשימת המרצים המסוננת
-  // const LECTURER_USER_TYPE_ID = 2; // *** שנה את זה ל-UserTypeId הנכון של מרצים במערכת שלך ***
 
 
   useEffect(() => {
     if (initialData) {
 
-    
       setFormData({
         topicId: initialData?.topicId || "",
         topic: initialData?.name || "",
@@ -175,24 +151,9 @@ const [pendingUpdateData, setPendingUpdateData] = useState(null);
         status: "",
       });
     }
-
-//     console.log("startDate in formData:", formData.startDate);
-// console.log("endDate in formData:", formData.endDate);
   }, [initialData]);
 
 
-
-
-  // useEffect(() => {
-  //   if (initialData && initialData.courseDays) {
-  //     setCourseDays(initialData.courseDays.map(day => ({ ...day, saved: true }))); // נניח שהימים מה-initialData שמורים
-  //   } else {
-  //     setCourseDays([{ day: "", startHour: "", endHour: "", saved: false }]);
-  //   }
-  // }, [initialData]);
-
-
-  // אם משתנה כלשהו בטופס הראשי - מבטל את מצב השמירה (אפשר לערוך)
   useEffect(() => {
     if (mainSaved) {
       setMainSaved(false);
@@ -208,19 +169,7 @@ useEffect(() => {
   dispatch(fetchAllStatuses());
 }, [dispatch]);
 
-// useEffect(() => {
-//   if (formData.status && !statuses.find(s => s.statusId === formData.status)) {
-//     setFormData(prev => ({ ...prev, status: "" }));
-//   }
-// }, [statuses, formData.status]);
-  // אם משתנה כלשהו באחד מהימים - מבטל את מצב השמירה של אותו יום
-  // useEffect(() => {
-  //   // רק נבדוק אם יש ימים שלא שמורים
-  //   if (courseDays.some(day => day.saved)) {
-  //     // אם יש לפחות אחד עם saved=true, נשאיר
-  //     // אך אם השתנה משהו מחוץ לשמירה צריך להגדיר מה לעשות - כאן אנחנו לא עושים שינוי כי saved מתעדכן בלולאה למטה
-  //   }
-  // }, [courseDays]);
+
 
   const isLecturerValid = teachers.some(
     (teacher) => teacher.name === formData.lecturerName
@@ -268,11 +217,11 @@ useEffect(() => {
       setCourseDays(updatedDays);
     }
   };
-
+//שמירה של ערכית נושא
   const handleSave = () => {
     const teacherId = teachers.find(teacher => teacher.name.includes(formData.lecturerName)).userId;
     console.log(teacherId)
-    onSubmit({ ...formData,teacherId:teacherId });// צריך ליצור לימים פונקציה נפרדת
+    onSubmit({ ...formData,teacherId:teacherId });
     setMainSaved(true);
   };
 
@@ -514,46 +463,7 @@ useEffect(() => {
 </Box>
         </Box>
 
-        {/* דיאלוג האישור למחיקת מפגשים עתידיים */}
-{/* <Dialog
-  open={showConfirmDialog}
-  onClose={() => setShowConfirmDialog(false)}
-  aria-labelledby="confirm-dialog-title"
-  aria-describedby="confirm-dialog-description"
->
-  <DialogContent>
-    <Typography id="confirm-dialog-description" sx={{ mb: 2 }}>
-      לנושא קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס, מפגשים אלו ימחקו. האם להמשיך בשמירה?
-    </Typography>
-    <Box display="flex" justifyContent="flex-end" gap={1}>
-      <Button
-        variant="outlined"
-        onClick={() => setShowConfirmDialog(false)}
-      >
-        ביטול
-      </Button>
-      <Button
-        variant="contained"
-        onClick={async () => {
-          if (!pendingUpdateData) return;
-          const updateWithForce = { ...pendingUpdateData, ForceUpdate: true };
-          try {
-            await updateTopic(updateWithForce);  // פה קוראים לפונקציית הקריאה ל-API
-            setShowConfirmDialog(false);
-            setMainSaved(true);
-            onSubmit(updateWithForce);
-          } catch (error) {
-            console.error("שגיאה בשמירת עדכון עם ForceUpdate:", error);
-          }
-        }}
-      >
-        אישור
-      </Button>
-    </Box>
-  </DialogContent>
-</Dialog> */}
-
-
+      
         <Box
           sx={{
             backgroundColor: "#FFFFFF",

@@ -127,29 +127,20 @@ const handleDialogSubmit = async (formData) => {
         return;
     }
 
-    // יצירת אובייקט הנושא המעודכן לשליחה ל-Redux ולבקאנד
-    // שימי לב: השתמשתי ב-selectedTopic.topicId מכיוון שזהו השם הנפוץ,
-    // אך בקוד שלך הוא מופיע לפעמים כ-TopicId (עם T גדולה). וודאי שאת משתמשת בשם הנכון.
     const topicToUpdate = {
-        // שמירה על ה-ID המקורי של הנושא (חשוב לעדכון בבקאנד וב-Redux)
         topicId: selectedTopic.topicId || selectedTopic.TopicId, // שימוש בשני המקרים
         courseId: selectedTopic.courseId || courseId, // שמירה על ה-courseId המקורי
-        
         name: formData.topic, // שם הנושא
         teacherId:formData.teacherId,
         teacherName: formData.lecturerName,
         startDate: formData.startDate,
         endDate: formData.endDate,
         numberOfMeetings:Number (formData.numberOfMeetings),
-        
-        // עדכון שדות הציוד
         computers: formData.equipment.computers,
         microphone: formData.equipment.microphone,
         projector: formData.equipment.projector,
-        
         statusId: statusMap[formData.status], // המרת הסטטוס מהלייבל הטקסטואלי ל-ID
-        // אם יש לך courseDays ב-formData, תוכלי להוסיף אותם כאן:
-        // courseDays: formData.courseDays, 
+  
     };
    
 
@@ -158,8 +149,6 @@ const handleDialogSubmit = async (formData) => {
         console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
        dispatch(fetchAllTopicForCourseByCourseId(selectedTopic.courseId));
 
-    // setDialogOpen(false);
-    // setSelectedTopic(null); // איפוס ה-selectedTopic לאחר השמירה
 };
 
   const handleConfirmUpdate = async () =>{

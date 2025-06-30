@@ -44,7 +44,6 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
   const currentYear = new Date().getFullYear();
-
   const [wasModified, setWasModified] = useState(false);
 
   useEffect(() => {
@@ -171,7 +170,6 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
           onClick={() => {
             setFilters(initialState);
             dispatch(fetchCoordinators());
-            // intentionally NOT resetting wasModified
           }}
         >
           ניקוי
@@ -180,7 +178,6 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
           variant="contained"
           sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
           startIcon={<SearchIcon />}
-          //disabled={isSearchDisabled}
           onClick={() => {
             onSearch();
           }}

@@ -19,7 +19,6 @@ import {
   setPageSize,
 } from "../features/course/courseSlice";
 import CourseGrid from "../components/CourseGrid";
-import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import api from "../utils/api";
@@ -57,7 +56,6 @@ const CoursesPage = () => {
   };
 
   const [filters, setFilters] = useState(initialState);
-  const [openDialog, setOpenDialog] = useState(false);
   const currentPage = useSelector(selectCurrentPage);
   const pageSize = useSelector(selectPageSize);
   const totalCount = useSelector(selectTotalCount);
@@ -128,7 +126,6 @@ const CoursesPage = () => {
 
     dispatch(setCurrentPage(1));
     await dispatch(fetchFilteredPaginatedCourses(params));
-    // setFilters(initialState);
   };
 
 
@@ -137,11 +134,6 @@ const CoursesPage = () => {
     dispatch(setPageSize(newPageSize));
   };
 
-  const handleAddCourse = (newCourseData) => {
-    console.log("קורס חדש:", newCourseData);
-    // כאן תוכל להוסיף קריאה ל־API בעתיד
-    setOpenDialog(false);
-  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -186,7 +178,6 @@ const CoursesPage = () => {
             sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
 
             startIcon={<AddCircleOutlineIcon />}
-            onClick={() => setOpenDialog(true)}
           >
             הוספת קורס
           </Button>
@@ -229,12 +220,6 @@ const CoursesPage = () => {
         pageSize={pageSize}
         onPageChange={changePage}
         onPageSizeChange={handlePageSizeChange}
-      />
-
-      <TopicDialog
-        open={openDialog}
-        onClose={() => setOpenDialog(false)}
-        onSubmit={handleAddCourse}
       />
     </Container>
   );
