@@ -8,6 +8,7 @@ import daysForCourseReducer from './daysForCourse/daysForCourseSlice';
 import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
 import statusCourseReducer from '../features/statusCourse/statusCourseSlice';
+import dayReducer from '../features/day/daySlice'
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     daysForCourse: daysForCourseReducer, //Slice of daysForCourse
     topic:topicReducer,
     statusCourse: statusCourseReducer,
+    day: dayReducer,
   },
 });
 

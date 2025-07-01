@@ -46,8 +46,16 @@ const courseSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
+            .addCase(addCourseAction.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(addCourseAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.courses.push(action.payload);
+      })
+      .addCase(addCourseAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
       })
       .addCase(updateCourseAction.fulfilled, (state, action) => {
         const index = state.courses.findIndex((course) => course.id === action.payload.id);

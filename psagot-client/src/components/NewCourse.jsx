@@ -3,21 +3,36 @@ import { React,  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
 import { fetchCourseStatuses } from "../features/statusCourse/statusCourseActions";
-import circlePlus from '../assets/icons/circle-plus.png';
+import Plus from '../assets/icons/circle-plus-black.png';
+import { fetchAllDays } from '../features/day/dayActions';
+import { addDaysForCourseAction } from '../features/daysForCourse/daysForCourseActions';
+import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useNavigate } from "react-router-dom";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import dayjs from "dayjs";
+
+
 
 const NewCourse = () => {
   const dispatch = useDispatch();
   const {statuses, status, error} = useSelector((state) => state.statusCourse);
-    const [daysToAdd, setDaysToAdd] = useState([
-  { day: '', time: '', isScheduled: false }
-]);
-  
+  const { days } = useSelector((state) => state.day);
+  const [daysToAdd, setDaysToAdd] = useState([
+    { day: '', time: '', isScheduled: false }]);
+  const navigate = useNavigate();
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { status: courseSaveStatus, error: courseSaveError } = useSelector((state) => state.course);
+
+
+
   const [formData, setFormData] = useState({
     courseName: '',
     coordinatorName: '',
     courseCode: '',
-    startDate: '',
-    endDate: '',
+    startDate: null,
+    endDate: null,
     year: '',
     meetingsCount: '',
     studentsCount: '',
@@ -25,6 +40,7 @@ const NewCourse = () => {
     status: '',
     color: '#ffffff',
   });
+  
 
   const handleChange = (e) => {
     console.log(e.target, e)
@@ -35,14 +51,25 @@ const NewCourse = () => {
   }));
 };
 
+const handleCancel = () => {
+  navigate('/courses');
+};
+
+const handleCloseSnackbar = (_, reason) => {
+  if (reason === 'clickaway') return;
+  setOpenSnackbar(false);
+};
+
+
+
   const handleSubmit = () => {
     console.log("formData.status:", formData.status);
       const dtoToSend = {
         Name: formData.courseName,
         Year: parseInt(formData.year),
         Color: formData.color,
-        StartDate: formData.startDate, // לוודא שהוא בפורמט yyyy-MM-dd
-        EndDate: formData.endDate || null,
+        StartDate: formData.startDate ? formData.startDate.format('YYYY-MM-DD') : null,
+        EndDate: formData.endDate ? formData.endDate.format('YYYY-MM-DD') : null,
         NumberOfMeetings: formData.meetingsCount ? parseInt(formData.meetingsCount) : null,
         NumberOfStudents: parseInt(formData.studentsCount),
         Notes: formData.notes || null,
@@ -58,22 +85,37 @@ const NewCourse = () => {
   setDaysToAdd(updatedDays);
 };
 const handleSchedule = () => {
-  const courseId = 123; // או מזהות שתחזירי מהקורס לאחר השמירה
+   const courseId = 123; // צריך לקבל מהקורס השמור או מסטייט
+
   const payload = daysToAdd.map((day) => ({
-    courseId: courseId, // או מתוך סטייט
+    courseId,
     dayName: day.day,
     time: day.time,
     isScheduled: day.isScheduled,
   }));
-  
+
   console.log("Days to send:", payload);
 
-  //dispatch(addDaysForCourseAction(payload))// במידה ואת שומרת דרך Redux
+  payload.forEach((dayForCourse) => {
+    dispatch(addDaysForCourseAction(dayForCourse));
+  });
 };
 const handleAddDay = () => {
   setDaysToAdd((prev) => [...prev, { day: '', time: '', isScheduled: false }]);
 };
 
+useEffect(() => {
+  if (courseSaveStatus === 'succeeded') {
+    setOpenSnackbar(true);
+    const timer = setTimeout(() => {
+      navigate('/courses');
+    }, 3000);
+     return () => clearTimeout(timer);
+  }
+  if (courseSaveStatus === 'failed') {
+    alert(`אירעה שגיאה בעת שמירת הקורס: ${courseSaveError}`);
+  }
+}, [courseSaveStatus, courseSaveError, navigate]);
 
 
   useEffect(() => {
@@ -82,6 +124,10 @@ const handleAddDay = () => {
      }
      console.log("statuses", statuses);
   },[dispatch, status, statuses]);
+
+  useEffect(() => {
+  dispatch(fetchAllDays());
+}, [dispatch]);
   
   
   return (
@@ -110,7 +156,7 @@ const handleAddDay = () => {
         >
           <Button
           variant="outlined"
-          onClick={() => {/* למשל: navigate(-1) */}}
+         onClick={handleCancel}
           sx={{
             height: '44px',
             padding: '0px 24px',
@@ -197,31 +243,47 @@ const handleAddDay = () => {
             InputLabelProps={{ sx: { right: 0 } }}
             sx={{ width: '200px' }}
           />
-          <Box sx={{ mr: 2 }}>
-            <TextField
-              name="startDate"
+         
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+             <Box sx={{ mr: 2 }}>
+            <DatePicker
+             // name="startDate"
               label="תאריך התחלה"
               variant="standard"
               value={formData.startDate}
-              onChange={handleChange}
-              InputLabelProps={{ sx: { right: 0 } }}
-              sx={{ width: '200px' }}
-              inputProps={{ dir: "rtl", pattern: "\\d{4}-\\d{2}-\\d{2}"}}
+              onChange={(newValue) =>
+        setFormData((prev) => ({ ...prev, startDate: newValue }))
+      }
+              slotProps={{
+        textField: {
+          variant: 'standard',
+          sx: { width: '200px' },
+          InputLabelProps: { sx: { right: 0 } },
+        }
+      }}
             />
           </Box>
-          <Box sx={{ mr: 4 }}>
-            <TextField
-              name="endDate"
+            <Box sx={{ mr: 4 }}>
+            <DatePicker
+              //name="endDate"
               label="תאריך סיום"
-              type="text"
+             // type="text"
               variant="standard"
               value={formData.endDate}
-              onChange={handleChange}
-              InputLabelProps={{ sx: { right: 0 } }}
-              sx={{ width: '200px' }}
-              inputProps={{ dir: "rtl", pattern: "\\d{4}-\\d{2}-\\d{2}" }}
+                onChange={(newValue) =>
+        setFormData((prev) => ({ ...prev, endDate: newValue }))
+      }
+              slotProps={{
+        textField: {
+          variant: 'standard',
+          sx: { width: '200px' },
+          InputLabelProps: { sx: { right: 0 } },
+        }
+      }}
             />
           </Box>
+
+          </LocalizationProvider>
         </Stack>
      {  /* Third Row */}
         <Stack direction="row" justifyContent="flex-end" alignItems="center">
@@ -344,6 +406,7 @@ const handleAddDay = () => {
       </Paper>
 <Paper
   elevation={0}
+  dir="rtl"
   sx={{
     display: 'flex',
     width: '70rem',
@@ -400,7 +463,9 @@ const handleAddDay = () => {
   </Box>
 
   {/* שורת השדות: יום, שעה, שיבוץ תקין */}
+ {daysToAdd.map((item, index) => (
   <Box
+    key={index}
     sx={{
       display: 'flex',
       justifyContent: 'flex-start',
@@ -409,45 +474,68 @@ const handleAddDay = () => {
       width: '100%',
     }}
   >
-    {/* יום */}
+    {/* יום מתוך days מהשרת */}
     <TextField
       select
       variant="standard"
-      fullWidth
-      InputProps={{ disableUnderline: true }}
+      label= 'יום'
+      value={item.day}
+      onChange={(e) => handleDayChange(index, 'day', e.target.value)}
+      InputLabelProps={{ sx: { right: 0 } }}  
       sx={{
         width: '12.5rem',
         borderBottom: '1px solid #C6C6C6',
-      }}
-    />
+        '& .MuiSelect-icon': { left: 0, right: 'auto', },
+      }}            
+    >
+      <MenuItem value="">בחר יום</MenuItem>
+      {days?.map((day) => (
+        <MenuItem key={day.dayId} value={day.name}>
+          {day.name}
+        </MenuItem>
+      ))}
+    </TextField>
 
-    {/* שעת סיום */}
-    <TextField
-      type="time"
-      variant="standard"
-      fullWidth
-      InputProps={{ disableUnderline: true }}
-      sx={{
-        width: '12.5rem',
-        borderBottom: '1px solid #C6C6C6',
-      }}
-    />
+    {/* שעה */}
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <TimePicker
+    label="שעה"
+    value={item.time ? dayjs(item.time, 'HH:mm') : null}
+    onChange={(newValue) =>
+      handleDayChange(index, 'time', newValue ? newValue.format('HH:mm') : '')
+    }
+    ampm={false}
+    slotProps={{
+      textField: {
+        variant: 'standard',
+        sx: { width: '12.5rem' },
+        InputLabelProps: { sx: { right: 0 } },
+        inputProps: { dir: 'rtl', style: { textAlign: 'right' } },
+      },
+    }}
+  />
+</LocalizationProvider>
+ 
 
     {/* שיבוץ תקין */}
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
       <Typography variant="body2">שיבוץ תקין</Typography>
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        checked={item.isScheduled}
+        onChange={(e) => handleDayChange(index, 'isScheduled', e)}
+      />
     </Box>
   </Box>
+))}
+
 
   {/* כפתור הוספת יום */}
-  <Box sx={{ alignSelf: 'flex-start', mt: 1 }}>
+  <Box sx={{ mt: 1, height: '1.25rem'}}>
     <Button
     onClick={handleAddDay}
       sx={{
        display: 'flex',
-       width: '5 rem',
-       height: '1.25rem',
        padding: '0rem 0.25rem',
        justifyContent: 'flex-end',
        alignItems: 'center',
@@ -459,17 +547,17 @@ const handleAddDay = () => {
       }}
     >
       <img
-        src={circlePlus}
+        src={Plus}
         alt="אייקון הוספת יום"
-        style={{ width: '5vw', height: '8vh' }}
+        style={{ width: '12wv', height: '12hv' }}
       />
       <Typography
         sx={{
           fontFamily: 'Rubik',
-          fontZize: '0.875rem',
+          fontSize: '0.875rem',
           fontStyle: 'normal',
           fontWeight: 400,
-          lineHight: 'normal',
+          lineHeight: 'normal',
           textTransform: 'capitalize',
           color: 'var(--Neutral-80, #393939)',
         }}
@@ -479,6 +567,17 @@ const handleAddDay = () => {
     </Button>
   </Box>
 </Paper>
+<Snackbar
+  open={openSnackbar}
+  autoHideDuration={3000}
+  onClose={handleCloseSnackbar}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+>
+  <MuiAlert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }} elevation={6} variant="filled">
+    שמירת פרטי הקורס הסתיימה בהצלחה
+  </MuiAlert>
+</Snackbar>
+
 
     </Box>
  );   
