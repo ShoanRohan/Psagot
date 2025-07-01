@@ -95,6 +95,7 @@ const CoursesPage = () => {
 
     <Button
       variant="contained"
+      onClick={() => navigate('/newCourse')}
       sx={{
         width: "152px",
         height: "40px",

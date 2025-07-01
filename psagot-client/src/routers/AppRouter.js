@@ -30,6 +30,7 @@ const AppRouter = () => {
         <Route path="cours/:id" element={<CoursPage />} />
         <Route path="user" element={<UserManagement />} />
         <Route path="courses" element={<CoursesPage />} />
+        <Route path="/newCourse" element={<AddCoursePage/>}/>
       </Route>
 
       {/* כל כתובת שלא קיימת */}
