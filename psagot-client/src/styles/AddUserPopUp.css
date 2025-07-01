@@ -1,0 +1,76 @@
+.modal-container {
+  max-width: 600px;
+  width: 90%;
+  padding: 20px;
+  border-radius: 8px;
+  background: white;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.custom-input label {
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.custom-input input,
+.custom-input select,
+.custom-input textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.custom-input input:focus,
+.custom-input select:focus,
+.custom-input textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.error-message {
+  font-size: 12px;
+  color: red;
+  margin-top: 2px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-button {
+  min-width: 90px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 4px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}

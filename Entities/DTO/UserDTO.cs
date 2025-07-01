@@ -20,12 +20,10 @@ namespace Entities.DTO
 
         public int UserTypeId { get; set; }
         
-        public string UserTypeName { get; set; } = null!;
+        public string? UserTypeName { get; set; } = null!;
 
         public bool IsActive { get; set; }
 
         public string? Role { get; set; }
-
-
     }
 }
