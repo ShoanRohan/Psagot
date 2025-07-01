@@ -26,7 +26,6 @@ const AddAndUpdateUserPopUp = ({ open = false, onClose = () => {}, user, onSave,
 
 const currentUser = useSelector((state) => state.auth.user);
 const isAdmin = currentUser?.UserTypeName === 'מנהל';
-//const editingManager = user?.userTypeName === 'מנהל';
 const isEditingOther = currentUser?.userId !== user?.userId;
 const canEditPermission = isAdmin && !isEditingOther;
 
@@ -46,9 +45,6 @@ const canEditPermission = isAdmin && !isEditingOther;
             .matches(/[A-Z]/, "הסיסמה חייבת לכלול לפחות אות גדולה אחת")
             .matches(/[0-9]/, "הסיסמה חייבת לכלול לפחות מספר אחד")
             .required("שדה חובה"),
-          // confirmPassword: Yup.string()
-          //   .oneOf([Yup.ref("password"), null], "הסיסמאות אינן תואמות")
-          //   .required("יש לאמת את הסיסמה"),
         }),
     status: Yup.string().required("שדה חובה"),
     permission: Yup.string().required("שדה חובה"),
@@ -64,7 +60,6 @@ const canEditPermission = isAdmin && !isEditingOther;
         ? {}
         : {
             password: "",
-            //confirmPassword: "",
           }),
       isActive: user?.isActive ?? false,
       userTypeId: user?.userTypeId ?? -1,
@@ -143,19 +138,6 @@ const canEditPermission = isAdmin && !isEditingOther;
                     error={formik.touched.password && Boolean(formik.errors.password)}
                     helperText={formik.touched.password && formik.errors.password}
                     fullWidth
-                  />
-                 <TextField
-                    // className="custom-input"
-                    // label="אימות סיסמה"
-                    // name="confirmPassword"
-                    // type="password"
-                    // variant="standard"
-                    // value={formik.values.confirmPassword}
-                    // onChange={formik.handleChange}
-                    // onBlur={formik.handleBlur}
-                    // error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                    // helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                    // fullWidth
                   />
                 </>
               )}
