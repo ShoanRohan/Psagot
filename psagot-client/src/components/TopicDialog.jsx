@@ -13,7 +13,8 @@ import { addScheduleForTopic } from '../utils/scheduleForTopicUtil';
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTeachers } from "../features/user/userAction";
 import { fetchAllStatuses } from "../features/status/statusActions";
-import { updateTopic } from "../utils/topicUtil";
+import { getAllScheduleForTopicByTopicId } from "../utils/scheduleForTopicUtil";
+
 
 const sharedStyles = {
   width: "150px",
@@ -99,6 +100,8 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const { teachers} = useSelector(state => state.user)
   const [isEditingMain, setIsEditingMain] = useState(false);
   const statuses = useSelector((state) => state.status.coursesStatuses);
+  const [originalCourseDays, setOriginalCourseDays] = useState([]);
+  const [originalDayData, setOriginalDayData] = useState(null);
 
 
   const [formData, setFormData] = useState({
@@ -134,7 +137,9 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
           projector: initialData?.projector || false,
         },
         status: initialData?.statusName || ""
+        
       });
+      
     } else {
       setFormData({
         topicId: "",
@@ -169,7 +174,26 @@ useEffect(() => {
   dispatch(fetchAllStatuses());
 }, [dispatch]);
 
+useEffect(() => {
+  const fetchDaysForTopic = async () => {
+    if (!initialData?.topicId) return;
 
+    try {
+      const response = await getAllScheduleForTopicByTopicId(initialData.topicId);
+      const days = response.map(day => ({
+        day: day.dayName, // או day.dayId
+        startHour: day.startHour,
+        endHour: day.endHour,
+        saved: true
+      }));
+      setCourseDays(originalCourseDays);
+    } catch (error) {
+      console.error("שגיאה בטעינת ימים לנושא:", error);
+    }
+  };
+
+  fetchDaysForTopic();
+}, [initialData]);
 
   const isLecturerValid = teachers.some(
     (teacher) => teacher.name === formData.lecturerName
@@ -211,12 +235,16 @@ useEffect(() => {
   };
 
   const handleDeleteDay = (index) => {
-    if (courseDays.length > 1) {
-      const updatedDays = [...courseDays];
+    const updatedDays = [...courseDays];
+    if (updatedDays.length > 1) {
       updatedDays.splice(index, 1);
-      setCourseDays(updatedDays);
+    } else {
+      // אם זו השורה האחרונה - אפס אותה
+      updatedDays[0] = { day: "", startHour: "", endHour: "", saved: false };
     }
+    setCourseDays(updatedDays);
   };
+  
 //שמירה של ערכית נושא
   const handleSave = () => {
     const teacherId = teachers.find(teacher => teacher.name.includes(formData.lecturerName)).userId;
@@ -228,12 +256,21 @@ useEffect(() => {
 
   
   const handleEditDay = (index) => {
-    setEditingDayIndex(index);
-  };
+  const dayCopy = JSON.parse(JSON.stringify(courseDays[index])); // deep copy
+  setOriginalDayData(dayCopy);
+  setEditingDayIndex(index);
+};
+
+const handleCancelEditDay = () => {
+  if (originalDayData !== null && editingDayIndex !== null) {
+    const updatedDays = [...courseDays];
+    updatedDays[editingDayIndex] = originalDayData; // מחזיר את המצב הקודם רק ליום הזה
+    setCourseDays(updatedDays);
+  }
+  setEditingDayIndex(null);
+  setOriginalDayData(null);
+};
   
-  const handleCancelEditDay = () => {
-    setEditingDayIndex(null);
-  };
 
   const handleSaveDay = async (index) => {
     const updatedDays = [...courseDays];
@@ -256,6 +293,19 @@ useEffect(() => {
 
     }
   };
+
+  useEffect(() => {
+    if (initialData?.schedule) {
+      const loadedDays = initialData.schedule.map(day => ({
+        day: day.day,
+        startHour: day.startHour,
+        endHour: day.endHour,
+        saved: true
+      }));
+      setCourseDays(loadedDays);
+      setOriginalCourseDays(loadedDays);
+    }
+  }, [initialData]);
 
   return (
     <Dialog
@@ -317,7 +367,7 @@ useEffect(() => {
   <Box display="flex" gap={1}>
     {isEditingMain ? (
       <>
-        <Button onClick={() => { setIsEditingMain(false); onClose(); }} variant="outlined" sx={cancelButtonStyle}>
+        <Button onClick={() => { setIsEditingMain(false); }} variant="outlined" sx={cancelButtonStyle}>
           ביטול
         </Button>
         <Button
@@ -370,6 +420,11 @@ useEffect(() => {
       value={formData.lecturerName}
       onChange={handleChange}
       disabled={!isEditingMain} // הוסף disabled
+      sx={{
+        ...sharedStyles,
+        height: "32px", // או "36px" אם זה מתאים יותר לעיצוב שלך
+        mt: "8px", // מרווח מלמעלה ליישור טוב יותר
+      }}
     >
       {teachers?.map((teacher) => (
         <MenuItem key={teacher.Id} value={teacher.name}>
