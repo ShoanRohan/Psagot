@@ -1,10 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from './meetingActions';
+import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById,fetchMeetingByDate } from './meetingActions';
 
 const initialState = {
   meetings: [],
   meeting: null,
   status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
+  meetingsSchedule: [],
+  isLoadingSchedule: false,
+  scheduleError: null,
+  selectedDateRange: { from: null, to: null },
   error: null,
 };
 
@@ -60,7 +64,22 @@ const meetingSlice = createSlice({
             .addCase(fetchMeetingById.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            });
+            })
+
+        .addCase(fetchMeetingByDate.pending, (state) => {
+            state.isLoadingSchedule = true;
+            state.scheduleError = null;
+        })
+        .addCase(fetchMeetingByDate.fulfilled, (state, action) => {
+            state.isLoadingSchedule = false;
+            state.meetingsSchedule = action.payload;
+            state.selectedDateRange.to = action.meta.arg.to;
+            state.selectedDateRange.from = action.meta.arg.from;
+        })
+        .addCase(fetchMeetingByDate.rejected, (state, action) => {
+            state.isLoadingSchedule = false;
+            state.scheduleError = action.payload || action.error.message;
+        });
     },
 });
 

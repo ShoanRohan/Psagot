@@ -1,5 +1,8 @@
-import React, { useEffect, useRef,useState  } from 'react';
-import { Box, useMediaQuery, useTheme,IconButton, Modal, Button, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Box, useMediaQuery, useTheme, IconButton,
+  Modal, Button, Typography
+} from '@mui/material';
 import FullCalendar from "@fullcalendar/react";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -7,7 +10,6 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllRooms, fetchRoomsScheduleByDate } from '../features/room/roomActions';
-
 
 export default function RoomsScheduleGrid() {
   const dispatch = useDispatch();
@@ -22,10 +24,8 @@ export default function RoomsScheduleGrid() {
 
   const [openError, setOpenError] = useState(false);
 
-
   const formatDate = (date) => {
-    if (!date)
-      return '2025-02-02';
+    if (!date) return '2025-02-02';
     const parts = date.split('/');
     if (parts.length !== 3) return '2025-02-02';
     const [day, month, year] = parts;
@@ -41,22 +41,17 @@ export default function RoomsScheduleGrid() {
     if (roomsStatus === 'idle') {
       dispatch(fetchAllRooms());
     }
-
     if (roomsStatus === 'failed') {
       setOpenError(true);
     }
   }, [status, roomsStatus, dispatch, displayDate]);
-
 
   const allRooms = rooms.map(({ name }) => ({
     id: name?.trim(),
     title: name,
   }));
 
-  const visibleRooms = allRooms.slice(
-    currentPage * roomsPerPage,
-    (currentPage + 1) * roomsPerPage
-  );
+  const visibleRooms = allRooms.slice(currentPage * roomsPerPage, (currentPage + 1) * roomsPerPage);
 
   const events = roomSchedule
     .filter(event => visibleRooms.some(room => room.id === event.roomName?.trim()))
@@ -111,40 +106,27 @@ export default function RoomsScheduleGrid() {
     }
   };
 
-  useEffect(() => {
-    const calendarApi = calendarRef.current?.getApi();
-    if (calendarApi) {
-      calendarApi.setOption('resources', visibleRooms);
-      calendarApi.refetchEvents();
-      calendarApi.gotoDate(formattedDate);
-    }
-  }, [currentPage, visibleRooms, formattedDate]);
-
   const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
+
   return (
     <>
-      <Modal
-        open={openError}
-        onClose={() => setOpenError(false)}
+      <Modal open={openError} onClose={() => setOpenError(false)}
         aria-labelledby="modal-error-title"
         aria-describedby="modal-error-description"
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        }}
-      >
-        <Box
-          sx={{
-            bgcolor: 'background.paper',
-            boxShadow: 24,
-            p: 4,
-            outline: 'none',
-            borderRadius: 2,
-            width: 300,
-            textAlign: 'center',
-          }}
-        >
+        }}>
+        <Box sx={{
+          bgcolor: 'background.paper',
+          boxShadow: 24,
+          p: 4,
+          outline: 'none',
+          borderRadius: 2,
+          width: 300,
+          textAlign: 'center',
+        }}>
           <Typography id="modal-error-title" variant="h6" component="h2" gutterBottom>
             שגיאה
           </Typography>
@@ -158,14 +140,21 @@ export default function RoomsScheduleGrid() {
         </Box>
       </Modal>
 
-      <Box
-
-        sx={{
-          //הגדרות כלליות לטבלה
-          position: 'absolute',
-          top: 130,
-          right: 350,
-          width: '1480px',
+      {/* מרכז את הטבלה בדף */}
+      <Box sx={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+      }}>
+        <Box sx={{
+          width: '90vw',
+          maxWidth: '1480px',
+          // height: '90vh',
+          overflow: 'auto',
+          mr:-4,
           padding: "10px",
           borderRadius: "7px",
           boxShadow: [
@@ -174,52 +163,38 @@ export default function RoomsScheduleGrid() {
             "0 2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
             "0 -2px 5px rgba(0.1, 0.1, 0.1, 0.1)",
           ],
-          height: 'fit-content',
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
 
-          //הורדת גבול עליון ושמאלי לטבלה
-          "& table": {
-            border: 'none !important',
-          },
-          //הגדרות על שורת החדרים
+          "& table": { border: 'none !important' },
           "& th": {
             borderTop: 'none !important',
             borderRight: 'none !important',
             borderBottom: '1px solid #ddd !important',
             textAlign: 'center',
           },
-          //גבול מסביב לשעות
-          "& td": {
-            border: 'none !important',
-          },
-          //שורות הטבלה
+          "& td": { border: 'none !important' },
           "& .fc-timegrid-slot": {
             borderBottom: '1px solid #eee !important',
           },
-          //עמודות הטבלה
           "& .fc-timegrid-col": {
             borderLeft: '1px solid #eee !important',
           },
-          //גבול שמאלי לשעות
           "& .fc-timegrid-col:first-child": {
             borderLeft: 'none !important',
           },
-          //גבול שמאלי לשעות
           "& .fc-timegrid-slot:first-child": {
             borderLeft: 'none !important',
           },
-          //הגדרות לטור השעות
           "& .fc-timegrid-axis-cushion, & .fc-timegrid-slot-label-cushion": {
             padding: "10px 15px",
             borderBottom: "2px solid #ddd",
             fontFamily: "Rubik",
             fontSize: '16px',
-            color: "var(--Neutral-80, #393939)",
+            color: "#393939",
           },
-          //הגדרות לשורת החדרים
           "& .fc-col-header-cell": {
             backgroundColor: "#F6F7F9",
             borderBottom: "2px solid #ddd",
@@ -228,9 +203,8 @@ export default function RoomsScheduleGrid() {
             textAlign: "center",
             whiteSpace: "nowrap",
             height: "58px",
-            color: "var(--Neutral-80, #393939)",
+            color: "#393939",
           },
-          //אירועים eventהגדרות ל
           "& .fc-event": {
             width: "100%",
             borderRadius: "15px",
@@ -244,57 +218,50 @@ export default function RoomsScheduleGrid() {
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)",
             color: "black",
           },
-        }}
-      >
-        <IconButton onClick={handlePrevRooms} disabled={currentPage === 0} sx={{ mr: 1, p: 2 }}>
-          <ArrowForwardIosIcon />
-        </IconButton>
+        }}>
+          <IconButton onClick={handlePrevRooms} disabled={currentPage === 0} sx={{ mr: 1, p: 2 }}>
+            <ArrowForwardIosIcon />
+          </IconButton>
 
-        <Box sx={{ flexGrow: 1, overflowX: 'hidden' }}>
-
-          {status === 'succeeded' && events.length === 0 && (
-            <Box
-              sx={{
-                marginTop: 0,
-                padding: 0,
+          <Box sx={{ flexGrow: 1, overflowX: 'hidden' }}>
+            {status === 'succeeded' && events.length === 0 && (
+              <Box sx={{
                 backgroundColor: 'rgba(133, 179, 248, 0.52)',
                 color: '#2172EB',
                 fontWeight: 'bold',
                 textAlign: 'center',
                 borderRadius: 1,
-              }}
-            >
-              אין מפגשים בתאריך הנבחר.
-            </Box>
-          )}
+              }}>
+                אין מפגשים בתאריך הנבחר.
+              </Box>
+            )}
+            <FullCalendar
+              ref={calendarRef}
+              eventContent={renderEventContent}
+              eventDidMount={handleEventDidMount}
+              plugins={[resourceTimeGridPlugin, interactionPlugin]}
+              initialView="resourceTimeGridDay"
+              initialDate={formattedDate}
+              slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
+              headerToolbar={false}
+              slotMinTime="08:00:00"
+              slotMaxTime="22:00:00"
+              contentHeight="auto"
+              expandRows={true}
+              slotEventOverlap={false}
+              allDaySlot={false}
+              slotDuration="01:00"
+              resources={visibleRooms}
+              events={events}
+              locale="he"
+              direction="rtl"
+            />
+          </Box>
 
-
-          <FullCalendar
-            ref={calendarRef}
-            eventContent={renderEventContent}
-            eventDidMount={handleEventDidMount}
-            plugins={[resourceTimeGridPlugin, interactionPlugin]}
-            initialView="resourceTimeGridDay"
-            initialDate={formattedDate}
-            slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
-            headerToolbar={false}
-            slotMinTime="08:00:00"
-            slotMaxTime="22:00:00"
-            contentHeight="auto"
-            expandRows={true}
-            slotEventOverlap={false}
-            allDaySlot={false}
-            slotDuration="01:00"
-            resources={visibleRooms}
-            events={events}
-            locale="he"
-            direction="rtl"
-          />
+          <IconButton onClick={handleNextRooms} disabled={currentPage >= maxPage} sx={{ ml: 1, p: 2 }}>
+            <ArrowBackIosIcon />
+          </IconButton>
         </Box>
-
-        <IconButton onClick={handleNextRooms} disabled={currentPage >= maxPage} sx={{ ml: 1, p: 2 }}>
-          <ArrowBackIosIcon />
-        </IconButton>
       </Box>
     </>
   );
