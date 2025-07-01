@@ -15,6 +15,8 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { useNavigate } from "react-router-dom";
+
 
 const CourseGrid = ({ courses }) => {
   const dispatch = useDispatch();
@@ -26,19 +28,24 @@ const CourseGrid = ({ courses }) => {
   });
 
   useEffect(() => {
-    if (courses && courses.length > 0) {
-      const filtered = courses.map(course => ({
-        ...course,
-        isActive: course.statusId === 1,
-      }));
-      setRows(filtered);
-    } else {
-      setRows([]);
-    }
-  }, [courses]);
+  if (courses && courses.length > 0) {
+    const filtered = courses.map(course => ({
+      ...course,
+      isActive: course.statusId === 1,
+      coordinatorName: course.coordinator?.name || '',
+    }));
+    console.log('Mapped courses with coordinatorName:', filtered);
+    setRows(filtered);
+  } else {
+    setRows([]);
+  }
+}, [courses]);
+
+
+const navigate = useNavigate();
 
   const handleEditClick = (id) => () => {
-
+    navigate(`/cours/${id}`);
   };
 
   const formatDayMonthFromParts = (params) => {
@@ -48,11 +55,10 @@ const CourseGrid = ({ courses }) => {
     if (!day || !month) return '';
     return `${day}/${month}`;
   };
-
   const columns = [
     { field: 'courseId', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'name', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-    { field: 'coordinator', headerName: 'שם רכזת', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
+    { field: 'coordinatorName', headerName: 'שם רכזת', flex: 1, headerAlign: 'center', align: 'center' , },
     { field: 'year', headerName: 'שנה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, editable: true, headerAlign: 'center', align: 'center', valueFormatter: formatDayMonthFromParts },
     { field: 'endDate', headerName: 'תאריך סיום', flex: 1, editable: true, headerAlign: 'center', align: 'center', valueFormatter: formatDayMonthFromParts },

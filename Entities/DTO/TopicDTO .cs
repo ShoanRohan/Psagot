@@ -17,15 +17,19 @@ namespace Entities.DTO
 
         public int TeacherId { get; set; }
 
+        public string? TeacherName { get; set; }
+
         public DateOnly StartDate { get; set; }
 
         public DateOnly? EndDate { get; set; }
 
         public int? NumberOfMeetings { get; set; }
+        public int MeetingsCount { get; set; } 
 
         public bool Computers { get; set; }
 
         public bool Projector { get; set; }
+        public bool HasSchedule { get; set; } 
 
         public bool Microphone { get; set; }
         public int? StatusId { get; set; }

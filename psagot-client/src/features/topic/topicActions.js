@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getAllTopics, getTopicById, addTopic, updateTopic, deleteTopic, getAllTopicsForCourseByCourseId } from '../../utils/topicUtil';
-
+import { filterTopics as filterTopicsApi } from '../../utils/topicUtil';
 // getting all topics
 export const fetchAllTopic = createAsyncThunk('topic/fetchAllTopic', async () => {
   const data = await getAllTopics();
@@ -36,3 +36,12 @@ export const fetchAllTopicFotCourseByCourseId = createAsyncThunk('topic/fetchAll
     const data = await getAllTopicsForCourseByCourseId(CourseId);
     return data;
   });
+
+  export const filterTopics = createAsyncThunk('Topics/filterTopics', async (filters, { rejectWithValue }) => {
+  try {
+    const data = await filterTopicsApi(filters);
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || 'שגיאה בסינון הנושאים');
+  }
+});

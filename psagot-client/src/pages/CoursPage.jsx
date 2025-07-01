@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Tabs, Tab } from "@mui/material";
 import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם למיקום הקובץ אצלך
-
+import TopicsGrid from "../components/TopicsGrid";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllTopic } from "../features/topic/topicActions";
+import TopicSearch from "../components/TopicSearch";
 const CoursPage = () => { 
   const [tabValue, setTabValue] = useState(0);
+
+ const dispatch = useDispatch();
+ const topics = useSelector((state) => state.topic.topics);
+
+  useEffect(() => {
+     dispatch(fetchAllTopic());
+   }, [dispatch]);
 
   const selectedCourse = {
     id: 1,
@@ -13,7 +23,7 @@ const CoursPage = () => {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
-
+ 
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
       {/* שורת כותרת עם שם הקורס והכפתורים */}
@@ -74,7 +84,10 @@ const CoursPage = () => {
       <Box sx={{ mt: 2 }}>
         {tabValue === 0 && <CourseDetails />}
         {tabValue === 1 && (
-          <Typography variant="body1">כאן יהיו נושאי הקורס</Typography>
+          <>
+           <TopicSearch  />
+          <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse.id)} />
+          </>
         )}
       </Box>
     </Box>
