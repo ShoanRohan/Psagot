@@ -1,215 +1,40 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
-import {
-  DataGrid,
-  GridRowModes,
-  GridActionsCellItem,
-} from "@mui/x-data-grid";
-import SaveIcon from "@mui/icons-material/Save";
-import CancelIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import editIcon from "../assets/icons/editIcon.png";
-import Pagination from "@mui/material/Pagination";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import Stack from "@mui/material/Stack";
-import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from '../pages/HomePage';
+import Layout from '../pages/Layout';
+import CoursesPage from '../pages/CoursesPage';
+import Login from '../components/Login';
+import Register from '../components/Register';
+import LoginPage from '../pages/LoginPage';
+import UserManagement from '../pages/UserManagement';
+import CoursPage from '../pages/CoursPage';
+import RegisterPage from '../pages/RegisterPage';
 
-const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
-  const dispatch = useDispatch();
-  const [rows, setRows] = useState([]);
-  const [rowModesModel, setRowModesModel] = useState({});
-  const [paginationModel, setPaginationModel] = useState({ pageSize: 10, page: 0 });
-
-  useEffect(() => {
-    if (topics && topics.length > 0) {
-      setRows(topics);
-    } else {
-      setRows([]);
-    }
-  }, [topics]);
-
-  const formatDate = (params) => {
-    const dateStr = typeof params === 'string' ? params : params?.value;
-    if (!dateStr || typeof dateStr !== 'string') return '';
-    const [year, month, day] = dateStr.split('-');
-    return `${day}/${month}`;
-  };
-
-  const handleDelete = (id) => async () => {
-    const confirmed = window.confirm("לנושא זה משובצים מפגשים, במחיקת הנושא המפגשים ימחקו גם. האם להמשיך?");
-    if (!confirmed) return;
-    try {
-      await onDeleteTopic(id);
-      alert("נושא נמחק בהצלחה");
-    } catch (error) {
-      alert("מחיקת נושא נכשלה: " + error.message);
-    }
-  };
-
-  const columns = [
-    { field: 'topicId', headerName: 'קוד נושא', flex: 1, headerAlign: 'center', align: 'center' },
-    { field: 'name', headerName: 'שם נושא', flex: 1, headerAlign: 'center', align: 'center' },
-    { field: 'teacherName', headerName: 'שם מורה', flex: 1, headerAlign: 'center', align: 'center' },
-    { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatDate },
-    { field: 'endDate', headerName: 'תאריך סיום', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatDate },
-    { field: 'meetingsCount', headerName: 'מס מפגשים', flex: 1, headerAlign: 'center', align: 'center' },
-    { field: 'equipment', headerName: 'ציוד', flex: 1, headerAlign: 'center', align: 'center' },
-    {
-      field: 'statusId',
-      headerName: 'סטטוס',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderHeader: () => (
-        <Box
-          component="span"
-          sx={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '4px',
-            fontWeight: 'bold',
-            fontFamily: 'Rubik',
-            fontSize: '0.7vw',
-            color: '#2A2A2A',
-          }}
-        >
-          סטטוס
-          <UnfoldMoreIcon sx={{ fontSize: '16px', color: '#2A2A2A' }} />
-        </Box>
-      ),
-      renderCell: (params) => {
-        const statusMap = {
-          1: { text: "פעיל", style: { background: '#DAF8E6', color: '#1A8245' } },
-          2: { text: "ממתין", style: { background: '#FEEBEB', color: '#B00020' } },
-          3: { text: "הסתיים", style: { background: '#E5E7EB80', color: '#374151' } },
-        };
-        const currentStatus = statusMap[params.value] || { text: "לא ידוע", style: {} };
-        return (
-          <div style={{
-            width: '72px',
-            height: '24px',
-            padding: '4px 16px',
-            borderRadius: '50px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            fontSize: '0.65vw',
-            fontFamily: 'Rubik',
-            fontWeight: 400,
-            cursor: 'default',
-            ...currentStatus.style
-          }}>
-            {currentStatus.text}
-          </div>
-        );
-      }
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: '',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-        const actions = isInEditMode ? [
-          <GridActionsCellItem icon={<SaveIcon />} label="Save" />,
-          <GridActionsCellItem icon={<CancelIcon />} label="Cancel" />,
-        ] : [
-          <GridActionsCellItem icon={<img src={editIcon} alt='עריכה' />} label="Edit" onClick={() => onEditTopic(id)} />,
-        ];
-        if (canEdit) {
-          actions.push(<GridActionsCellItem icon={<DeleteIcon />} label="Delete" onClick={handleDelete(id)} />);
-        }
-        return actions;
-      }
-    }
-  ];
-
-  const CustomPagination = () => {
-    const pageCount = Math.ceil(rows.length / paginationModel.pageSize);
-    return (
-      <Box
-        sx={{
-          borderRadius: "8px",
-          background: "#FFF",
-          boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
-          display: "flex",
-          padding: "1% 0.5%",
-          alignItems: "center",
-          alignSelf: "stretch",
-          marginTop: "1%",
-          width: "96%",
-        }}>
-        <Stack direction="row" alignItems="center" sx={{ minWidth: 'fit-content', flexWrap: 'nowrap' }}>
-          <Box component="span" sx={{ fontSize: "0.75vw", fontFamily: "Rubik", whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', marginLeft: '16px' }}>
-            מספר שורות :
-          </Box>
-          <Select
-            size="small"
-            dir="ltr"
-            value={paginationModel.pageSize}
-            onChange={(e) => setPaginationModel({ page: 0, pageSize: e.target.value })}
-            variant="standard"
-            disableUnderline
-            IconComponent={UnfoldMoreIcon}
-            sx={{ height: '28px', minWidth: '37%', borderRadius: '4px', border: '0.5px solid #F0F1F3', fontSize: '0.7vw', fontFamily: 'Rubik', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              '& .MuiSelect-select': { padding: '2px 8px 0 8px', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' },
-              '& .MuiSelect-icon': { top: '50%', transform: 'translateY(-50%)', right: '8px', width: '18px', height: '18px' } }}>
-            {[10, 20, 50].map((size) => (
-              <MenuItem key={size} value={size} sx={{ fontSize: '0.75vw', paddingTop: '4px' }}>{size}</MenuItem>
-            ))}
-          </Select>
-        </Stack>
-        <Box sx={{ flexGrow: 1 }} />
-        <Pagination
-          dir="ltr"
-          count={pageCount}
-          page={paginationModel.page + 1}
-          onChange={(e, value) => setPaginationModel((prev) => ({ ...prev, page: value - 1 }))}
-          shape="rounded"
-          siblingCount={0}
-          size="small"
-          sx={{ '& .MuiPaginationItem-root': { backgroundColor: 'transparent', fontSize: '0.75vw' }, '& .Mui-selected': { backgroundColor: '#F6F7F9 !important', border: '0.5px solid #F0F1F3', borderRadius: '3px', fontSize: '0.75vw' }, '& .MuiPaginationItem-previousNext': { border: '0.5px solid #F0F1F3', borderRadius: '3px', fontSize: '0.75vw' } }}
-        />
-      </Box>
-    );
-  };
-
+const AppRouter = () => {
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ direction: 'rtl', height: "60%", width: 'calc(100% - 48px)', display: 'flex', flexDirection: 'column', alignItems: 'center', alignSelf: 'stretch', padding: "0.2% 1% 2% 2%", borderRadius: '10px', backgroundColor: "#FFF", boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)', position: 'absolute', top: '29%', zIndex: 1, boxSizing: 'border-box', overflow: 'hidden', border: "none" }}>
-        <Box sx={{ flexGrow: 1, width: '100%', position: 'relative', height: '100%', overflow: 'auto', '&::-webkit-scrollbar': { width: '8px' }, '&::-webkit-scrollbar-thumb': { Color: '#326DEF', borderRadius: '8px' }, '&::-webkit-scrollbar-track': { backgroundColor: '#f0f0f0' } }}>
-          <DataGrid
-            sx={{
-              "& .MuiDataGrid-columnHeader": { display: "grid", placeItems: "center", textAlign: "center" },
-              "& .MuiDataGrid-footerContainer": { borderTop: "none" },
-              "& .MuiDataGrid-columnHeaderTitle": { fontWeight: "bold", textAlign: "center", justifyContent: "center", display: "flex", fontFamily: "Rubik", fontSize: "0.7vw", color: "#2A2A2A" },
-              "& .MuiDataGrid-columnSeparator": { display: "none" },
-              "& .MuiDataGrid-cell": { whiteSpace: "normal", display: "flex", justifyContent: "center", alignItems: "center", textAlign: "center", padding: "1.5% 1%", fontSize: "0.7vw", fontFamily: "Rubik", border: "none", outline: "none" },
-              "& .MuiDataGrid-row": { display: "flex", width: "100%", height: "auto", padding: "0.3% 0 0.3% 0.3%", justifyContent: "space-between", alignItems: "center", background: "#FFFFFF", "&:nth-of-type(even)": { backgroundColor: "#FAFCFF" }, "&:nth-of-type(odd)": { backgroundColor: "#FFFFFF" } }
-            }}
-            rows={rows}
-            columns={columns}
-            getRowId={(row) => row.topicId}
-            pagination
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 20, 50]}
-            hideFooter
-          />
-        </Box>
-      </Box>
-      <Box sx={{ position: "absolute", bottom: "2.5%", width: "100%", display: "flex", justifyContent: "center", alignItems: "center", left: "0.02%" }}>
-        <CustomPagination />
-      </Box>
-    </Box>
+    <Routes>
+      {/* עמוד התחברות */}
+      <Route path="/" element={<LoginPage />}>
+        <Route index element={<Login />} />
+      </Route>
+
+      {/* עמוד הרשמה */}
+      <Route path="/register" element={<RegisterPage />}>
+        <Route index element={<Register />} />
+      </Route>
+
+      {/* עמודים אחרי התחברות – תחת Layout */}
+      <Route path="/" element={<Layout />}>
+        <Route path="home" element={<HomePage />} />
+        <Route path="cours/:id" element={<CoursPage />} />
+        <Route path="user" element={<UserManagement />} />
+        <Route path="courses" element={<CoursesPage />} />
+      </Route>
+
+      {/* כל כתובת שלא קיימת */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 
-export default TopicsGrid;
+export default AppRouter;

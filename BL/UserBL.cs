@@ -50,14 +50,17 @@ namespace BL
         }
         public async Task<UserDTO> UserLoginAsync(string email, string password)
         {
-            var user = await _userDL.UserLoginAsync(email, password);
+            var user = await _userDL.GetUserByEmail(email);
 
-            if (user != null && BCrypt.Net.BCrypt.Verify(password, user.Password))
-            {
-                return _mapper.Map<UserDTO>(user);
-            }
-            return null;
+            if (user == null)
+                throw new Exception("EMAIL_NOT_FOUND");
+
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
+                throw new Exception("WRONG_PASSWORD");
+
+            return _mapper.Map<UserDTO>(user);
         }
+
 
         public async Task<(UserDTO User, string ErrorMessage)> GetUserById(int id)
         {
@@ -79,6 +82,12 @@ namespace BL
         {
             return await _userDL.GetUserNamesByUserTypeId(userTypeId);
         }
+        public async Task<bool> DoesEmailExistAsync(string email)
+        {
+            var user = await _userDL.GetUserByEmail(email);
+            return user != null;
+        }
+
 
     }
 }
