@@ -15,51 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { addUserAction, loginAction } from "../features/user/userAction";
 import { useDispatch } from "react-redux";
 
-// const fakeUserService = {
-//     existingEmails: ["test@example.com", "user@domain.com"],  
-//     existingPhones: ["0501234567", "0529876543"],
-
-//     checkEmailExists(email) {
-//         return this.existingEmails.includes(email);
-//     },
-
-//     checkPhoneExists(phone) {
-//         return this.existingPhones.includes(phone);
-//     },
-
-    // saveUser(user) {
-    //     return new Promise((resolve, reject) => {
-    //         setTimeout(() => {
-    //             if (this.checkEmailExists(user.email)) {
-    //                 reject("המייל כבר קיים במערכת");
-    //             } else if (this.checkPhoneExists(user.phone)) {
-    //                 reject("מספר הטלפון כבר קיים במערכת");
-    //             } else {
-    //                 this.existingEmails.push(user.email);
-    //                 this.existingPhones.push(user.phone);
-    //                 resolve("המשתמש נשמר בהצלחה");
-    //             }
-    //         }, 1000);
-    //     });
-    // },
-
-//     login(email, password) {
-//         return new Promise((resolve, reject) => {
-//             setTimeout(() => {
-//                 if (email === "user@example.com" && password === "password123") {
-//                     resolve({ id: 1, name: "User Example", email });
-//                 } else {
-//                     reject("אימייל או סיסמה שגויים");
-//                 }
-//             }, 1000);
-//         });
-//     },
-
-//     saveUserSession(user) {
-//         localStorage.setItem("user", JSON.stringify(user));
-//     },
-// };
-
 const getPasswordStrength = (password) => {
     let score = 0;
     if (!password) return { label: "", color: "" };
@@ -105,7 +60,7 @@ const LoginRegister = () => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const navigate = useNavigate();
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         validateForm();
@@ -158,27 +113,28 @@ const LoginRegister = () => {
         setShowConfirmPassword(!showConfirmPassword);
     };
 
-    const login = () => {
+    const login = async () => {
         setLoading(true);
-        dispatch(loginAction({email:formData.email,password: formData.password}))
-        // fakeUserService
-        //     .login(formData.email, formData.password)
-        //     .then((user) => {
-        //         fakeUserService.saveUserSession(user);
-        //         showAlert("התחברת בהצלחה!", "success");
-        //         setTimeout(() => {
-                navigate("/");
-        //         }, 1500);
-            // })
-            // .catch((err) => {
-            //     showAlert(err, "error");
-            // })
-            // .finally(() => {
-            //     setLoading(false);
-            // });
+
+        try {
+            const resultAction = await dispatch(loginAction({
+                email: formData.email,
+                password: formData.password
+            }));
+
+            if (loginAction.fulfilled.match(resultAction)) {
+                navigate("/courses");
+            } else {
+                showAlert("התחברות נכשלה, אנא בדוק את הפרטים ונסה שוב.");
+            }
+        } catch (error) {
+            showAlert("אירעה שגיאה, אנא נסה שוב מאוחר יותר.");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    const register = () => {
+    const register = async () => {
         if (!isFormValid) return;
 
         const newUser = {
@@ -191,21 +147,19 @@ const LoginRegister = () => {
         };
 
         setLoading(true);
-        dispatch(addUserAction(newUser))
-        // fakeUserService
-        //     .saveUser(newUser)
-        //     .then((msg) => {
-        //         showAlert(msg, "success");
-        //         setTimeout(() => {
-                    navigate("/");
-        //         }, 1500);
-        //     })
-        //     .catch((err) => {
-        //         showAlert(err, "error");
-        //     })
-        //     .finally(() => {
-        //         setLoading(false);
-        //     });
+
+        try {
+            const resultAction = await dispatch(addUserAction(newUser));
+            if (addUserAction.fulfilled.match(resultAction)) {
+                navigate("/courses");
+            } else {
+                showAlert("הרשמה נכשלה, אנא נסה שוב.");
+            }
+        } catch (error) {
+            showAlert("אירעה שגיאה, אנא נסה שוב מאוחר יותר.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleSubmit = () => {
@@ -253,27 +207,27 @@ const LoginRegister = () => {
                     mx: "auto",
                 }}
             >
-                 <Box
-                sx={{
-                    width: "20vw", // 10%  רוחב לוגו 
-                    height: "10vh",
-                    backgroundImage: 'url(/assets/logo.svg)',
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "contain",
-                    backgroundPosition: "center",
-                    // backgroundColor: "rgb(252, 252, 254)
-                    flexShrink: 0,
-                }}
-            />
+                <Box
+                    sx={{
+                        width: "20vw", // 10%  רוחב לוגו 
+                        height: "10vh",
+                        backgroundImage: 'url(/assets/logo.svg)',
+                        backgroundRepeat: "no-repeat",
+                        backgroundSize: "contain",
+                        backgroundPosition: "center",
+                        // backgroundColor: "rgb(252, 252, 254)
+                        flexShrink: 0,
+                    }}
+                />
                 <Typography variant="h5" >
                     {mode === "login" ? " התחברות למערכת" : "הרשמה למערכת"}
-                    
+
                 </Typography>
-                
+
 
                 {mode === "register" && (
                     <>
-                       
+
                         <TextField
                             label="שם מלא"
                             variant="standard"
@@ -282,29 +236,30 @@ const LoginRegister = () => {
                             error={!!errors.name}
                             helperText={errors.name}
                             fullWidth
-                            inputProps={{ dir: "rtl" , sx: { color: "primary.main", textAlign: "right" } }}
+                            inputProps={{ dir: "rtl", sx: { color: "primary.main", textAlign: "right" } }}
                             InputLabelProps={{
-    style: {
-      right: 0,
-      left: "auto",
-      direction: "rtl",
-      textAlign: "right",
-    color:"blue"
-    },
-  }}
-                            FormHelperTextProps={{ sx: { 
-    color: errors.email ? "error.main" : "primary.main",
-    textAlign: "right",
-    pr: 0.5,
-  }
-}}
+                                style: {
+                                    right: 0,
+                                    left: "auto",
+                                    direction: "rtl",
+                                    textAlign: "right",
+                                    color: "blue"
+                                },
+                            }}
+                            FormHelperTextProps={{
+                                sx: {
+                                    color: errors.email ? "error.main" : "primary.main",
+                                    textAlign: "right",
+                                    pr: 0.5,
+                                }
+                            }}
 
                             sx={{
-                                
-  "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
-  "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
-  "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
-}}
+
+                                "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
+                                "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
+                                "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
+                            }}
 
                         />
                         <TextField
@@ -316,23 +271,23 @@ const LoginRegister = () => {
                             helperText={errors.phone}
                             fullWidth
                             inputProps={{ dir: "rtl" }}
-                            FormHelperTextProps={{ sx: { color: "primary.main", textAlign:"right" } }}
+                            FormHelperTextProps={{ sx: { color: "primary.main", textAlign: "right" } }}
                             InputLabelProps={{
-    style: {
-      right: 0,
-      left: "auto",
-      direction: "rtl",
-      textAlign: "right",
-      color: "primary.main"
-      
-    },
-  }}
+                                style: {
+                                    right: 0,
+                                    left: "auto",
+                                    direction: "rtl",
+                                    textAlign: "right",
+                                    color: "primary.main"
+
+                                },
+                            }}
                             sx={{
-                                
-  "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
-  "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
-  "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
-}}
+
+                                "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
+                                "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
+                                "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
+                            }}
 
                         />
                     </>
@@ -347,21 +302,21 @@ const LoginRegister = () => {
                     helperText={errors.email}
                     fullWidth
                     inputProps={{ dir: "rtl" }}
-                    FormHelperTextProps={{ sx: { color: "primary.main"  ,textAlign:"right"} }}
+                    FormHelperTextProps={{ sx: { color: "primary.main", textAlign: "right" } }}
                     InputLabelProps={{
-    style: {
-      right: 0,
-      left: "auto",
-      direction: "rtl",
-      textAlign: "right",
-    },
-  }}
+                        style: {
+                            right: 0,
+                            left: "auto",
+                            direction: "rtl",
+                            textAlign: "right",
+                        },
+                    }}
                     sx={{
-                        
-  "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
-  "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
-  "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
-}}
+
+                        "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
+                        "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
+                        "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
+                    }}
 
                 />
 
@@ -376,36 +331,36 @@ const LoginRegister = () => {
                     fullWidth
                     inputProps={{ dir: "rtl" }}
                     InputLabelProps={{
-    style: {
-      right: 0,
-      left: "auto",
-      direction: "rtl",
-      textAlign: "right",
-    },
-  }}
- 
-   
-            
-                     FormHelperTextProps={{
-    sx: {
-      color: errors.password ? "error.main" : "primary.main",
-      textAlign: "right",
-      pr: 0.5,
-    }
-}}
-    sx={{
-        
-    "& .MuiInput-underline:before": {
-      borderBottomColor: "primary.main",
-    },
-    "& .MuiInput-underline:hover:before": {
-      borderBottomColor: "primary.dark",
-    },
-    "& .MuiInput-underline:after": {
-      borderBottomColor: "primary.main",
-    },
-  
-  }}
+                        style: {
+                            right: 0,
+                            left: "auto",
+                            direction: "rtl",
+                            textAlign: "right",
+                        },
+                    }}
+
+
+
+                    FormHelperTextProps={{
+                        sx: {
+                            color: errors.password ? "error.main" : "primary.main",
+                            textAlign: "right",
+                            pr: 0.5,
+                        }
+                    }}
+                    sx={{
+
+                        "& .MuiInput-underline:before": {
+                            borderBottomColor: "primary.main",
+                        },
+                        "& .MuiInput-underline:hover:before": {
+                            borderBottomColor: "primary.dark",
+                        },
+                        "& .MuiInput-underline:after": {
+                            borderBottomColor: "primary.main",
+                        },
+
+                    }}
                     InputProps={{
                         endAdornment: (
                             <InputAdornment position="end" sx={{ ml: 1 }}>
@@ -419,8 +374,8 @@ const LoginRegister = () => {
                             </InputAdornment>
                         ),
                     }}
-                       
-            
+
+
                 />
                 {mode === "register" && formData.password && (
                     <Typography
@@ -443,14 +398,14 @@ const LoginRegister = () => {
                         fullWidth
                         inputProps={{ dir: "rtl" }}
                         InputLabelProps={{
-    style: {
-      right: 0,
-      left: "auto",
-      direction: "rtl",
-      textAlign: "right",
-    },
-  }}
-                        FormHelperTextProps={{ sx: { color: "primary.main", textAlign:"right" } }}
+                            style: {
+                                right: 0,
+                                left: "auto",
+                                direction: "rtl",
+                                textAlign: "right",
+                            },
+                        }}
+                        FormHelperTextProps={{ sx: { color: "primary.main", textAlign: "right" } }}
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position="end" sx={{ ml: 1 }}>
@@ -465,10 +420,10 @@ const LoginRegister = () => {
                             ),
                         }}
                         sx={{
-  "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
-  "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
-  "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
-}}
+                            "& .MuiInput-underline:before": { borderBottomColor: "primary.main" },
+                            "& .MuiInput-underline:hover:before": { borderBottomColor: "primary.dark" },
+                            "& .MuiInput-underline:after": { borderBottomColor: "primary.main" },
+                        }}
 
                     />
                 )}
