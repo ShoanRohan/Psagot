@@ -22,10 +22,10 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher.Name))
             .ReverseMap();
         CreateMap<Course, CourseDTO>().ForMember(dest => dest.StatusName, opt => opt.MapFrom(src => src.Status.Name))
-            .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name));
-        CreateMap<CourseDTO, Course>();
+                    .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name)).ReverseMap();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
         CreateMap<StatusTopic, StatusTopicDTO>().ReverseMap();
+
 
         CreateMap<Meeting, EventDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MeetingId))

@@ -19,7 +19,8 @@ namespace DL
         Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
         Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers();
         Task<User> UserLoginAsync(string email, string password);
-        //Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
+        Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
+        Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
         Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers();
     }
 }

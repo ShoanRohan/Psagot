@@ -132,13 +132,13 @@ namespace Psagot.Controllers
 
         }
 
-        //[HttpGet("GetAllCoordinators")]
-        //public async Task<IActionResult> GetAllCoordinators()
-        //{
-        //    var (users, errorMessage) = await _userBL.GetAllCoordinators();
-        //    if (users == null) return BadRequest(errorMessage);
-        //    return Ok(users);
-        //}
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (users == null) return BadRequest(errorMessage);
+            return Ok(users);
+        }
 
         [HttpGet("GetCoordinatorsAndLecturers")]
         public async Task<IActionResult> GetCoordinatorsAndLecturers()
@@ -148,5 +148,13 @@ namespace Psagot.Controllers
             return Ok(users);
         }
 
+        [HttpGet("GetUsersByPage")]
+        public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok( new{users, countUsers });
+        }
     }
 }
