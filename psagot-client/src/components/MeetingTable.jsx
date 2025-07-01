@@ -119,23 +119,29 @@ const MeetingTable = React.memo(({ onEdit }) => {
   }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
   // Render functions for table cells
-  const renderStatusChip = useCallback((row) => (
+const renderStatusChip = useCallback((row) => {
+  const meetingDate = new Date(row.meetingDate);
+  const isActive = meetingDate >= new Date();
+
+  return (
     <Chip
-      label={row.isPartOfSchedule ? 'פעיל' : 'הסתיים'}
+      label={isActive ? 'פעיל' : 'הסתיים'}
       sx={{
         width: 97,
         height: 39,
         borderRadius: '68.31px',
-        backgroundColor: row.isPartOfSchedule ? '#DAF8E6' : '#E5E7EB80',
-        color: row.isPartOfSchedule ? '#000' : '#666',
+        backgroundColor: isActive ? '#DAF8E6' : '#E5E7EB80',
+        color: isActive ? '#000' : '#666',
         fontSize: 14,
         fontWeight: 500,
         '&:hover': {
-          backgroundColor: row.isPartOfSchedule ? '#DAF8E6' : '#E5E7EB80',
+          backgroundColor: isActive ? '#DAF8E6' : '#E5E7EB80',
         },
       }}
     />
-  ), []);
+  );
+}, []);
+
 
   const renderValidChip = useCallback((row) => (
     <Typography
@@ -285,12 +291,12 @@ const MeetingTable = React.memo(({ onEdit }) => {
       <Box
         sx={{
           position: 'relative',
-          top: -24,
+          top: -70,
           marginBottom: -10,
           textAlign: 'right',
           backgroundColor: 'transparent',
           zIndex: 10,
-          paddingBottom: 15,
+          paddingBottom: 4,
           paddingRight: 20,
         }}
       >

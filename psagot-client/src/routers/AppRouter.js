@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CoursesPage from '../pages/CoursesPage';
@@ -9,15 +9,7 @@ import MeetingPage from '../pages/MeetingPage';
 import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
-    const navigate = useNavigate(); 
-
-    // Handle navigation to edit meeting
-   const handleEditMeeting = (meeting) => {
-    // Navigate with meeting ID and optionally pass meeting data via state
-    navigate(`/edit-meeting/${meeting.meetingId}`, { 
-      state: { meeting } 
-    });
-  };
+   
 
     return (         
         <Routes>
@@ -30,7 +22,7 @@ const AppRouter = () => {
                 <Route path="courses" element={<CoursesPage />} />
                  <Route 
         path="/meetings" 
-        element={<MeetingPage onEdit={handleEditMeeting} />} 
+        element={<MeetingPage  />} 
       />
       <Route 
         path="/edit-meeting/:meetingId" 
