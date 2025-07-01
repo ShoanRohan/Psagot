@@ -2,17 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById, deleteMeetingAction } from './meetingActions';
 
 const initialState = {
-  meetings: [],
-  meeting: null,
-  status: 'idle',
-  error: null,
-  isLoading: false,
+    meetings: [],
+    meeting: null,
+    status: 'idle',
+    error: null,
+    isLoading: false,
 };
 
 const meetingSlice = createSlice({
     name: 'meeting',
     initialState,
-    reducers: { 
+    reducers: {
         clearError: (state) => {
             state.error = null;
         },
@@ -42,7 +42,7 @@ const meetingSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload || action.error.message;
             })
-            
+
             // Update Meeting
             .addCase(updateMeetingAction.pending, (state) => {
                 state.status = "loading";
@@ -67,26 +67,26 @@ const meetingSlice = createSlice({
                 state.error = action.payload || action.error.message;
                 state.error = action.error.message;
             })
-            
+
             // Add Meeting
             .addCase(addMeetingAction.pending, (state) => {
                 state.status = "loading";
                 state.isLoading = true;
                 state.error = null;
             })
-             .addCase(addMeetingAction.fulfilled, (state, action) => {
+            .addCase(addMeetingAction.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.isLoading = false;
                 state.meetings.push(action.payload);
                 state.error = null;
             })
-              .addCase(addMeetingAction.rejected, (state, action) => {
+            .addCase(addMeetingAction.rejected, (state, action) => {
                 state.status = 'failed';
                 state.isLoading = false;
                 state.error = action.payload || action.error.message;
             })
 
-            
+
             // Fetch Meeting By ID
             .addCase(fetchMeetingById.pending, (state) => {
                 state.status = 'loading';
@@ -105,7 +105,7 @@ const meetingSlice = createSlice({
                 state.error = action.payload || action.error.message;
                 state.error = action.error.message;
             })
-            
+
             // Delete Meeting - מחזיר את כל המפגשים המעודכנים
             .addCase(deleteMeetingAction.pending, (state) => {
                 state.status = 'loading';
@@ -119,7 +119,7 @@ const meetingSlice = createSlice({
             .addCase(deleteMeetingAction.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
-            });  
+            });
     },
 });
 

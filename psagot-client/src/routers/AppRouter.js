@@ -10,48 +10,39 @@ import UserManagement from '../pages/UserManagement';
 import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
-    const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-    // Handle navigation to edit meeting
-   const handleEditMeeting = (meeting) => {
-    // Navigate with meeting ID and optionally pass meeting data via state
-    navigate(`/edit-meeting/${meeting.meetingId}`, { 
-      state: { meeting } 
+  // קישור ישיר לטופס עריכת המפגש, לפי ה ID שמוצג בטבלת המפגשים
+  const handleEditMeeting = (meeting) => {
+    navigate(`/edit-meeting/${meeting.meetingId}`, {
+      state: { meeting }
     });
   };
 
-    return (         
-        <Routes>
-            {/* Protected routes wrapped by Layout */}
-            <Route path="/" element={<Layout />}>
-                {/* Default route when accessing '/' */}
-                <Route index element={<HomePage />} />
-                
-                {/* Main application routes */}
-                <Route path="courses" element={<CoursesPage />} />
-                 <Route 
-        path="/meetings" 
-        element={<MeetingPage onEdit={handleEditMeeting} />} 
-      />
-      <Route 
-        path="/edit-meeting/:meetingId" 
-        element={<MeetingForm />} 
-      />
-      <Route 
-        path="/add-meeting" 
-        element={<MeetingForm />} 
-      />
-                
-                {/* Future routes - uncomment when ready */}
-                {/* <Route path="rooms" element={<RoomsPage />} /> */}
-                {/* <Route path="calendar" element={<CalendarPage />} /> */}
-            </Route>
+  return (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<HomePage />} />
+        <Route path="courses" element={<CoursesPage />} />
+        <Route
+          path="/meetings"
+          element={<MeetingPage onEdit={handleEditMeeting} />}
+        />
+        <Route
+          path="/edit-meeting/:meetingId"
+          element={<MeetingForm />}
+        />
+        <Route
+          path="/add-meeting"
+          element={<MeetingForm />}
+        />
 
-            {/* Standalone routes (authentication pages) */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-        </Routes>
-    );
+      </Route>
+
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+    </Routes>
+  );
 };
 
 export default AppRouter;

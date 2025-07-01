@@ -1,29 +1,29 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { 
-  getAllMeetings, 
-  getMeetingById,  // ודא שזה כתוב נכון ללא 'e' מיותרת
-  addMeeting, 
-  updateMeeting, 
-  deleteMeeting 
+import {
+  getAllMeetings,
+  getMeetingById,
+  addMeeting,
+  updateMeeting,
+  deleteMeeting
 } from '../../utils/meetingUtil';
 
-export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
-    const data = await getAllMeetings();
-    return data;
+export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async () => {
+  const data = await getAllMeetings();
+  return data;
 });
 
 export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", async (id) => {
-    const data = await getMeetingById(id); // ודא שזה כתוב נכון
-    return data;
+  const data = await getMeetingById(id); // ודא שזה כתוב נכון
+  return data;
 });
 
 
 export const addMeetingAction = createAsyncThunk(
-    "meeting/addMeetingAction",
-    async (addNewMeeting) => {
-        const data = await addMeeting(addNewMeeting);
-        return data;
-    }
+  "meeting/addMeetingAction",
+  async (addNewMeeting) => {
+    const data = await addMeeting(addNewMeeting);
+    return data;
+  }
 );
 
 export const updateMeetingAction = createAsyncThunk(
