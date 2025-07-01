@@ -8,18 +8,22 @@ import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
 import RegisterPage from '../pages/RegisterPage';
+import TopicDialog from '../components/TopicDialog';
 
 const AppRouter = () => {
     return (
         <Routes>
             {/* ניווט ברירת מחדל ישירות ל-login */}
             <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/TopicDialog/:id" element={<TopicDialog />} />
+
 
             {/* עמודי אפליקציה אחרי התחברות */}
             <Route path="/" element={<Layout />}>
                 <Route index element={<HomePage />} />
                 <Route path="/user" element={<UserManagement />} />
                 <Route path="/courses" element={<CoursesPage />} />
+
             </Route>
 
             {/* עמוד התחברות */}
