@@ -54,7 +54,6 @@ const CourseDetails = () => {
         setSubMessage(subMessage);
         setConfirmActionCallback(() => callback);
         setShowConfirmActionDialog(true);
-
     };
 
     const handleConfirmAction = () => {
@@ -156,12 +155,10 @@ const CourseDetails = () => {
         };
     }, [dispatch]);
 
-
     const saveChanges = async (e, confirmDelete = false) => {
-        e.preventDefault();
+        if (e && typeof e.preventDefault === 'function') { e.preventDefault(); }
         const { errors, isValid } = validateForm(formData);
         setFieldErrors(errors);
-
         if (!isValid) {
             handleShowResultDialog('שגיאה', 'יש לתקן את השדות המסומנים באדום לפני שמירה.');
             return;
@@ -189,7 +186,7 @@ const CourseDetails = () => {
                 dispatch(fetchCourseById(selectedCourse?.courseId));
             } else if (updateCourseAction.rejected.match(actionResult)) {
                 if (actionResult.payload && typeof actionResult.payload === 'object' && actionResult.payload.isConflict) {
-                    handleShowConfirmation('שמירת פרטי קורס', actionResult.payload.message, 'האם ברצונך לשמור בכל זאת?', () => saveChanges(null, true));
+                    handleShowConfirmation('שמירת פרטי קורס', 'לקורס קיימים מפגשים עתידיים, במקרה של שינוי הסטטוס מפגשים אלו ימחקו.','האם להמשיך בשמירה?', () => saveChanges(null, true));
                 } else {
                     handleShowResultDialog('שגיאה בשמירה', 'השמירה לא הצליחה. אנא נסה שוב.');
                 }
@@ -225,7 +222,7 @@ const CourseDetails = () => {
                 sx: {
                     '.MuiSelect-icon': { right: 'unset', left: '0px' },
                     '& .MuiSelect-select': {
-                        padding: '4.5px 2px !important',
+                        padding: '4.5px 2px !important', fontFamily: 'Rubik'
                     },
                 }, renderValue: displayValue || undefined,
             }} >

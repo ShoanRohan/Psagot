@@ -23,7 +23,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchAllScheduleForTopics.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedScheduleForTopic = action.payload;
+                state.scheduleForTopics = action.payload;
             })
             .addCase(fetchAllScheduleForTopics.rejected, (state, action) => {
                 state.status = 'failed';
@@ -34,7 +34,7 @@ const scheduleForTopicSlice = createSlice({
             })
             .addCase(fetchScheduleForTopicById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.scheduleForTopic = action.payload;
+                state.selectedScheduleForTopic = action.payload;
             })
             .addCase(fetchScheduleForTopicById.rejected, (state, action) => {
                 state.status = 'failed';

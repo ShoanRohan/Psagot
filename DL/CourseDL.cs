@@ -72,7 +72,7 @@ namespace DL
                 if (isStatusChangeFromActive)
                 {
                     var futureMeetings = await _context.Set<Meeting>()
-                                   .Where(m => m.CourseId == course.CourseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now.AddDays(-15)))
+                                   .Where(m => m.CourseId == course.CourseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
                                    .AsNoTracking()
                                    .ToListAsync();
 
@@ -114,8 +114,7 @@ namespace DL
             try
             {
                 var futureMeetings = await _context.Set<Meeting>()
-                                                   .Where(m => m.CourseId == courseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now.AddDays(-15)))
-                                                   /*DateOnly.FromDateTime(DateTime.Now))*/
+                                                   .Where(m => m.CourseId == courseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
                                                    .ToListAsync();
 
                 if (futureMeetings.Any())

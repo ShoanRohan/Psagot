@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import {
-  Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow,
-  Table, TableBody, Select, MenuItem, CircularProgress, Grid2
-} from '@mui/material';
+import { Box, Paper, IconButton, Pagination, Typography, TableContainer, TableHead, TableRow,
+  Table, TableBody, Select, MenuItem, CircularProgress, Grid2 } from '@mui/material';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import { format } from 'date-fns';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
@@ -32,7 +30,7 @@ const getStatusColors = (statusName) => {
   if (statusName === 'פעיל') return { bgcolor: '#DAF8E6', color: '#1A8245' };
   if (statusName === 'ממתין') return { bgcolor: '#FEEBEB', color: '#E10E0E' };
   if (statusName === 'מושהה') return { bgcolor: '#E5E7EB', color: '#494747' };
-  return { bgcolor: '#E5E7EB', color: '#494747' };
+  return { bgcolor: '#D1E0FF', color: '#1A3275' };
 };
 
 const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSizeChange }) => {
@@ -150,9 +148,9 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
                 borderColor: '#F0F1F3', p: '6px 10px', fontSize: '12px', ml: '8px',
                 '& .MuiSelect-select': { display: 'flex', justifyContent: 'center', textAlign: 'center' }
               }} >
-              <MenuItem value={1} sx={{ justifyContent: 'center' }}>10</MenuItem>
-              <MenuItem value={2} sx={{ justifyContent: 'center' }}>20</MenuItem>
-              <MenuItem value={5} sx={{ justifyContent: 'center' }}>50</MenuItem>
+              <MenuItem value={10} sx={{ justifyContent: 'center' }}>10</MenuItem>
+              <MenuItem value={20} sx={{ justifyContent: 'center' }}>20</MenuItem>
+              <MenuItem value={50} sx={{ justifyContent: 'center' }}>50</MenuItem>
             </Select>
             <Typography fontFamily="Rubik" fontSize="14px" sx={{ ml: 1 }} >:מספר שורות</Typography>
           </Grid2>
