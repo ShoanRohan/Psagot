@@ -10,9 +10,18 @@ import {
     Paper,
 } from '@mui/material';
 
-const CourseDetails = () => {
+const CourseDetails = ({ course, setCourse }) => {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 25 }, (_, i) => currentYear - 20 + i);
+
+    const handleChange = (field, value) => {
+        setCourse((prev) => ({
+            ...prev,
+            [field]: value,
+        }));
+    };
+
+    if (!course) return null; // למנוע קריסה לפני שהנתונים נטענו
 
     return (
         <Paper
@@ -37,25 +46,48 @@ const CourseDetails = () => {
 
                     {/* קבוצה 1 */}
                     <Box sx={{ display: 'flex', mb: 1, gap: 1 }}>
-                        {[
-                            'קוד קורס',
-                            'שם קורס',
-                            'שם רכזת',
-                        ].map((label, index) => (
-                            <TextField
-                                key={index}
-                                fullWidth
-                                label={label}
-                                variant="standard"
-                                inputProps={{
-                                    dir: 'rtl',
-                                    style: { textAlign: 'right', fontSize: '14px' },
-                                }}
-                                InputLabelProps={{
-                                    sx: { right: 0, left: 'unset', fontSize: '14px' },
-                                }}
-                            />
-                        ))}
+                        <TextField
+                            fullWidth
+                            label="קוד קורס"
+                            variant="standard"
+                            value={course.courseId || ''}
+                            InputProps={{ readOnly: true }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                            InputLabelProps={{
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="שם קורס"
+                            variant="standard"
+                            value={course.name || ''}
+                            onChange={(e) => handleChange('name', e.target.value)}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                            InputLabelProps={{
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="רכזת"
+                            variant="standard"
+                            value={course.coordinator?.name || ''}
+                            InputProps={{ readOnly: true }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                            InputLabelProps={{
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                        />
                     </Box>
 
                     {/* קבוצה 2 */}
@@ -65,7 +97,8 @@ const CourseDetails = () => {
                                 שנה
                             </InputLabel>
                             <Select
-                                defaultValue=""
+                                value={course.year || ''}
+                                onChange={(e) => handleChange('year', e.target.value)}
                                 inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
                                 sx={{
                                     textAlign: 'right',
@@ -80,49 +113,75 @@ const CourseDetails = () => {
                             </Select>
                         </FormControl>
 
-                        {[
-                            { label: 'תאריך התחלה', type: 'date' },
-                            { label: 'תאריך סיום', type: 'date' },
-                        ].map(({ label, type }, index) => (
-                            <TextField
-                                key={index}
-                                fullWidth
-                                label={label}
-                                variant="standard"
-                                type={type}
-                                InputLabelProps={{
-                                    shrink: true,
-                                    sx: { right: 0, left: 'unset', fontSize: '14px' },
-                                }}
-                                inputProps={{
-                                    dir: 'rtl',
-                                    style: { textAlign: 'right', fontSize: '14px' },
-                                }}
-                            />
-                        ))}
+                        <TextField
+                            fullWidth
+                            label="תאריך התחלה"
+                            variant="standard"
+                            type="date"
+                            value={course.startDate || ''}
+                            onChange={(e) => handleChange('startDate', e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                        />
+
+                        <TextField
+                            fullWidth
+                            label="תאריך סיום"
+                            variant="standard"
+                            type="date"
+                            value={course.endDate || ''}
+                            onChange={(e) => handleChange('endDate', e.target.value)}
+                            InputLabelProps={{
+                                shrink: true,
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                        />
                     </Box>
 
                     {/* קבוצה 3 */}
                     <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                        {[
-                            'מספר תלמידים',
-                            'מספר מפגשים',
-                        ].map((label, index) => (
-                            <TextField
-                                key={index}
-                                fullWidth
-                                label={label}
-                                variant="standard"
-                                sx={{ width: '30%' }}
-                                inputProps={{
-                                    dir: 'rtl',
-                                    style: { textAlign: 'right', fontSize: '14px' },
-                                }}
-                                InputLabelProps={{
-                                    sx: { right: 0, left: 'unset', fontSize: '14px' },
-                                }}
-                            />
-                        ))}
+                        <TextField
+                            fullWidth
+                            label="מספר תלמידים"
+                            variant="standard"
+                            type="number"
+                            value={course.numberOfStudents || ''}
+                            onChange={(e) => handleChange('numberOfStudents', e.target.value)}
+                            sx={{ width: '30%' }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                            InputLabelProps={{
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            label="מספר מפגשים"
+                            variant="standard"
+                            type="number"
+                            value={course.numberOfMeetings || ''}
+                            onChange={(e) => handleChange('numberOfMeetings', e.target.value)}
+                            sx={{ width: '30%' }}
+                            inputProps={{
+                                dir: 'rtl',
+                                style: { textAlign: 'right', fontSize: '14px' },
+                            }}
+                            InputLabelProps={{
+                                sx: { right: 0, left: 'unset', fontSize: '14px' },
+                            }}
+                        />
                     </Box>
 
                     {/* קבוצה 4 */}
@@ -133,6 +192,8 @@ const CourseDetails = () => {
                             minRows={2}
                             label="הערות"
                             variant="standard"
+                            value={course.notes || ''}
+                            onChange={(e) => handleChange('notes', e.target.value)}
                             sx={{ width: '60%' }}
                             inputProps={{
                                 dir: 'rtl',
@@ -153,14 +214,13 @@ const CourseDetails = () => {
                                     right: 0,
                                     left: 'unset',
                                     fontSize: '14px',
-                                    width: '150px',
-                                    height: '45px',
                                 }}
                             >
                                 סטטוס
                             </InputLabel>
                             <Select
-                                defaultValue=""
+                                value={course.statusId || ''}
+                                onChange={(e) => handleChange('statusId', e.target.value)}
                                 inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
                                 sx={{
                                     textAlign: 'right',
@@ -170,8 +230,8 @@ const CourseDetails = () => {
                                     },
                                 }}
                             >
-                                <MenuItem value="active">פעיל</MenuItem>
-                                <MenuItem value="inactive">לא פעיל</MenuItem>
+                                <MenuItem value={1}>פעיל</MenuItem>
+                                <MenuItem value={2}>לא פעיל</MenuItem>
                             </Select>
                         </FormControl>
 
@@ -186,7 +246,8 @@ const CourseDetails = () => {
                             <Typography sx={{ fontSize: '14px' }}>צבע לטבלה</Typography>
                             <input
                                 type="color"
-                                defaultValue="#000000"
+                                value={course.color || '#000000'}
+                                onChange={(e) => handleChange('color', e.target.value)}
                                 style={{
                                     border: 'none',
                                     width: '30px',
