@@ -596,13 +596,11 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         successMessage += `\nשיבוץ לא תקין: ${formData.reason}`;
       }
 
-      // Show success dialog
+      // הצגת הודעה בעת שמירת המפגש
       showDialog(
         'success',
         'שמירת מפגש',
         successMessage,
-        //'שמירה בוצעה בהצלחה', 
-        //isEditMode ? 'המפגש עודכן בהצלחה!' : 'המפגש נוסף בהצלחה למערכת!',
         false,
         () => {
           closeDialog();
@@ -712,39 +710,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
   };
 
-  // סגנון מותאם לדיאלוג בהתאם לדרישות העיצוב
-  const dialogBoxStyle = {
-    '& .MuiDialog-paper': {
-      width: '564px',
-      borderRadius: '10px',
-      border: '1px solid #C6C6C6',
-      padding: '40px',
-      gap: '24px',
-      backgroundColor: '#FFFFFF',
-      position: 'absolute',
-      top: '384px',
-      left: '601px'
-    }
-  };
-
-  const dialogContentStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '484px',
-    height: 'auto',
-    gap: '8px',
-    textAlign: 'center'
-  };
-
-  const dialogActionsStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '484px',
-    height: '136px',
-    gap: '32px',
-    justifyContent: 'center',
-    padding: 0
-  };
 
   return (
     <>
