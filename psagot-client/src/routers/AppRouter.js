@@ -6,6 +6,7 @@ import CalendarPage from '../pages/CalendarPage';
 import MeetingsTable from '../components/MeetingsTable';
 import RoomTable from '../components/RoomTable';
 import RoomsHeader from '../components/RoomsHeader';
+import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
     return (
@@ -19,6 +20,7 @@ const AppRouter = () => {
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
                 <Route path="/roomsHeader" element={<RoomsHeader/>} />
+                <Route path='/meetingForm' element={<MeetingForm />} />
             </Route>
         </Routes>
     );

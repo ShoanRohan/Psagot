@@ -84,4 +84,14 @@
   right: 0;
   left: auto;
 }
+.reason {
+  width: 424px;
+}
+
+.reason .MuiInputBase-inputMultiline {
+  text-align: right;
+  direction: rtl;
+}
+
+
 
