@@ -201,7 +201,7 @@ namespace DL
             }
         }
 
-        public async Task<(List<User> Users,int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        public async Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
         {
             try
             {
@@ -216,26 +216,8 @@ namespace DL
             }
             catch (Exception ex)
             {
-                return (null,0, ex.Message);
+                return (null, 0, ex.Message);
             }
         }
     }
-
-        public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
-        {
-            try
-            {
-                var users = await _context.Users
-                    .Where(u => u.UserType != null && (u.UserType.Name == "Coordinator" || u.UserType.Name == "Lecturer"))
-                    .Include(u => u.UserType)
-                    .ToListAsync();
-
-                return (users, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
-        }
 }
