@@ -166,7 +166,6 @@ const handleDialogSubmit = async (formData) => {
     };
 
 
-
     const handleDeleteClick = async (topicId) => {
         // כאן תציגי את האזהרה
         setTopicToDelete(topicId);
