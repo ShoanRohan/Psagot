@@ -223,23 +223,46 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
             showResult('שגיאה', 'אירעה שגיאה בלתי צפויה בעת שמירת היום.');
         }
     };
+
     const handleDeleteDay = async (daysForCourseId) => {
-        showConfirmation('מחיקת יום',
-            "האם אתה בטוח שברצונך למחוק?",  "ייתכן שיש נושאים המשובצים ליום זה.",
-            async () => {
-                try {
-                    const actionResult = await dispatch(deleteDaysForCourseAction(daysForCourseId));
-                    if (deleteDaysForCourseAction.fulfilled.match(actionResult)) {
-                        showResult('מחיקת יום', 'היום נמחק בהצלחה.');
-                        dispatch(fetchDaysForCourseByCourseId(selectedCourse.courseId));
-                    } else if (deleteDaysForCourseAction.rejected.match(actionResult)) {
-                        showResult('שגיאה במחיקה', 'המחיקה לא הצליחה. אנא נסה שוב.');
+        const updatedDaysListAfterDelete = daysForCourse
+            .filter(d => d.daysForCourseId !== daysForCourseId)
+            .map(day => mapDayToRequestDTO(day, selectedCourse.courseId));
+
+        const performDelete = async (confirmConflict = false) => {
+            try {
+                if (!confirmConflict) {
+                    const conflictCheckResult = await dispatch(checkTopicsConflictAction({
+                        courseId: selectedCourse.courseId,
+                        newDays: updatedDaysListAfterDelete
+                    }));
+                    if (checkTopicsConflictAction.fulfilled.match(conflictCheckResult)) {
+                        if (conflictCheckResult.payload.hasConflicts) {
+                            showConfirmation( 'מחיקת יום',
+                                "בעקבות מחיקת יום זה, יש נושאים המשובצים בצורה לא תקינה.",
+                                "האם למחוק בכל זאת?",
+                                () => performDelete(true)
+                            );
+                            return;
+                        }
+                    } else if (checkTopicsConflictAction.rejected.match(conflictCheckResult)) {
+                        showResult('שגיאה', "אירעה שגיאה בבדיקת קונפליקט עם נושאים לפני מחיקה.");
+                        return;
                     }
-                } catch (error) {
-                    showResult('שגיאה', 'אירעה שגיאה בלתי צפויה בעת מחיקת היום.');
                 }
+
+                const actionResult = await dispatch(deleteDaysForCourseAction(daysForCourseId));
+                if (deleteDaysForCourseAction.fulfilled.match(actionResult)) {
+                    showResult('מחיקת יום', 'היום נמחק בהצלחה.');
+                    dispatch(fetchDaysForCourseByCourseId(selectedCourse.courseId));
+                } else if (deleteDaysForCourseAction.rejected.match(actionResult)) {
+                    showResult('שגיאה במחיקה', 'המחיקה לא הצליחה. אנא נסה שוב.');
+                }
+            } catch (error) {
+                showResult('שגיאה', 'אירעה שגיאה בלתי צפויה בעת מחיקת היום.');
             }
-        );
+        };
+        performDelete();
     };
 
     useEffect(() => {
@@ -268,11 +291,8 @@ const CourseDaysManager = ({ selectedCourse, user, showResult, showConfirmation 
                 sx={commonTextFieldSx} select={isEditable || isNew}
                 SelectProps={(isEditable || isNew) ? {
                     IconComponent: ExpandMoreIcon,
-                    sx: {
-                        '.MuiSelect-icon': { right: 'unset', left: '0px' },
-                        '.MuiSelect-select': {
-                            padding: '4.5px 2px !important',
-                        },
+                    sx: { '.MuiSelect-icon': { right: 'unset', left: '0px' },
+                        '.MuiSelect-select': { padding: '4.5px 2px !important', },
                     },
                 } : undefined}
                 InputProps={inputPropsDirection}
