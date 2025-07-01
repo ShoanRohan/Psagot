@@ -45,7 +45,17 @@ namespace BL
             return (_mapper.Map<ScheduleForTopicDTO>(updatedScheduleForTopic), null);
         }
 
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
 
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
        
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {

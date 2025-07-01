@@ -1,0 +1,46 @@
+.topics-search-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    font-family: "Rubik";
+    direction: rtl;
+    border-radius: 10px;
+    box-shadow: 0px 0px 4px 0px rgba(220, 226, 236, 0.8);
+  }
+  
+  .topics-filters {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .filter-select {
+    width: 150px;
+    height: 43px;
+    text-align: right;
+    direction: rtl;
+  }
+  
+  .topics-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .reset-btn,
+  .search-btn {
+    min-width: 100px;
+    height: 40px;
+    border-radius: 50px;
+    font-family: "Rubik";
+    font-weight: 400;
+    font-size: 16px;
+    text-transform: none;
+  }
+  
+  .search-btn {
+    background-color: #1976d2;
+    color: white;
+  }
+  

@@ -25,7 +25,7 @@ import { StyledTableCell, StyledTableRow } from "../styles/MeetingsTableStyle";
 
 export default function MeetingsTable() {
   const dispatch = useDispatch();
-  const { meetings, loading, error, totalCount } = useSelector(
+  const { meetings, status, error, totalCount } = useSelector(
     (state) => state.meeting
   );
   const [page, setPage] = useState(1);
@@ -36,6 +36,19 @@ export default function MeetingsTable() {
     message: "",
     severity: "success",
   });
+
+const getStatusChip = (meetingDateStr) => {
+  const meetingDate = new Date(meetingDateStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isActive = meetingDate >= today;
+    return (
+      <Chip
+        label={isActive ? "פעיל" : "הסתיים"}
+        className={isActive ? "status-chip active" : "status-chip inactive"}
+      />
+    );
+};
 
   useEffect(() => {
     if (!pageNumber || !rowsPerPage) return;
@@ -58,14 +71,14 @@ export default function MeetingsTable() {
     setPageNumber(1);
   };
 
-  if (loading) return <CircularProgress />;
+  if (status === 'loading') return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 
   const displayedMeetings = Array.isArray(meetings) ? meetings : [];
 
   const pageCount = Math.ceil(totalCount / rowsPerPage);
   return (
-    <div>
+    <Box>
       <TableContainer component={Paper} className="table-container">
         <Table className="meetings-table">
           <TableHead>
@@ -101,32 +114,20 @@ export default function MeetingsTable() {
           <TableBody>
             {displayedMeetings.map((meeting) => (
               <StyledTableRow key={meeting.meetingId}>
-                <StyledTableCell>{meeting.meetingNumber}</StyledTableCell>
-                <StyledTableCell>{meeting.course}</StyledTableCell>
-                <StyledTableCell>{meeting.subject}</StyledTableCell>
-                <StyledTableCell>{meeting.teacher}</StyledTableCell>
+                <StyledTableCell>{meeting.meetingNumberForTopic}</StyledTableCell>
+                <StyledTableCell>{meeting.course?.name || "-"}</StyledTableCell>
+                <StyledTableCell>{meeting.topic?.name || "-"}</StyledTableCell>
+                <StyledTableCell>{meeting.teacher?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.meetingDate}</StyledTableCell>
-                <StyledTableCell>{meeting.day}</StyledTableCell>
+                <StyledTableCell>{meeting.day?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.startTime}</StyledTableCell>
                 <StyledTableCell>{meeting.endTime}</StyledTableCell>
-                <StyledTableCell>{meeting.roomId}</StyledTableCell>
+                <StyledTableCell>{meeting.room?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.isValid ? "V" : "X"}</StyledTableCell>
-                <StyledTableCell>
-                  <Chip
-                    label={meeting.inSystem ? "פעיל" : "הסתיים"}
-                    className={
-                      meeting.inSystem
-                        ? "status-chip active"
-                        : "status-chip inactive"
-                    }
-                  />
-                </StyledTableCell>
+                <StyledTableCell>{getStatusChip(meeting.meetingDate)}</StyledTableCell>
                 <StyledTableCell>
                   <Box className="icon-buttons">
-                    <IconButton
-                      className="delete-button"
-                      onClick={() => handleDelete(meeting.id)}
-                    >
+                    <IconButton className="delete-button" onClick={() => handleDelete(meeting.id)}>
                       <DeleteOutlineIcon />
                     </IconButton>
                     <IconButton className="edit-button">
@@ -177,6 +178,6 @@ export default function MeetingsTable() {
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
-    </div>
+    </Box>
   );
 }
