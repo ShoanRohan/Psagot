@@ -127,7 +127,7 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
           }}
         />
 
-        <FormControl variant="standard" sx={sharedStyles}>
+<FormControl variant="standard" sx={{ ...sharedStyles, mt: '-7px' }}>
           <InputLabel>רכזת</InputLabel>
           <Select
             value={filters.courseCoordinator}
