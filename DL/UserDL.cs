@@ -32,10 +32,10 @@ namespace DL
         }
 
         public async Task<User> GetUserByEmailAndPhone(string email, string phone)
-{
-    return await _context.Users
-        .FirstOrDefaultAsync(u => u.Email == email && u.Phone == phone);
-}
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email && u.Phone == phone);
+        }
 
 
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
@@ -103,6 +103,11 @@ namespace DL
                                  .Select(u => u.Name)
                                  .ToListAsync();
         }
+        public async Task<User> GetUserByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
 
     }
 }

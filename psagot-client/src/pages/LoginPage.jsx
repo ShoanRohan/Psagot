@@ -70,7 +70,7 @@ const LoginPage = () => {
 
 					<Box>
 						<Outlet />
-						{/* <Login/> */}
+						
 					</Box>
 				</Box>
 			</Box>
