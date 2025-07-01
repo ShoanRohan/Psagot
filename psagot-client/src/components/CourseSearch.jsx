@@ -73,7 +73,7 @@ const CourseSearch = () => {
         dir="rtl"
         sx={{
           position: "absolute",
-          top: "120px",
+          top: "18.5%",
           left: "50%",
           transform: "translateX(-50%)",
           width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
@@ -99,7 +99,7 @@ const CourseSearch = () => {
           sx={{
             width: 120,
             borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik', fontSize: '14px' },
+            input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         />
         <TextField
@@ -110,7 +110,7 @@ const CourseSearch = () => {
           sx={{
             width: 120,
             borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik', fontSize: '14px' },
+            input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         />
         <TextField
@@ -122,11 +122,11 @@ const CourseSearch = () => {
           sx={{
             width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         >
           {coordinators?.map((coordinator) => (
-            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
+            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
               {coordinator}
             </MenuItem>
           ))}
@@ -140,11 +140,11 @@ const CourseSearch = () => {
           sx={{
             width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         >
           {years.map((year) => (
-            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
+            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
               {year}
             </MenuItem>
           ))}
@@ -158,16 +158,27 @@ const CourseSearch = () => {
             sx={{
               width: 120,
               borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '14px' },
+              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
             }}
             slotProps={{
               textField: {
                 placeholder: 'תאריך התחלה',
                 variant: 'standard',
                 sx: {
-                  width: 120,
+                  width: 125,
                   borderBottom: '1px solid #C6C6C6',
                   input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                    top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root':{
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root':{
+                    marginTop:0
+                  }
                 },
               },
             }}
@@ -181,16 +192,28 @@ const CourseSearch = () => {
             sx={{
               width: 120,
               borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '14px' },
+              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
             }}
             slotProps={{
               textField: {
                 placeholder: 'תאריך סיום',
                 variant: 'standard',
                 sx: {
-                  width: 120,
+                  width: 125,
                   borderBottom: '1px solid #C6C6C6',
                   input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  input: { fontFamily: 'Rubik', fontSize: '14px' },
+                  '& .MuiInputLabel-root.MuiFormLabel-root': {
+                    right: 0,
+                    left: 'auto',
+                     top: '-15px'
+                  },
+                  '& .MuiInputAdornment-root':{
+                    marginLeft: 0,
+                  },
+                  '& .MuiPickersInputBase-root':{
+                    marginTop:0
+                  }
                 },
               },
             }}
@@ -205,11 +228,11 @@ const CourseSearch = () => {
           sx={{
             width: 120,
             borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '14px' },
+            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         >
           {statuses.map((status) => (
-            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik', fontSize: '14px' }}>
+            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
               {status}
             </MenuItem>
           ))}
@@ -224,7 +247,7 @@ const CourseSearch = () => {
               width: '100px',
               height: '40px',
               fontFamily: 'Rubik',
-              fontSize: '14px',
+              fontSize: '0.7vw',
               borderColor: '#326DEF',
               color: '#326DEF',
               '&:hover': {
@@ -244,7 +267,7 @@ const CourseSearch = () => {
               width: '100px',
               height: '40px',
               fontFamily: 'Rubik',
-              fontSize: '14px',
+              fontSize: '0.7vw',
               backgroundColor: '#326DEF',
               color: 'white',
               '&:hover': {
