@@ -20,13 +20,17 @@ namespace Psagot.Controllers
             _userBL = userBL;
         }
 
-        [HttpPost("AddUser")]
+        [HttpPost("Register")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
             if (userDTO == null)
                 return BadRequest("Invalid user data");
             try
             {
+                var user = await _userBL.UserLoginAsync(userDTO.Email, userDTO.Password);
+                if (user != null)
+                    return Conflict("User already exists");
+                
                 var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
                 if (addedUser == null)
                     return BadRequest(errorMessage);
@@ -127,7 +131,7 @@ namespace Psagot.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error"+ex);
             }
 
         }

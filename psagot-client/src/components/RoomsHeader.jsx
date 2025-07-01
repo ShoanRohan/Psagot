@@ -2,7 +2,7 @@ import { useState } from "react";
 import dayjs from "dayjs";
 import NavigationBar from "./NavigationBar";
 import { HeaderContainer, Title, ButtonsWrapper, ExportButton, AddRoomButton, ListViewButton , PdfLogo } from "./RoomsHeaderStyle";
-import pdfIcon from "../assets/imgs/pdf.png";
+import pdfIcon from "../assets/icons/pdf.png";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import jsPDF from "jspdf";

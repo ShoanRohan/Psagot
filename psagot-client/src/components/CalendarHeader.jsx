@@ -1,4 +1,4 @@
-import pdfIcon from "../assets/imgs/pdf.png";
+import pdfIcon from "../assets/icons/pdf.png";
 import "dayjs/locale/he";
 import NavigationBar from "./NavigationBar";
 import jsPDF from "jspdf";
