@@ -7,6 +7,8 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import UserManagement from '../pages/UserManagement';
+import RoomsGrid from '../components/RoomsGrid';
 import RoomsPage from '../pages/RoomsPage';
 
 const AppRouter = () => {
@@ -15,6 +17,7 @@ const AppRouter = () => {
             <Route path='/' element={<Layout />}>
                 <Route index element={<HomePage />} />
                 <Route path='courses' element={<CoursesPage />} />
+                <Route path='users' element={<UserManagement />} />
                 {/* <Route path='meetings' element={<MeetingsPage />} /> */}
                 <Route path='rooms'  element= {<RoomsPage/>}/>
             </Route>
@@ -28,7 +31,9 @@ const AppRouter = () => {
 
             </Route>
 
+
         </Routes>
+       
        
     );
 };

@@ -12,6 +12,12 @@ const initialState = {
     // displayDate: new Date().toISOString().split('T')[0],
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
+     searchRoom:{roomName:'',mic:'false',projector:'false',computer:'false',numOfSeats:0},
+    roomsWithPagination:[],
+    pageNumber:1,
+    pageSize:10,
+    totalCount:0,
+    searchStatus:'false'
 };
     console.log(initialState.displayDate)
 
@@ -19,20 +25,33 @@ const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        
-        setRoom: (state, action) => {
-            
-        },
-        setDisplayDate: (state, action) => {
-            state.displayDate = action.payload;
+        setRoom: (state, action) => {   
         },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
         },
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
+        },
         setViewMode: (state, action) => {
             state.viewMode = action.payload;
+        },
+        
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload;
+            const start = (state.pageNumber - 1) * state.pageSize;
+            const end = start + state.pageSize;
+            state.roomsWithPagination = state.rooms.slice(start, end);
+        },
+        setPageSize: (state, action) => {
+            state.pageSize = action.payload;
+            state.pageNumber = 1; // חזרה לעמוד ראשון
+            const start = 0;
+            const end = start + state.pageSize;
+            state.roomsWithPagination = state.rooms.slice(start, end);
         }
     },
+    
     extraReducers: (builder) => {
         builder
             .addCase(fetchAllRooms.pending, (state) => {
@@ -42,6 +61,9 @@ const roomSlice = createSlice({
                 console.log(action.payload)
                 state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
+                state.totalCount = action.payload.length;
+                state.roomsWithPagination = state.rooms.slice(state.pageSize*(state.pageNumber-1),state.pageSize*state.pageNumber);
+                console.log(state.roomsWithPagination)
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.roomsStatus = 'failed';
@@ -95,5 +117,6 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setDisplayDate,setRoom ,setViewMode } = roomSlice.actions;
+export const { setRoom, setRoomSchedule, setPageNumber, setPageSize, setViewMode, setDisplayDate } = roomSlice.actions;
 export default roomSlice.reducer;
+
