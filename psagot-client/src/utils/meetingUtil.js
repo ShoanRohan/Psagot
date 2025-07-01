@@ -25,8 +25,13 @@ const GetMeetingsByPage = async (page, pageSize) => {
     return response.data;
 };
 const getMeetingsByRange = async (startDate, endDate) => {
-  const response = await api.get(`/Meeting/GetMeetingsByRange?startDate=${startDate}&endDate=${endDate}`);
-  return response.data;
+    const response = await api.get(`/Meeting/GetMeetingsByRange?startDate=${startDate}&endDate=${endDate}`);
+    return response.data;
 };
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage, getMeetingsByRange};
+const getAllMeetingsBySubject = async (subject) => {
+    const response = await api.get(`/Meeting/GetAllMeetingsBySubject/${subject}`);
+    return response.data;
+};
+
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, GetMeetingsByPage, getMeetingsByRange, getAllMeetingsBySubject };

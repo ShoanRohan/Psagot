@@ -9,16 +9,20 @@ import {
     fetchAllLecturersAndCoordinators,
     fetchFilteredUseres,
     loginAction,
-    registerAction
+    registerAction,
+    fetchUsersByPage
 } from './userAction';
 
 const initialState = {
     coordinators: [],
+    users: [],
     teachers: [],
-    user: [],
     selectedUser: null,
     status: 'idle',
     error: null,
+    pageNumber: 1,
+    pageSize: 10,
+    totalUsers: 0,
 };
 
 const userSlice = createSlice({
@@ -26,8 +30,14 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUser: (state, action) => {
-            // ניתן להוסיף לוגיקה אם נדרש
+
         },
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload
+        },
+        setPageSize: (state, action) => {
+            state.pageSize = action.payload
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -37,7 +47,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchAllUsers.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload;
+                state.users = action.payload;
             })
             .addCase(fetchAllUsers.rejected, (state, action) => {
                 state.status = 'failed';
@@ -75,10 +85,12 @@ const userSlice = createSlice({
 
             // updateUserAction
             .addCase(updateUserAction.fulfilled, (state, action) => {
-                const index = state.user.findIndex((user) => user.id === action.payload.id);
+                const index = state.users.findIndex((user) => user.id === action.payload.id);
                 if (index !== -1) {
-                    state.user[index] = action.payload;
+                    state.users[index] = action.payload;
                 }
+            }).addCase(updateUserAction.pending, (state) => {
+                state.status = 'loading';
             })
 
             // loginAction
@@ -154,14 +166,27 @@ const userSlice = createSlice({
             .addCase(registerAction.rejected, (state, action) => {
                 state.status = 'failed';
                 if (action.error.message.includes('400'))
-                    state.error = 'פרטי ההזנה שגויים. יש לבדוק ולנסות שוב.';
+                    state.error = '���� ����� ������. �� ����� ������ ���.';
                 else if (action.error.message.includes('409'))
-                    state.error = 'משתמש זה כבר קיים במערכת.';
+                    state.error = '����� �� ��� ���� ������.';
                 else
-                    state.error = 'אירעה שגיאה בלתי צפויה. יש לנסות שוב מאוחר יותר.';
+                    state.error = '����� ����� ���� �����. �� ����� ��� ����� ����.';
+            })
+
+            .addCase(fetchUsersByPage.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUsersByPage.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.users = action.payload.users;
+                state.totalUsers = action.payload.countUsers;
+            })
+            .addCase(fetchUsersByPage.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
             });
     },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setPageNumber, setPageSize } = userSlice.actions;
 export default userSlice.reducer;

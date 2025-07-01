@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserDTO
+    public class UserTableDTO
     {
         public int UserId { get; set; }
 
@@ -16,14 +16,9 @@ namespace Entities.DTO
 
         public string Phone { get; set; } = null!;
 
-        public string Password { get; set; } = null!;
-
-        public int UserTypeId { get; set; }
-        
-        public string? UserTypeName { get; set; } = null!;
+        public string UserTypeName { get; set; } = null!;
 
         public bool IsActive { get; set; }
 
-        public string? Role { get; set; }
     }
 }

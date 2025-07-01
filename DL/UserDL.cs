@@ -120,20 +120,6 @@ namespace DL
             return user;
         }
 
-        //public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
-        //{
-        //    try
-        //    {
-        //        var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
-        //            .Include(user => user.UserType).ToListAsync();
-        //        return (users, null);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return (null, ex.Message);
-        //    }
-        //}
-
         public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
         {
             try
@@ -202,5 +188,37 @@ namespace DL
             }
         }
 
+        public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            try
+            {
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "רכזת")
+                    .Include(user => user.UserType).ToListAsync();
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Skip((pageNumber - 1) * pageSize)  // דילוג על תוצאות קודמות
+                    .Take(pageSize)  // הגבלת מספר השורות
+                    .Include(user => user.UserType)
+                    .ToListAsync();
+
+                var countUsers = _context.Users.Count();
+                return (users, countUsers, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
+            }
+        }
     }
 }

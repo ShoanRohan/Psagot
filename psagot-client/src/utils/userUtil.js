@@ -34,23 +34,28 @@ const getAllLecturersAndCoordinators = async () => {
 };
 
 const getCoordinators = async () => {
-    const response = await api.get('/User/GetCoordinators');
-    return response.data;
+  const response = await api.get('/User/GetCoordinators');
+  return response.data;
 };
 
 const getTeachers = async () => {
-    const response = await api.get('/User/GetTeachers');
-    return response.data;
+  const response = await api.get('/User/GetTeachers');
+  return response.data;
 };
 
 const register = async (newUser) => {
-    const response = await api.post('/User/Register', newUser);
-    return response.data;
+  const response = await api.post('/User/Register', newUser);
+  return response.data;
+};
+const getUsersByPage = async (pageNumber, pageSize) => {
+  const response = await api.get(`/User/GetUsersByPage?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+  return response.data;
 };
 
+
 const login = async (loginUser) => {
-    const response = await api.post('/User/login', loginUser);
-    return response.data; // רק .data כדי לא להעביר headers
+  const response = await api.post('/User/login', loginUser);
+  return response.data; // �� .data ��� �� ������ headers
 };
 
 export {
@@ -64,4 +69,5 @@ export {
   login,
   getTeachers,
   register,
+  getUsersByPage
 };

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getAllUsers, getUserById,
      addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators,
-      login, register, getTeachers, getFilteredUsers } from "../../utils/userUtil";
+    login, register, getTeachers, getFilteredUsers, getUsersByPage } from "../../utils/userUtil";
 
 export const fetchAllUsers = createAsyncThunk(
   "user/fetchAllUsers",
@@ -38,7 +38,7 @@ export const updateUserAction =createAsyncThunk('user/updateUserAction', async(u
 });
 
 export const loginAction = createAsyncThunk('user/login', async (loginUser) => {
-    const data = await login(loginUser); // מחזיר רק את data
+    const data = await login(loginUser); // ����� �� �� data
     return data;
 });
 
@@ -51,6 +51,7 @@ export const fetchTeachers = createAsyncThunk("user/fetchTeachers", async () => 
         const data = await getTeachers();
         return data;
 });
+
 export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
     const data = await getAllLecturersAndCoordinators();
     return data;
@@ -59,5 +60,10 @@ export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllL
 
 export const registerAction = createAsyncThunk('user/register', async (newUser) => {
     const data = await register(newUser);
+    return data;
+});
+
+export const fetchUsersByPage = createAsyncThunk('user/getUsersByPage', async({pageNumber, pageSize}) => {
+    const data = await getUsersByPage(pageNumber, pageSize);
     return data;
 });
