@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -53,16 +54,17 @@ const menuItems = [
     exact: true
   }
 ];
-
 const SideBar = () => {
+  const navigate = useNavigate();
   const { selectedUser } = useSelector((state) => state.user);
-
+  const handleAvatarClick = () => {
+    navigate("/profile");
+  };
   return (
     <Stack direction="column" spacing={0} className='Stack1'>
       <Stack direction="column" spacing={0} className='Stack2'>
         <img src="/assets/logo_psagot.png" alt="Logo" />
       </Stack>
-
       <Stack direction="column" spacing={1} className='navItems'>
         {menuItems.map((item, index) => (
           <NavLink 
@@ -77,8 +79,8 @@ const SideBar = () => {
           </NavLink>
         ))}
       </Stack>
-
       <Box className="user-profile-container">
+        <Button onClick={handleAvatarClick}>
         <Box className="user-info">
           <Typography className="user-name">
             {selectedUser?.name ?? "משתמש לא מחובר"}
@@ -90,6 +92,7 @@ const SideBar = () => {
         <Avatar className="user-avatar">
           <AccountCircleIcon />
           </Avatar>
+          </Button>
       </Box>
     </Stack>
   );

@@ -20,9 +20,15 @@ import * as Yup from "yup";
 import "../styles/AddUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
 
-const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit = false }) => {
+const AddAndUpdateUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit = false }) => {
   const { userTypes } = useSelector((state) => state.userType);
   IsEdit = user && user.userId ? true : false;
+
+const currentUser = useSelector((state) => state.auth.user);
+const isAdmin = currentUser?.UserTypeName === 'מנהל';
+//const editingManager = user?.userTypeName === 'מנהל';
+const isEditingOther = currentUser?.userId !== user?.userId;
+const canEditPermission = isAdmin && !isEditingOther;
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -40,9 +46,9 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
             .matches(/[A-Z]/, "הסיסמה חייבת לכלול לפחות אות גדולה אחת")
             .matches(/[0-9]/, "הסיסמה חייבת לכלול לפחות מספר אחד")
             .required("שדה חובה"),
-          confirmPassword: Yup.string()
-            .oneOf([Yup.ref("password"), null], "הסיסמאות אינן תואמות")
-            .required("יש לאמת את הסיסמה"),
+          // confirmPassword: Yup.string()
+          //   .oneOf([Yup.ref("password"), null], "הסיסמאות אינן תואמות")
+          //   .required("יש לאמת את הסיסמה"),
         }),
     status: Yup.string().required("שדה חובה"),
     permission: Yup.string().required("שדה חובה"),
@@ -58,7 +64,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
         ? {}
         : {
             password: "",
-            confirmPassword: "",
+            //confirmPassword: "",
           }),
       isActive: user?.isActive ?? false,
       userTypeId: user?.userTypeId ?? -1,
@@ -138,18 +144,18 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
                     helperText={formik.touched.password && formik.errors.password}
                     fullWidth
                   />
-                  <TextField
-                    className="custom-input"
-                    label="אימות סיסמה"
-                    name="confirmPassword"
-                    type="password"
-                    variant="standard"
-                    value={formik.values.confirmPassword}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                    helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
-                    fullWidth
+                 <TextField
+                    // className="custom-input"
+                    // label="אימות סיסמה"
+                    // name="confirmPassword"
+                    // type="password"
+                    // variant="standard"
+                    // value={formik.values.confirmPassword}
+                    // onChange={formik.handleChange}
+                    // onBlur={formik.handleBlur}
+                    // error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
+                    // helperText={formik.touched.confirmPassword && formik.errors.confirmPassword}
+                    // fullWidth
                   />
                 </>
               )}
@@ -162,6 +168,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="custom-select"
+                  disabled={!canEditPermission}
                 >
                   {userTypes?.map((userType) => (
                     <MenuItem key={userType.id} value={userType.id}>
@@ -180,6 +187,7 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
                         onChange={(e) =>
                           formik.setFieldValue("status", e.target.checked ? "פעיל" : "לא פעיל")
                         }
+                        disabled={!canEditPermission}
                       />
                     }
                     label="פעיל"
@@ -202,4 +210,4 @@ const AddUserPopUp = ({ open = false, onClose = () => {}, user, onSave, IsEdit =
   );
 };
 
-export default AddUserPopUp;
+export default AddAndUpdateUserPopUp;
