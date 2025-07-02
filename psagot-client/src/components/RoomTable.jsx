@@ -101,7 +101,7 @@ export default function RoomTable({ date }) {
                   const cellKey = `${rowIndex}-${colIndex}`;
                   if (occupiedCells[cellKey]) return null;
 
-                  const meeting = meetings.find((m) => {
+                  const meeting = meetings?.length>0 && meetings.find((m) => {
                     if (m.extendedProps?.location !== room.name) return false;
                     const meetingStartHour = parseInt(m.start.slice(11, 13), 10);
                     const timeStartHour = parseInt(time.split('-')[0].slice(0, 2), 10);

@@ -14,6 +14,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
+import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
 
 const menuItems = [
   {
@@ -38,6 +39,12 @@ const menuItems = [
     path: "/rooms",
     icon: <MeetingRoomIcon />,
     text: "חדרים",
+    exact: true
+  },
+  {
+    path: "/rooms-table",
+    icon: <ScheduleOutlinedIcon />,
+    text: "לוז יומי",
     exact: true
   },
   {

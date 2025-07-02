@@ -84,7 +84,9 @@ const meetingSlice = createSlice({
                })
             .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
                state.rangeStatus = 'succeeded';
-               state.meetingsByRange = action.payload;
+               if(action.payload?.length>0){
+                   state.meetingsByRange = action.payload;
+               }
              })
             .addCase(fetchMeetingsByRange.rejected, (state, action) => {
                 state.rangeStatus = 'failed';
