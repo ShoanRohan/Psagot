@@ -1,10 +1,6 @@
-import { useState } from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Grid from "@mui/material/Grid";
-import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
+import { TextField,Button,Checkbox,FormControlLabel,Box,Grid} from "@mui/material";
+import { Search } from "@mui/icons-material";
 import { fetchFilteredUseres } from "../features/user/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import { BoxSearchBar } from "../styles/UserSearchBar";
@@ -109,7 +105,7 @@ const UserSearchBar = () => {
       <Button
         variant="contained"
         color="primary"
-        startIcon={<SearchIcon style={{ padding: "5px" }} />}
+        startIcon={<Search style={{ padding: "5px" }} />}
         sx={{ borderRadius: "20px", minWidth: "120px", marginRight: 2 }}
         onClick={handleSearch}
       >
