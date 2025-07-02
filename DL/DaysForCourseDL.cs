@@ -23,9 +23,14 @@ namespace DL
         {
             try
             {
-                var addedDaysForCourse = await _context.Set<DaysForCourse>().AddAsync(daysForCourse);
+                var addedEntry = await _context.Set<DaysForCourse>().AddAsync(daysForCourse);
                 await _context.SaveChangesAsync();
-                return (addedDaysForCourse.Entity, null);
+
+                var resultDaysForCourse = await _context.Set<DaysForCourse>()
+                    .Include(dfc => dfc.Day)
+                    .FirstOrDefaultAsync(dfc => dfc.DaysForCourseId == addedEntry.Entity.DaysForCourseId);
+
+                return (resultDaysForCourse, null);
             }
             catch (Exception ex)
             {
@@ -81,7 +86,12 @@ namespace DL
             {
                 _context.Set<DaysForCourse>().Update(daysForCourse);
                 await _context.SaveChangesAsync();
-                return (daysForCourse, null);
+
+                var resultDaysForCourse = await _context.Set<DaysForCourse>()
+                    .Include(dfc => dfc.Day)
+                    .FirstOrDefaultAsync(dfc => dfc.DaysForCourseId == daysForCourse.DaysForCourseId);
+
+                return (resultDaysForCourse, null);
             }
             catch (Exception ex)
             {

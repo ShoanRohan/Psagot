@@ -27,7 +27,6 @@ const CourseScreen = () => {
   const handleTabChange = (event, newIndex) => {
     setTabIndex(newIndex);
   };
-  console.log(course)
   return (
     <Box className="course-container">
       {/* כותרת הקורס */}

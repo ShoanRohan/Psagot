@@ -26,7 +26,7 @@ const updateDaysForCourse = async (dayForCourse ) => {
 };
 
 const deleteDaysForCourse = async (id) => {
-    const response = await api.delete(`/DaysForCourse/DeleteDaysForCourse/${id}`); // נניח שיש נקודת קצה כזו
+    const response = await api.delete(`/DaysForCourse/DeleteDaysForCourse/${id}`);
     return response.data;
 };
 

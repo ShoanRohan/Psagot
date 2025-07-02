@@ -196,7 +196,7 @@ const CourseDetails = () => {
         }
     };
 
-    const isSaveButtonDisabled = !isEditing || !isValidForm;
+    const isSaveButtonDisabled = !isValidForm;
 
     const renderTextField = ({ label, name, type = 'text', value, multiline = false, rows = 1, readOnly = false,
         isSelect = false, options = [], displayValue = null }) => {
@@ -213,7 +213,7 @@ const CourseDetails = () => {
                 ml: '20px', fontSize: '16px', fontFamily: 'Rubik',
                 ...(name === 'notes' && { '& textarea': { alignContent: 'end !important' } }),
             },
-            InputLabelProps: { sx: { width: '150%', fontFamily: 'Rubik', } },
+            InputLabelProps: { sx: { width: '150%', fontFamily: 'Rubik' }, shrink: true },
             error: !!fieldErrors[name], helperText: fieldErrors[name]
         };
         if (isSelect) {
@@ -278,8 +278,7 @@ const CourseDetails = () => {
                     {(user?.userTypeId <= 2 || selectedCourse?.coordinatorId == user?.userId) && <Box>
                         {isEditing ? (
                             <><Button variant="outlined" sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik' }}
-                                onClick={() => {
-                                    setIsEditing(false);
+                                onClick={() => { setIsEditing(false);
                                     if (selectedCourse) {
                                         setFormData({
                                             name: selectedCourse.name || '',
@@ -293,6 +292,7 @@ const CourseDetails = () => {
                                             statusId: selectedCourse.statusId || '',
                                             color: selectedCourse.color || ''
                                         });
+                                        setIsValidForm(true);
                                     } setFieldErrors({});
                                 }}>ביטול</Button>
                                 <Button variant="contained" sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', mr: '15px' }}
@@ -382,19 +382,16 @@ const CourseDetails = () => {
                                 </Typography>
                             )}
                             <Box display={'flex'} justifyContent={'center'} mt={3}>
-                                <Button variant="outlined" sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', ml: '10px', width: '83px', height: '44px' }} onClick={handleCancelAction}>ביטול</Button>
-                                <Button variant="contained" sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', width: '83px', height: '44px' }} onClick={handleConfirmAction}>אישור</Button>
+                                <Button variant="outlined"  onClick={handleCancelAction}
+                                sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', ml: '10px', width: '83px', height: '44px' }}>ביטול</Button>
+                                <Button variant="contained"  onClick={handleConfirmAction}
+                                sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', width: '83px', height: '44px' }}>אישור</Button>
                             </Box>
                         </Box>
                     </Box>
                 </Dialog>
             </Box>
-            <CourseDaysManager
-                selectedCourse={selectedCourse}
-                user={user}
-                showResult={handleShowResultDialog}
-                showConfirmation={handleShowConfirmation}
-            />
+            <CourseDaysManager selectedCourse={selectedCourse} user={user} showResult={handleShowResultDialog} showConfirmation={handleShowConfirmation} />
         </Box>
     )
 }

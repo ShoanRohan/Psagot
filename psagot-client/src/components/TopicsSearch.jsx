@@ -23,6 +23,7 @@ const sharedStyles = {
   direction: "rtl",
   "& .MuiInputLabel-root": {
     right: "0",
+    fontFamily: "Rubik",
     transformOrigin: "top right",
   },
   "& .MuiSelect-icon": {
@@ -101,7 +102,8 @@ const TopicsSearch = () => {
                 setFilters({ ...filters, topicName: e.target.value });
                 setActiveButton(false);
               }}
-              sx={sharedStyles}
+              sx={{ ...sharedStyles, '.MuiSelect-select': { padding: '4.5px 2px !important' } }}
+              MenuProps={{ sx: { "& .MuiMenuItem-root": { fontFamily: "Rubik" } } }}
             >
               {topics?.map((topic) => (
                 <MenuItem key={topic.topicId} value={topic.name}>
@@ -119,7 +121,8 @@ const TopicsSearch = () => {
                 setFilters({ ...filters, teacherName: e.target.value })
                 setActiveButton(false);
               }}
-              sx={sharedStyles}
+              sx={{ ...sharedStyles, '.MuiSelect-select': { padding: '4.5px 2px !important' } }}
+              MenuProps={{ sx: { "& .MuiMenuItem-root": { fontFamily: "Rubik" } } }}
             >
               {teachers?.map((teacher) => (
                 <MenuItem key={teacher.id} value={teacher.name}>
@@ -136,7 +139,8 @@ const TopicsSearch = () => {
                 setFilters({ ...filters, statusName: e.target.value })
                 setActiveButton(false);
               }}
-              sx={sharedStyles}
+              sx={{ ...sharedStyles, '.MuiSelect-select': { padding: '4.5px 2px !important' } }}
+              MenuProps={{ sx: { "& .MuiMenuItem-root": { fontFamily: "Rubik" } } }}
             >
               {topicsStatuses?.map((topic) => (
                 <MenuItem key={topic.StatusTopicId} value={topic.name}>

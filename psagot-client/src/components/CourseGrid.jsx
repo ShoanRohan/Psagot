@@ -66,7 +66,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
   if (!courses || courses.length === 0) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-        <Typography>לא נמצאו קורסים להצגה.</Typography>
+        <Typography variant="h6" color="error" sx={{ fontFamily: 'Rubik' }}>לא נמצאו קורסים להצגה.</Typography>
       </Box>
     );
   }

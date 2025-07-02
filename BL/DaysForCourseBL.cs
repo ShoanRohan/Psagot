@@ -99,16 +99,12 @@ namespace BL
 
                 foreach (var schedule in schedules)
                 {
-                    var matchingNewDay = newDays.FirstOrDefault(d => d.DayId == schedule.DayId);
+                    var isScheduleCovered = newDays.Any(d =>
+                        d.DayId == schedule.DayId && 
+                        schedule.StartTime >= d.StartTime && 
+                        schedule.EndTime <= d.EndTime);  
 
-                    if (matchingNewDay != null)
-                    {
-                        if (schedule.StartTime < matchingNewDay.StartTime || schedule.EndTime > matchingNewDay.EndTime)
-                        {
-                            return (true, "בעקבות השינוי בימים יש נושאים שמשובצים בצורה לא תקינה האם לשמור בכל זאת?");
-                        }
-                    }
-                    else
+                    if (!isScheduleCovered)
                     {
                         return (true, "בעקבות השינוי בימים יש נושאים שמשובצים בצורה לא תקינה האם לשמור בכל זאת?");
                     }

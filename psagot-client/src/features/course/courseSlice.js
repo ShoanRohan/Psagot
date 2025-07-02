@@ -28,7 +28,7 @@ const courseSlice = createSlice({
         },
         resetSelectedCourseStatus: (state) => {
             state.selectedCourseStatus = 'idle';
-            state.error = null; // אפס גם שגיאה רלוונטית
+            state.error = null;
         }
     },
     extraReducers: (builder) => {

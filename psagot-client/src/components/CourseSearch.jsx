@@ -17,14 +17,19 @@ import { fetchCoordinators } from "../features/user/userAction";
 const sharedStyles = {
   width: "100%",
   textAlign: "right",
+  fontFamily: "Rubik",
   direction: "rtl",
   "& .MuiInputLabel-root": {
     right: "0",
+    fontFamily: "Rubik",
     transformOrigin: "top right",
   },
   "& .MuiSelect-icon": {
     right: "unset",
     left: "0px",
+  },
+  "& .MuiInputBase-input": {
+    fontFamily: "Rubik",
   },
 };
 
@@ -135,7 +140,8 @@ const CourseSearch = ({ filters, setFilters, onSearch, initialState }) => {
               setFilters({ ...filters, courseCoordinator: e.target.value });
               setWasModified(true);
             }}
-            sx={sharedStyles}
+            sx={{ ...sharedStyles, '.MuiSelect-select': { padding: '4.5px 2px !important' } }}
+            MenuProps={{ sx: { "& .MuiMenuItem-root": { fontFamily: "Rubik" } } }}
           >
             {coordinators?.map((coordinator) => (
               <MenuItem key={coordinator.userId} value={coordinator.name}>

@@ -63,18 +63,18 @@ namespace DL
             try
             {
                 var originalStatusId = await _context.Set<Course>()
-                                               .Where(c => c.CourseId == course.CourseId)
-                                               .Select(c => c.StatusId)
-                                               .FirstOrDefaultAsync();
+                    .Where(c => c.CourseId == course.CourseId)
+                    .Select(c => c.StatusId)
+                    .FirstOrDefaultAsync();
 
                 bool isStatusChangeFromActive = (originalStatusId == 1 && course.StatusId != 1);
                 bool hasFutureMeetings = false;
                 if (isStatusChangeFromActive)
                 {
                     var futureMeetings = await _context.Set<Meeting>()
-                                   .Where(m => m.CourseId == course.CourseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
-                                   .AsNoTracking()
-                                   .ToListAsync();
+                        .Where(m => m.CourseId == course.CourseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
+                        .AsNoTracking()
+                        .ToListAsync();
 
                     if (futureMeetings.Any())
                     {
@@ -114,8 +114,8 @@ namespace DL
             try
             {
                 var futureMeetings = await _context.Set<Meeting>()
-                                                   .Where(m => m.CourseId == courseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
-                                                   .ToListAsync();
+                    .Where(m => m.CourseId == courseId && m.MeetingDate > DateOnly.FromDateTime(DateTime.Now))
+                    .ToListAsync();
 
                 if (futureMeetings.Any())
                 {

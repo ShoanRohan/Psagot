@@ -62,7 +62,6 @@ export default function CourseTopicGrid() {
 
     }, [dispatch, courseId]);
 
-    console.log("טופיקס:", topics)
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -95,7 +94,6 @@ export default function CourseTopicGrid() {
 
 
 const handleDialogSubmit = async (formData) => {
-    console.log("נתוני עריכה שהתקבלו מהפופ-אפ:", formData);
 
     // מפת המרה מהלייבל הטקסטואלי של הסטטוס ל-ID המספרי שלו
     const statusMap = {
@@ -141,7 +139,6 @@ const handleDialogSubmit = async (formData) => {
         // היא תעדכן את הסטייט באופן אוטומטי לאחר קבלת התגובה מהשרת.
         // .unwrap() מאפשר לטפל בשגיאות מה-thunk באמצעות try...catch
         await dispatch(updateTopicAction(topicToUpdate)).unwrap(); 
-        console.log("נושא עודכן בהצלחה ב-Redux ובבקאנד!");
         dispatch(fetchAllTopicForCourseByCourseId(courseId));
     } catch (error) {
         console.error("שגיאה בעדכון הנושא:", error);

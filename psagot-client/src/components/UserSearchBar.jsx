@@ -45,8 +45,8 @@ const UserSearchBar = () => {
       };
 
       // שליחה לפונקציה ב-Redux
-      dispatch(fetchFilteredUseres(filteredUsersParamaters));
-      console.log("users: ", users);
+        dispatch(fetchFilteredUseres(filteredUsersParamaters));
+        console.log("users: ", users);
     }
   };
 

@@ -105,7 +105,6 @@ const TopicDialog = ({ open, onClose, onSubmit,initialData }) => {
   const { teachers} = useSelector(state => state.user)
   const [isEditingMain, setIsEditingMain] = useState(false);
   const statuses = useSelector((state) => state.status.coursesStatuses);
-  console.log("statuses", statuses);
 
 
   // // שלוף את כל המשתמשים (רכזות ומרצים) מהסטייט של Redux.

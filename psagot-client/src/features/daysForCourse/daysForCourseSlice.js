@@ -16,85 +16,89 @@ const daysForCourseSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchAllDaysForCourse.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchAllDaysForCourse.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourses = action.payload;
-            })
-            .addCase(fetchAllDaysForCourse.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
-            .addCase(fetchDaysForCourseById.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchDaysForCourseById.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.dayForCourse = action.payload;
-            })
-            .addCase(fetchDaysForCourseById.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload;
-            })
-            .addCase(fetchDaysForCourseByCourseId.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(fetchDaysForCourseByCourseId.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourseByCourseId = action.payload;
-            })
-            .addCase(fetchDaysForCourseByCourseId.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
-            .addCase(addDaysForCourseAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(addDaysForCourseAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourses = [...state.daysForCourses, action.payload];
-            })
-            .addCase(addDaysForCourseAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            })
-            .addCase(updateDaysForCourseAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(updateDaysForCourseAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                const index = state.daysForCourses.findIndex((daysForCourse) => daysForCourse.id === action.payload.id);
-                if (index !== -1) {
-                    state.daysForCourses[index] = action.payload;
-                }
-            })
-            .addCase(updateDaysForCourseAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload;
-            })
-            .addCase(deleteDaysForCourseAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(deleteDaysForCourseAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                state.daysForCourseByCourseId = state.daysForCourseByCourseId.filter(day => day.daysForCourseId !== action.payload);
-            })
-            .addCase(deleteDaysForCourseAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload;
-            })
-            .addCase(checkTopicsConflictAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(checkTopicsConflictAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-            })
-            .addCase(checkTopicsConflictAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.payload;
-            });
+          .addCase(fetchAllDaysForCourse.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(fetchAllDaysForCourse.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.daysForCourses = action.payload;
+          })
+          .addCase(fetchAllDaysForCourse.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+          })
+          .addCase(fetchDaysForCourseById.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(fetchDaysForCourseById.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.dayForCourse = action.payload;
+          })
+          .addCase(fetchDaysForCourseById.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          })
+          .addCase(fetchDaysForCourseByCourseId.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(fetchDaysForCourseByCourseId.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.daysForCourseByCourseId = action.payload;
+          })
+          .addCase(fetchDaysForCourseByCourseId.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+          })
+          .addCase(addDaysForCourseAction.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(addDaysForCourseAction.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.daysForCourses.push(action.payload);
+            state.daysForCourseByCourseId.push(action.payload);
+          })
+          .addCase(addDaysForCourseAction.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.error.message;
+          })
+          .addCase(updateDaysForCourseAction.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(updateDaysForCourseAction.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            const updatedDay = action.payload;
+
+            const index = state.daysForCourseByCourseId.findIndex( (day) => day.daysForCourseId === updatedDay.daysForCourseId );
+            if (index !== -1) {
+              state.daysForCourseByCourseId[index] = updatedDay;
+            }
+          })
+          .addCase(updateDaysForCourseAction.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          })
+          .addCase(deleteDaysForCourseAction.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(deleteDaysForCourseAction.fulfilled, (state, action) => {
+            state.status = "succeeded";
+            state.daysForCourseByCourseId = state.daysForCourseByCourseId.filter( (day) => day.daysForCourseId !== action.payload );
+            state.daysForCourses = state.daysForCourses.filter( (day) => day.daysForCourseId !== action.payload );
+          })
+          .addCase(deleteDaysForCourseAction.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          })
+          .addCase(checkTopicsConflictAction.pending, (state) => {
+            state.status = "loading";
+          })
+          .addCase(checkTopicsConflictAction.fulfilled, (state, action) => {
+            state.status = "succeeded";
+          })
+          .addCase(checkTopicsConflictAction.rejected, (state, action) => {
+            state.status = "failed";
+            state.error = action.payload;
+          });
     },
 });
 
