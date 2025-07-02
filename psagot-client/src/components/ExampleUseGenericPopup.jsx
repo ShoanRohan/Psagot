@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import GenericPopup from '../components/GenericPopup';
 import Button from '@mui/material/Button';
-import { ContentTextBold, ContentTextRegular } from '../styles/GenericPopupStyle';
 
 const ExampleUseGenericPopup = () => {
     const [showCancel, setShowCancel] = useState(true);
@@ -28,13 +27,9 @@ const ExampleUseGenericPopup = () => {
                 onCancel={handleCancel}
                 showCancelButton={showCancel}
                 showSaveButton={showSave}
+                subTitle='דוגמא לתוכן 1, אפשרי שאלה אם לשמור תוכן'
+                content='דוגמא לתוכן 2, לא חובה'
             >
-                <ContentTextBold>
-                    דוגמא לתוכן 1, אפשרי שאלה אם לשמור תוכן
-                </ContentTextBold>
-                <ContentTextRegular>
-                    דוגמא לתוכן 2, לא חובה
-                </ContentTextRegular>
             </GenericPopup>
         </>
     );
