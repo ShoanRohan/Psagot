@@ -17,7 +17,6 @@ import Stack from '@mui/material/Stack';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 
 const CourseGrid = ({ courses }) => {
-  const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
   const [paginationModel, setPaginationModel] = useState({

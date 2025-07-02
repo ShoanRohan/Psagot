@@ -1,27 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button, Tabs, Tab } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  Tabs,
+  Tab,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם
+import { useDispatch, useSelector } from "react-redux";
+import CourseDetails from "../components/CourseDetails";
+import {
+  fetchCourseById,
+  updateCourseAction,
+} from "../features/course/courseActions";
+import { setCourse } from "../features/course/courseSlice";
 
 const CoursPage = () => {
-  const [tabValue, setTabValue] = useState(0);
-  const { id } = useParams(); // קבלת מזהה קורס מה-URL
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
-  const [selectedCourse, setSelectedCourse] = useState(null); // קורס נבחר
+  const selectedCourse = useSelector((state) => state.course.selectedCourse);
+  const [tabValue, setTabValue] = useState(0);
+
+  // Snackbar state
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success", // 'success' | 'error' | 'info' | 'warning'
+  });
+
+  const handleSnackbarClose = () => {
+    setSnackbar((prev) => ({ ...prev, open: false }));
+  };
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const response = await axios.get(`/api/Course/GetCourseById/${id}`);
-        setSelectedCourse(response.data);
-      } catch (error) {
-        console.error("שגיאה בשליפת פרטי קורס:", error);
-      }
-    };
-
-    if (id) fetchCourse();
-  }, [id]);
+    if (id) {
+      dispatch(fetchCourseById(id));
+    }
+  }, [id, dispatch]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -29,22 +47,35 @@ const CoursPage = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put("/api/Course/UpdateCourse", selectedCourse);
-      alert("הקורס עודכן בהצלחה");
+      await dispatch(updateCourseAction(selectedCourse));
+      setSnackbar({
+        open: true,
+        message: "הקורס עודכן בהצלחה",
+        severity: "success",
+      });
     } catch (error) {
       console.error("שגיאה בעדכון הקורס:", error);
-      alert("ארעה שגיאה בעת עדכון הקורס");
+      setSnackbar({
+        open: true,
+        message: "ארעה שגיאה בעת עדכון הקורס",
+        severity: "error",
+      });
     }
   };
 
   const handleCancel = () => {
-    // רענון מחדש של הנתונים מהשרת (אפשר גם לעשות ניווט אחורה)
     window.location.reload();
+  };
+
+  const handleSetCourse = (updater) => {
+    dispatch(
+      setCourse(typeof updater === "function" ? updater(selectedCourse) : updater)
+    );
   };
 
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
-      {/* שורת כותרת עם שם הקורס והכפתורים */}
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -66,12 +97,7 @@ const CoursPage = () => {
           <Button
             variant="contained"
             color="primary"
-            sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
-            }}
+            sx={{ borderRadius: "30px", px: 4, py: 1, textTransform: "none" }}
             onClick={handleSave}
             disabled={!selectedCourse}
           >
@@ -80,12 +106,7 @@ const CoursPage = () => {
           <Button
             variant="outlined"
             color="primary"
-            sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
-            }}
+            sx={{ borderRadius: "30px", px: 4, py: 1, textTransform: "none" }}
             onClick={handleCancel}
           >
             ביטול
@@ -93,21 +114,37 @@ const CoursPage = () => {
         </Box>
       </Box>
 
-      {/* טאבים */}
+      {/* Tabs */}
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label="פרטי קורס" />
         <Tab label="נושאי קורס" />
       </Tabs>
 
-      {/* תוכן לפי טאב */}
+      {/* Tab Content */}
       <Box sx={{ mt: 2 }}>
         {tabValue === 0 && selectedCourse && (
-          <CourseDetails course={selectedCourse} setCourse={setSelectedCourse} />
+          <CourseDetails course={selectedCourse} setCourse={handleSetCourse} />
         )}
         {tabValue === 1 && (
           <Typography variant="body1">כאן יהיו נושאי הקורס</Typography>
         )}
       </Box>
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

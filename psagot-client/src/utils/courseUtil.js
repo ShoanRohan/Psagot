@@ -1,6 +1,7 @@
 import api from "./api";
 
 const getCourseById = async (id) => {
+    console.log('here', id)
     const response = await api.get(`/Course/GetCourseById/${id}`);
     return response.data;
 };
