@@ -1,29 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Tabs, Tab } from "@mui/material";
-import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם למיקום הקובץ אצלך
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם
+
 import TopicsGrid from "../components/TopicsGrid";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllTopic } from "../features/topic/topicActions";
 import TopicSearch from "../components/TopicSearch";
 const CoursPage = () => { 
   const [tabValue, setTabValue] = useState(0);
+  const { id } = useParams(); // קבלת מזהה קורס מה-URL
 
- const dispatch = useDispatch();
- const topics = useSelector((state) => state.topic.topics);
+    const [selectedCourse, setSelectedCourse] = useState(null); // קורס נבחר
+    const topics = useSelector((state) => state.topic.topics);
 
   useEffect(() => {
-     dispatch(fetchAllTopic());
-   }, [dispatch]);
+    const fetchCourse = async () => {
+      try {
+        const response = await axios.get(`/api/Course/GetCourseById/${id}`);
+        setSelectedCourse(response.data);
+      } catch (error) {
+        console.error("שגיאה בשליפת פרטי קורס:", error);
+      }
+    };
 
-  const selectedCourse = {
-    id: 1,
-    name: "קורס ארכיטקטורה",
-  };
+    if (id) fetchCourse();
+  }, [id]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
- 
+
+  const handleSave = async () => {
+    try {
+      await axios.put("/api/Course/UpdateCourse", selectedCourse);
+      alert("הקורס עודכן בהצלחה");
+    } catch (error) {
+      console.error("שגיאה בעדכון הקורס:", error);
+      alert("ארעה שגיאה בעת עדכון הקורס");
+    }
+  };
+
+  const handleCancel = () => {
+    // רענון מחדש של הנתונים מהשרת (אפשר גם לעשות ניווט אחורה)
+    window.location.reload();
+  };
+
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "94vh" }}>
       {/* שורת כותרת עם שם הקורס והכפתורים */}
@@ -35,17 +57,15 @@ const CoursPage = () => {
           mb: 3,
         }}
       >
-        {/* כותרת: שם הקורס */}
         <Box>
           <Typography variant="h5" sx={{ fontWeight: "bold", color: "#0b2d72" }}>
-            {selectedCourse.name}
+            {selectedCourse?.name || "טעינה..."}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             פרטי קורס
           </Typography>
         </Box>
 
-        {/* כפתורים */}
         <Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
@@ -56,6 +76,8 @@ const CoursPage = () => {
               py: 1,
               textTransform: "none",
             }}
+            onClick={handleSave}
+            disabled={!selectedCourse}
           >
             שמור
           </Button>
@@ -68,6 +90,7 @@ const CoursPage = () => {
               py: 1,
               textTransform: "none",
             }}
+            onClick={handleCancel}
           >
             ביטול
           </Button>
@@ -82,7 +105,9 @@ const CoursPage = () => {
 
       {/* תוכן לפי טאב */}
       <Box sx={{ mt: 2 }}>
-        {tabValue === 0 && <CourseDetails />}
+        {tabValue === 0 && selectedCourse && (
+          <CourseDetails course={selectedCourse} setCourse={setSelectedCourse} />
+        )}
         {tabValue === 1 && (
           <>
            <TopicSearch  />
@@ -94,4 +119,4 @@ const CoursPage = () => {
   );
 };
 
-export default CoursPage; 
+export default CoursPage;

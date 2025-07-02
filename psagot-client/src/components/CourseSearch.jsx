@@ -178,7 +178,10 @@ const CourseSearch = () => {
                   },
                   '& .MuiPickersInputBase-root':{
                     marginTop:0
-                  }
+                  },
+                  '& .MuiInputBase-root': {
+                    marginTop: 0,
+                  },
                 },
               },
             }}
@@ -213,7 +216,10 @@ const CourseSearch = () => {
                   },
                   '& .MuiPickersInputBase-root':{
                     marginTop:0
-                  }
+                  },
+                  '& .MuiInputBase-root': {
+                    marginTop: 0,
+                  },
                 },
               },
             }}
