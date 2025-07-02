@@ -1,18 +1,16 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  IconButton,
-  Box,
-  TablePagination,
-  CircularProgress,
-} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import IconButton from "@mui/material/IconButton";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
+import CircularProgress from "@mui/material/CircularProgress";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { styled } from "@mui/material/styles";
@@ -22,8 +20,7 @@ import {
   changePageSize,
   updateFilteredRooms,
 } from "../features/room/roomSlice";
-import TablePaginationActions from "./TablePaginationActions";
-import { EditOutlined } from "@mui/icons-material";
+import TablePaginationActions from "./TablePaginationActions"
 
 const StyledTableCell = styled(TableCell)(() => ({
   fontSize: "14px",

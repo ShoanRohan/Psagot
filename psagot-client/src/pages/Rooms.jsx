@@ -3,6 +3,7 @@ import RoomsSearchBar from "../components/RoomsSearchBar"
 import ExampleUseGenericPopup from '../components/ExampleUseGenericPopup'
 import RoomsGrid from '../components/RoomsGrid'
 
+
 const Rooms = () => {
   return (
     <div>

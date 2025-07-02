@@ -10,7 +10,11 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import { useDispatch } from "react-redux";
-import { filterRooms, resetFilter, updateFilteredRooms } from "../features/room/roomSlice";
+import {
+  filterRooms,
+  resetFilter,
+  updateFilteredRooms,
+} from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
 
 const myEequipment = ["מקרן", "רמקולים", "מחשבים"];
@@ -32,8 +36,10 @@ const RoomsSearchBar = () => {
     return isValid;
   };
   const clean = () => {
-  dispatch(resetFilter());
-};
+    setRoomSearch(roomSearchEmpty); // תאפס את השדות בטופס
+    setCapacityError(""); // תאפס שגיאות
+    dispatch(resetFilter());
+  };
 
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
@@ -53,7 +59,6 @@ const RoomsSearchBar = () => {
     setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
-    if (!validate()) return;
     const projector = roomSearch.equipment.includes("מקרן");
     const speakers = roomSearch.equipment.includes("רמקולים");
     const computers = roomSearch.equipment.includes("מחשבים");
@@ -79,7 +84,6 @@ const RoomsSearchBar = () => {
           name="roomName"
           value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
-      
         />
         <FormControl size="small" className="textField equipment-select">
           <InputLabel id="equipment-label">ציוד</InputLabel>
@@ -119,7 +123,12 @@ const RoomsSearchBar = () => {
         {(roomSearch.roomName ||
           roomSearch.capacity ||
           roomSearch.equipment.length > 0) && (
-          <Button variant="outlined" color="primary" onClick={clean} className="clear-button">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={clean}
+            className="clear-button"
+          >
             ניקוי
           </Button>
  
