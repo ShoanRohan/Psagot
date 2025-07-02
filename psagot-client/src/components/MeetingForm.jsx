@@ -73,9 +73,9 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     type: 'success', // 'success', 'error', 'warning', 'info'
     title: '',
     message: '',
-    showCancel: false,
-    onConfirm: null,
-    onCancel: null
+    showCancel: false, // האם להראות כפתור ביטול
+    onConfirm: null, // מה לעשות בלחיצה על אישור
+    onCancel: null  // מה לעשות בלחיצה על ביטול
   });
 
   useEffect(() => {
@@ -166,6 +166,7 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
   }, [isDataLoaded, meetingId, meetings, propMeeting, meetingFromState, isEditMode]);
 
 
+  //עדכון פרטי השדות ב CONSOLE
   useEffect(() => {
     console.log('MeetingForm Debug Info:', {
       isEditMode,
@@ -269,19 +270,19 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
 
     //שדות חובה בהוספת מפגש
-    if (!formData.topicId) errors.topicId = 'נושא הוא שדה חובה';
-    if (!formData.courseId) errors.courseId = 'שם קורס הוא שדה חובה';
-    if (!formData.teacherId) errors.teacherId = 'שם מרצה הוא שדה חובה';
-    if (!formData.roomId) errors.roomId = 'מספר חדר הוא שדה חובה';
-    if (!formData.meetingDate) errors.meetingDate = 'תאריך הוא שדה חובה';
-    if (!formData.startTime) errors.startTime = 'שעת התחלה היא שדה חובה';
-    if (!formData.endTime) errors.endTime = 'שעת סיום היא שדה חובה';
-    if (!formData.year) errors.year = 'שנה היא שדה חובה';
+    if (!formData.topicId) errors.topicId = ' שדה חובה';
+    if (!formData.courseId) errors.courseId = ' שדה חובה';
+    if (!formData.teacherId) errors.teacherId = ' שדה חובה';
+    if (!formData.roomId) errors.roomId = ' שדה חובה';
+    if (!formData.meetingDate) errors.meetingDate = ' שדה חובה';
+    if (!formData.startTime) errors.startTime = ' שדה חובה';
+    if (!formData.endTime) errors.endTime = ' שדה חובה';
+    if (!formData.year) errors.year = ' שדה חובה';
 
     //שדות חובה נוספים בעריכת מפגש
     if (isEditMode) {
-      if (!formData.meetingId) errors.meetingId = 'מספר מפגש הוא שדה חובה';
-      if (!formData.statusCourseId) errors.statusCourseId = 'סטטוס הוא שדה חובה';
+      if (!formData.meetingId) errors.meetingId = ' שדה חובה';
+      if (!formData.statusCourseId) errors.statusCourseId = ' שדה חובה';
     }
 
     return errors;
@@ -440,19 +441,11 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     // בדיקת תקינות הטופס והחזרת שגיאה במקרה הצורך
     const errors = validateForm();
     console.log("Validation Errors:", errors);
-    setValidationErrors(errors);
 
 
     if (Object.keys(errors).length > 0) {
-      // הכנס כאן את השינוי
-      const errorMessages = Object.values(errors).join('\n'); // יחבר את כל הודעות השגיאה לשורה אחת עם מעברי שורה
-      showDialog(
-        'error', // סוג הדיאלוג יהיה "שגיאה"
-        'שגיאות בטופס', // כותרת הדיאלוג
-        `אנא מלא את כל שדות החובה ותקן את השגיאות הבאות:\n${errorMessages}`, // הודעה מפורטת
-        false, // לא נציג כפתור ביטול בהודעת שגיאת ולידציה פשוטה
-        closeDialog
-      );
+      // הצגת שגיאות אם לא מילאו שדות חובה
+      setValidationErrors(errors);
       return;
     }
 
@@ -940,6 +933,8 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                 type="date"
                 value={formData.meetingDate || ''}
                 onChange={handleChange}
+                error={!!validationErrors.meetingDate}
+                helperText={validationErrors.meetingDate}
                 InputLabelProps={{ shrink: true }}
                 required
                 variant="outlined"
@@ -1178,19 +1173,22 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            overflowX: 'hidden' // << הוספנו
           }
         }}
       >
         {/* כותרת שורה עליונה */}
         <Box
           sx={{
-            width: '484px',
+            width: '100%', // << חשוב לשים 100%
+            maxWidth: '484px',
             height: '21px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            mb: 3
+            mb: 3,
+            overflowX: 'hidden' // << ביטול גלילה אופקית
           }}
         >
           {/* טקסט כותרת בצד ימין */}
@@ -1203,7 +1201,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
           >
             שמירת מפגש
           </Typography>
-          {/* X בצד שמאל */}
           <IconButton
             aria-label="close"
             onClick={closeDialog}
@@ -1218,13 +1215,15 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         {/* תוכן הודעה */}
         <Box
           sx={{
-            width: '484px',
+            width: '100%',
+            maxWidth: '484px',
             minHeight: '136px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '32px',
-            textAlign: 'center'
+            textAlign: 'center',
+            overflowX: 'hidden'
           }}
         >
           <Typography
@@ -1242,16 +1241,24 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
             <Box
               sx={{
                 width: '100%',
+                maxWidth: '100%',
                 border: '1px solid #ff9800',
                 borderRadius: '4px',
                 backgroundColor: '#fff3e0',
-                padding: '8px'
+                padding: '8px',
+                overflowX: 'hidden'
               }}
             >
               <Typography variant="subtitle1" color="text.secondary">
                 פירוט:
               </Typography>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, textAlign: 'right' }}>
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                textAlign: 'right',
+                overflowX: 'hidden'
+              }}>
                 {dialog.reasons.map((reason, index) => (
                   <li key={index} style={{ marginBottom: '4px' }}>
                     - {reason}
@@ -1265,14 +1272,19 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         {/* כפתורים */}
         <DialogActions
           sx={{
-            width: '484px',
+            width: '100%',
+            maxWidth: '484px',
             justifyContent: 'center',
             gap: '16px',
-            marginTop: '32px'
+            marginTop: '32px',
+            overflowX: 'hidden'
           }}
         >
           <Button
-            onClick={dialog.onCancel}
+            onClick={() => {
+              if (dialog.onCancel) dialog.onCancel();
+              closeDialog();
+            }}
             variant="outlined"
             sx={{
               width: '83px',
@@ -1310,8 +1322,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
-
 
     </>
 
