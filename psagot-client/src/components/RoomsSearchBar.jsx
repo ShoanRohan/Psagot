@@ -8,10 +8,14 @@ import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
+import InputLabel from "@mui/material/InputLabel";
 import { useDispatch } from "react-redux";
-import { filterRooms } from "../features/room/roomSlice";
+import {
+  filterRooms,
+  resetFilter,
+  updateFilteredRooms,
+} from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
-import { InputLabel } from "@mui/material";
 
 const myEequipment = ["מקרן", "רמקולים", "מחשבים"];
 const RoomsSearchBar = () => {
@@ -32,26 +36,29 @@ const RoomsSearchBar = () => {
     return isValid;
   };
   const clean = () => {
-  setRoomSearch(roomSearchEmpty);
-  setCapacityError("");
-  dispatch(filterRooms({}));
-};
+    setRoomSearch(roomSearchEmpty); // תאפס את השדות בטופס
+    setCapacityError(""); // תאפס שגיאות
+    dispatch(resetFilter());
+  };
 
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
-     if (name === "capacity") {
-    if (value === "") {
-      setCapacityError("");
-    } else if (isNaN(value) || Number(value) <= 0) {
-      setCapacityError("חייב להיות מספר חיובי");
-    } else {
-      setCapacityError("");
+    if (name === "equipment") {
+      setRoomSearch({ ...roomSearch, equipment: value });
+      return;
     }
-  }
+    if (name === "capacity") {
+      if (value === "") {
+        setCapacityError("");
+      } else if (Number(value) <= 0) {
+        setCapacityError("חייב להיות מספר חיובי");
+      } else {
+        setCapacityError("");
+      }
+    }
     setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
-    if (!validate()) return;
     const projector = roomSearch.equipment.includes("מקרן");
     const speakers = roomSearch.equipment.includes("רמקולים");
     const computers = roomSearch.equipment.includes("מחשבים");
@@ -61,8 +68,10 @@ const RoomsSearchBar = () => {
         projector,
         speakers,
         computers,
+        isNewSearch: true,
       })
     );
+    dispatch(updateFilteredRooms());
   };
   return (
     <Box className="rooms-search-bar">
@@ -75,7 +84,6 @@ const RoomsSearchBar = () => {
           name="roomName"
           value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
-      
         />
         <FormControl size="small" className="textField equipment-select">
           <InputLabel id="equipment-label">ציוד</InputLabel>
@@ -115,7 +123,12 @@ const RoomsSearchBar = () => {
         {(roomSearch.roomName ||
           roomSearch.capacity ||
           roomSearch.equipment.length > 0) && (
-          <Button variant="outlined" color="primary" onClick={clean} className="clear-button">
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={clean}
+            className="clear-button"
+          >
             ניקוי
           </Button>
         )}
