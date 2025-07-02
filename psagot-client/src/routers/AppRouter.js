@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux'; // חדש!
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CalendarPage from '../pages/CalendarPage';
@@ -10,10 +9,10 @@ import RoomTable from '../components/RoomTable';
 import CourseScreen from "../components/CourseScreen";
 import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
-import EditProfile from '../components/EditProfile'; // חדש!
+import EditProfile from '../components/EditProfile'; 
 
 const AppRouter = () => {
-  const { selectedUser } = useSelector((state) => state.user); // חדש!
+
 
   return (
     <Routes>
@@ -25,7 +24,7 @@ const AppRouter = () => {
         <Route path='/users' element={<UsersPage />} />
         <Route path='/rooms' element={<Rooms />} />
         <Route path='/calendar' element={<CalendarPage />} />
-        <Route path='/edit-profile' element={<EditProfile user={selectedUser} />} />
+        <Route path='/edit-profile' element={<EditProfile />} />
       </Route>
     </Routes>
   );
