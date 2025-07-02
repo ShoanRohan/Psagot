@@ -155,17 +155,6 @@ const roomSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addRoomAction.fulfilled, (state, action) => {
-        state.rooms.push(action.payload);
-      })
-      .addCase(updateRoomAction.fulfilled, (state, action) => {
-        const index = state.rooms.findIndex(
-          (room) => room.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.rooms[index] = action.payload;
-        }
-      })
-      .addCase(addRoomAction.fulfilled, (state, action) => {
         state.status = 'succeeded';
         let _rooms = [...state.rooms];
         _rooms.push(action.payload);
