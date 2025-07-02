@@ -9,11 +9,13 @@ import CourseSearch from "../components/CourseSearch";
 import circlePlus from "../assets/icons/circle-plus.png";
 import exptExcel from "../assets/icons/excelExport.png";
 import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 
 const CoursesPage = () => {
   const dispatch = useDispatch();
   const courses = useSelector((state) => state.course.courses);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(filterCourses({ statusId: 1 }));
@@ -93,6 +95,7 @@ const CoursesPage = () => {
 
     <Button
       variant="contained"
+      onClick={() => navigate('/newCourse')}
       sx={{
         width: "152px",
         height: "40px",

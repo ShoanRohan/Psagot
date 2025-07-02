@@ -7,34 +7,38 @@ import Login from '../components/Login';
 import Register from '../components/Register';
 import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
+import CoursPage from '../pages/CoursPage';
 import RegisterPage from '../pages/RegisterPage';
-import TopicDialog from '../components/TopicDialog';
+import AddCoursePage from '../pages/AddCoursePage';
 
 const AppRouter = () => {
-    return (
-        <Routes>
-            {/* ניווט ברירת מחדל ישירות ל-login */}
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/TopicDialog/:id" element={<TopicDialog />} />
+  return (
+    <Routes>
+      {/* עמוד התחברות */}
+      <Route path="/" element={<LoginPage />}>
+        <Route index element={<Login />} />
+      </Route>
 
+      {/* עמוד הרשמה */}
+      <Route path="/register" element={<RegisterPage />}>
+        <Route index element={<Register />} />
+      </Route>
 
-            {/* עמודי אפליקציה אחרי התחברות */}
-            <Route path="/" element={<Layout />}>
-                <Route index element={<HomePage />} />
-                <Route path="/user" element={<UserManagement />} />
-                <Route path="/courses" element={<CoursesPage />} />
+      {/* עמודים אחרי התחברות – תחת Layout */}
+      <Route path="/" element={<Layout />}>
+        <Route path="home" element={<HomePage />} />
+        <Route path="cours/:id" element={<CoursPage />} />
+        <Route path="user" element={<UserManagement />} />
+        <Route path="courses" element={<CoursesPage />} />
+        <Route path="/newCourse" element={<AddCoursePage/>}/>
+      </Route>
 
-            </Route>
+      {/* כל כתובת שלא קיימת */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/TopicDialog/:id" element={<TopicDialog />} />
 
-            {/* עמוד התחברות */}
-            <Route path="/login" element={<LoginPage />}>
-                <Route index element={<Login />} />
-            </Route>
-            <Route path='/register' element={<RegisterPage />}>
-                <Route index element={<Register />} />
-            </Route>
-        </Routes>
-    );
+    </Routes>
+  );
 };
 
 export default AppRouter;

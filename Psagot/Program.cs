@@ -4,6 +4,8 @@ using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
+using Psagot.Converters;
+
 
 namespace Psagot
 {
@@ -34,7 +36,15 @@ namespace Psagot
             builder.Services.AddScoped<ITopicDL, TopicDL>();
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
-            builder.Services.AddControllers();
+            builder.Services.AddScoped<IStatusCourseDL, StatusCourseDL>();
+            builder.Services.AddScoped<IStatusCourseBL, StatusCourseBL>();
+
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new NullableDateOnlyJsonConverter());
+            });
+
             builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

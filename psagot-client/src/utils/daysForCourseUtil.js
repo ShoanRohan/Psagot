@@ -10,7 +10,7 @@ const getDaysForCourseByCourseId = async (courseId) => {
     return response.data;
 };
 
-const gelAllDaysForCourse = async () => {
+const getAllDaysForCourse = async () => {
     const response = await api.get('/DaysForCourse/GetAllDaysForCourse');
     return response.data;
 };
@@ -25,4 +25,4 @@ const updateDaysForCourse = async (updateDaysForCourse) => {
     return response.data;
 };
 
-export { addDaysForCourse, getDaysForCourseByCourseId, gelAllDaysForCourse, getDaysForCourseById, updateDaysForCourse };
+export { addDaysForCourse, getDaysForCourseByCourseId, getAllDaysForCourse, getDaysForCourseById, updateDaysForCourse };

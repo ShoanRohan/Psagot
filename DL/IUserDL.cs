@@ -18,5 +18,7 @@ namespace DL
         Task<IEnumerable<UserNameIdDTO>> GetUserNamesByUserTypeId(int userTypeId);
 
         Task<User> GetUserByEmailAndPhone(string email, string phone);
+        Task<User> GetUserByEmail(string email);
+
     }
 }
