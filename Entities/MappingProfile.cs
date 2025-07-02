@@ -25,7 +25,8 @@ public class MappingProfile : Profile
                     .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name)).ReverseMap();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
         CreateMap<StatusTopic, StatusTopicDTO>().ReverseMap();
-
+        CreateMap<User, UserTableDTO>().ForMember(dest => dest.UserTypeName,
+              opt => opt.MapFrom(src => src.UserType.Name)).ReverseMap();
 
         CreateMap<Meeting, EventDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MeetingId))
