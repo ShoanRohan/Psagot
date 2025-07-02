@@ -22,7 +22,7 @@ import {
   changePageSize,
   updateFilteredRooms,
 } from "../features/room/roomSlice";
-// import TablePaginationActions from "./TablePaginationActions";
+import TablePaginationActions from "./TablePaginationActions";
 import { EditOutlined } from "@mui/icons-material";
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -155,7 +155,7 @@ const RoomsGrid = () => {
         rowsPerPageOptions={[2, 3, 25, 50]}
         labelRowsPerPage="מספר שורות:"
         labelDisplayedRows={() => `עמוד ${pageIndex + 1}`}
-        // ActionsComponent={TablePaginationActions}
+        ActionsComponent={TablePaginationActions}
         sx={{
           borderTop: "1px solid #e0e0e0",
           direction: "ltr",
