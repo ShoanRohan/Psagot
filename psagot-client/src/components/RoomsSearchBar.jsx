@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
+import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import InputLabel from "@mui/material/InputLabel";
@@ -36,26 +37,24 @@ const RoomsSearchBar = () => {
     return isValid;
   };
   const clean = () => {
-    setRoomSearch(roomSearchEmpty); 
-    setCapacityError("");
-    dispatch(resetFilter());
-  };
+  dispatch(resetFilter());
+};
 
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
     if (name === "equipment") {
-      setRoomSearch({ ...roomSearch, equipment: value });
-      return;
+    setRoomSearch({ ...roomSearch, equipment: value });
+    return;
+  }
+     if (name === "capacity") {
+    if (value === "") {
+      setCapacityError("");
+    } else if (Number(value) <= 0) {
+      setCapacityError("חייב להיות מספר חיובי");
+    } else {
+      setCapacityError("");
     }
-    if (name === "capacity") {
-      if (value === "") {
-        setCapacityError("");
-      } else if (Number(value) <= 0) {
-        setCapacityError("חייב להיות מספר חיובי");
-      } else {
-        setCapacityError("");
-      }
-    }
+  }
     setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
@@ -64,17 +63,17 @@ const RoomsSearchBar = () => {
     const computers = roomSearch.equipment.includes("מחשבים");
     dispatch(
       filterRooms({
-        ...roomSearch,
-        projector,
-        speakers,
-        computers,
+      ...roomSearch,
+      projector,
+      speakers,
+      computers,
         isNewSearch: true,
       })
     );
     dispatch(updateFilteredRooms());
   };
   return (
-    <Box className="rooms-search-bar">
+      <Box className="rooms-search-bar">
       <div className="search-fields">
         <TextField
           label="שם חדר"
@@ -132,7 +131,8 @@ const RoomsSearchBar = () => {
           >
             ניקוי
           </Button>
-        )}
+ 
+       )}
         <Button
           variant="contained"
           color="primary"
@@ -148,7 +148,7 @@ const RoomsSearchBar = () => {
           <span className="search-button-text">חיפוש</span>
         </Button>
       </div>
-    </Box>
+      </Box>
   );
 };
 export default RoomsSearchBar;

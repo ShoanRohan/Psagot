@@ -1,13 +1,14 @@
+/* ספציפיות גבוהה יותר עבור class של החיפוש */
 .rooms-search-bar {
-  display: flex;
+    display: flex;
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 12px;
-  background-color: #f9fbfd;
-  padding: 16px;
+    background-color: #f9fbfd;
+    padding: 16px;
   border-radius: 10px;
-  margin-bottom: 24px;
+    margin-bottom: 24px;
   direction: rtl;
   width: 100%;
   max-width: 100%;
@@ -15,25 +16,34 @@
   box-sizing: border-box;
   margin: 30px 50px; /* חיצוני */
   width: calc(100% - 80px); /* כדי למנוע גלילה מיותרת */
-}
+  }
 .rooms-search-bar * {
   font-family: 'Rubik', sans-serif !important;
   font-weight: 400;
-
+  
+  /* ספציפיות גבוהה יותר עבור TextField ו-FormControl */
+  .rooms-search-bar .MuiTextField-root,
+  .rooms-search-bar .MuiFormControl-root {
+    min-width: 160px !important;
+  }
 }
-
 /* שדה טקסט כללי */
 .textField {
   width: 20% !important;
   min-width: 150px !important;
-  direction: rtl;
-}
-
+    direction: rtl;
+    padding: 1rem;
+    width: 100%;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  
 /* שדה ציוד */
 .textField.equipment-select {
-  width: 20% !important;
+    width: 20% !important;
   min-width: 180px !important;
-}
+  }
 .textField.equipment-select .MuiSelect-select.MuiSelect-outlined {
   padding-right: 0px !important;
 }
@@ -41,7 +51,7 @@
   right: 17px !important;
   left: auto !important;
 }
-
+  
 .MuiButton-root.clear-button {
   min-width: 70px !important;  /* ביטול רוחב מינימלי של MUI */
   width: auto !important;
@@ -77,52 +87,52 @@
 }
 
 /* עיצוב בסיסי לשדה */
-.textField .MuiInputBase-root {
-  border-bottom: 1px solid #ccc !important;
-  border-radius: 0 !important;
+  .textField .MuiInputBase-root {
+    border-bottom: 1px solid #ccc !important;
+    border-radius: 0 !important;
   font-size: 0.9rem !important;
   direction: rtl;
-}
-
+  }
+  
 /* קו תחתון ממוקד */
 .textField .Mui-focused .MuiInputBase-root {
   border-bottom: 2px solid #888 !important;
-}
-
+  }
+  
 /* הסרת מסגרות outlined */
 .textField .MuiOutlinedInput-notchedOutline,
-.textField .Mui-focused .MuiOutlinedInput-notchedOutline {
-  border: none !important;
-}
-
+  .textField .Mui-focused .MuiOutlinedInput-notchedOutline {
+    border: none !important;
+  }
+  
 /* Select (ציוד) – יישור ותיקוני גובה */
 .MuiSelect-select {
   direction: rtl !important;
   text-align: right;
-  font-size: 0.9rem !important;
-}
-
+    font-size: 0.9rem !important;
+  }
+  
 /* יישור וגובה לשדה Select */
 .textField .MuiSelect-select {
   margin-top: -5px;
   height: 24px;
-}
-
+  }
+  
 /* עיצוב כפתורים */
-.MuiButton-root {
-  border-radius: 999px !important;
+  .MuiButton-root {
+    border-radius: 999px !important;
   padding: 6px 12px !important;
-  font-size: 0.9rem !important;
-  text-transform: none !important;
+    font-size: 0.9rem !important;
+    text-transform: none !important;
   font-weight: 500;
-  min-width: 100px !important;
+    min-width: 100px !important;
   height: 40px !important;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px !important;
-}
-
+  }
+  
 /* כפתור כחול מלא */
 .MuiButton-contained {
   background-color: #326DEF !important;
@@ -130,7 +140,7 @@
 }
 
 /* כפתור outlined */
-.MuiButton-outlined {
+  .MuiButton-outlined {
   border: 1.5px solid #326DEF !important;
   color: #326DEF !important;
   background-color: white !important;
@@ -154,15 +164,15 @@
   background-color: #f9f9f9;
   border-radius: 12px;
   margin-bottom: 1rem;
-}
+  }
 
 .search-button.Mui-disabled {
   background-color: #326DEF !important;
   color: white !important;
   cursor: not-allowed !important;
   opacity: 0.6;
-}
-
+  }
+  
 
 /* שדות חיפוש */
 .search-fields {
@@ -172,8 +182,8 @@
   flex: 1;
   justify-content: flex-start; /* מיושרים לימין (ב־RTL) */
   padding-right: 12px;
-}
-
+  }
+  
 /* כפתורים */
 .search-buttons {
   min-width: 240px;
@@ -188,12 +198,10 @@
   margin-right: 5px; /* רווח אחרי המילה "חיפוש" */
 
 }
-}
-
+  }
+  
 .textField.equipment-select .MuiSelect-icon {
   right: auto !important;
   left: 8px !important; /* מרחק קטן משמאל */
-}
-
-
-
+  }
+  
