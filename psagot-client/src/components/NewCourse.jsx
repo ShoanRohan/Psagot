@@ -1,4 +1,4 @@
-import { Paper, Stack, TextField, Typography, MenuItem, Button, Box } from "@mui/material";
+import { Paper, Stack, TextField, Typography, MenuItem, Button, Box, Alert } from "@mui/material";
 import { React,  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addCourseAction } from "../features/course/courseActions";
@@ -22,10 +22,59 @@ const NewCourse = () => {
   const [daysToAdd, setDaysToAdd] = useState([
     { day: '', time: '', isScheduled: false }]);
   const navigate = useNavigate();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); 
+
   const { status: courseSaveStatus, error: courseSaveError } = useSelector((state) => state.course);
 
+  const showSnackbar = (message, severity = 'success') => {
+  setSnackbarMessage(message);
+  setSnackbarSeverity(severity);
+  setSnackbarOpen(true);
+};
 
+const [errors, setErrors] = useState({
+  courseName: '',
+  year: '',
+  studentsCount: '',
+  meetingsCount: '',
+  startDate: '',
+  endDate: '',
+  status: '',
+});
+
+const [dayErrors, setDayErrors] = useState([]);
+
+const validateField = (name, value) => {
+  switch (name) {
+    case 'courseName':
+      return value.trim() === '' ? 'יש להזין שם קורס' : '';
+    case 'year':
+      return !/^\d{4}$/.test(value) ? 'יש להזין שנה תקינה (4 ספרות)' : '';
+    case 'studentsCount':
+      return isNaN(value) || value <= 0 ? 'יש להזין מספר תלמידים תקין' : '';
+    case 'meetingsCount':
+      return isNaN(value) || value <= 0 ? 'יש להזין מספר מפגשים תקין' : '';
+    case 'startDate':
+      return !value ? 'יש להזין תאריך התחלה' : '';
+    case 'endDate':
+      return !value ? 'יש להזין תאריך סיום' : '';
+    case 'status':
+      return value === '' ? 'יש לבחור סטטוס' : '';
+    default:
+      return '';
+  }
+};
+
+const validateForm = () => {
+  const newErrors = {};
+  Object.entries(formData).forEach(([key, value]) => {
+    newErrors[key] = validateField(key, value);
+  });
+  setErrors(newErrors);
+  return Object.values(newErrors).every((x) => x === '');
+};
 
   const [formData, setFormData] = useState({
     courseName: '',
@@ -40,44 +89,49 @@ const NewCourse = () => {
     status: '',
     color: '#ffffff',
   });
-  
 
-  const handleChange = (e) => {
-    console.log(e.target, e)
-  const { name, value } = e.target;
-  setFormData((prev) => ({
-    ...prev,
-    [name]: value,
+  const validateDays = () => {
+  const newDayErrors = daysToAdd.map((day) => ({
+    day: day.day ? '' : 'יש לבחור יום',
+    time: day.time ? '' : 'יש לבחור שעה',
   }));
+  setDayErrors(newDayErrors);
+  return newDayErrors.every((d) => d.day === '' && d.time === '');
 };
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name]: value }));
+  setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
+};
+
 
 const handleCancel = () => {
   navigate('/courses');
 };
 
-const handleCloseSnackbar = (_, reason) => {
-  if (reason === 'clickaway') return;
-  setOpenSnackbar(false);
-};
-
-
-
   const handleSubmit = () => {
-    console.log("formData.status:", formData.status);
-      const dtoToSend = {
-        Name: formData.courseName,
-        Year: parseInt(formData.year),
-        Color: formData.color,
-        StartDate: formData.startDate ? formData.startDate.format('YYYY-MM-DD') : null,
-        EndDate: formData.endDate ? formData.endDate.format('YYYY-MM-DD') : null,
-        NumberOfMeetings: formData.meetingsCount ? parseInt(formData.meetingsCount) : null,
-        NumberOfStudents: parseInt(formData.studentsCount),
-        Notes: formData.notes || null,
-        StatusId: formData.status ==='' ? null : Number(formData.status)
-      };
-    console.log("DTO to send:", dtoToSend);
-    dispatch(addCourseAction(dtoToSend));
+  const isCourseValid = validateForm();
+  const areDaysValid = validateDays();
+  if (!isCourseValid || !areDaysValid) {
+    showSnackbar('יש למלא את כל השדות החובה', 'error');
+    return;
+  }
+
+  const dtoToSend = {
+    Name: formData.courseName,
+    Year: parseInt(formData.year),
+    Color: formData.color,
+    StartDate: formData.startDate ? formData.startDate.format('YYYY-MM-DD') : null,
+    EndDate: formData.endDate ? formData.endDate.format('YYYY-MM-DD') : null,
+    NumberOfMeetings: parseInt(formData.meetingsCount),
+    NumberOfStudents: parseInt(formData.studentsCount),
+    Notes: formData.notes || null,
+    StatusId: Number(formData.status),
   };
+
+  dispatch(addCourseAction(dtoToSend));
+};
 
   const handleDayChange = (index, field, value) => {
   const updatedDays = [...daysToAdd];
@@ -85,7 +139,16 @@ const handleCloseSnackbar = (_, reason) => {
   setDaysToAdd(updatedDays);
 };
 const handleSchedule = () => {
-   const courseId = 123; // צריך לקבל מהקורס השמור או מסטייט
+  const invalidRows = daysToAdd.filter(day =>
+    day.day === '' || day.time === ''
+  );
+
+  if (invalidRows.length > 0) {
+    showSnackbar('יש למלא יום ושעה עבור כל שיבוץ לפני השיבוץ', 'error');
+    return;
+  }
+
+  const courseId = 123; // צריך להחליף למזהה הקורס הנכון
 
   const payload = daysToAdd.map((day) => ({
     courseId,
@@ -99,21 +162,24 @@ const handleSchedule = () => {
   payload.forEach((dayForCourse) => {
     dispatch(addDaysForCourseAction(dayForCourse));
   });
+
+  showSnackbar('שמירת ימי הקורס הסתיימה בהצלחה', 'success');
 };
+
 const handleAddDay = () => {
   setDaysToAdd((prev) => [...prev, { day: '', time: '', isScheduled: false }]);
 };
 
 useEffect(() => {
   if (courseSaveStatus === 'succeeded') {
-    setOpenSnackbar(true);
+    showSnackbar('שמירת פרטי הקורס הסתיימה בהצלחה', 'success');
     const timer = setTimeout(() => {
       navigate('/courses');
     }, 3000);
      return () => clearTimeout(timer);
   }
   if (courseSaveStatus === 'failed') {
-    alert(`אירעה שגיאה בעת שמירת הקורס: ${courseSaveError}`);
+    showSnackbar(`אירעה שגיאה בעת שמירת הקורס: ${courseSaveError}`, 'error');
   }
 }, [courseSaveStatus, courseSaveError, navigate]);
 
@@ -172,6 +238,17 @@ useEffect(() => {
           <Button
           variant="contained"
           onClick={handleSubmit}
+            disabled={
+              Object.values(errors).some((x) => x !== '') ||
+              !formData.courseName ||
+              !formData.coordinatorName ||
+              !formData.year ||
+              !formData.startDate ||
+              !formData.endDate ||
+              !formData.studentsCount ||
+              !formData.meetingsCount ||
+              !formData.status
+            }
           sx={{
             display: 'inline-flex',
             justifyContent: 'center',
@@ -213,6 +290,8 @@ useEffect(() => {
               variant="standard"
               value={formData.courseName}
               onChange={handleChange}
+              error={!!errors.courseName}
+               helperText={errors.courseName}
               inputProps={{ dir: "rtl" }}
               InputLabelProps={{ sx: { right: 0 } }}
               sx={{ width: '200px' }}
@@ -225,6 +304,8 @@ useEffect(() => {
               variant="standard"
               value={formData.coordinatorName}
               onChange={handleChange}
+               error={!!errors.coordinatorName}
+               helperText={errors.coordinatorName}
               inputProps={{ dir: "rtl" }}
               InputLabelProps={{ sx: { right: 0 } }}
               sx={{ width: '200px' }}
@@ -239,6 +320,8 @@ useEffect(() => {
             variant="standard"
             value={formData.year}
             onChange={handleChange}
+             error={!!errors.year}
+               helperText={errors.year}
             inputProps={{ dir: "rtl" }}
             InputLabelProps={{ sx: { right: 0 } }}
             sx={{ width: '200px' }}
@@ -247,39 +330,40 @@ useEffect(() => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
              <Box sx={{ mr: 2 }}>
             <DatePicker
-             // name="startDate"
               label="תאריך התחלה"
               variant="standard"
               value={formData.startDate}
               onChange={(newValue) =>
-        setFormData((prev) => ({ ...prev, startDate: newValue }))
-      }
+                setFormData((prev) => ({ ...prev, startDate: newValue }))
+              }
               slotProps={{
-        textField: {
-          variant: 'standard',
-          sx: { width: '200px' },
-          InputLabelProps: { sx: { right: 0 } },
-        }
-      }}
+                textField: {
+                  variant: 'standard',
+                  sx: { width: '200px' },
+                  InputLabelProps: { sx: { right: 0 } },
+                }
+              }}
+              error={!!errors.startDate}
+              helperText={errors.startDate}
             />
           </Box>
-            <Box sx={{ mr: 4 }}>
+          <Box sx={{ mr: 4 }}>
             <DatePicker
-              //name="endDate"
-              label="תאריך סיום"
-             // type="text"
-              variant="standard"
-              value={formData.endDate}
-                onChange={(newValue) =>
-        setFormData((prev) => ({ ...prev, endDate: newValue }))
-      }
-              slotProps={{
-        textField: {
-          variant: 'standard',
-          sx: { width: '200px' },
-          InputLabelProps: { sx: { right: 0 } },
-        }
-      }}
+            label="תאריך סיום"
+            variant="standard"
+            value={formData.endDate}
+            onChange={(newValue) =>
+              setFormData((prev) => ({ ...prev, endDate: newValue }))
+            }
+            slotProps={{
+              textField: {
+                variant: 'standard',
+                sx: { width: '200px' },
+                InputLabelProps: { sx: { right: 0 } },
+              }
+            }}
+            error={!!errors.endDate}
+            helperText={errors.endDate}
             />
           </Box>
 
@@ -294,6 +378,8 @@ useEffect(() => {
             variant="standard"
             value={formData.studentsCount || ''}
             onChange={handleChange}
+            error={!!errors.studentsCount}
+            helperText={errors.studentsCount}
             inputProps={{ dir: "rtl" }}
             InputLabelProps={{ sx: { right: 0 } }}
             sx={{ width: '200px' }}
@@ -306,6 +392,8 @@ useEffect(() => {
               variant="standard"
               value={formData.meetingsCount}
               onChange={handleChange}
+              error={!!errors.meetingsCount}
+              helperText={errors.meetingsCount}
               inputProps={{ dir: "rtl" }}
               InputLabelProps={{ sx: { right: 0 } }}
               sx={{ width: '200px' }}
@@ -338,6 +426,8 @@ useEffect(() => {
             sx={{ width: 200,
               '& .MuiSelect-icon': { left: 0, right: 'auto', },
             }}
+            error={!!errors.status}
+            helperText={errors.status}
             InputLabelProps={{ sx: { right: 0 } }}          
           >
              <MenuItem value="">סטטוס</MenuItem>
@@ -479,6 +569,8 @@ useEffect(() => {
       select
       variant="standard"
       label= 'יום'
+      error={!!dayErrors[index]?.day}
+      helperText={dayErrors[index]?.day}
       value={item.day}
       onChange={(e) => handleDayChange(index, 'day', e.target.value)}
       InputLabelProps={{ sx: { right: 0 } }}  
@@ -511,6 +603,8 @@ useEffect(() => {
         sx: { width: '12.5rem' },
         InputLabelProps: { sx: { right: 0 } },
         inputProps: { dir: 'rtl', style: { textAlign: 'right' } },
+        error: !!dayErrors[index]?.time,
+        helperText: dayErrors[index]?.time,
       },
     }}
   />
@@ -568,15 +662,20 @@ useEffect(() => {
   </Box>
 </Paper>
 <Snackbar
-  open={openSnackbar}
-  autoHideDuration={3000}
-  onClose={handleCloseSnackbar}
-  anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+  open={snackbarOpen}
+  autoHideDuration={4000}
+  onClose={() => setSnackbarOpen(false)}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 >
-  <MuiAlert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }} elevation={6} variant="filled">
-    שמירת פרטי הקורס הסתיימה בהצלחה
-  </MuiAlert>
+  <Alert
+    onClose={() => setSnackbarOpen(false)}
+    severity={snackbarSeverity}
+    sx={{ width: '100%', direction: 'rtl' }}
+  >
+    {snackbarMessage}
+  </Alert>
 </Snackbar>
+
 
 
     </Box>
