@@ -25,7 +25,8 @@ public class MappingProfile : Profile
                     .ForMember(dest => dest.CoordinatorName, opt => opt.MapFrom(src => src.Coordinator.Name)).ReverseMap();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
         CreateMap<StatusTopic, StatusTopicDTO>().ReverseMap();
-
+        CreateMap<User, UserTableDTO>().ForMember(dest => dest.UserTypeName,
+              opt => opt.MapFrom(src => src.UserType.Name)).ReverseMap();
 
         CreateMap<Meeting, EventDTO>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.MeetingId))
@@ -39,10 +40,6 @@ public class MappingProfile : Profile
                     Location = (src.Room != null ? src.Room.Name : "לא ידוע"),
                     Color = (src.Course != null && src.Course.Color != null ? src.Course.Color : "gray")
                 }));
-        CreateMap<User, UserTableDTO>().ForMember(dest => dest.UserTypeName,
-               opt => opt.MapFrom(src => src.UserType.Name)).ReverseMap();
-
-
     }
 
     private DateTime CombineDateAndTime(DateOnly date, TimeOnly? time)
