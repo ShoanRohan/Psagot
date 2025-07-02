@@ -19,8 +19,6 @@ namespace Entities.DTO
 
         public TimeOnly EndTime { get; set; }
 
-        public virtual CourseDTO Course { get; set; } = null!;
-
-        public virtual DayDTO Day { get; set; } = null!;
+       
     }
 }

@@ -33,3 +33,8 @@ const deleteMeeting = async (meetingId) => {
 
 
 export { getAllMeetings, updateMeeting, addMeeting, getMeetingById, deleteMeeting };
+
+
+
+
+

@@ -17,27 +17,28 @@ import { fetchAllTopic } from '../features/topic/topicActions';
 import { fetchAllUsers } from '../features/user/userAction';
 import { fetchAllMeetings, addMeetingAction, updateMeetingAction } from '../features/meeting/meetingActions';
 import { clearError } from '../features/meeting/meetingSlice';
-import ChevronDownIcon from '../assets/icons/chevron-down.png';// ייבוא תמונת החץ של שדות ה OPTIONS
+
+// ייבוא תמונת החץ של שדות ה OPTIONS
+import ChevronDownIcon from '../assets/icons/chevron-down.png';
 
 const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
-  const dispatch = useDispatch(); // לקבלת פונקציית dispatch מ-Redux.
-  const navigate = useNavigate(); // לניווט בין דפים.
-  const location = useLocation(); // לגישה למידע על המיקום הנוכחי ב-URL.
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const meetingFromState = location.state?.meeting; // אובייקט פגישה מה-state של ה-location (אם קיים).
 
-  const { meetingId } = useParams(); // ID של הפגישה מה-URL (אם קיים).
-  const isEditMode = meetingId ? true : false; // דגל למצב עריכה (תלוי ב-meetingId).
+  const meetingFromState = location.state?.meeting;
 
-  // שליפת נתונים מ-Redux store:
-  const { meetings, isLoading, error: reduxError } = useSelector(state => state.meeting); // נתוני פגישות, טעינה ושגיאות.
-  const rooms = useSelector(state => state.room.rooms || []); // רשימת חדרים.
-  const courses = useSelector(state => state.course.courses || []); // רשימת קורסים.
-  const topics = useSelector(state => state.topic.topics || []); // רשימת נושאים.
-  const users = useSelector(state => state.user.user || []); // רשימת משתמשים.
+  const { meetingId } = useParams();
+  const isEditMode = meetingId ? true : false;
+
+  const { meetings, isLoading, error: reduxError } = useSelector(state => state.meeting);
+  const rooms = useSelector(state => state.room.rooms || []);
+  const courses = useSelector(state => state.course.courses || []);
+  const topics = useSelector(state => state.topic.topics || []);
+  const users = useSelector(state => state.user.user || []);
 
   const initialFormData = {
-    // אתחול טופס:
     meetingId: '',
     scheduleForTopicId: null,
     meetingNumberForTopic: 1,
@@ -59,12 +60,11 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     isPartOfSchedule: false
   };
 
-  // מצבי קומפוננטה באמצעות useState:
-  const [formData, setFormData] = useState(initialFormData); // נתוני הטופס הנוכחיים.
-  const [validationErrors, setValidationErrors] = useState({}); // שגיאות ולידציה.
-  const [invalidReasons, setInvalidReasons] = useState([]); // סיבות לאי-תקינות (אם רלוונטי).
-  const [statusOptions, setStatusOptions] = useState([]); // אפשרויות סטטוס.
-  const [isDataLoaded, setIsDataLoaded] = useState(false); // דגל לטעינת נתונים ראשונית.
+  const [formData, setFormData] = useState(initialFormData);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [invalidReasons, setInvalidReasons] = useState([]);
+  const [statusOptions, setStatusOptions] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
 
 
 
@@ -73,9 +73,9 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     type: 'success', // 'success', 'error', 'warning', 'info'
     title: '',
     message: '',
-    showCancel: false,
-    onConfirm: null,
-    onCancel: null
+    showCancel: false, // האם להראות כפתור ביטול
+    onConfirm: null, // מה לעשות בלחיצה על אישור
+    onCancel: null  // מה לעשות בלחיצה על ביטול
   });
 
   useEffect(() => {
@@ -166,6 +166,7 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
   }, [isDataLoaded, meetingId, meetings, propMeeting, meetingFromState, isEditMode]);
 
 
+  //עדכון פרטי השדות ב CONSOLE
   useEffect(() => {
     console.log('MeetingForm Debug Info:', {
       isEditMode,
@@ -269,19 +270,19 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
 
     //שדות חובה בהוספת מפגש
-    if (!formData.topicId) errors.topicId = 'שדה חובה';
-    if (!formData.courseId) errors.courseId = 'שם קורס הוא שדה חובה';
-    if (!formData.teacherId) errors.teacherId = 'שם מרצה הוא שדה חובה';
-    if (!formData.roomId) errors.roomId = 'מספר חדר הוא שדה חובה';
-    if (!formData.meetingDate) errors.meetingDate = 'תאריך הוא שדה חובה';
-    if (!formData.startTime) errors.startTime = 'שעת התחלה היא שדה חובה';
-    if (!formData.endTime) errors.endTime = 'שעת סיום היא שדה חובה';
-    if (!formData.year) errors.year = 'שנה היא שדה חובה';
+    if (!formData.topicId) errors.topicId = ' שדה חובה';
+    if (!formData.courseId) errors.courseId = ' שדה חובה';
+    if (!formData.teacherId) errors.teacherId = ' שדה חובה';
+    if (!formData.roomId) errors.roomId = ' שדה חובה';
+    if (!formData.meetingDate) errors.meetingDate = ' שדה חובה';
+    if (!formData.startTime) errors.startTime = ' שדה חובה';
+    if (!formData.endTime) errors.endTime = ' שדה חובה';
+    if (!formData.year) errors.year = ' שדה חובה';
 
     //שדות חובה נוספים בעריכת מפגש
     if (isEditMode) {
-      if (!formData.meetingId) errors.meetingId = 'מספר מפגש הוא שדה חובה';
-      if (!formData.statusCourseId) errors.statusCourseId = 'סטטוס הוא שדה חובה';
+      if (!formData.meetingId) errors.meetingId = ' שדה חובה';
+      if (!formData.statusCourseId) errors.statusCourseId = ' שדה חובה';
     }
 
     return errors;
@@ -432,27 +433,24 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
   };
 
   const handleSaveMeeting = async () => {
+
     // הסרת שגיאות קודמות/ סיבות לאי תקינות
     setValidationErrors({});
     setInvalidReasons([]);
+
     // בדיקת תקינות הטופס והחזרת שגיאה במקרה הצורך
     const errors = validateForm();
     console.log("Validation Errors:", errors);
-    setValidationErrors(errors);
+
 
     if (Object.keys(errors).length > 0) {
-      const errorMessages = Object.values(errors).join('\n'); 
-      showDialog(
-        'error',
-        'שגיאות בטופס',
-        `אנא מלא את כל שדות החובה ותקן את השגיאות הבאות:\n${errorMessages}`,
-        false, 
-        closeDialog
-      );
+      // הצגת שגיאות אם לא מילאו שדות חובה
+      setValidationErrors(errors);
       return;
     }
 
     try {
+
       // בדיקת זמינות חדר
       if (!isRoomAvailable(
         parseInt(formData.roomId),
@@ -476,11 +474,15 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         );
         return;
       }
+
+
+
       // חישוב מס' מפגש
       let meetingNumberForTopic = 1;
       if (formData.topicId && formData.courseId) {
         meetingNumberForTopic = calculateMeetingNumber(parseInt(formData.topicId), formData.meetingDate, meetings);
       }
+
       if (isEditMode && !formData.isValid && formData.reason) {
         showDialog(
           'warning',
@@ -522,12 +524,16 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
       } else if (error.message) {
         errorMessage = `עריכת מפגש נכשלה - ${error.message}`;
       }
+
       showDialog('error', 'שגיאה', errorMessage, false, closeDialog);
     }
   };
+
+
+
   // פונקציה לשמירת  השינויים
   const proceedWithSave = async (meetingNumberForTopic) => {
-  //פונקציה לטיפול בשעה
+    //אם השעה היא 5 ספרות כולל : נוסף לשניות 00, כי TIMEONLY שמגדיר את שעת ההתחלה ושעת הסיום מכיל גם שניות
     const formatTime = (timeStr) => {
       return timeStr.length === 5 ? `${timeStr}:00` : timeStr;
     };
@@ -560,6 +566,7 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
       meetingDTO.reason = null; // או מחרוזת ריקה, תלוי בציפיית השרת
     }
 
+
     meetingDTO = isEditMode ? { ...meetingDTO, meetingId: Number(formData.meetingId) } : meetingDTO;
 
     console.log("Sending meeting data:", meetingDTO);
@@ -582,16 +589,15 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         successMessage += `\nשיבוץ לא תקין: ${formData.reason}`;
       }
 
-      // Show success dialog
+      // הצגת הודעה בעת שמירת המפגש
       showDialog(
         'success',
         'שמירת מפגש',
         successMessage,
-        //'שמירה בוצעה בהצלחה', 
-        //isEditMode ? 'המפגש עודכן בהצלחה!' : 'המפגש נוסף בהצלחה למערכת!',
         false,
         () => {
           closeDialog();
+          
           if (!isEditMode) {
             // איפוס הטופס כמו בדף המקורי
             setFormData({
@@ -698,39 +704,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
   };
 
-  // סגנון מותאם לדיאלוג בהתאם לדרישות העיצוב
-  const dialogBoxStyle = {
-    '& .MuiDialog-paper': {
-      width: '564px',
-      borderRadius: '10px',
-      border: '1px solid #C6C6C6',
-      padding: '40px',
-      gap: '24px',
-      backgroundColor: '#FFFFFF',
-      position: 'absolute',
-      top: '384px',
-      left: '601px'
-    }
-  };
-
-  const dialogContentStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '484px',
-    height: 'auto',
-    gap: '8px',
-    textAlign: 'center'
-  };
-
-  const dialogActionsStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '484px',
-    height: '136px',
-    gap: '32px',
-    justifyContent: 'center',
-    padding: 0
-  };
 
   return (
     <>
@@ -961,6 +934,8 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                 type="date"
                 value={formData.meetingDate || ''}
                 onChange={handleChange}
+                error={!!validationErrors.meetingDate}
+                helperText={validationErrors.meetingDate}
                 InputLabelProps={{ shrink: true }}
                 required
                 variant="outlined"
@@ -1199,19 +1174,22 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            overflowX: 'hidden' // << הוספנו
           }
         }}
       >
         {/* כותרת שורה עליונה */}
         <Box
           sx={{
-            width: '484px',
+            width: '100%', // << חשוב לשים 100%
+            maxWidth: '484px',
             height: '21px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            mb: 3
+            mb: 3,
+            overflowX: 'hidden' // << ביטול גלילה אופקית
           }}
         >
           {/* טקסט כותרת בצד ימין */}
@@ -1224,7 +1202,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
           >
             שמירת מפגש
           </Typography>
-          {/* X בצד שמאל */}
           <IconButton
             aria-label="close"
             onClick={closeDialog}
@@ -1239,13 +1216,15 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         {/* תוכן הודעה */}
         <Box
           sx={{
-            width: '484px',
+            width: '100%',
+            maxWidth: '484px',
             minHeight: '136px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '32px',
-            textAlign: 'center'
+            textAlign: 'center',
+            overflowX: 'hidden'
           }}
         >
           <Typography
@@ -1263,16 +1242,24 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
             <Box
               sx={{
                 width: '100%',
+                maxWidth: '100%',
                 border: '1px solid #ff9800',
                 borderRadius: '4px',
                 backgroundColor: '#fff3e0',
-                padding: '8px'
+                padding: '8px',
+                overflowX: 'hidden'
               }}
             >
               <Typography variant="subtitle1" color="text.secondary">
                 פירוט:
               </Typography>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, textAlign: 'right' }}>
+              <ul style={{
+                listStyle: 'none',
+                padding: 0,
+                margin: 0,
+                textAlign: 'right',
+                overflowX: 'hidden'
+              }}>
                 {dialog.reasons.map((reason, index) => (
                   <li key={index} style={{ marginBottom: '4px' }}>
                     - {reason}
@@ -1286,14 +1273,19 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         {/* כפתורים */}
         <DialogActions
           sx={{
-            width: '484px',
+            width: '100%',
+            maxWidth: '484px',
             justifyContent: 'center',
             gap: '16px',
-            marginTop: '32px'
+            marginTop: '32px',
+            overflowX: 'hidden'
           }}
         >
           <Button
-            onClick={dialog.onCancel}
+            onClick={() => {
+              if (dialog.onCancel) dialog.onCancel();
+              closeDialog();
+            }}
             variant="outlined"
             sx={{
               width: '83px',
@@ -1331,8 +1323,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
           </Button>
         </DialogActions>
       </Dialog>
-
-
 
     </>
 

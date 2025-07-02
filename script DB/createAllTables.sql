@@ -80,7 +80,7 @@ CREATE TABLE Rooms (
     Capacity INT NOT NULL
 );
 -- יצירת טבלת Meetings
-CREATE TABLE Meetings (
+Create TABLE Meetings (
     MeetingId INT IDENTITY PRIMARY KEY,
     ScheduleForTopicId INT NULL,
     MeetingNumberForTopic INT NOT NULL,

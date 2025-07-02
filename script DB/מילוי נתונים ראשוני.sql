@@ -229,3 +229,5 @@ VALUES
     (13, 7, 5, 1, 1, '14:00', '16:00', 1, 3, 13, 4, '2025-02-16'), (13, 8, 5, 1, 1, '14:00', '16:00', 1, 3, 13, 4, '2025-02-23'),
     (13, 9, 5, 1, 1, '14:00', '16:00', 1, 3, 13, 4, '2025-03-02'), (13, 10, 5, 1, 1, '14:00', '16:00', 1, 3, 13, 4, '2025-03-09');
 
+	SELECT ScheduleForTopicId FROM ScheduleForTopic WHERE ScheduleForTopicId IN (1, 2, 3, 4, 5);
+	SELECT * FROM ScheduleForTopic WHERE ScheduleForTopicId = 5;

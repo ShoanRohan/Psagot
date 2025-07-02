@@ -19,6 +19,7 @@ const UserManagement = () => {
       return;
     }
 
+    
     // יוצרים worksheet מהנתונים
     const worksheet = XLSX.utils.json_to_sheet(users);
 

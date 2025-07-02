@@ -38,5 +38,6 @@ namespace Entities.DTO
         public int Year { get; set; }
         public int StatusCourseId { get; set; }
 
+
     }
 }

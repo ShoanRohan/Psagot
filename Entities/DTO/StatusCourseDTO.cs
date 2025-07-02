@@ -14,4 +14,6 @@ namespace Entities.DTO
         public string Name { get; set; } = null!;
 
     }
+
 }
+

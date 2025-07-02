@@ -23,11 +23,12 @@ export const ExportIconButton = ({
 
   return (
     <Button
-    
+
       onClick={handleExport}
       size="small"
-      
-      style={{ width: '44.00000762939453px',
+
+      style={{
+        width: '44.00000762939453px',
         height: '44.00000762939453px',
         left: '252px',
         borderRadius: '6.88px',
@@ -36,12 +37,12 @@ export const ExportIconButton = ({
         paddingRight: '8px',
         paddingBottom: '6.88px',
         paddingLeft: '8px'
-         }}
+      }}
 
 
 
     >
-      <img src= {excel} alt="ייצוא לאקסל" style={{height:'29px', width:'29px'}} />
+      <img src={excel} alt="ייצוא לאקסל" style={{ height: '29px', width: '29px' }} />
     </Button>
   );
 };

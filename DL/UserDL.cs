@@ -20,6 +20,7 @@ namespace DL
         {
             try
             {
+                user.UserType = null;
                 var addedUser = await _context.Set<User>().AddAsync(user);
                 await _context.SaveChangesAsync();
                 return (addedUser.Entity, null);

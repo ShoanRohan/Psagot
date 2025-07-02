@@ -1,4 +1,11 @@
+using Entities.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 ﻿using Entities.DTO;
+
 
 public class UserDTO
 {
@@ -14,13 +21,12 @@ public class UserDTO
 
     public int UserTypeId { get; set; }
 
-        
-        public string UserTypeName { get; set; } = null!;
+   public string UserTypeName { get; set; } = null!;
 
-        public bool IsActive { get; set; }
+   public bool IsActive { get; set; }
 
-    public string? Role { get; set; }
+   public string? Role { get; set; }
 
 
-    public virtual UserTypeDTO UserType { get; set; } = null!;
+
 }

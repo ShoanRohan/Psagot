@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace Entities.DTO
 {
-    public class UserTypeDTO
+    public class StatusTopicDTO
     {
-        public int UserTypeId { get; set; }
-        public string Name { get; set; }
+        public int StatusTopicId { get; set; }
 
-        public TimeOnly EndTime { get; set; }
+        public string Name { get; set; } = null!;
 
     }
 }
