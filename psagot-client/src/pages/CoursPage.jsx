@@ -25,7 +25,7 @@ const CoursPage = () => {
   };
  
   return (
-    <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
+    <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "94vh" }}>
       {/* שורת כותרת עם שם הקורס והכפתורים */}
       <Box
         sx={{
