@@ -36,8 +36,10 @@ const RoomsSearchBar = () => {
     return isValid;
   };
   const clean = () => {
-  dispatch(resetFilter());
-};
+    setRoomSearch(roomSearchEmpty); // תאפס את השדות בטופס
+    setCapacityError(""); // תאפס שגיאות
+    dispatch(resetFilter());
+  };
 
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
@@ -82,7 +84,6 @@ const RoomsSearchBar = () => {
           name="roomName"
           value={roomSearch?.roomName}
           onChange={handleChangeRoomSearch}
-      
         />
         <FormControl size="small" className="textField equipment-select">
           <InputLabel id="equipment-label">ציוד</InputLabel>

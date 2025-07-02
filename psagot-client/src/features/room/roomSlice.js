@@ -169,9 +169,9 @@ const roomSlice = createSlice({
 export const {
   setRoom,
   filterRooms,
-  resetFilter,
   changePageSize,
   changePageIndex,
   updateFilteredRooms,
+  resetFilter,
 } = roomSlice.actions;
 export default roomSlice.reducer;
