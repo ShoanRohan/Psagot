@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators, getFilteredUsers } from "../../utils/userUtil";
+import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators, getTeachers, getFilteredUsers, getUsersByPage } from "../../utils/userUtil";
 
 export const fetchAllUsers = createAsyncThunk(
   "user/fetchAllUsers",
@@ -46,8 +46,16 @@ export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", asyn
         return data;
 });
 
+export const fetchTeachers = createAsyncThunk("user/fetchTeachers", async () => {
+        const data = await getTeachers();
+        return data;
+});
 export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllLecturersAndCoordinators', async () => {
     const data = await getAllLecturersAndCoordinators();
     return data;
-  }
-);
+});
+
+export const fetchUsersByPage = createAsyncThunk('user/fetchUsersByPage', async({pageNumber, pageSize}) => {
+    const data = await getUsersByPage(pageNumber, pageSize);
+    return data;
+});
