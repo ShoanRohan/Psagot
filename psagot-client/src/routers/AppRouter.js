@@ -10,6 +10,9 @@ import UserManagement from '../pages/UserManagement';
 import CoursPage from '../pages/CoursPage';
 import RegisterPage from '../pages/RegisterPage';
 import AddCoursePage from '../pages/AddCoursePage';
+import TopicDialog from '../components/TopicDialog';
+
+
 
 const AppRouter = () => {
   return (
