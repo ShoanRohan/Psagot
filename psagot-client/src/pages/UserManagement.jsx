@@ -4,7 +4,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import UserGrid from '../components/UserGrid';
 import { useSelector } from 'react-redux';
-import circlePlus from '../assets/icons/circle-plus.png';
+import circlePlus from '../assets/icons/circlePlus.png';
 import exptExsel from '../assets/icons/image 6.png';
 
 
