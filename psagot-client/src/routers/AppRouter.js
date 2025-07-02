@@ -9,11 +9,9 @@ import RoomTable from '../components/RoomTable';
 import CourseScreen from "../components/CourseScreen";
 import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
-import EditProfile from '../components/EditProfile'; 
+import EditProfile from '../components/EditProfile';
 
 const AppRouter = () => {
-
-
   return (
     <Routes>
       <Route path='/' element={<Layout />}>

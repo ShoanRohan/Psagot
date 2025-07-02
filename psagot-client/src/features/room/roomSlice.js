@@ -26,10 +26,12 @@ const initialState = {
   },
 };
 const roomSlice = createSlice({
-    name: 'room',
-    initialState,
-    reducers: {
-        setRoom: (state, action) => {
+  name: "room",
+  initialState,
+  reducers: {
+    setRooms: (state, action) => {
+      //כרגע ריק
+    },
 
     updateFilteredRooms: (state) => {
       const allFiltered = state.isSearchActive
