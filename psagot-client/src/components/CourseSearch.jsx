@@ -173,7 +173,11 @@ const CourseSearch = () => {
             label="קוד קורס"
             value={filters.courseId}
             onChange={handleChange('courseId')}
-            sx={sharedStyles}
+            sx={[sharedStyles, {
+              '& .MuiInputBase-root': {
+                marginTop: '21px',
+              }
+            }]}
             InputProps={{
               inputProps: {
                 style: { textAlign: 'right' },
@@ -200,7 +204,11 @@ const CourseSearch = () => {
             label="שם קורס"
             value={filters.name}
             onChange={handleChange('name')}
-            sx={sharedStyles}
+            sx={[sharedStyles, {
+              '& .MuiInputBase-root': {
+                marginTop: '21px',
+              }
+            }]}
             InputProps={{ inputProps: { style: { textAlign: 'right' } }, disableUnderline: false }}
           />
 
