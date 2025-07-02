@@ -79,3 +79,34 @@
    display: flex;
    align-items: center;
  }
+
+ .titleUsers{
+   variant:"h1";
+    align-items:"right";
+    font-family: "Rubik", sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    color: #0D1783;
+    text-align: right;
+ }
+
+
+ .usersTable {
+  border-collapse: collapse; 
+  width: 100%;  /* מתאימה את הרוחב של הטבלה לגודל העמוד */
+  height: 100vh; /* מתאימה את הגובה של הטבלה לגובה של חלון הדפדפן */
+  overflow: auto; /* מאפשר גלילה אם התוכן גדול מהתא */
+
+}
+
+/* עיצוב כותרות הטבלה */
+.usersTable th {
+  font-weight: bold;
+  font-family:"Rubik",sans-serif;
+  text-align: center;
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  background-color: #ffffff; 
+  color: #000000; 
+}
+
