@@ -114,23 +114,17 @@ const LoginRegister = () => {
 
     const login = async () => {
         setLoading(true);
-
         try {
             const resultAction = await dispatch(loginAction({
                 email: formData.email,
                 password: formData.password
-            }));
-
-            if (loginAction.fulfilled.match(resultAction)) {
-                navigate("/courses");
-            } else {
-                showAlert("התחברות נכשלה, אנא בדוק את הפרטים ונסה שוב.");
+            })).unwrap();
+             navigate("/courses");
+             } catch (err) {
+                showAlert(err ||"התחברות נכשלה, אנא בדוק את הפרטים ונסה שוב.");
+             } finally {
+             setLoading(false);
             }
-        } catch (error) {
-            showAlert("אירעה שגיאה, אנא נסה שוב מאוחר יותר.");
-        } finally {
-            setLoading(false);
-        }
     };
 
     const register = async () => {
@@ -141,25 +135,34 @@ const LoginRegister = () => {
             password: formData.password,
             name: formData.name,
             phone: formData.phone,
-            IsActive: true,
-            UserTypeId: 5,
+            isActive: true,
+            userTypeId: 5
         };
 
         setLoading(true);
 
-        try {
-            const resultAction = await dispatch(registerAction(newUser));
+        // try {
+        //     const resultAction = await dispatch(registerAction(newUser));
 
-            if (registerAction.fulfilled.match(resultAction)) {
-                navigate("/courses");
-            } else {
-                showAlert("הרשמה נכשלה, אנא נסה שוב.");
+        //     if (registerAction.fulfilled.match(resultAction)) {
+        //         navigate("/courses");
+        //     } else {
+        //         showAlert("הרשמה נכשלה, אנא נסה שוב.");
+        //     }
+        // } catch (error) {
+        //     showAlert("אירעה שגיאה, אנא נסה שוב מאוחר יותר.");
+        // } finally {
+        //     setLoading(false);
+        // }
+             try {
+             const result = await dispatch(registerAction(newUser)).unwrap();
+             navigate("/courses");
+             } catch (err) {
+                 showAlert(err || "הרשמה נכשלה, אנא נסה שוב.");
+             } finally {
+             setLoading(false);
             }
-        } catch (error) {
-            showAlert("אירעה שגיאה, אנא נסה שוב מאוחר יותר.");
-        } finally {
-            setLoading(false);
-        }
+
     };
 
     const handleSubmit = () => {

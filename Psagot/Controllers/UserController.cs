@@ -29,7 +29,7 @@ namespace Psagot.Controllers
             {
                 var user = await _userBL.UserLoginAsync(userDTO.Email, userDTO.Password);
                 if (user != null)
-                    return Conflict("User already exists");
+                    return Conflict("המשתמש קיים כבר במערכת ");
                 
                 var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
                 if (addedUser == null)
@@ -122,7 +122,7 @@ namespace Psagot.Controllers
                 var user = await _userBL.UserLoginAsync(login.Email, login.Password);
 
                 if (user == null)
-                    return Unauthorized("Invalid email or password");
+                    return Unauthorized("המשתמש אינו קיים במערכת ");
                 return Ok(new
                 {
                     user = user,
