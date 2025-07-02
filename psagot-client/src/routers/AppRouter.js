@@ -21,11 +21,10 @@ const AppRouter = () => {
                 <Route path='/course/:id' element={<CourseScreen/>} />  
                 <Route path='/meetings' element={<MeetingsTable />} />
                 <Route path='/users' element={<UsersPage />} />
-                <Route path='/rooms' element={<Rooms />} />
+                {/* <Route path='/rooms' element={<Rooms />} /> */}
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
-                {/* <Route path='/rooms' element={<Rooms />} /> */}
-                {/*<Route path='/rooms' element={<RoomsViewPage />} />*/}
+                <Route path='/rooms' element={<RoomsViewPage />} />
             </Route>
         </Routes>
     );

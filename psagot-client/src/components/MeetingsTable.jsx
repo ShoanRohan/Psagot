@@ -22,6 +22,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import "../styles/meetingsTable.css";
 import { StyledTableCell, StyledTableRow } from "../styles/MeetingsTableStyle";
+import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 
 export default function MeetingsTable() {
   const dispatch = useDispatch();
@@ -37,18 +38,18 @@ export default function MeetingsTable() {
     severity: "success",
   });
 
-const getStatusChip = (meetingDateStr) => {
-  const meetingDate = new Date(meetingDateStr);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const isActive = meetingDate >= today;
+  const getStatusChip = (meetingDateStr) => {
+    const meetingDate = new Date(meetingDateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const isActive = meetingDate >= today;
     return (
       <Chip
         label={isActive ? "פעיל" : "הסתיים"}
         className={isActive ? "status-chip active" : "status-chip inactive"}
       />
     );
-};
+  };
 
   useEffect(() => {
     if (!pageNumber || !rowsPerPage) return;
@@ -71,14 +72,14 @@ const getStatusChip = (meetingDateStr) => {
     setPageNumber(1);
   };
 
-  if (status === 'loading') return <CircularProgress />;
+  if (status === "loading") return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 
   const displayedMeetings = Array.isArray(meetings) ? meetings : [];
 
   const pageCount = Math.ceil(totalCount / rowsPerPage);
   return (
-    <Box>
+    <Box className="meetings-wrapper">
       <TableContainer component={Paper} className="table-container">
         <Table className="meetings-table">
           <TableHead>
@@ -114,20 +115,29 @@ const getStatusChip = (meetingDateStr) => {
           <TableBody>
             {displayedMeetings.map((meeting) => (
               <StyledTableRow key={meeting.meetingId}>
-                <StyledTableCell>{meeting.meetingNumberForTopic}</StyledTableCell>
+                <StyledTableCell>
+                  {meeting.meetingNumberForTopic}
+                </StyledTableCell>
                 <StyledTableCell>{meeting.course?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.topic?.name || "-"}</StyledTableCell>
-                <StyledTableCell>{meeting.teacher?.name || "-"}</StyledTableCell>
+                <StyledTableCell>
+                  {meeting.teacher?.name || "-"}
+                </StyledTableCell>
                 <StyledTableCell>{meeting.meetingDate}</StyledTableCell>
                 <StyledTableCell>{meeting.day?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.startTime}</StyledTableCell>
                 <StyledTableCell>{meeting.endTime}</StyledTableCell>
                 <StyledTableCell>{meeting.room?.name || "-"}</StyledTableCell>
                 <StyledTableCell>{meeting.isValid ? "V" : "X"}</StyledTableCell>
-                <StyledTableCell>{getStatusChip(meeting.meetingDate)}</StyledTableCell>
+                <StyledTableCell>
+                  {getStatusChip(meeting.meetingDate)}
+                </StyledTableCell>
                 <StyledTableCell>
                   <Box className="icon-buttons">
-                    <IconButton className="delete-button" onClick={() => handleDelete(meeting.id)}>
+                    <IconButton
+                      className="delete-button"
+                      onClick={() => handleDelete(meeting.id)}
+                    >
                       <DeleteOutlineIcon />
                     </IconButton>
                     <IconButton className="edit-button">
@@ -143,18 +153,15 @@ const getStatusChip = (meetingDateStr) => {
 
       <Box className="highlighted-box">
         <Box className="flex-center">
-          <Typography className="ml-1">מספר שורות:</Typography>
+          <Typography className="my-inline-text"> מספר שורות: </Typography>
           <Select
             value={rowsPerPage}
             onChange={handleRowsPerPageChange}
-            size="small"
-            className="custom-select"
-            IconComponent={() => (
-              <Box className="icon-container">
-                {" "}
-                <UnfoldMoreIcon />{" "}
-              </Box>
+            IconComponent={(props) => (
+              <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: "small" }} />
             )}
+            displayEmpty
+            className="meeting-select"
           >
             {[10, 25, 50].map((option) => (
               <MenuItem key={option} value={option}>
