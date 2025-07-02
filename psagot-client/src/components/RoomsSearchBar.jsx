@@ -36,8 +36,8 @@ const RoomsSearchBar = () => {
     return isValid;
   };
   const clean = () => {
-    setRoomSearch(roomSearchEmpty); // תאפס את השדות בטופס
-    setCapacityError(""); // תאפס שגיאות
+    setRoomSearch(roomSearchEmpty); 
+    setCapacityError("");
     dispatch(resetFilter());
   };
 

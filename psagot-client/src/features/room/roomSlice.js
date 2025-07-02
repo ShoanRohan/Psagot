@@ -94,14 +94,18 @@ const roomSlice = createSlice({
       if (isNewSearch) {
         state.filters = filters;
       }
-      const allFiltered = state.rooms.filter(
-        (room) =>
-          (filters.roomName ? room.name.includes(filters.roomName) : true) &&
-          (filters.capacity ? room.capacity >= filters.capacity : true) &&
-          (filters.projector ? room.projector : true) &&
-          (filters.speakers ? room.speakers : true) &&
-          (filters.computers ? room.computers : true)
-      );
+      console.log("Filters before filtering:", filters);
+      const allFiltered = state.rooms.filter((room) => {
+  return (
+    (filters.roomName ? room.name.includes(filters.roomName) : true) &&
+    (filters.capacity ? room.capacity >= filters.capacity : true) &&
+    (filters.projector ? room.projector : true) &&
+    (filters.speakers ? room.speakers : true) &&
+    (filters.computers ? room.computers : true)
+  );
+});
+
+    
       state.isSearchActive = true;
       state.pageIndex = pageIndex;
       state.pageSize = pageSize;
