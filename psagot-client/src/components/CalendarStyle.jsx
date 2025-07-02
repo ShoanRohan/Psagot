@@ -24,7 +24,7 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     backgroundColor: "#FFFFFF",
     borderRadius: "10px",
     padding: "12px",
-    boxShadow: "0px 4px 20px rgba(0, 0, 255, 0.4) !important",
+    // border:"0.1px solid rgba(211, 211, 251, 0.4)",
     position: "relative",
     zIndex: 1,
     flexShrink: "1",
@@ -200,15 +200,17 @@ const CalendarStyle = styled(Box)(({ theme }) => ({
     border: "1px solid #F0F1F3",
   },
 
-  //אירוע
+  //אירוע בתצוגות שבוע וחודש
   "& .fc-v-event": {
     minWidth: "71.25px",
     minHeight: "10.17px",
-    backgroundColor: "transparent !important",
-    border: "none !important",
+    backgroundColor: "transparent !important", //למנוע רקע חיצוני לאירוע
+    border: "transparent !important",////למנוע גבול חיצוני לאירוע
+
   },
 
-  //מוריד גבול ימני בתצוגות שבוע ויום
+
+  //מוריד גבול ללוח(לא כולל ימות השבוע) בתצוגות שבוע ויום
   "& .fc-theme-standard td": {
     border: "none ",
   },
@@ -228,6 +230,8 @@ const dayInWeekHeaderStyle = {
   backgroundColor: "#F8F9FC",
   width: "65px", // רוחב קבוע לכל כותרת יום
 };
+
+
 
 const dayCellStyle = {//כל הקוביה שמכילה ריבוע תאריכים וריבוע מפגשים
   display: "flex !important",
@@ -262,38 +266,73 @@ const gregorianDateStyle = {
 
 
 
+function darkenColor(hexColor, percent) {
+  if (!hexColor) return "#666"; // אפור כהה
+  const num = parseInt(hexColor.replace("#", ""), 16);
+
+  let r = (num >> 16) & 0xff;
+  let g = (num >> 8) & 0xff;
+  let b = num & 0xff;
+
+  r = Math.max(0, Math.min(255, Math.floor(r * (1 - percent))));
+  g = Math.max(0, Math.min(255, Math.floor(g * (1 - percent))));
+  b = Math.max(0, Math.min(255, Math.floor(b * (1 - percent))));
+
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function lightenColor(hexColor, percent) {
+  if (!hexColor) return "#bbb"; // אפור בהיר
+
+  const num = parseInt(hexColor.replace("#", ""), 16);
+
+  let r = (num >> 16) & 0xff;
+  let g = (num >> 8) & 0xff;
+  let b = num & 0xff;
+
+  r = Math.min(255, Math.floor(r + (255 - r) * percent));
+  g = Math.min(255, Math.floor(g + (255 - g) * percent));
+  b = Math.min(255, Math.floor(b + (255 - b) * percent));
+
+  return (
+    "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)
+  );
+}
 
 
-
-//עיצוב האירוע
+// עיצוב הרכיב
 const StyledEventBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "isMonthView",
-})(({ color, borderColor, isMonthView }) => ({
-  backgroundColor: color || "#ffccf3",
-  fontFamily: "Rubik",
-  color: "black",
-  padding: "3px",
-  borderRadius: "5px",
-  borderRight: `3px solid ${borderColor || "#ff00b4"}`,
-  textAlign: "center",
-  width: "100%",
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  justifyContent: "center",
-  overflow: "hidden",
-  whiteSpace: "normal",
-  wordBreak: "keep-all",
-  textOverflow: "ellipsis",
-  fontSize: isMonthView ? "6px" : "inherit",
-  ...(isMonthView && {
-    maxHeight: "19.17px",
-    minHeight: "19.17px",
-    lineHeight: "19.17px",
-    whiteSpace: "nowrap",
-  }),
-}));
+  shouldForwardProp: (prop) => prop !== "isMonthView" && prop !== "color" && prop !== "isPast",
+})(({ color = "#808080", isMonthView, isPast = false }) => {
+  const borderColor = isPast ? lightenColor(color, 0.7) : darkenColor(color, 0.1);
+  const backgroundColor = isPast ? lightenColor(color, 0.9) : lightenColor(color, 0.65);
+  return {
+    backgroundColor: backgroundColor,
+    fontFamily: "Rubik",
+    color: "black",
+    padding: "3px",
+    borderRadius: "5px",
+    borderRight: `3px solid ${borderColor}`,
+    textAlign: "center",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+    whiteSpace: "normal",
+    wordBreak: "keep-all",
+    textOverflow: "ellipsis",
+    fontSize: isMonthView ? "6px" : "inherit",
+    ...(isMonthView && {
+      maxHeight: "19.17px",
+      minHeight: "19.17px",
+      lineHeight: "19.17px",
+      whiteSpace: "nowrap",
+    }),
+  };
+});
 
 
 export { CalendarStyle, dayInWeekHeaderStyle, dayCellStyle, hebrewDateStyle, gregorianDateStyle, StyledEventBox };
