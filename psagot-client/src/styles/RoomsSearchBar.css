@@ -26,7 +26,7 @@
   .rooms-search-bar .MuiFormControl-root {
     min-width: 160px !important;
   }
-  
+}
 /* שדה טקסט כללי */
 .textField {
   width: 20% !important;

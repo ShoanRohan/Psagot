@@ -105,7 +105,7 @@ const UserSearchBar = () => {
       <Button
         variant="contained"
         color="primary"
-        startIcon={<SearchIcon style={{ padding: "5px" }} />}
+        startIcon={<Search style={{ padding: "5px" }} />}
         sx={{ borderRadius: "20px", minWidth: "120px", marginRight: 2 }}
         onClick={handleSearch}
       >

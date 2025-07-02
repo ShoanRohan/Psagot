@@ -9,7 +9,6 @@ import ListItemText from "@mui/material/ListItemText";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
-import InputLabel from "@mui/material/InputLabel";
 import { useDispatch } from "react-redux";
 import { filterRooms, resetFilter, updateFilteredRooms } from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
