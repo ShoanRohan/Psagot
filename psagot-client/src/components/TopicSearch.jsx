@@ -12,22 +12,20 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchCoordinators } from '../features/user/userAction';
-import { filterCourses } from '../features/course/courseActions';
+import { filterTopics } from '../features/topic/topicActions';
 
 const statuses = ['פעיל', 'לא פעיל'];
 const years = Array.from({ length: 2050 - 2016 + 1 }, (_, i) => 2016 + i);
 
 const defaultFilters = {
-  courseId: '',
   name: '',
   coordinator: '',
-  year: '',
   startDate: null,
   endDate: null,
   status: 'פעיל',
 };
 
-const CourseSearch = () => {
+const TopicSearch = () => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
 
@@ -49,7 +47,7 @@ const CourseSearch = () => {
 
   const handleSearch = () => {
     const filterDto = {
-      courseId: filters.courseId || null,
+      TopicId: filters.TopicId || null,
       name: filters.name || null,
       year: filters.year ? parseInt(filters.year) : null,
       startDate: filters.startDate ? filters.startDate.toISOString() : null,
@@ -58,13 +56,13 @@ const CourseSearch = () => {
       statusId: filters.status === 'פעיל' ? 1 : 2,
     };
 
-    dispatch(filterCourses(filterDto));
+    dispatch(filterTopics(filterDto));
     setLastSearchedFilters(filters);
   };
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    dispatch(filterCourses({ statusId: 1 }));
+    dispatch(filterTopics({ statusId: 1 }));
   };
 
   return (
@@ -73,17 +71,17 @@ const CourseSearch = () => {
         dir="rtl"
         sx={{
           position: "absolute",
-          top: "18%",
-          left: "50%",
+          top: "19%",
+          left: "43.25%",
           transform: "translateX(-50%)",
-          width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
-          height: '72px',
+          width: "calc(100% - 300px)", // Full width minus padding (24px on each side)
+          height: '90px',
           background: '#fff',
           boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
           borderRadius: '10px',
           padding: '16px',
           display: 'flex',
-          alignItems: 'center',
+          alignItems: 'end',
           gap: '16px',
           fontFamily: 'Rubik',
           border: '1px solid #E5E7EB',
@@ -93,18 +91,7 @@ const CourseSearch = () => {
       >
         <TextField
           variant="standard"
-          placeholder="קוד קורס"
-          value={filters.courseId}
-          onChange={handleChange('courseId')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        />
-        <TextField
-          variant="standard"
-          placeholder="שם קורס"
+          placeholder="נושא"
           value={filters.name}
           onChange={handleChange('name')}
           sx={{
@@ -113,10 +100,10 @@ const CourseSearch = () => {
             input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
           }}
         />
-        {/* <TextField
+        <TextField
           select
           variant="standard"
-          placeholder="רכזת"
+          placeholder="שם מרצה"
           value={filters.coordinator}
           onChange={handleChange('coordinator')}
           sx={{
@@ -130,95 +117,8 @@ const CourseSearch = () => {
               {coordinator}
             </MenuItem>
           ))}
-        </TextField> */}
-        <TextField
-          variant="standard"
-          select
-          placeholder="שנה"
-          value={filters.year}
-          onChange={handleChange('year')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        >
-          {years.map((year) => (
-            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
-              {year}
-            </MenuItem>
-          ))}
         </TextField>
-        <Grid item xs={12} md={1.6}>
-          <DatePicker
-            variant="standard"
-            label="תאריך התחלה"
-            value={filters.startDate}
-            onChange={handleDateChange('startDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
-            slotProps={{
-              textField: {
-                placeholder: 'תאריך התחלה',
-                variant: 'standard',
-                sx: {
-                  width: 125,
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                    top: '-15px'
-                  },
-                  '& .MuiInputAdornment-root':{
-                    marginLeft: 0,
-                  },
-                  '& .MuiPickersInputBase-root':{
-                    marginTop:0
-                  }
-                },
-              },
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} md={1.6}>
-          <DatePicker
-            label="תאריך סיום"
-            value={filters.endDate}
-            onChange={handleDateChange('endDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
-            slotProps={{
-              textField: {
-                placeholder: 'תאריך סיום',
-                variant: 'standard',
-                sx: {
-                  width: 125,
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                     top: '-15px'
-                  },
-                  '& .MuiInputAdornment-root':{
-                    marginLeft: 0,
-                  },
-                  '& .MuiPickersInputBase-root':{
-                    marginTop:0
-                  }
-                },
-              },
-            }}
-          />
-        </Grid>
+       
         <TextField
           variant="standard"
           select
@@ -288,4 +188,4 @@ const CourseSearch = () => {
   );
 };
 
-export default CourseSearch;
+export default TopicSearch;

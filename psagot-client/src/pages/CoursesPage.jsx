@@ -44,13 +44,12 @@ const CoursesPage = () => {
       maxWidth={false} 
       sx={{
         maxWidth: "none !important",
-        width: "100%",
+        width: "96%",
         height: "100vh",
         display: "flex",
         flexDirection: "column",
         background: "var(--Brand-10, #FAFCFF)",
         position: "relative",
-        
 
       }}
     >

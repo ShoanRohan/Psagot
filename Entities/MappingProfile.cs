@@ -17,15 +17,15 @@ public class MappingProfile : Profile
         CreateMap<Meeting, MeetingDTO>().ReverseMap();
         CreateMap<DaysForCourse, DaysForCourseDTO>().ReverseMap();
         CreateMap<ScheduleForTopic, ScheduleForTopicDTO>().ReverseMap();
-        CreateMap<Topic, TopicDTO>().ReverseMap();
-        CreateMap<StatusCourse, StatusCourseDTO>()
-        .ForMember(dest => dest.StatusCourseId, opt => opt.MapFrom(src => src.StatusCourseId));
-        CreateMap<StatusCourseDTO, StatusCourse>()
-    .ForMember(dest => dest.StatusCourseId, opt => opt.MapFrom(src => src.StatusCourseId));
-        CreateMap<Course, CourseDTO>()
-    .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.StatusId))
-    .ReverseMap()
-    .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.StatusId));
+        CreateMap<Course,CourseDTO> ().ReverseMap();
+        CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
+        CreateMap<Topic, TopicDTO>()
+    .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher != null ? src.Teacher.Name : null))
+    .ForMember(dest => dest.MeetingsCount, opt => opt.MapFrom(src => src.Meetings.Count))
+    .ForMember(dest => dest.HasSchedule, opt => opt.MapFrom(src => src.ScheduleForTopics.Any()));
+
+
+        CreateMap<TopicDTO, Topic>();
 
     }
 }
