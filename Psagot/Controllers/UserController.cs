@@ -97,6 +97,16 @@ namespace Psagot.Controllers
             return Ok(new { TotalCount = totalCount, Users = users });
         }
 
+        [HttpGet("GetTeachers")]
+        public async Task<IActionResult> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userBL.GetTeachers();
+            if (teachers == null || !teachers.Any())
+                return BadRequest(errorMessage);
+
+            return Ok(teachers);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
@@ -136,6 +146,15 @@ namespace Psagot.Controllers
             var (users, errorMessage) = await _userBL.GetCoordinatorsAndLecturers();
             if (users == null) return BadRequest(errorMessage);
             return Ok(users);
+        }
+
+        [HttpGet("GetUsersByPage")]
+        public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok( new{users, countUsers });
         }
     }
 }
