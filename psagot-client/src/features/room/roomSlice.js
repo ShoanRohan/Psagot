@@ -58,14 +58,20 @@ const roomSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(addRoomAction.fulfilled, (state, action) => {
-                state.rooms.push(action.payload);
+          .addCase(addRoomAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                let _rooms = [...state.rooms];
+                _rooms.push(action.payload);
+                state.rooms = _rooms;
             })
             .addCase(updateRoomAction.fulfilled, (state, action) => {
-                const index = state.rooms.findIndex((room) => room.id === action.payload.id);
+              state.status = 'succeeded';
+              let _rooms = [...state.rooms];
+                const index = _rooms.findIndex((room) => room.id === action.payload.id);
                 if (index !== -1) {
-                    state.rooms[index] = action.payload;
+                    _rooms[index] = action.payload;
                 }
+                state.rooms = _rooms;
             });
     },
 });

@@ -26,7 +26,7 @@ namespace Psagot.Controllers
                 return Ok(result.Room);
             }
 
-            [HttpPut("UpdatrRoom")]
+            [HttpPut("UpdateRoom")]
             public async Task<IActionResult> UpdateRoom([FromBody] RoomDTO roomDTO)
             {
                 var result = await _roomBL.UpdateRoom(roomDTO);
