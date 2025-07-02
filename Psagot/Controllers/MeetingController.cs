@@ -71,7 +71,7 @@ namespace Psagot.Controllers
             if (!string.IsNullOrEmpty(errorMessage))
                 return BadRequest(errorMessage);
             if (events == null || !events.Any())
-                return NotFound("No meetings found in the specified date range.");
+                return NoContent();
             return Ok(events);
         }
 

@@ -29,7 +29,7 @@ export default function RoomTable({ date }) {
   const dispatch = useDispatch();
   const { rooms, status: roomsStatus, error: roomsError } = useSelector(state => state.room);
   const { status: rangeStatus, error: meetingsError } = useSelector(state => state.meeting);
-  const meetings = useSelector(state => state.meeting.rangedMeetings);
+  const meetings = useSelector(state => state.meeting.meetingsByRange);
   const isLoading = roomsStatus === 'loading' || rangeStatus === 'loading';
 
 

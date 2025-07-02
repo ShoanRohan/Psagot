@@ -3,11 +3,12 @@ import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingBy
 
 const initialState = {
   meetings: [], //תוצאת fetchMeetingsByPage
-  rangedMeetings: [], //תוצאת fetchMeetingsByRange
+  meetingsByRange: [], //תוצאת fetchMeetingsByRange
+  meeting: null,
   status: 'idle',// state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל 
   rangeStatus: 'idle',
   error: null,
-  totalCount: 0, 
+  totalCount: 0
 };
 
 const meetingSlice = createSlice({
@@ -76,15 +77,15 @@ const meetingSlice = createSlice({
                 state.status = 'failed';
                 state.error = action.error.message;
             })
-            .addCase(fetchMeetingsByRange.pending, (state) => {
-                state.rangeStatus = 'loading';
-                state.rangedMeetings = [];
-                state.error = null;
-            })
+           .addCase(fetchMeetingsByRange.pending, (state) => {
+                state.rangeStatus = 'loading'; 
+                state.meetingsByRange = []; 
+                state.error = null;  
+               })
             .addCase(fetchMeetingsByRange.fulfilled, (state, action) => {
-                state.rangeStatus = 'succeeded';
-                state.rangedMeetings = action.payload;
-            })
+               state.rangeStatus = 'succeeded';
+               state.meetingsByRange = action.payload;
+             })
             .addCase(fetchMeetingsByRange.rejected, (state, action) => {
                 state.rangeStatus = 'failed';
                 state.error = action.error.message;
