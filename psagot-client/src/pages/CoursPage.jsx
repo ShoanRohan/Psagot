@@ -7,29 +7,31 @@ import CourseDetails from "../components/CourseDetails"; // עדכני את הנ
 import TopicsGrid from "../components/TopicsGrid";
 import { useDispatch, useSelector } from "react-redux";
 import TopicSearch from "../components/TopicSearch";
-const CoursPage = () => { 
+import { fetchCourseById } from "../features/course/courseActions";
+
+const CoursPage = () => {
   const [tabValue, setTabValue] = useState(0);
   const { id } = useParams(); // קבלת מזהה קורס מה-URL
 
-    const [selectedCourse, setSelectedCourse] = useState(null); // קורס נבחר
-    const topics = useSelector((state) => state.topic.topics);
+  const [selectedCourse, setSelectedCourse] = useState(null); // קורס נבחר
+  const topics = useSelector((state) => state.topic.topics);
+  const dispatch = useDispatch();
+  const courseFromStore = useSelector(state => state.course.selectedCourse);
+
 
   useEffect(() => {
-    const fetchCourse = async () => {
-      try {
-        const response = await axios.get(`/api/Course/GetCourseById/${id}`);
-        setSelectedCourse(response.data);
-      } catch (error) {
-        console.error("שגיאה בשליפת פרטי קורס:", error);
-      }
-    };
+    if (id) {
+      dispatch(fetchCourseById(id));
+    }
+  }, [dispatch, id]);
 
-    if (id) fetchCourse();
-  }, [id]);
+  useEffect(() => {
+    if (courseFromStore) {
+      setSelectedCourse(courseFromStore);
+    }
+  }, [courseFromStore]);
 
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+  const handleTabChange = (event, newValue) => setTabValue(newValue);
 
   const handleSave = async () => {
     try {
@@ -66,7 +68,7 @@ const CoursPage = () => {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 1 }}>
+<Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
             color="primary"
@@ -105,7 +107,7 @@ const CoursPage = () => {
 
       {/* תוכן לפי טאב */}
       <Box sx={{ mt: 2 }}>
-        {tabValue === 0 && selectedCourse && (
+      {tabValue === 0 && selectedCourse && (
           <CourseDetails course={selectedCourse} setCourse={setSelectedCourse} />
         )}
         {tabValue === 1 && (

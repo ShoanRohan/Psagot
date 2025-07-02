@@ -84,6 +84,9 @@ namespace DL
                     .Include(c => c.Status)
                     .AsQueryable();
 
+                if (filter.CourseId.HasValue)
+                    query = query.Where(c => c.CourseId == filter.CourseId.Value);
+
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                     query = query.Where(c => c.Name.Contains(filter.Name));
 
@@ -109,6 +112,20 @@ namespace DL
             {
                 return (null, ex.Message);
             }
+        }
+        public async Task<List<int>> GetExistingCourseYears()
+        {
+            return await _context.Set<Course>()
+              .Select(c => c.Year)
+              .Distinct()
+              .OrderByDescending(y => y)
+              .ToListAsync();
+
+        }
+
+        public async Task<List<StatusCourse>> GetAllStatusCourses()
+        {
+            return await _context.StatusCourses.ToListAsync();
         }
 
 

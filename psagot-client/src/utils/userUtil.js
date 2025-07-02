@@ -52,4 +52,15 @@ const getCoordinators = async (userTypeId = 3) => {
     }
 };
 
-export { getAllUsers, getUserById, addUser, updatedUser, getCoordinators };
+const getLecturers  = async (userTypeId = 4) => {
+try {
+        const response = await api.get(`/User/GetUserNamesByUserTypeId/${userTypeId}`);
+        return response.data;
+    } catch (error) {
+        if (error.response && error.response.data) {
+            return error.response.data;
+        }
+        throw error;
+    }
+};
+export { getAllUsers, getUserById, addUser, updatedUser, getCoordinators, getLecturers};
