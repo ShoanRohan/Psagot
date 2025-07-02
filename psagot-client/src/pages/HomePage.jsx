@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 import { Typography, Button, Container } from "@mui/material";
 import UserSearchBar from "../components/UserSearchBar"
+import RoomsGrid from "../components/RoomsGrid"
+import RoomsSearchBar from "../components/RoomsSearchBar";
 
 const HomePage = () => {
     const dispatch = useDispatch();
@@ -26,6 +28,8 @@ const HomePage = () => {
         <Container item style={{ textAlign: 'center', padding: 10 }}>
             <Typography variant="h5">😀hello psagot project😀</Typography>
             <Button onClick={handleClickButton}>Example of a function structure</Button>
+            <RoomsSearchBar></RoomsSearchBar>
+            <RoomsGrid></RoomsGrid>
         </Container>
     );
 }
