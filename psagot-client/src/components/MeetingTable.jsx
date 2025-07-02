@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Box,
-  Paper,
   Typography,
   Chip,
   Dialog,
@@ -27,11 +26,9 @@ import trash from '../assets/icons/trash.png';
 import penToSquare from '../assets/icons/penToSquare.png';
 
 const MeetingTable = React.memo(({ onEdit }) => {
-  // Redux state
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
 
-  // Local state
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [meetingToDelete, setMeetingToDelete] = useState(null);
@@ -42,7 +39,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
     severity: 'success',
   });
 
-  // Table configuration
   const columns = useMemo(() => [
     'מספר מפגש',
     'שם קורס',
@@ -73,13 +69,8 @@ const MeetingTable = React.memo(({ onEdit }) => {
     'סטטוס': 'isPartOfSchedule',
   }), []);
 
-  // Event handlers
   const showSnackbar = useCallback((message, severity = 'success') => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
+    setSnackbar({ open: true, message, severity });
   }, []);
 
   const handleCloseSnackbar = useCallback(() => {
@@ -118,30 +109,25 @@ const MeetingTable = React.memo(({ onEdit }) => {
     }
   }, [meetingToDelete, dispatch, showSnackbar, handleCloseDeleteDialog]);
 
-  // Render functions for table cells
-const renderStatusChip = useCallback((row) => {
-  const meetingDate = new Date(row.meetingDate);
-  const isActive = meetingDate >= new Date();
+  const renderStatusChip = useCallback((row) => {
+    const meetingDate = new Date(row.meetingDate);
+    const isActive = meetingDate >= new Date();
 
-  return (
-    <Chip
-      label={isActive ? 'פעיל' : 'הסתיים'}
-      sx={{
-        width: 97,
-        height: 39,
-        borderRadius: '68.31px',
-        backgroundColor: isActive ? '#DAF8E6' : '#E5E7EB80',
-        color: isActive ? '#000' : '#666',
-        fontSize: 14,
-        fontWeight: 500,
-        '&:hover': {
+    return (
+      <Chip
+        label={isActive ? 'פעיל' : 'הסתיים'}
+        sx={{
+          width: 97,
+          height: 39,
+          borderRadius: '68.31px',
           backgroundColor: isActive ? '#DAF8E6' : '#E5E7EB80',
-        },
-      }}
-    />
-  );
-}, []);
-
+          color: isActive ? '#000' : '#666',
+          fontSize: 14,
+          fontWeight: 500,
+        }}
+      />
+    );
+  }, []);
 
   const renderValidChip = useCallback((row) => (
     <Typography
@@ -149,8 +135,6 @@ const renderStatusChip = useCallback((row) => {
         fontSize: 14,
         fontWeight: 500,
         color: '#393939',
-        backgroundColor: 'transparent',
-        textAlign: 'center',
       }}
     >
       {row.isValid ? 'V' : 'X'}
@@ -158,16 +142,12 @@ const renderStatusChip = useCallback((row) => {
   ), []);
 
   const renderDeleteButton = useCallback((row) => (
-    <Tooltip title="מחק מפגש" placement="top">
+    <Tooltip title="מחק מפגש">
       <IconButton
         onClick={() => handleDelete(row)}
         size="small"
         sx={{
           color: 'error.main',
-          padding: '6px',
-          margin: '0 1px',
-          minWidth: '32px',
-          minHeight: '32px',
           '&:hover': {
             backgroundColor: 'error.light',
             opacity: 0.1,
@@ -178,26 +158,19 @@ const renderStatusChip = useCallback((row) => {
           component="img"
           src={trash}
           alt="Delete"
-          sx={{
-            width: 18,
-            height: 18,
-          }}
+          sx={{ width: 18, height: 18 }}
         />
       </IconButton>
     </Tooltip>
   ), [handleDelete]);
 
   const renderEditButton = useCallback((row) => (
-    <Tooltip title="ערוך מפגש" placement="top">
+    <Tooltip title="ערוך מפגש">
       <IconButton
         onClick={() => onEdit?.(row)}
         size="small"
         sx={{
           color: 'primary.main',
-          padding: '6px',
-          margin: '0 1px',
-          minWidth: '32px',
-          minHeight: '32px',
           '&:hover': {
             backgroundColor: 'primary.light',
             opacity: 0.1,
@@ -208,10 +181,7 @@ const renderStatusChip = useCallback((row) => {
           component="img"
           src={penToSquare}
           alt="Edit"
-          sx={{
-            width: 18,
-            height: 18,
-          }}
+          sx={{ width: 18, height: 18 }}
         />
       </IconButton>
     </Tooltip>
@@ -224,7 +194,6 @@ const renderStatusChip = useCallback((row) => {
     'עריכה': { render: renderEditButton },
   }), [renderStatusChip, renderValidChip, renderDeleteButton, renderEditButton]);
 
-  // Effects
   useEffect(() => {
     if (status === 'idle') {
       dispatch(fetchAllMeetings());
@@ -233,7 +202,6 @@ const renderStatusChip = useCallback((row) => {
     }
   }, [status, dispatch]);
 
-  // Loading state
   if (isInitialLoading) {
     return (
       <Box
@@ -254,7 +222,6 @@ const renderStatusChip = useCallback((row) => {
     );
   }
 
-  // Error state
   if (status === 'failed') {
     return (
       <Box
@@ -267,17 +234,16 @@ const renderStatusChip = useCallback((row) => {
           gap: 2,
         }}
       >
-        <Typography variant="h6" color="error" textAlign="center">
+        <Typography variant="h6" color="error">
           שגיאה בטעינת המפגשים
         </Typography>
-        <Typography variant="body2" color="text.secondary" textAlign="center">
+        <Typography variant="body2" color="text.secondary">
           {error}
         </Typography>
         <Button
           variant="contained"
           onClick={handleManualRefresh}
           startIcon={<RefreshIcon />}
-          size="large"
         >
           נסה שוב
         </Button>
@@ -286,16 +252,14 @@ const renderStatusChip = useCallback((row) => {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
-      {/* Page Title */}
+    <Box sx={{ width: '95%' , marginLeft: 'auto', marginRight:'auto',
+  }}>
       <Box
         sx={{
           position: 'relative',
           top: -70,
           marginBottom: -10,
           textAlign: 'right',
-          backgroundColor: 'transparent',
-          zIndex: 10,
           paddingBottom: 4,
           paddingRight: 20,
         }}
@@ -306,116 +270,90 @@ const renderStatusChip = useCallback((row) => {
             fontFamily: '"Rubik", sans-serif',
             fontWeight: 700,
             fontSize: { xs: 28, sm: 35, md: 40 },
-            lineHeight: '100%',
             color: '#0D1783',
             textShadow: '1px 1px 2px rgba(0,0,0,0.1)',
-            margin: 0,
-            display: 'inline-block',
           }}
         >
           מפגשים
         </Typography>
       </Box>
 
-      {/* Main Content */}
-      <Paper
-        elevation={3}
-        sx={{
-          padding: 2,
-          borderRadius: 2,
-        }}
+      <CustomTable
+        columns={columns}
+        data={meetings || []}
+        keyMap={keyMap}
+        columnConfig={columnConfig}
+      />
+
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        maxWidth="sm"
+        fullWidth
       >
-        <CustomTable
-          columns={columns}
-          data={meetings || []}
-          keyMap={keyMap}
-          columnConfig={columnConfig}
-          onEdit={onEdit}
-          onDelete={handleDelete}
-        />
-
-        {/* Delete Confirmation Dialog */}
-        <Dialog
-          open={openDeleteDialog}
-          onClose={handleCloseDeleteDialog}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle
-            sx={{
-              textAlign: 'right',
-              fontWeight: 600,
-            }}
+        <DialogTitle sx={{ textAlign: 'right', fontWeight: 600 }}>
+          מחיקת מפגש
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography sx={{ textAlign: 'right', mb: 2 }}>
+            האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" 
+            מהקורס "{meetingToDelete?.courseName}"?
+          </Typography>
+          {meetingToDelete && !meetingToDelete.isValid && (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                color: 'error.main',
+                mt: 2,
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Typography sx={{ mr: 1 }}>
+                המפגש מסומן כשגוי.
+              </Typography>
+              <EventBusyIcon />
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'flex-start', gap: 1 }}>
+          <Button
+            onClick={handleCloseDeleteDialog}
+            disabled={isDeleting}
+            color="inherit"
           >
-            מחיקת מפגש
-          </DialogTitle>
-          <DialogContent dividers>
-            <Typography sx={{ textAlign: 'right', mb: 2 }}>
-              האם אתה בטוח שברצונך למחוק את המפגש "{meetingToDelete?.topicName}" 
-              מהקורס "{meetingToDelete?.courseName}"?
-            </Typography>
-            {meetingToDelete && !meetingToDelete.isValid && (
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  color: 'error.main',
-                  mt: 2,
-                  justifyContent: 'flex-end',
-                }}
-              >
-                <Typography sx={{ mr: 1 }}>
-                  המפגש מסומן כשגוי.
-                </Typography>
-                <EventBusyIcon />
-              </Box>
+            ביטול
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
+            disabled={isDeleting}
+            sx={{ minWidth: 80 }}
+          >
+            {isDeleting ? (
+              <CircularProgress size={24} color="inherit" />
+            ) : (
+              'מחק'
             )}
-          </DialogContent>
-          <DialogActions
-            sx={{
-              justifyContent: 'flex-start',
-              gap: 1,
-            }}
-          >
-            <Button
-              onClick={handleCloseDeleteDialog}
-              disabled={isDeleting}
-              color="inherit"
-            >
-              ביטול
-            </Button>
-            <Button
-              onClick={handleConfirmDelete}
-              variant="contained"
-              color="error"
-              disabled={isDeleting}
-              sx={{ minWidth: 80 }}
-            >
-              {isDeleting ? (
-                <CircularProgress size={24} color="inherit" />
-              ) : (
-                'מחק'
-              )}
-            </Button>
-          </DialogActions>
-        </Dialog>
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-        {/* Snackbar for notifications */}
-        <Snackbar
-          open={snackbar.open}
-          autoHideDuration={4000}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
           onClose={handleCloseSnackbar}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          severity={snackbar.severity}
+          sx={{ width: '100%' }}
         >
-          <Alert
-            onClose={handleCloseSnackbar}
-            severity={snackbar.severity}
-            sx={{ width: '100%' }}
-          >
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Paper>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 });

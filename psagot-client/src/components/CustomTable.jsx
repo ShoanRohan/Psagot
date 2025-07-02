@@ -20,15 +20,12 @@ const CustomTable = ({
   keyMap = {},
   rowsPerPageOptions = [10, 25, 50],
   defaultRowsPerPage = 50,
-  title,
-  headerActions,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
 
   // Validation
   if (!Array.isArray(columns) || columns.length === 0) {
-    console.error('columns prop must be a non-empty array');
     return (
       <Alert severity="error" sx={{ m: 2 }}>
         שגיאה: עמודות אינן תקינות
@@ -37,7 +34,6 @@ const CustomTable = ({
   }
 
   if (!Array.isArray(data)) {
-    console.error('data prop must be an array');
     return (
       <Alert severity="error" sx={{ m: 2 }}>
         שגיאה: נתונים אינם תקינים
@@ -59,18 +55,6 @@ const CustomTable = ({
     page * rowsPerPage + rowsPerPage
   );
 
-  // סגנון כותרות העמודות
-  const headerTextStyle = {
-    fontFamily: '"Rubik", sans-serif',
-    fontWeight: 500,
-    fontSize: 16,
-    lineHeight: 1,
-    letterSpacing: 0,
-    textAlign: 'center',
-    textTransform: 'capitalize',
-    color: '#393939',
-  };
-
   const renderHeaderCell = (col) => {
     if (col === 'סטטוס') {
       return (
@@ -82,7 +66,15 @@ const CustomTable = ({
             gap: 1,
           }}
         >
-          <Typography component="span" sx={headerTextStyle}>
+          <Typography 
+            component="span" 
+            sx={{
+              fontFamily: '"Rubik", sans-serif',
+              fontWeight: 500,
+              fontSize: 16,
+              color: '#393939',
+            }}
+          >
             {col}
           </Typography>
           <Box
@@ -103,19 +95,38 @@ const CustomTable = ({
     }
 
     return (
-      <Typography sx={headerTextStyle}>
+      <Typography 
+        sx={{
+          fontFamily: '"Rubik", sans-serif',
+          fontWeight: 500,
+          fontSize: 16,
+          color: '#393939',
+        }}
+      >
         {col}
       </Typography>
     );
   };
 
-  const renderCell = (row, col, index, colIndex) => {
-    const cellKey = `${index}-${colIndex}`;
+  const formatDate = (dateString) => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${year}\\${month}\\${day}`;
+  };
 
+  const formatTime = (timeString) => {
+    if (!timeString) return '-';
+    return timeString.substring(0, 5);
+  };
+
+  const renderCell = (row, col, index, colIndex) => {
     if (columnConfig[col] && typeof columnConfig[col].render === 'function') {
       return (
         <TableCell
-          key={cellKey}
+          key={`${index}-${colIndex}`}
           align="center"
           sx={{
             fontSize: { xs: 12, sm: 13, md: 14 },
@@ -129,10 +140,20 @@ const CustomTable = ({
     }
 
     const dataKey = keyMap[col] || col.toLowerCase().replace(/\s+/g, '');
+    let cellValue = row[dataKey] !== undefined ? row[dataKey] : '-';
+
+    // Format date columns
+    if (col === 'תאריך') {
+      cellValue = formatDate(cellValue);
+    }
+    // Format time columns
+    else if (col === 'שעת התחלה' || col === 'שעת סיום') {
+      cellValue = formatTime(cellValue);
+    }
 
     return (
       <TableCell
-        key={cellKey}
+        key={`${index}-${colIndex}`}
         align="center"
         sx={{
           fontSize: { xs: 12, sm: 13, md: 14 },
@@ -140,87 +161,24 @@ const CustomTable = ({
           fontFamily: '"Rubik", sans-serif',
         }}
       >
-        {row[dataKey] !== undefined ? row[dataKey] : '-'}
+        {cellValue}
       </TableCell>
     );
   };
 
   return (
-    <Box
-      sx={{
-        // width: '100%',
-        // maxWidth: 1496,
-        // minWidth: 800,
-        // minHeight: 776,
-        // mx: 'auto',
-        // mt: 2.5,
-        // p: 1,
-        // display: 'flex',
-        // flexDirection: 'column',
-        // gap: 3,
-        // fontFamily: '"Rubik", sans-serif',
-      }}
-    >
-      {/* Header Section */}
-      {/* {(title || headerActions) && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            height: 44,
-            mb: 2,
-            direction: 'rtl',
-          }}
-        >
-          {title && (
-            <Typography
-              variant="h4"
-              sx={{
-                fontSize: { xs: 24, sm: 28, md: 32 },
-                fontWeight: 700,
-                lineHeight: '44px',
-                color: 'text.primary',
-                textAlign: 'right',
-                fontFamily: '"Rubik", sans-serif',
-              }}
-            >
-              {title}
-            </Typography>
-          )}
-
-          {headerActions && (
-            <Box
-              sx={{
-                display: 'flex',
-                gap: 2,
-                alignItems: 'center',
-              }}
-            >
-              {headerActions}
-            </Box>
-          )}
-        </Box>
-      )} */}
-
-      {/* Table Section */}
+     <Box>
       <Paper
         sx={{
           direction: 'rtl',
-          overflow: 'auto',
+          overflow: 'visible',
           p: { xs: '20px 10px', sm: '35px 20px' },
           borderRadius: 2.5,
           boxShadow: '0px 0px 4px 0px rgba(220, 226, 236, 0.8)',
           fontFamily: '"Rubik", sans-serif',
         }}
       >
-        <Table
-          stickyHeader
-          sx={{
-            // minWidth: { xs: 600, sm: 600, md: 600 },
-            fontFamily: '"Rubik", sans-serif',
-          }}
-        >
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               {columns.map((col, index) => (
@@ -232,8 +190,7 @@ const CustomTable = ({
                     borderBottom: '1px solid #C6C6C6',
                     height: 42,
                     padding: { xs: '8px 4px', sm: '8px 16px' },
-                    minWidth: col === 'עריכה' || col === 'מחיקה' ? 60 : 'auto',
-                    verticalAlign: 'middle',
+                    minWidth: 'auto',
                   }}
                 >
                   {renderHeaderCell(col)}
@@ -260,7 +217,6 @@ const CustomTable = ({
         </Table>
       </Paper>
 
-      {/* Pagination Section */}
       <Box sx={{ px: { xs: 1, sm: 2 } }}>
         <TablePagination
           component="div"
