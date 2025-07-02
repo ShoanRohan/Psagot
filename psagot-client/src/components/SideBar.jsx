@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -14,6 +13,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
+import  Link  from '@mui/material/Link';
 
 const menuItems = [
   {
@@ -87,11 +87,11 @@ const SideBar = () => {
             {selectedUser?.userTypeName ?? "ללא תפקיד"}
           </Typography>
         </Box>
-        <NavLink to="/edit-profile">
+        <Link to="/edit-profile">
           <Avatar className="user-avatar" sx={{ cursor: 'pointer' }}>
             <AccountCircleIcon />
           </Avatar>
-        </NavLink>
+        </Link>
       </Box>
     </Stack>
   );
