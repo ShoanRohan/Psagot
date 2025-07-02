@@ -7,7 +7,7 @@ import CourseDetails from "../components/CourseDetails"; // עדכני את הנ
 import TopicsGrid from "../components/TopicsGrid";
 import { useDispatch, useSelector } from "react-redux";
 import TopicSearch from "../components/TopicSearch";
-import { fetchCourseById } from "../features/course/courseActions";
+import { fetchCourseById,updateCourseAction } from "../features/course/courseActions";
 
 const CoursPage = () => {
   const [tabValue, setTabValue] = useState(0);
@@ -35,7 +35,8 @@ const CoursPage = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put("/api/Course/UpdateCourse", selectedCourse);
+      await dispatch(updateCourseAction(selectedCourse)).unwrap();
+     // await axios.put("/api/Course/UpdateCourse", selectedCourse);
       alert("הקורס עודכן בהצלחה");
     } catch (error) {
       console.error("שגיאה בעדכון הקורס:", error);
