@@ -17,6 +17,10 @@ const CoursesPage = () => {
   const courses = useSelector((state) => state.course.courses);
   const navigate = useNavigate();
 
+  const handleAddCourse = () => {
+    navigate('/newCourse', { state: { fromUserClick: true } });
+  };
+
   useEffect(() => {
     dispatch(filterCourses({ statusId: 1 }));
   }, [dispatch]);
@@ -94,7 +98,7 @@ const CoursesPage = () => {
 
     <Button
       variant="contained"
-      onClick={() => navigate('/newCourse')}
+      onClick={handleAddCourse}
       sx={{
         width: "152px",
         height: "40px",
