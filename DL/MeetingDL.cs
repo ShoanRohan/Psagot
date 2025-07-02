@@ -3,6 +3,7 @@ using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,7 +49,7 @@ namespace DL
         public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
         {
             try
-            {   
+            {
                 var meetings = await _context.Set<Meeting>().ToListAsync();
                 return (meetings, null);
             }
@@ -69,6 +70,106 @@ namespace DL
             catch (Exception ex)
             {
                 return (null, ex.Message);
+            }
+
+        }
+
+        public async Task<(IEnumerable<Meeting> Meetings, string ErrorMessage)> GetMeetingsByRange(DateOnly startDate, DateOnly endDate)
+        {
+            try
+            {
+                var meetings = await _context.Meetings
+                    .Where(m => m.MeetingDate >= startDate && m.MeetingDate <= endDate)
+                    .Include(m => m.Course)
+                    .Include(m => m.Topic)
+                    .Include(m => m.Room)
+                    .ToListAsync();
+
+                if (meetings == null || !meetings.Any())
+                    return (null, "No meetings found");
+
+                return (meetings, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, "An error occurred while retrieving meetings");
+            }
+        }
+
+
+        public async Task<(IEnumerable<Meeting>, int)> GetMeetingsByPage(int page, int pageSize)
+        {
+            try
+            {
+                var query = _context.Meetings
+                    .Include(m => m.Course)
+                    .Include(m => m.Topic)
+                    .Include(m => m.Room)
+                    .Include(m => m.Teacher).ThenInclude(t => t.UserType) 
+                    .Include(m => m.Day)
+                    .Include(m => m.ScheduleForTopic)
+                    .AsQueryable();
+
+                int totalCount = await query.CountAsync();
+
+                List<Meeting> meetings = await query
+                    .OrderBy(m => m.MeetingDate)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (meetings, totalCount);
+            }
+            catch (Exception)
+            {
+                return (Enumerable.Empty<Meeting>(), 0);
+            }
+        }
+        public async Task<(List<Meeting> Meetings, int TotalCount, string ErrorMessage)> SearchMeetings(int? courseId, int? topicId, string teacherName, string? date, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var query = _context.Meetings.AsQueryable();
+
+                // קבע את התאריך לסינון. אם לא סופק, השתמש בתאריך היום כברירת מחדל.
+                DateOnly filterDate = !string.IsNullOrEmpty(date) ? DateOnly.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture) : DateOnly.FromDateTime(DateTime.Today);
+                // סנן לפי התאריך (בין אם הוא סופק או ברירת מחדל)
+                query = query.Where(m => m.MeetingDate == filterDate);
+
+                // סנן לפי הפרמטרים האחרים שסופקו
+                if (courseId.HasValue)
+                {
+                    query = query.Where(m => m.CourseId == courseId.Value);
+                }
+
+                if (topicId.HasValue)
+                {
+                    query = query.Where(m => m.TopicId == topicId.Value);
+                }
+
+                if (!string.IsNullOrEmpty(teacherName))
+                {
+                    var teacher = await _context.Users
+                        .FirstOrDefaultAsync(u => u.Name == teacherName && u.UserTypeId == 2);
+
+                    if (teacher != null)
+                    {
+                        query = query.Where(m => m.TeacherId == teacher.UserId);
+                    }
+                }
+
+                int totalCount = await query.CountAsync();
+
+                var meetings = await query
+                    .Skip((pageNumber - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+
+                return (meetings, totalCount, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
             }
         }
     }

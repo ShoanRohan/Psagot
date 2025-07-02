@@ -58,5 +58,57 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+
+        public async Task<(IEnumerable<EventDTO> Events, string ErrorMessage)> GetMeetingsByRange(DateOnly startDate, DateOnly endDate)
+        {
+            try
+            {
+                var (meetings, errorMessage) = await _meetingDL.GetMeetingsByRange(startDate, endDate);
+                if (meetings == null || !meetings.Any())
+                    return (null, errorMessage ?? "No meetings found");
+                var events = _mapper.Map<IEnumerable<EventDTO>>(meetings);
+                return (events, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, "An error occurred while processing meetings.");
+            }
+        }
+
+        public async Task<(IEnumerable<MeetingDTO> Meetings, int TotalCount)> GetMeetingsByPage(int page, int pageSize)
+        {
+            var (meetings, totalCount) = await _meetingDL.GetMeetingsByPage(page, pageSize);
+
+            if (meetings == null)
+            { return (Enumerable.Empty<MeetingDTO>(), 0); }
+
+            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), totalCount);
+        }
+
+        public async Task<(ListOfMeetingsForTopicDTO Result, string ErrorMessage)> SearchMeetings(int? courseId, int? topicId, string teacherName, string? date, int pageNumber, int pageSize)
+        {
+            try
+            {
+                var (meetings, totalCount, errorMessage) = await _meetingDL.SearchMeetings(courseId, topicId, teacherName, date, pageNumber, pageSize);
+
+                if (meetings == null)
+                {
+                    return (null, errorMessage ?? "Search results were null.");
+                }
+                var meetingsDtoList = _mapper.Map<List<MeetingDTO>>(meetings);
+
+                var result = new ListOfMeetingsForTopicDTO
+                {
+                    Meetings = meetingsDtoList,
+                    TotalCount = totalCount
+                };
+
+                return (result, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
     }
 }

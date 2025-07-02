@@ -2,12 +2,30 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
+import CalendarPage from '../pages/CalendarPage';
+import CoursesPage from "../pages/CoursesPage";
+import MeetingsTable from '../components/MeetingsTable';
+import RoomTable from '../components/RoomTable';
+import RoomsHeader from '../components/RoomsHeader';
+import CourseScreen from "../components/CourseScreen";
+import Rooms from '../pages/Rooms';
+import UsersPage from '../pages/UsersPage';
+import RoomsViewPage from '../pages/RoomsViewPage';
 
 const AppRouter = () => {
     return (
         <Routes>
-            <Route path='/' element={<Layout/>}>
-                <Route path='/' element={<HomePage/>}/>
+            <Route path='/' element={<Layout />}>
+                <Route path='/' element={<HomePage />} />
+                <Route path='/courses' element={<CoursesPage/>} />
+                <Route path='/course/:id' element={<CourseScreen/>} />  
+                <Route path='/meetings' element={<MeetingsTable />} />
+                <Route path='/users' element={<UsersPage />} />
+                <Route path='/rooms' element={<Rooms />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
+                {/* <Route path='/rooms' element={<Rooms />} /> */}
+                {/*<Route path='/rooms' element={<RoomsViewPage />} />*/}
             </Route>
         </Routes>
     );

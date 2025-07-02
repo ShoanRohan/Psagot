@@ -33,6 +33,8 @@ namespace Psagot
             builder.Services.AddScoped<ITopicBL, TopicBL>();
             builder.Services.AddScoped<IScheduleForTopicDL,ScheduleForTopicDL >();
             builder.Services.AddScoped<ITopicDL, TopicDL>();
+            builder.Services.AddScoped<IStatusDL, StatusDL>();
+            builder.Services.AddScoped<IStatusBL, StatusBL>();
 
 
             builder.Services.AddScoped<ICourseDL, CourseDL>();

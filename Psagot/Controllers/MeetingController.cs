@@ -61,5 +61,34 @@ namespace Psagot.Controllers
 
             return Ok(addedMeeting);
         }
+
+        [HttpGet("GetMeetingsByRange")]
+        public async Task<IActionResult> GetMeetingsByRange([FromQuery] DateOnly startDate, [FromQuery] DateOnly endDate)
+        {
+            if (startDate > endDate)
+                return BadRequest("Start date cannot be after end date.");
+            var (events, errorMessage) = await _meetingBL.GetMeetingsByRange(startDate, endDate);
+            if (!string.IsNullOrEmpty(errorMessage))
+                return BadRequest(errorMessage);
+            if (events == null || !events.Any())
+                return NotFound("No meetings found in the specified date range.");
+            return Ok(events);
+        }
+
+        [HttpGet("GetMeetingsByPage")]
+        public async Task<IActionResult> GetMeetingsByPage([FromQuery] int page, [FromQuery] int pageSize)
+        {
+            var (meetings, totalCount) = await _meetingBL.GetMeetingsByPage(page, pageSize);
+            return Ok(new { Meetings = meetings, TotalCount = totalCount });
+        }
+
+        [HttpGet("SearchMeetings")]
+        public async Task<ActionResult> SearchMeetings(int? courseId, int? topicId, string? teacherName, string? date, int pageNumber, int pageSize)
+        {
+            var (result, errorMessage) = await _meetingBL.SearchMeetings(courseId, topicId, teacherName, date, pageNumber, pageSize);
+            if (result == null) return BadRequest(errorMessage);
+
+            return Ok(result);
+        }
     }
 }

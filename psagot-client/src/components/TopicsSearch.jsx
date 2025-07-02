@@ -1,0 +1,186 @@
+import * as React from "react";
+import {
+  Box,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Button,
+} from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined";
+import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { fetchAllTopicForCourseByCourseId } from "../features/topic/topicActions";
+import { setFilterTopic } from "../features/topic/topicSlice";
+import { fetchAllStatusesTopics } from "../features/status/statusActions";
+import { fetchTeachers } from "../features/user/userAction";
+import { selectSelectedCourse } from '../features/course/courseSlice';
+const sharedStyles = {
+  width: "150px",
+  height: "43px",
+  textAlign: "right",
+  direction: "rtl",
+  "& .MuiInputLabel-root": {
+    right: "0",
+    transformOrigin: "top right",
+  },
+  "& .MuiSelect-icon": {
+    right: "unset",
+    left: "0px",
+  },
+};
+
+const buttonStyles = {
+  minWidth: "100px",
+  height: "40px",
+  borderRadius: "50px",
+  boxShadow: "none",
+  fontFamily: "Rubik",
+  fontWeight: 400,
+  fontSize: "16px",
+  textTransform: "none",
+};
+
+const TopicsSearch = () => {
+  const dispatch = useDispatch();
+  const { topics, status } = useSelector((state) => state.topic);
+  // const{selectedCourse} = useSelector((state) => state.course);
+   const selectedCourse = useSelector(selectSelectedCourse)
+  const { teachers } = useSelector((state) => state.user);
+  const { topicsStatuses } = useSelector((state) => state.status);
+  const initialState = {
+    topicName: "",
+    teacherName: "",
+    statusName: "",
+  };
+
+  const [filters, setFilters] = useState(initialState);
+  const [activeButton, setActiveButton] = useState(true);
+  useEffect(() => {
+    if ( selectedCourse?.courseId) {
+      dispatch(fetchAllTopicForCourseByCourseId(selectedCourse.courseId));
+    }
+  }, [dispatch, selectedCourse?.courseId]);
+   useEffect(() => {
+    if (status === "idle") {
+      dispatch(fetchAllStatusesTopics());
+      dispatch(fetchTeachers());
+    }
+  }, [status, dispatch]);
+
+  const handleFilterData = () => {
+    dispatch(setFilterTopic(filters))
+    setActiveButton(true)
+  }
+  
+  return (
+    <Box sx={{ width: "100%" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "10px 20px",
+          backgroundColor: "white",
+          fontFamily: "Rubik",
+          direction: "rtl",
+          borderRadius: "10px",
+          background: "#FFF",
+          padding: "30px 32px",
+          boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
+        }}
+      >
+        {/* שדות בחירה */}
+        <Box sx={{ display: "flex", gap: "20px" }}>
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>נושא</InputLabel>
+            <Select
+              value={filters.topicName}
+              onChange={(e) => {
+                setFilters({ ...filters, topicName: e.target.value });
+                setActiveButton(false);
+              }}
+              sx={sharedStyles}
+            >
+              {topics?.map((topic) => (
+                <MenuItem key={topic.topicId} value={topic.name}>
+                  {topic.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>שם מרצה</InputLabel>
+            <Select
+              value={filters.teacherName}
+              onChange={(e) => {
+                setFilters({ ...filters, teacherName: e.target.value })
+                setActiveButton(false);
+              }}
+              sx={sharedStyles}
+            >
+              {teachers?.map((teacher) => (
+                <MenuItem key={teacher.id} value={teacher.name}>
+                  {teacher.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>סטאטוס</InputLabel>
+            <Select
+              value={filters.statusName}
+              onChange={(e) => {
+                setFilters({ ...filters, statusName: e.target.value })
+                setActiveButton(false);
+              }}
+              sx={sharedStyles}
+            >
+              {topicsStatuses?.map((topic) => (
+                <MenuItem key={topic.StatusTopicId} value={topic.name}>
+                  {topic.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        {/* כפתורים */}
+        <Box sx={{ display: "flex", gap: "10px" }}>
+          <Button
+            variant="outlined"
+            sx={buttonStyles}
+            // startIcon={<FilterAltOffOutlinedIcon sx={{ marginLeft: 1 }}/>}
+            // startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
+            onClick={() => {
+              setFilters(initialState)
+              dispatch(setFilterTopic(initialState));
+              setActiveButton(true)
+
+            }}
+          >
+            ניקוי
+          </Button>
+
+          <Button
+
+            variant="contained"
+            sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
+            startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
+            disabled={activeButton} // הכפתור מושבת
+            onClick={() => {
+              handleFilterData();
+            }}
+          >
+            חיפוש
+          </Button>
+
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export default TopicsSearch;

@@ -63,7 +63,7 @@ namespace DL
         {
             try
             {
-                IEnumerable<DaysForCourse> DaysForCourse = await _context.Set<DaysForCourse>().Where(d => d.CourseId == courseId).ToListAsync();
+                IEnumerable<DaysForCourse> DaysForCourse = await _context.Set<DaysForCourse>().Include(d => d.Day).Where(d => d.CourseId == courseId).ToListAsync();
                 return (DaysForCourse, null);
             }
             catch (Exception ex)

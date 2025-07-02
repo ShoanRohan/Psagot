@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -69,8 +70,74 @@ namespace DL
             }
         }
 
+        public async Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators()
+        {
+            try
+            {
+                var coordinators = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 3 && u.IsActive) // סינון רק רכזות פעילות
+                    .Select(u => new CoordinatorDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
+
+                return (coordinators, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            try
+            {
+                var teachers = await _context.Set<User>()
+                    .Where(u => u.UserTypeId == 4 && u.IsActive) // סינון רק מורות פעילות
+                    .Select(u => new TeacherDTO
+                    {
+                        UserId = u.UserId,
+                        Name = u.Name
+                    })
+                    .ToListAsync();
+
+                return (teachers, null); // אם הכל הצליח
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message); // אם קרתה שגיאה
+            }
+        }
+
+        public async Task<User> UserLoginAsync(string email, string password)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            return user;
+        }
+
+        public async Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers()
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Where(u => u.UserType != null && (u.UserType.Name == "Coordinator" || u.UserType.Name == "Lecturer"))
+                    .Include(u => u.UserType)
+                    .ToListAsync();
+
+                return (users, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
         public async Task<(IEnumerable<User> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
-            string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
+          string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
         {
             try
             {
@@ -98,8 +165,6 @@ namespace DL
                         .Select(u => u.User); // חזרה לאובייקט המקורי של ה-User
                 }
 
-
-
                 if (isActive.HasValue)
                 {
                     query = query.Where(u => u.IsActive == isActive);
@@ -122,27 +187,36 @@ namespace DL
             }
         }
 
-
-
-        public async Task<User> UserLoginAsync(string email, string password)
-        {
-            var user = await _context.Users
-                .FirstOrDefaultAsync(u => u.Email == email);
-
-            return user;
-        }
-
         public async Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators()
         {
             try
             {
-                var users = await _context.Set<User>().Where(u => u.UserType.Name == "Coordinator")
+                var users = await _context.Set<User>().Where(u => u.UserType.Name == "רכזת")
                     .Include(user => user.UserType).ToListAsync();
                 return (users, null);
             }
             catch (Exception ex)
             {
                 return (null, ex.Message);
+            }
+        }
+
+        public async Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var users = await _context.Users
+                    .Skip((pageNumber - 1) * pageSize)  // דילוג על תוצאות קודמות
+                    .Take(pageSize)  // הגבלת מספר השורות
+                    .Include(user => user.UserType)
+                    .ToListAsync();
+
+                var countUsers = _context.Users.Count();
+                return (users, countUsers, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, 0, ex.Message);
             }
         }
     }

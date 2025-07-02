@@ -14,9 +14,12 @@ namespace DL
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(IEnumerable<User> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
     string username, string phone, string role, bool? isActive, int pageNumber, int pageSize);
-
         Task<(User User, string ErrorMessage)> GetUserById(int id);
+        Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
+        Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers();
         Task<User> UserLoginAsync(string email, string password);
         Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
+        Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
+        Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers();
     }
 }

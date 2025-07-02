@@ -45,7 +45,17 @@ namespace BL
             return (_mapper.Map<ScheduleForTopicDTO>(updatedScheduleForTopic), null);
         }
 
+        public async Task<(bool IsDeleted, string ErrorMessage)> DeleteScheduleForTopic(int TopicId)
+        {
+            var (isDeleted, errorMessage) = await _scheduleForTopicDL.DeleteScheduleForTopic(TopicId);
 
+            if (!isDeleted) 
+            {
+                return (false, errorMessage);
+            }
+
+            return (true, null);
+        }
        
         public async Task<(IEnumerable<ScheduleForTopicDTO> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
@@ -63,6 +73,15 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<ScheduleForTopicDTO>>(scheduleForTopic), null);
         }
+
+        public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> AddScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO)
+        {
+            var scheduleForTopic = _mapper.Map<ScheduleForTopic>(scheduleForTopicDTO);
+            var (addedSchedule, errorMessage) = await _scheduleForTopicDL.AddScheduleForTopic(scheduleForTopic);
+            if (addedSchedule == null) return (null, errorMessage);
+            return (_mapper.Map<ScheduleForTopicDTO>(addedSchedule), null);
+        }
+
     }
 
 

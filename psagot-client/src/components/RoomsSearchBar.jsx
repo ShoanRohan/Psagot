@@ -6,6 +6,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
 import ListItemText from "@mui/material/ListItemText";
+import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import SearchIcon from "@mui/icons-material/Search";
 import InputLabel from "@mui/material/InputLabel";
@@ -53,22 +54,23 @@ const RoomsSearchBar = () => {
     setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
+    if (!validate()) return;
     const projector = roomSearch.equipment.includes("מקרן");
     const speakers = roomSearch.equipment.includes("רמקולים");
     const computers = roomSearch.equipment.includes("מחשבים");
     dispatch(
       filterRooms({
-        ...roomSearch,
-        projector,
-        speakers,
-        computers,
+      ...roomSearch,
+      projector,
+      speakers,
+      computers,
         isNewSearch: true,
       })
     );
     dispatch(updateFilteredRooms());
   };
   return (
-    <Box className="rooms-search-bar">
+      <Box className="rooms-search-bar">
       <div className="search-fields">
         <TextField
           label="שם חדר"
@@ -138,7 +140,7 @@ const RoomsSearchBar = () => {
           <span className="search-button-text">חיפוש</span>
         </Button>
       </div>
-    </Box>
+      </Box>
   );
 };
 export default RoomsSearchBar;

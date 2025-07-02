@@ -1,0 +1,44 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Entities.Contexts;
+using Microsoft.EntityFrameworkCore;
+using Entities.Models;
+namespace DL
+{
+    public class StatusDL : IStatusDL
+    {
+        private readonly PsagotDbContext _context;
+
+        public StatusDL(PsagotDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<(IEnumerable<StatusCourse> StatusCourses, string ErrorMessage)> GetAllStatusCourses()
+        {
+            try
+            {
+                var statusCourses = await _context.Set<StatusCourse>().ToListAsync();
+                return (statusCourses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(IEnumerable<StatusTopic> statusTopic, string ErrorMessage)> GetAllStatusTopics()
+        {
+            try
+            {
+                var statusTopic = await _context.Set<StatusTopic>().ToListAsync();
+                return (statusTopic, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+    }
+}

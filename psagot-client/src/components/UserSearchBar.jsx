@@ -3,6 +3,7 @@ import { TextField,Button,Checkbox,FormControlLabel,Box,Grid} from "@mui/materia
 import { Search } from "@mui/icons-material";
 import { fetchFilteredUseres } from "../features/user/userAction";
 import { useDispatch, useSelector } from "react-redux";
+import { BoxSearchBar } from "../styles/UserSearchBar";
 
 const UserSearchBar = () => {
   const dispatch = useDispatch();
@@ -35,27 +36,18 @@ const UserSearchBar = () => {
       // יצירת אובייקט דינמי עם הפרמטרים
       const filteredUsersParamaters = {
         ...searchFields,
-        pageNumber: 1,   // אמור לבוא מהטופס
-        pageSize: 3,     // אמור להיות בסטייט גלובלי
+        pageNumber: 1, // אמור לבוא מהטופס
+        pageSize: 3, // אמור להיות בסטייט גלובלי
       };
 
       // שליחה לפונקציה ב-Redux
       dispatch(fetchFilteredUseres(filteredUsersParamaters));
-      console.log("users: ",users)
+      console.log("users: ", users);
     }
   };
 
   return (
-    <Box
-      sx={{
-        backgroundColor: "#F9FAFC",
-        padding: 2,
-        borderRadius: 2,
-        display: "flex",
-        alignItems: "center",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-      }}
-    >
+    <BoxSearchBar>
       <Grid container spacing={2} alignItems="center">
         <Grid item xs={12} sm={3}>
           <TextField
@@ -97,7 +89,12 @@ const UserSearchBar = () => {
             control={
               <Checkbox
                 checked={searchFields.isActive}
-                onChange={() => setSearchFields({ ...searchFields, isActive: !searchFields.isActive })}
+                onChange={() =>
+                  setSearchFields({
+                    ...searchFields,
+                    isActive: !searchFields.isActive,
+                  })
+                }
               />
             }
             label="פעיל"
@@ -108,13 +105,13 @@ const UserSearchBar = () => {
       <Button
         variant="contained"
         color="primary"
-        startIcon={<Search style={{ padding: "5px" }} />}
+        startIcon={<SearchIcon style={{ padding: "5px" }} />}
         sx={{ borderRadius: "20px", minWidth: "120px", marginRight: 2 }}
         onClick={handleSearch}
       >
         חיפוש
       </Button>
-    </Box>
+    </BoxSearchBar>
   );
 };
 
