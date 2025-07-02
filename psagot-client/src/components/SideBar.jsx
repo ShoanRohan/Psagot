@@ -14,7 +14,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
-import  Link  from '@mui/material/Link';
+
 
 const menuItems = [
   {
@@ -88,11 +88,11 @@ const SideBar = () => {
             {selectedUser?.userTypeName ?? "ללא תפקיד"}
           </Typography>
         </Box>
-        <Link to="/edit-profile">
+        <NavLink to="/edit-profile">
           <Avatar className="user-avatar" sx={{ cursor: 'pointer' }}>
             <AccountCircleIcon />
           </Avatar>
-        </Link>
+        </NavLink>
       </Box>
     </Stack>
   );
