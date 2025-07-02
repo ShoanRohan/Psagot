@@ -109,5 +109,13 @@ namespace BL
             var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
             return (userDTOs, countUsers, null);
         }
+
+        public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userDL.GetTeachers();
+            if (teachers == null) return (null, errorMessage);
+
+            return (teachers, null); ;
+        }
     }
 }
