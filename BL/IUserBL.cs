@@ -22,6 +22,8 @@ namespace BL
         Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers();
 
         Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
+
+        Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers();
     }
 }
 

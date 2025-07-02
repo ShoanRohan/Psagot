@@ -97,6 +97,16 @@ namespace Psagot.Controllers
             return Ok(new { TotalCount = totalCount, Users = users });
         }
 
+        [HttpGet("GetTeachers")]
+        public async Task<IActionResult> GetTeachers()
+        {
+            var (teachers, errorMessage) = await _userBL.GetTeachers();
+            if (teachers == null || !teachers.Any())
+                return BadRequest(errorMessage);
+
+            return Ok(teachers);
+        }
+
         [HttpPost("login")]
         public async Task<ActionResult> Login([FromBody] LoginDTO login)
         {
