@@ -43,7 +43,11 @@ const getCoordinators = async () => {
     return response.data;
 };
 
+const getUsersByPage = async (pageNumber, pageSize) => {
+    const response = await api.get(`/User/GetUsersByPage?pageNumber=${pageNumber}&pageSize=${pageSize}`);
+    return response.data;
+};
 
-export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getFilteredUsers };
+export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getFilteredUsers, getUsersByPage };
 
 

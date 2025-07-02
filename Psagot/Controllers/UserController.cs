@@ -137,5 +137,14 @@ namespace Psagot.Controllers
             if (users == null) return BadRequest(errorMessage);
             return Ok(users);
         }
+
+        [HttpGet("GetUsersByPage")]
+        public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok( new{users, countUsers });
+        }
     }
 }

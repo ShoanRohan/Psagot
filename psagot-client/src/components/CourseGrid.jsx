@@ -33,7 +33,7 @@ const CourseGrid = ({ totalCount, currentPage, pageSize, onPageChange, onPageSiz
     const dispatch = useDispatch();
     const [selectSize, setSelectSize] = useState(pageSize);
     const courses = useSelector(selectCourses);
-
+    
     const handlePageChange = (event, newPage) => {
         onPageChange(newPage);
     };
