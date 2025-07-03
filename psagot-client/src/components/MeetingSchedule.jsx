@@ -4,7 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchMeetingByDate } from '../features/meeting/meetingActions';
 
 
@@ -12,6 +12,7 @@ import { fetchMeetingByDate } from '../features/meeting/meetingActions';
 export default function MeetingSchedule() {
   // ריפרנס לרכיב FullCalendar לגישה ל-API שלו.
   const calendarRef = useRef(null);
+  const dispatch = useDispatch();
   const theme = useTheme();
   const { status } = useSelector((state) => state.meeting); 
   // Hook של React Router לניווט ה events.
@@ -109,7 +110,6 @@ export default function MeetingSchedule() {
   //דואג שהטבלה תקבל נתונים עדכניים בכל עת
   useEffect(() => {
     const calendarApi = calendarRef.current?.getApi();
-
     // if (status === 'idle') {
     //   dispatch(fetchMeetingByDate());
     // }
