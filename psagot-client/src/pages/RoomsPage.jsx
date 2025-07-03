@@ -7,6 +7,7 @@ import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
 import ExcelIcon from '../assets/icons/excelIcon.svg';
 import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 import CoursesPage from './CoursesPage';
+import RoomsGrid from '../components/RoomsGrid';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
@@ -148,7 +149,7 @@ const RoomsPage = () => {
         >
          
           {/* תצוגת רשימה */}
-          
+          <RoomsGrid/>
         </Box>
 
         <Box
