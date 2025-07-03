@@ -32,6 +32,8 @@ namespace Entities.DTO
 
         public int? StatusId { get; set; }
 
+        public int? CoordinatorId { get; set; }
+
         public virtual UserDTO? Coordinator { get; set; }
 
         public StatusCourseDTO? Status { get; set; }

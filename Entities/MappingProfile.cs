@@ -20,11 +20,11 @@ public class MappingProfile : Profile
         CreateMap<Course,CourseDTO> ().ReverseMap();
         CreateMap<StatusCourse, StatusCourseDTO>().ReverseMap();
         CreateMap<Topic, TopicDTO>()
-    .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher != null ? src.Teacher.Name : null))
-    .ForMember(dest => dest.MeetingsCount, opt => opt.MapFrom(src => src.Meetings.Count))
-    .ForMember(dest => dest.HasSchedule, opt => opt.MapFrom(src => src.ScheduleForTopics.Any()));
-
-
+            .ForMember(dest => dest.TeacherName, opt => opt.MapFrom(src => src.Teacher != null ? src.Teacher.Name : null))
+            .ForMember(dest => dest.MeetingsCount, opt => opt.MapFrom(src => src.Meetings.Count))
+            .ForMember(dest => dest.HasSchedule, opt => opt.MapFrom(src => src.ScheduleForTopics.Any()));
+        CreateMap<CourseDTO, Course>()
+            .ForMember(dest => dest.CoordinatorId, opt => opt.MapFrom(src => src.CoordinatorId));
         CreateMap<TopicDTO, Topic>();
 
     }
