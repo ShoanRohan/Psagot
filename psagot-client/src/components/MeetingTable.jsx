@@ -261,7 +261,7 @@ const MeetingTable = React.memo(({ onEdit }) => {
           marginBottom: -10,
           textAlign: 'right',
           paddingBottom: 4,
-          paddingRight: 20,
+          paddingRight: 0,
         }}
       >
         <Typography

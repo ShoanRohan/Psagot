@@ -10,7 +10,17 @@ import {
   Box,
   Typography,
   Alert,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
 } from '@mui/material';
+import {
+  KeyboardArrowLeft,
+  KeyboardArrowRight,
+  FirstPage,
+  LastPage,
+} from '@mui/icons-material';
 import selector from '../assets/icons/selector.png';
 
 const CustomTable = ({
@@ -166,6 +176,120 @@ const CustomTable = ({
     );
   };
 
+  // Custom Pagination Component
+  const CustomPaginationActions = () => {
+    const totalPages = Math.ceil(data.length / rowsPerPage);
+    
+    const handleFirstPageButtonClick = () => {
+      setPage(0);
+    };
+
+    const handleBackButtonClick = () => {
+      setPage(page - 1);
+    };
+
+    const handleNextButtonClick = () => {
+      setPage(page + 1);
+    };
+
+    const handleLastPageButtonClick = () => {
+      setPage(Math.max(0, totalPages - 1));
+    };
+
+    const handlePageClick = (pageNumber) => {
+      setPage(pageNumber);
+    };
+
+    // Generate page numbers to display
+    const getPageNumbers = () => {
+      const pages = [];
+      const maxVisiblePages = 5;
+      
+      if (totalPages <= maxVisiblePages) {
+        for (let i = 0; i < totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        const startPage = Math.max(0, page - 2);
+        const endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
+        
+        for (let i = startPage; i <= endPage; i++) {
+          pages.push(i);
+        }
+      }
+      
+      return pages;
+    };
+
+    return (
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <IconButton
+          onClick={handleFirstPageButtonClick}
+          disabled={page === 0}
+          sx={{ 
+            color: '#393939',
+            '&:disabled': { color: '#ccc' }
+          }}
+        >
+          <LastPage />
+        </IconButton>
+        
+        <IconButton
+          onClick={handleBackButtonClick}
+          disabled={page === 0}
+          sx={{ 
+            color: '#393939',
+            '&:disabled': { color: '#ccc' }
+          }}
+        >
+          <KeyboardArrowRight />
+        </IconButton>
+
+        {getPageNumbers().map((pageNumber) => (
+          <IconButton
+            key={pageNumber}
+            onClick={() => handlePageClick(pageNumber)}
+            sx={{
+              minWidth: 32,
+              height: 32,
+              backgroundColor: page === pageNumber ? '#1976d2' : 'transparent',
+              color: page === pageNumber ? 'white' : '#393939',
+              fontFamily: '"Rubik", sans-serif',
+              fontSize: 14,
+              '&:hover': {
+                backgroundColor: page === pageNumber ? '#1565c0' : '#f5f5f5',
+              },
+            }}
+          >
+            {pageNumber + 1}
+          </IconButton>
+        ))}
+
+        <IconButton
+          onClick={handleNextButtonClick}
+          disabled={page >= Math.ceil(data.length / rowsPerPage) - 1}
+          sx={{ 
+            color: '#393939',
+            '&:disabled': { color: '#ccc' }
+          }}
+        >
+          <KeyboardArrowLeft />
+        </IconButton>
+        
+        <IconButton
+          onClick={handleLastPageButtonClick}
+          disabled={page >= Math.ceil(data.length / rowsPerPage) - 1}
+          sx={{ 
+            color: '#393939',
+            '&:disabled': { color: '#ccc' }
+          }}
+        >
+          <FirstPage />
+        </IconButton>
+      </Box>
+    );
+  };
+
   return (
      <Box>
       <Paper
@@ -217,39 +341,74 @@ const CustomTable = ({
         </Table>
       </Paper>
 
-      <Box sx={{ px: { xs: 1, sm: 2 } }}>
-        <TablePagination
-          component="div"
-          rowsPerPageOptions={rowsPerPageOptions}
-          count={data.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="שורות לעמוד:"
-          labelDisplayedRows={({ from, to, count }) =>
-            `${from}-${to} מתוך ${count}`
-          }
+      {/* Custom Pagination */}
+      <Box 
+        sx={{ 
+          px: { xs: 1, sm: 2 },
+          py: 2,
+          backgroundColor: 'white',
+          borderRadius: 1,
+          mt: 1,
+        }}
+      >
+        <Box
           sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             direction: 'rtl',
-            fontSize: { xs: 12, sm: 13, md: 14 },
-            fontFamily: '"Rubik", sans-serif',
-            '& .MuiTablePagination-toolbar': {
-              justifyContent: 'space-between',
-              flexWrap: 'wrap',
-              gap: 1,
-            },
-            '& .MuiSelect-select': {
-              pr: 2,
-              pl: 2,
-              fontFamily: '"Rubik", sans-serif',
-            },
-            '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
-              fontSize: { xs: 12, sm: 13, md: 14 },
-              fontFamily: '"Rubik", sans-serif',
-            },
+            flexWrap: 'wrap',
+            gap: 2,
           }}
-        />
+        >
+          {/* Right side - Rows per page */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography
+              sx={{
+                fontSize: { xs: 12, sm: 13, md: 14 },
+                fontFamily: '"Rubik", sans-serif',
+                color: '#393939',
+              }}
+            >
+              מספר השורות:
+            </Typography>
+            <FormControl size="small">
+              <Select
+                value={rowsPerPage}
+                onChange={handleChangeRowsPerPage}
+                sx={{
+                  minWidth: 60,
+                  height: 32,
+                  fontFamily: '"Rubik", sans-serif',
+                  fontSize: { xs: 12, sm: 13, md: 14 },
+                  '& .MuiSelect-select': {
+                    pr: 2,
+                    pl: 2,
+                  },
+                }}
+              >
+                {rowsPerPageOptions.map((option) => (
+                  <MenuItem 
+                    key={option} 
+                    value={option}
+                    sx={{ 
+                      fontFamily: '"Rubik", sans-serif',
+                      fontSize: { xs: 12, sm: 13, md: 14 },
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Left side - Page navigation */}
+          <CustomPaginationActions />
+        </Box>
+
+        {/* Display current page info */}
+        
       </Box>
     </Box>
   );
