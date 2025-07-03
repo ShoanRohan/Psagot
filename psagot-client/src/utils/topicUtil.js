@@ -30,5 +30,9 @@ const getAllTopicsForCourseByCourseId = async (CourseId) => {
     const response = await api.get(`/Topic/GetAllTopicsForCourseByCourseId/${CourseId}`);
     return response.data;
 };
+const filterTopics = async (filter) => {
+  const response = await api.post('/Topic/FilterTopics', filter);
+  return response.data;
+};
 
-export { getAllTopics, getTopicById, addTopic, updateTopic, deleteTopic, getAllTopicsForCourseByCourseId };
+export { getAllTopics, getTopicById, addTopic, updateTopic, deleteTopic, getAllTopicsForCourseByCourseId ,filterTopics};

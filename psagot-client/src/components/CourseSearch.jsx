@@ -1,21 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
-  TextField,
-  MenuItem,
   Button,
-  Grid,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Select,
+  TextField,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { fetchAvailableYears, fetchCourseStatuses, filterCourses } from '../features/course/courseActions';
 import { fetchCoordinators } from '../features/user/userAction';
-import { filterCourses } from '../features/course/courseActions';
+import dayjs from 'dayjs';
 
-const statuses = ['פעיל', 'לא פעיל'];
-const years = Array.from({ length: 2050 - 2016 + 1 }, (_, i) => 2016 + i);
+const sharedStyles = {
+  width: '150px',
+  height: '43px',
+  textAlign: 'right',
+  direction: 'rtl',
+  '& .MuiInputLabel-root': {
+    right: '0',
+    transformOrigin: 'top right',
+    fontFamily: 'Rubik'
+  },
+  '& .MuiSelect-icon': {
+    right: 'unset',
+    left: '0px',
+  },
+  fontFamily: 'Rubik',
+  input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+
+};
+
+const buttonStyles = {
+  minWidth: '100px',
+  height: '40px',
+  borderRadius: '50px',
+  fontFamily: 'Rubik',
+  fontWeight: 400,
+  fontSize: '16px',
+  textTransform: 'none',
+  input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+
+};
+const scrollBar = {
+  maxHeight: 48 * 4.5,
+  '&::-webkit-scrollbar': {
+    width: '8px',
+  },
+  '&::-webkit-scrollbar-track': {
+    backgroundColor: '#f1f1f1',
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: '#888',
+    borderRadius: '10px',
+  },
+  '&::-webkit-scrollbar-thumb:hover': {
+    backgroundColor: '#555',
+  },
+};
 
 const defaultFilters = {
   courseId: '',
@@ -24,47 +71,75 @@ const defaultFilters = {
   year: '',
   startDate: null,
   endDate: null,
-  status: 'פעיל',
+  status: 1,
+};
+
+const getInitialFilters = () => {
+  const saved = localStorage.getItem('courseFilters');
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return {
+        ...defaultFilters,
+        ...parsed,
+        startDate: parsed.startDate ? dayjs(parsed.startDate) : null,
+        endDate: parsed.endtDate ? dayjs(parsed.endDate) : null,
+      };
+    } catch {
+      return defaultFilters;
+    }
+  }
+  return defaultFilters;
 };
 
 const CourseSearch = () => {
   const dispatch = useDispatch();
   const coordinators = useSelector((state) => state.user.coordinators);
+  const years = useSelector((state) => state.course.availableYears || []);
+  const statuses = useSelector((state) => state.course.courseStatuses || []);
+
+  // אתחול ה-state מה-localStorage או ברירת מחדל
+  const [filters, setFilters] = useState(getInitialFilters);
+  const [lastSearchedFilters, setLastSearchedFilters] = useState(getInitialFilters);
+  const [hasSearched, setHasSearched] = useState(false);
 
   useEffect(() => {
     dispatch(fetchCoordinators());
+    dispatch(fetchAvailableYears());
+    dispatch(fetchCourseStatuses());
   }, [dispatch]);
 
-  const [filters, setFilters] = useState(defaultFilters);
-  const [lastSearchedFilters, setLastSearchedFilters] = useState(defaultFilters);
-
+  // בדיקה האם הפילטרים שונו ביחס לאחרון שחיפשנו
   const isFiltersChanged = JSON.stringify(filters) !== JSON.stringify(lastSearchedFilters);
 
   const handleChange = (field) => (event) => {
     setFilters({ ...filters, [field]: event.target.value });
   };
+
   const handleDateChange = (field) => (date) => {
     setFilters({ ...filters, [field]: date });
   };
 
   const handleSearch = () => {
     const filterDto = {
-      courseId: filters.courseId || null,
+      courseId: filters.courseId ? parseInt(filters.courseId) : null,
       name: filters.name || null,
       year: filters.year ? parseInt(filters.year) : null,
       startDate: filters.startDate ? filters.startDate.toISOString() : null,
       endDate: filters.endDate ? filters.endDate.toISOString() : null,
       coordinator: filters.coordinator || null,
-      statusId: filters.status === 'פעיל' ? 1 : 2,
+      statusId: filters.status || null,
     };
 
-    dispatch(filterCourses(filterDto));
     setLastSearchedFilters(filters);
+    dispatch(filterCourses(filterDto));
+    setHasSearched(true);
   };
 
   const handleReset = () => {
     setFilters(defaultFilters);
-    dispatch(filterCourses({ statusId: 1 }));
+    setLastSearchedFilters(defaultFilters);
+    setHasSearched(false);
   };
 
   return (
@@ -73,10 +148,10 @@ const CourseSearch = () => {
         dir="rtl"
         sx={{
           position: "absolute",
-          top: "18.5%",
+          top: "18%",
           left: "50%",
           transform: "translateX(-50%)",
-          width: "calc(100% - 48px)", // Full width minus padding (24px on each side)
+          width: "calc(100% - 48px)",
           height: '72px',
           background: '#fff',
           boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
@@ -87,71 +162,99 @@ const CourseSearch = () => {
           gap: '16px',
           fontFamily: 'Rubik',
           border: '1px solid #E5E7EB',
-          boxSizing: 'border-box', // Ensure padding is included in width
+          boxSizing: 'border-box',
           zIndex: 2,
         }}
       >
-        <TextField
-          variant="standard"
-          placeholder="קוד קורס"
-          value={filters.courseId}
-          onChange={handleChange('courseId')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        />
-        <TextField
-          variant="standard"
-          placeholder="שם קורס"
-          value={filters.name}
-          onChange={handleChange('name')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        />
-        <TextField
-          select
-          variant="standard"
-          placeholder="רכזת"
-          value={filters.coordinator}
-          onChange={handleChange('coordinator')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        >
-          {coordinators?.map((coordinator) => (
-            <MenuItem key={coordinator} value={coordinator} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
-              {coordinator}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          variant="standard"
-          select
-          placeholder="שנה"
-          value={filters.year}
-          onChange={handleChange('year')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        >
-          {years.map((year) => (
-            <MenuItem key={year} value={year} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
-              {year}
-            </MenuItem>
-          ))}
-        </TextField>
-        <Grid item xs={12} md={1.6}>
-          <DatePicker
+        <Box sx={{ display: 'flex', gap: '20px' }}>
+          <TextField
             variant="standard"
+            type="number"
+            label="קוד קורס"
+            value={filters.courseId}
+            onChange={handleChange('courseId')}
+            sx={[sharedStyles, {
+              '& .MuiInputBase-root': {
+                marginTop: '21px',
+              }
+            }]}
+            InputProps={{
+              inputProps: {
+                style: { textAlign: 'right' },
+              },
+              disableUnderline: false,
+              sx: {
+                '& input[type=number]': {
+                  MozAppearance: 'textfield',
+                },
+                '& input[type=number]::-webkit-outer-spin-button': {
+                  WebkitAppearance: 'none',
+                  margin: 0,
+                },
+                '& input[type=number]::-webkit-inner-spin-button': {
+                  WebkitAppearance: 'none',
+                  margin: 0,
+                },
+              },
+            }}
+          />
+
+          <TextField
+            variant="standard"
+            label="שם קורס"
+            value={filters.name}
+            onChange={handleChange('name')}
+            sx={[sharedStyles, {
+              '& .MuiInputBase-root': {
+                marginTop: '21px',
+              }
+            }]}
+            InputProps={{ inputProps: { style: { textAlign: 'right' } }, disableUnderline: false }}
+          />
+
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>רכזת</InputLabel>
+            <Select
+              value={filters.coordinator}
+              onChange={handleChange('coordinator')}
+              sx={sharedStyles}
+              MenuProps={{
+                PaperProps: {
+                  sx: { ...scrollBar }
+                },
+              }}
+            >
+              {coordinators?.map((c) => (
+                <MenuItem key={c.userId} value={c.userId}>
+                  {c.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>שנה</InputLabel>
+            <Select
+              value={filters.year}
+              onChange={handleChange('year')}
+              sx={sharedStyles}
+              MenuProps={{
+                PaperProps: {
+                  sx: { ...scrollBar }
+                },
+              }}
+            >
+              {years?.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+
+          <DatePicker
             label="תאריך התחלה"
             value={filters.startDate}
             onChange={handleDateChange('startDate')}
@@ -171,20 +274,28 @@ const CourseSearch = () => {
                   '& .MuiInputLabel-root.MuiFormLabel-root': {
                     right: 0,
                     left: 'auto',
-                    top: '-15px'
+                    // top: '-15px'
                   },
-                  '& .MuiInputAdornment-root':{
+                  '& .MuiInputAdornment-root': {
                     marginLeft: 0,
                   },
-                  '& .MuiPickersInputBase-root':{
-                    marginTop:0
-                  }
+                  '& .MuiPickersInputBase-root': {
+                    marginTop: 0
+                  },
+                  '& .MuiInputBase-root': {
+                    marginTop: '16px',
+                  },
+                  '& .MuiInputLabel-root': {
+                    right: '0',
+                    transformOrigin: 'top right',
+                    fontFamily: 'Rubik'
+                  },
+
                 },
               },
             }}
           />
-        </Grid>
-        <Grid item xs={12} md={1.6}>
+
           <DatePicker
             label="תאריך סיום"
             value={filters.endDate}
@@ -206,79 +317,50 @@ const CourseSearch = () => {
                   '& .MuiInputLabel-root.MuiFormLabel-root': {
                     right: 0,
                     left: 'auto',
-                     top: '-15px'
+                    //  top: '-15px'
                   },
-                  '& .MuiInputAdornment-root':{
+                  '& .MuiInputAdornment-root': {
                     marginLeft: 0,
                   },
-                  '& .MuiPickersInputBase-root':{
-                    marginTop:0
-                  }
+                  '& .MuiPickersInputBase-root': {
+                    marginTop: 0
+                  },
+                  '& .MuiInputBase-root': {
+                    marginTop: '16px',
+                  },
+                  '& .MuiInputLabel-root': {
+                    right: '0',
+                    transformOrigin: 'top right',
+                    fontFamily: 'Rubik'
+                  },
+
                 },
               },
             }}
           />
-        </Grid>
-        <TextField
-          variant="standard"
-          select
-          placeholder="סטטוס"
-          value={filters.status}
-          onChange={handleChange('status')}
-          sx={{
-            width: 120,
-            borderBottom: '1px solid #C6C6C6',
-            '.MuiSelect-select': { fontFamily: 'Rubik', fontSize: '0.7vw' },
-          }}
-        >
-          {statuses.map((status) => (
-            <MenuItem key={status} value={status} sx={{ fontFamily: 'Rubik', fontSize: '0.7vw' }}>
-              {status}
-            </MenuItem>
-          ))}
-        </TextField>
 
-        <Box sx={{ display: 'flex', gap: '16px', marginRight: 'auto' }}>
-          <Button
-            variant="outlined"
-            onClick={handleReset}
-            sx={{
-              borderRadius: '50px',
-              width: '100px',
-              height: '40px',
-              fontFamily: 'Rubik',
-              fontSize: '0.7vw',
-              borderColor: '#326DEF',
-              color: '#326DEF',
-              '&:hover': {
-                borderColor: '#2a5ed9',
-                backgroundColor: 'rgba(50, 109, 239, 0.04)',
-              },
-            }}
-          >
+          <FormControl variant="standard" sx={sharedStyles}>
+            <InputLabel>סטטוס</InputLabel>
+            <Select value={filters.status} onChange={handleChange('status')} sx={sharedStyles}>
+              {statuses?.map((status) => (
+                <MenuItem key={status.statusCourseId} value={status.statusCourseId}>
+                  {status.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: '6px', marginRight: 'auto' }}>
+          <Button variant="outlined" onClick={handleReset} sx={buttonStyles}>
             ניקוי
           </Button>
           <Button
             variant="contained"
             onClick={handleSearch}
             disabled={!isFiltersChanged}
-            sx={{
-              borderRadius: '50px',
-              width: '100px',
-              height: '40px',
-              fontFamily: 'Rubik',
-              fontSize: '0.7vw',
-              backgroundColor: '#326DEF',
-              color: 'white',
-              '&:hover': {
-                backgroundColor: '#2a5ed9',
-              },
-              '&:disabled': {
-                backgroundColor: '#B0C4DE',
-                color: 'white',
-              },
-            }}
-            startIcon={<SearchIcon />}
+            sx={{ ...buttonStyles, backgroundColor: '#1976d2', color: 'white' }}
+            startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
           >
             חיפוש
           </Button>

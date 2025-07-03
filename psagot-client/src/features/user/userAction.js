@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getUserById, addUser, updatedUser, getCoordinators} from "../../utils/userUtil";
+import { getAllUsers, getUserById, addUser, updatedUser, getCoordinators, getLecturers } from "../../utils/userUtil";
 
 
 export const fetchAllUsers = createAsyncThunk('user/fetchAllUsers', async () => {
-    const data = await getAllUsers();
-    return data;
+  const data = await getAllUsers();
+  return data;
 });
 
 export const fetchUserById = createAsyncThunk('user/fetchUserById', async (id, thunkAPI) => {
   if (!id) {
-    return thunkAPI.rejectWithValue({ message: "userId is undefined or null" });    
+    return thunkAPI.rejectWithValue({ message: "userId is undefined or null" });
   }
   const data = await getUserById(id);
   return data;
@@ -31,17 +31,26 @@ export const addUserAction = createAsyncThunk('user/addUserAction', async (newUs
   }
 });
 
-export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
-    const data = await updatedUser(updateUser);
-    return data;
+export const updateUserAction = createAsyncThunk('user/updateUserAction', async (updateUser) => {
+  const data = await updatedUser(updateUser);
+  return data;
 });
 
-export const fetchCoordinators = createAsyncThunk( 'user/fetchCoordinators', async (userTypeId = 3, thunkAPI) => {
-    try {
-      const data = await getCoordinators(userTypeId);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const fetchCoordinators = createAsyncThunk('user/fetchCoordinators', async (userTypeId = 3, thunkAPI) => {
+  try {
+    const data = await getCoordinators(userTypeId);
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
+}
+);
+export const fetchLecturers = createAsyncThunk('user/fetchLecturers', async (_, thunkAPI) => {
+  try {
+    const data = await getLecturers();
+    return data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.response?.data || 'שגיאה בשליפת המרצים');
+  }
+}
 );

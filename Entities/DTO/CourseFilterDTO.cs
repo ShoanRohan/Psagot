@@ -8,6 +8,7 @@ namespace Entities.DTO
 {
     public class CourseFilterDTO
     {
+        public int? CourseId { get; set; }
         public string? Name { get; set; }
         public int? Year { get; set; }
         public DateTime? StartDate { get; set; }

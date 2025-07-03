@@ -21,8 +21,11 @@ namespace DL
         {
             try
             {
-                var topic = await _context.Set<Topic>().FindAsync(id);
-                    
+                var topic = await _context.Set<Topic>()
+                .Include(t => t.Teacher)
+                .FirstOrDefaultAsync(t => t.TopicId == id);
+
+
                 return (topic, null);
             }
             catch (Exception ex)
@@ -99,7 +102,9 @@ namespace DL
         {
             try
             {
-                var topics = await _context.Set<Topic>().ToListAsync();
+                var topics = await _context.Set<Topic>()
+                .Include(t => t.Teacher) 
+                .ToListAsync();
                 return (topics, null);
             }
             catch (Exception ex)

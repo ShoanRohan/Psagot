@@ -5,6 +5,8 @@ import {
   addCourseAction,
   updateCourseAction,
   filterCourses,
+  fetchAvailableYears,
+  fetchCourseStatuses,
 } from './courseActions';
 
 const initialState = {
@@ -12,6 +14,8 @@ const initialState = {
   selectedCourse: null,
   status: 'idle',
   error: null,
+  availableYears: [],
+  courseStatuses: [],
 };
 
 const courseSlice = createSlice({
@@ -46,9 +50,17 @@ const courseSlice = createSlice({
         state.status = 'failed';
         state.error = action.error.message;
       })
+      .addCase(addCourseAction.pending, (state) => {
+        state.status = 'loading';
+      })
       .addCase(addCourseAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
         state.courses.push(action.payload);
       })
+      .addCase(addCourseAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })      
       .addCase(updateCourseAction.fulfilled, (state, action) => {
         const index = state.courses.findIndex((course) => course.id === action.payload.id);
         if (index !== -1) {
@@ -57,6 +69,12 @@ const courseSlice = createSlice({
       })
       .addCase(filterCourses.fulfilled, (state, action) => {
         state.courses = action.payload;
+      })
+      .addCase(fetchAvailableYears.fulfilled, (state, action) => {
+        state.availableYears = action.payload;
+      })
+      .addCase(fetchCourseStatuses.fulfilled, (state, action) => {
+        state.courseStatuses = action.payload;
       });
   },
 });

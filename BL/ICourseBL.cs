@@ -1,5 +1,6 @@
 using DL;
 using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,9 @@ namespace BL
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
         Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetCoursesByFilter(CourseFilterDTO filter);
+        Task<List<int>> GetExistingCourseYears();
+        Task<List<StatusCourse>> GetAllStatusCourses();
+
 
 
     }

@@ -9,6 +9,10 @@ import LoginPage from '../pages/LoginPage';
 import UserManagement from '../pages/UserManagement';
 import CoursPage from '../pages/CoursPage';
 import RegisterPage from '../pages/RegisterPage';
+import AddCoursePage from '../pages/AddCoursePage';
+import TopicDialog from '../components/TopicDialog';
+
+
 
 const AppRouter = () => {
   return (
@@ -29,10 +33,13 @@ const AppRouter = () => {
         <Route path="cours/:id" element={<CoursPage />} />
         <Route path="user" element={<UserManagement />} />
         <Route path="courses" element={<CoursesPage />} />
+        <Route path="/newCourse" element={<AddCoursePage/>}/>
       </Route>
 
       {/* כל כתובת שלא קיימת */}
-      <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="/TopicDialog/:id" element={<TopicDialog />} />
+
     </Routes>
   );
 };

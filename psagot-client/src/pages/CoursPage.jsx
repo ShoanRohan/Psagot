@@ -17,6 +17,11 @@ import {
 } from "../features/course/courseActions";
 import { setCourse } from "../features/course/courseSlice";
 
+import TopicsGrid from "../components/TopicsGrid";
+import { useDispatch, useSelector } from "react-redux";
+import TopicSearch from "../components/TopicSearch";
+import { fetchCourseById,updateCourseAction } from "../features/course/courseActions";
+
 const CoursPage = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -93,7 +98,7 @@ const CoursPage = () => {
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", gap: 1 }}>
+<Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
             color="primary"
@@ -126,7 +131,10 @@ const CoursPage = () => {
           <CourseDetails course={selectedCourse} setCourse={handleSetCourse} />
         )}
         {tabValue === 1 && (
-          <Typography variant="body1">כאן יהיו נושאי הקורס</Typography>
+          <>
+           <TopicSearch  />
+          <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse.id)} />
+          </>
         )}
       </Box>
 

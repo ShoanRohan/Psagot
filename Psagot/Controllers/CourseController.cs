@@ -36,6 +36,7 @@ namespace Psagot.Controllers
         [HttpPost("AddCourse")]
         public async Task<IActionResult> AddCourse([FromBody] CourseDTO courseDTO)
         {
+            Console.WriteLine(courseDTO);
             var (addedCourse, errorMessage) = await _courseBL.AddCourse(courseDTO);
             if (addedCourse == null) return BadRequest(errorMessage);
 
@@ -59,5 +60,18 @@ namespace Psagot.Controllers
 
             return Ok(courses);
         }
+        [HttpGet("GetExistingYears")]
+        public async Task<IActionResult> GetExistingYears()
+        {
+            var years = await _courseBL.GetExistingCourseYears();
+            return Ok(years);
+        }
+        [HttpGet("GetAllStatusCourses")]
+        public async Task<IActionResult> GetAllStatusCourses()
+        {
+            var statusList = await _courseBL.GetAllStatusCourses();
+            return Ok(statusList);
+        }
+
     }
 }

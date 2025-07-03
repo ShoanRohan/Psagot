@@ -9,9 +9,9 @@
     border-radius: 10px;
   }
   *::-webkit-scrollbar-thumb {
-    background: #6200ea;
+    background: var(--Brand-60, #326DEF);
     border-radius: 10px;
   }
   *::-webkit-scrollbar-thumb:hover {
-    background: #3700b3;
+    background: var(--Brand-80, #1E51C2);
   }

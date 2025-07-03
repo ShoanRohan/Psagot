@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class CourseDL:ICourseDL
+    public class CourseDL : ICourseDL
     {
         private readonly PsagotDbContext _context;
 
@@ -36,7 +36,10 @@ namespace DL
         {
             try
             {
-                var courses = await _context.Set<Course>().ToListAsync();
+                var courses = await _context.Courses
+                 .Include(c => c.Coordinator)
+                 .Include(c => c.Status)
+                 .ToListAsync();
                 return (courses, null);
             }
             catch (Exception ex)
@@ -76,7 +79,13 @@ namespace DL
         {
             try
             {
-                var query = _context.Set<Course>().AsQueryable();
+                var query = _context.Set<Course>()
+                    .Include(c => c.Coordinator)
+                    .Include(c => c.Status)
+                    .AsQueryable();
+
+                if (filter.CourseId.HasValue)
+                    query = query.Where(c => c.CourseId == filter.CourseId.Value);
 
                 if (!string.IsNullOrWhiteSpace(filter.Name))
                     query = query.Where(c => c.Name.Contains(filter.Name));
@@ -103,6 +112,20 @@ namespace DL
             {
                 return (null, ex.Message);
             }
+        }
+        public async Task<List<int>> GetExistingCourseYears()
+        {
+            return await _context.Set<Course>()
+              .Select(c => c.Year)
+              .Distinct()
+              .OrderByDescending(y => y)
+              .ToListAsync();
+
+        }
+
+        public async Task<List<StatusCourse>> GetAllStatusCourses()
+        {
+            return await _context.StatusCourses.ToListAsync();
         }
 
 
