@@ -9,13 +9,11 @@ import {
   Select,
   MenuItem,
   Checkbox,
-  FormControlLabel,
   Grid,
   Box,
   IconButton,
   Button,
   Typography,
-  Stack,
   Paper
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -27,95 +25,16 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { updateTopicAction } from '../features/topic/topicActions';
 
-
-const styles = {
-  dialogContainer: {
-    borderRadius: '10px',
-    p: 3,
-    backgroundColor: '#fff',
-    fontFamily: 'Rubik',
-    input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
+const sharedStyles = {
+  textAlign: "right",
+  direction: "rtl",
+  "& .MuiInputLabel-root": {
+    right: "0",
+    transformOrigin: "top right",
   },
-  paperProps: {
-    width: '80%',
-    maxWidth: '1000px',
-    margin: 'auto',
-    borderRadius: '10px',
-    padding: '40px',
-    backgroundColor: '#fff',
-    boxShadow: '0px 0px 4px rgba(220, 226, 236, 0.8)',
-    outline: '1px solid #C6C6C6',
-    outlineOffset: '-1px',
-    overflow: 'visible',
-    fontFamily: 'Rubik',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '40px'
-  },
-  headerRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    mb: 2
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 500,
-    textTransform: 'capitalize',
-    color: '#393939',
-    mb: 2
-  },
-  fieldBox: {
-    mb: 2
-  },
-  textField: {
-    fontFamily: 'Rubik',
-    input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-    '& label.Mui-focused': {
-      color: '#326DEF'
-    },
-    '& .MuiInputLabel-root': {
-      right: '0',
-      transformOrigin: 'top right',
-      fontFamily: 'Rubik'
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: '#C6C6C6'
-      },
-      '&:hover fieldset': {
-        borderColor: '#326DEF'
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '#326DEF'
-      }
-    }
-  },
-  saveButton: {
-    height: 44,
-    px: 3,
-    backgroundColor: '#326DEF',
-    borderRadius: 50,
-    color: 'white',
-    fontFamily: 'Rubik',
-    fontWeight: 400,
-    textTransform: 'capitalize',
-    '&:hover': {
-      backgroundColor: '#274bb5'
-    }
-  },
-  cancelButton: {
-    height: 44,
-    px: 3,
-    borderRadius: 50,
-    border: '1px solid #326DEF',
-    color: '#1E53CB',
-    fontFamily: 'Rubik',
-    fontWeight: 400,
-    textTransform: 'capitalize',
-    '&:hover': {
-      backgroundColor: 'rgba(50, 109, 239, 0.1)'
-    }
+  "& .MuiSelect-icon": {
+    right: "unset",
+    left: "0px",
   }
 };
 
@@ -123,7 +42,7 @@ const TopicDialog = ({ open, onClose, initialData }) => {
   const dispatch = useDispatch();
   const users = useSelector(state => state.user.user || []);
   const statuses = useSelector(state => state.course.courseStatuses || []);
-  const weekdays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
+  const lecturers = useSelector(state => state.user.lecturers || []);
 
   const [form, setForm] = useState({
     topicCode: initialData?.topicCode || '',
@@ -141,7 +60,6 @@ const TopicDialog = ({ open, onClose, initialData }) => {
     },
     schedule: initialData?.schedule?.length > 0 ? initialData.schedule : [{ day: '', startTime: '', endTime: '' }]
   });
-  ;
 
   useEffect(() => {
     dispatch(fetchAllUsers());
@@ -149,168 +67,251 @@ const TopicDialog = ({ open, onClose, initialData }) => {
     dispatch(fetchLecturers());
   }, [dispatch]);
 
-  const lecturers = useSelector(state => state.user.lecturers || []);
   const handleChange = field => event => {
     setForm({ ...form, [field]: event.target.value });
   };
 
-  const handleCheckboxChange = key => event => {
-    setForm({
-      ...form,
+  const handleCheckboxChange = (key, checked) => {
+    setForm((prevForm) => ({
+      ...prevForm,
       equipment: {
-        ...form.equipment,
-        [key]: event.target.checked
+        ...prevForm.equipment,
+        [key]: checked
       }
-    });
+    }));
   };
 
   const handleDateChange = field => date => {
     setForm({ ...form, [field]: date });
   };
 
-  const handleScheduleChange = (index, field) => event => {
-    const newSchedule = [...form.schedule];
-    newSchedule[index][field] = event.target.value;
-    setForm({ ...form, schedule: newSchedule });
-  };
-
-  const handleAddScheduleRow = () => {
-    setForm({
-      ...form,
-      schedule: [...form.schedule, { day: '', startTime: '', endTime: '' }]
-    });
-  };
-
   const handleSave = () => {
-    const topicToUpdate = {
-      id: initialData.id, // חשוב! לוודא שקיים
-      topicCode: form.topicCode,
-      topicName: form.topicName,
-      courseName: form.courseName,
-      lecturerId: form.lecturerId,
-      startDate: form.startDate ? form.startDate.toISOString() : null,
-      endDate: form.endDate ? form.endDate.toISOString() : null,
-      statusId: form.statusId,
-      numberOfSessions: form.numberOfSessions,
-      equipment: form.equipment,
-      schedule: form.schedule
+    const original = {
+      topicCode: initialData?.topicCode || '',
+      topicName: initialData?.topicName || '',
+      courseName: initialData?.courseName || '',
+      lecturerId: initialData?.lecturerId || '',
+      startDate: initialData?.startDate ? dayjs(initialData.startDate) : null,
+      endDate: initialData?.endDate ? dayjs(initialData.endDate) : null,
+      statusId: initialData?.statusId || '',
+      numberOfSessions: initialData?.numberOfSessions || '',
+      equipment: {
+        computers: initialData?.equipment?.computers || false,
+        projector: initialData?.equipment?.projector || false,
+        microphone: initialData?.equipment?.microphone || false
+      },
+      schedule: initialData?.schedule || []
     };
 
-    dispatch(updateTopicAction(topicToUpdate))
-      .unwrap()
-      .then(() => {
-        onClose();
-      })
-      .catch((error) => {
-        console.error('Error updating topic:', error);
-      });
-  };
+    const changedFields = {};
 
-  const handleCancel = () => {
-    onClose();
+    // השוואת שדות פשוטים
+    Object.keys(form).forEach(key => {
+      if (key === 'equipment' || key === 'schedule') return; // נטפל בהם בנפרד
+      if (dayjs(form[key]).isValid() && dayjs(original[key]).isValid()) {
+        if (!dayjs(form[key]).isSame(original[key])) {
+          changedFields[key] = form[key]?.toISOString?.() ?? form[key];
+        }
+      } else if (form[key] !== original[key]) {
+        changedFields[key] = form[key];
+      }
+    });
+
+    // השוואת ציוד (equipment)
+    const changedEquipment = {};
+    Object.keys(form.equipment).forEach(eq => {
+      if (form.equipment[eq] !== original.equipment[eq]) {
+        changedEquipment[eq] = form.equipment[eq];
+      }
+    });
+    if (Object.keys(changedEquipment).length > 0) {
+      changedFields.equipment = changedEquipment;
+    }
+
+    // השוואת לוח זמנים
+    if (JSON.stringify(form.schedule) !== JSON.stringify(original.schedule)) {
+      changedFields.schedule = form.schedule;
+    }
+
+    if (Object.keys(changedFields).length === 0) {
+      onClose(); // לא השתנה כלום
+      return;
+    }
+
+    // שליחת הנתונים ששונו בלבד
+    dispatch(updateTopicAction({
+      id: initialData.id,
+      ...changedFields
+    }))
+      .unwrap()
+      .then(() => onClose())
+      .catch((error) => console.error('Error updating topic:', error));
   };
 
   return (
-    <Paper sx={styles.dialogContainer} dir="rtl">
-
-      <Dialog open={open} onClose={onClose} PaperProps={{ sx: styles.paperProps }}
+    <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{
+      sx: {
+        width: '80vw',
+        maxWidth: '80vw',
+        borderRadius: 3,
+        m: 'auto',
+      },
+    }}>
+      <IconButton
+        onClick={onClose}
+        sx={{
+          position: "absolute",
+          top: 16,
+          left: 16,
+          color: "#494747",
+        }}
       >
-        <Box sx={styles.headerRow}>
-          <DialogTitle>  עריכת נושא{form.topicName ? ` - ${form.topicName}` : ''} </DialogTitle>
-          <Box display="flex" gap={1} alignItems="center">
-            <Button onClick={handleCancel} sx={styles.cancelButton}>ביטול</Button>
-            <Button onClick={handleSave} sx={styles.saveButton}>שמור</Button>
-            <IconButton onClick={onClose}><CloseIcon /></IconButton>
-          </Box>
-        </Box>
-
-        <DialogContent>
-          <Typography sx={styles.sectionTitle}>פרטים טכניים</Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField label="קוד נושא" value={form.topicCode} disabled fullWidth sx={styles.textField} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField label="שם נושא" value={form.topicName} onChange={handleChange('topicName')} fullWidth sx={styles.textField} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField label="שם קורס" value={form.courseName} onChange={handleChange('courseName')} fullWidth sx={styles.textField} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>שם מרצה</InputLabel>
-                <Select value={form.lecturerId} onChange={handleChange('lecturerId')} label="שם מרצה">
-                  {lecturers.map(user => (
-                    <MenuItem key={user.id} value={user.id}>{user.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker label="תאריך התחלה" value={form.startDate} onChange={handleDateChange('startDate')} slotProps={{ textField: { fullWidth: true, sx: styles.textField } }} />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker label="תאריך סיום" value={form.endDate} onChange={handleDateChange('endDate')} slotProps={{ textField: { fullWidth: true, sx: styles.textField } }} />
-              </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel>סטטוס</InputLabel>
-                <Select value={form.statusId} onChange={handleChange('statusId')} label="סטטוס">
-                  {statuses.map(status => (
-                    <MenuItem key={status.statusCourseId} value={status.statusCourseId}>{status.name}</MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField label="מספר מפגשים" type="number" value={form.numberOfSessions} onChange={handleChange('numberOfSessions')} fullWidth sx={styles.textField} />
-            </Grid>
+        <CloseIcon />
+      </IconButton>
+      <DialogTitle>
+        <Typography fontWeight="bold" fontSize={16}>
+          עריכת נושא{form.topicName ? ` - ${form.topicName}` : ''}
+        </Typography>
+      </DialogTitle>
+      <Box sx={{ width: '100%', height: '100%' }} dir="rtl">
+        <DialogContent sx={{ maxHeight: '90vh' }} dir="rtl">
+          <Grid container spacing={2} direction="column">
             <Grid item xs={12}>
-              <Box display="flex" gap={3}>
-                <FormControlLabel control={<Checkbox checked={form.equipment.computers} onChange={handleCheckboxChange('computers')} />} label="מחשבים" />
-                <FormControlLabel control={<Checkbox checked={form.equipment.projector} onChange={handleCheckboxChange('projector')} />} label="מקרן" />
-                <FormControlLabel control={<Checkbox checked={form.equipment.microphone} onChange={handleCheckboxChange('microphone')} />} label="מיקרופון" />
-              </Box>
-            </Grid>
+              <Paper sx={{ p: 2 }}>
+                <Box display="flex" justifyContent="space-between" alignItems="center" mt={-1} mb={1}>
+                  <Typography variant="h6" fontWeight="bold" fontSize={14} mb={2}>
+                    פרטים טכניים
+                  </Typography>
+                  <Box display="flex" gap={2} sx={{ justifyContent: 'center', px: 3, pb: 2 }}>
+                    <Button variant="contained" color="primary" onClick={handleSave} sx={{ borderRadius: '32px' }}>
+                      שמירה
+                    </Button>
+                  </Box>
+                </Box>
+                <Grid container spacing={2} sx={{ maxWidth: '80%' }}>
+                  <Grid item xs={3}>
+                    <TextField
+                      label="נושא"
+                      value={form.topicName}
+                      onChange={handleChange('topicName')}
+                      fullWidth
+                      variant="standard"
+                      InputLabelProps={{ sx: { textAlign: 'right', right: 0 } }}
+                      sx={{ ...sharedStyles }}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <FormControl fullWidth variant="standard" sx={{ ...sharedStyles }}>
+                      <InputLabel>שם מרצה</InputLabel>
+                      <Select
+                        value={form.lecturerId}
+                        onChange={handleChange('lecturerId')}
+                      >
+                        {lecturers.map(user => (
+                          <MenuItem key={user.id} value={user.id}>
+                            {user.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
 
-            {/* שיבוץ במערכת */}
-            <Grid item xs={12}>
-              <Box mt={2} p={2} border="1px solid #ccc" borderRadius="8px">
-                <Typography variant="h6" gutterBottom>שיבוץ במערכת</Typography>
-                {form.schedule.map((row, index) => (
-                  <Grid container spacing={2} alignItems="center" key={index} mt={1}>
-                    <Grid item xs={4}>
-                      <FormControl fullWidth>
-                        <InputLabel>יום</InputLabel>
-                        <Select value={row.day} onChange={handleScheduleChange(index, 'day')} label="יום">
-                          {weekdays.map(day => (
-                            <MenuItem key={day} value={day}>{day}</MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Grid container spacing={2} sx={{ maxWidth: '80%' }}>
+                    <Grid item xs={3}>
+                      <DatePicker
+                        label="תאריך התחלה"
+                        value={form.startDate}
+                        onChange={handleDateChange('startDate')}
+                        slotProps={{
+                          textField: {
+                            variant: 'standard',
+                            fullWidth: true,
+                            sx: sharedStyles
+                          }
+                        }}
+                      />
                     </Grid>
-                    <Grid item xs={4}>
-                      <TextField label="שעת התחלה" type="time" value={row.startTime} onChange={handleScheduleChange(index, 'startTime')} fullWidth sx={styles.textField} />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <TextField label="שעת סיום" type="time" value={row.endTime} onChange={handleScheduleChange(index, 'endTime')} fullWidth sx={styles.textField} />
+
+                    <Grid item xs={3}>
+                      <DatePicker
+                        label="תאריך סיום"
+                        value={form.endDate}
+                        onChange={handleDateChange('endDate')}
+                        slotProps={{
+                          textField: {
+                            variant: 'standard',
+                            fullWidth: true,
+                            sx: sharedStyles
+                          }
+                        }}
+                      />
                     </Grid>
                   </Grid>
-                ))}
-                <Box mt={2} display="flex" justifyContent="flex-end">
-                  <Button variant="outlined" sx={styles.saveButton} onClick={handleAddScheduleRow}>+ שיבוץ</Button>
-                </Box>
-              </Box>
+                </LocalizationProvider>
+
+                <Grid container spacing={2} sx={{ maxWidth: '80%' }}>
+                  <Grid item xs={3}>
+                    <TextField
+                      label="מספר מפגשים"
+                      type="number"
+                      value={form.numberOfSessions}
+                      onChange={handleChange('numberOfSessions')}
+                      fullWidth
+                      variant="standard"
+                      InputLabelProps={{ sx: { textAlign: 'right', right: 0 } }}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <FormControl fullWidth variant="standard" sx={{ ...sharedStyles }}>
+                      <InputLabel >סטטוס</InputLabel>
+                      <Select
+                        value={form.statusId}
+                        onChange={handleChange('statusId')}
+                      >
+                        {statuses.map(status => (
+                          <MenuItem key={status.statusTopicId} value={status.name}>
+                            {status.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} sx={{ maxWidth: '80%' }}>
+                  <Grid item xs={12}>
+                    <FormControl>
+                      <Typography fontWeight="bold" fontSize={14} mb={1}>
+                        ציוד נדרש:
+                      </Typography>
+                      <Box display="flex" gap={2} alignItems="center">
+                        <Checkbox
+                          checked={form.equipment.computers}
+                          onChange={(e) => handleCheckboxChange('computers', e.target.checked)}
+                        />
+                        <Typography component="span">מחשבים</Typography>
+                        <Checkbox
+                          checked={form.equipment.projector}
+                          onChange={(e) => handleCheckboxChange('projector', e.target.checked)}
+                        />
+                        <Typography component="span">מקרן</Typography>
+                        <Checkbox
+                          checked={form.equipment.microphone}
+                          onChange={(e) => handleCheckboxChange('microphone', e.target.checked)}
+                        />
+                        <Typography component="span">מיקרופון</Typography>
+                      </Box>
+                    </FormControl>
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
           </Grid>
         </DialogContent>
-      </Dialog>
-
-    </Paper>
+      </Box>
+    </Dialog>
   );
 };
 

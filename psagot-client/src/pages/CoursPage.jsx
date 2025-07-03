@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Button, Tabs, Tab } from "@mui/material";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import CourseDetails from "../components/CourseDetails"; // עדכני את הנתיב בהתאם
-
-import TopicsGrid from "../components/TopicsGrid";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import CourseDetails from "../components/CourseDetails";
+import TopicDialog from "../components/TopicDialog";
+import TopicsGrid from "../components/TopicsGrid";
 import TopicSearch from "../components/TopicSearch";
-import { fetchCourseById,updateCourseAction } from "../features/course/courseActions";
+import { fetchCourseById, updateCourseAction } from "../features/course/courseActions";
 
 const CoursPage = () => {
   const [tabValue, setTabValue] = useState(0);
-  const { id } = useParams(); // קבלת מזהה קורס מה-URL
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
 
-  const [selectedCourse, setSelectedCourse] = useState(null); // קורס נבחר
+  const [selectedCourse, setSelectedCourse] = useState(null);
   const topics = useSelector((state) => state.topic.topics);
   const dispatch = useDispatch();
-  const courseFromStore = useSelector(state => state.course.selectedCourse);
+  const courseFromStore = useSelector((state) => state.course.selectedCourse);
 
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState(null);
 
   useEffect(() => {
     if (id) {
@@ -31,12 +33,22 @@ const CoursPage = () => {
     }
   }, [courseFromStore]);
 
+  // ✅ פתיחה אוטומטית של דיאלוג לפי topicId מה־URL
+  useEffect(() => {
+    const topicIdFromQuery = searchParams.get("topicId");
+    if (topicIdFromQuery && topics.length > 0) {
+      const topicToEdit = topics.find(t => t.id === parseInt(topicIdFromQuery));
+      if (topicToEdit) {
+        handleOpenDialog(topicToEdit);
+      }
+    }
+  }, [searchParams, topics]);
+
   const handleTabChange = (event, newValue) => setTabValue(newValue);
 
   const handleSave = async () => {
     try {
       await dispatch(updateCourseAction(selectedCourse)).unwrap();
-     // await axios.put("/api/Course/UpdateCourse", selectedCourse);
       alert("הקורס עודכן בהצלחה");
     } catch (error) {
       console.error("שגיאה בעדכון הקורס:", error);
@@ -44,14 +56,21 @@ const CoursPage = () => {
     }
   };
 
-  const handleCancel = () => {
-    // רענון מחדש של הנתונים מהשרת (אפשר גם לעשות ניווט אחורה)
-    window.location.reload();
+  const handleCancel = () => window.location.reload();
+
+  const handleOpenDialog = (topic) => {
+    console.log("handleOpenDialog נקרא עם נושא:", topic);
+    setSelectedTopic(topic);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedTopic(null);
   };
 
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "94vh" }}>
-      {/* שורת כותרת עם שם הקורס והכפתורים */}
       <Box
         sx={{
           display: "flex",
@@ -69,16 +88,11 @@ const CoursPage = () => {
           </Typography>
         </Box>
 
-<Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
             color="primary"
-            sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
-            }}
+            sx={{ borderRadius: "30px", px: 4, py: 1, textTransform: "none" }}
             onClick={handleSave}
             disabled={!selectedCourse}
           >
@@ -87,12 +101,7 @@ const CoursPage = () => {
           <Button
             variant="outlined"
             color="primary"
-            sx={{
-              borderRadius: "30px",
-              px: 4,
-              py: 1,
-              textTransform: "none",
-            }}
+            sx={{ borderRadius: "30px", px: 4, py: 1, textTransform: "none" }}
             onClick={handleCancel}
           >
             ביטול
@@ -100,25 +109,37 @@ const CoursPage = () => {
         </Box>
       </Box>
 
-      {/* טאבים */}
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label="פרטי קורס" />
         <Tab label="נושאי קורס" />
       </Tabs>
 
-      {/* תוכן לפי טאב */}
       <Box sx={{ mt: 2 }}>
-      {tabValue === 0 && selectedCourse && (
+        {tabValue === 0 && selectedCourse && (
           <CourseDetails course={selectedCourse} setCourse={setSelectedCourse} />
         )}
+
         {tabValue === 1 && (
           <>
-           <TopicSearch  />
-          <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse.id)} />
+<Button
+              variant="contained"
+              color="secondary"
+              onClick={() => handleOpenDialog({ courseId: selectedTopic?.id })}
+              sx={{ mb: 2 }}
+            >
+              ערוך נושא קורס
+            </Button>
+            <TopicSearch />
+            <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse?.id)}/>
+            {selectedTopic && (
+              <TopicDialog open={openDialog} onClose={handleCloseDialog} initialData={selectedTopic} />
+            )}
+
           </>
         )}
       </Box>
     </Box>
+
   );
 };
 

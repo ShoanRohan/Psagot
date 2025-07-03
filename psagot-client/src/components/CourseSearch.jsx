@@ -258,84 +258,83 @@ const CourseSearch = () => {
             label="תאריך התחלה"
             value={filters.startDate}
             onChange={handleDateChange('startDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
             slotProps={{
               textField: {
                 placeholder: 'תאריך התחלה',
                 variant: 'standard',
                 sx: {
                   width: 125,
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                    // top: '-15px'
+                  direction: 'rtl', 
+                  input: {
+                    fontFamily: 'Rubik',
+                    fontSize: '14px',
                   },
                   '& .MuiInputAdornment-root': {
-                    marginLeft: 0,
+                    marginRight: 0, 
+                    marginLeft: 'unset',
+                    alignItems: 'center',
+                    height: '100%',
                   },
-                  '& .MuiPickersInputBase-root': {
-                    marginTop: 0
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '20px',
+                    marginTop: '0px',
                   },
                   '& .MuiInputBase-root': {
                     marginTop: '16px',
+                    height: '32px',
                   },
                   '& .MuiInputLabel-root': {
-                    right: '0',
+                    right: 0,
                     transformOrigin: 'top right',
-                    fontFamily: 'Rubik'
+                    fontFamily: 'Rubik',
                   },
-
                 },
               },
             }}
+
           />
 
           <DatePicker
             label="תאריך סיום"
             value={filters.endDate}
             onChange={handleDateChange('endDate')}
-            sx={{
-              width: 120,
-              borderBottom: '1px solid #C6C6C6',
-              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
-            }}
             slotProps={{
               textField: {
                 placeholder: 'תאריך סיום',
                 variant: 'standard',
                 sx: {
                   width: 125,
-                  borderBottom: '1px solid #C6C6C6',
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  input: { fontFamily: 'Rubik', fontSize: '14px' },
-                  '& .MuiInputLabel-root.MuiFormLabel-root': {
-                    right: 0,
-                    left: 'auto',
-                    //  top: '-15px'
+                  direction: 'rtl', 
+                  input: {
+                    fontFamily: 'Rubik',
+                    fontSize: '14px',
                   },
                   '& .MuiInputAdornment-root': {
-                    marginLeft: 0,
+                    marginRight: 0, 
+                    marginLeft: 'unset',
+                    alignItems: 'center',
+                    height: '100%',
                   },
-                  '& .MuiPickersInputBase-root': {
-                    marginTop: 0
+                  '& .MuiSvgIcon-root': {
+                    fontSize: '20px',
+                    marginTop: '0px',
                   },
                   '& .MuiInputBase-root': {
                     marginTop: '16px',
+                    height: '32px',
                   },
                   '& .MuiInputLabel-root': {
-                    right: '0',
+                    right: 0,
                     transformOrigin: 'top right',
-                    fontFamily: 'Rubik'
+                    fontFamily: 'Rubik',
                   },
-
                 },
               },
+            }}
+            sx={{
+              width: 120,
+              borderBottom: '1px solid #C6C6C6',
+              input: { fontFamily: 'Rubik', fontSize: '0.7vw' },
             }}
           />
 
