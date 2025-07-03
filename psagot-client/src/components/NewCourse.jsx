@@ -32,8 +32,7 @@ const NewCourse = () => {
   const hasMounted = useRef(false);
   const prevSaveStatusRef = useRef('idle');
   const { coordinators, status: coordinatorsStatus } = useSelector((state) => state.user);
-  
-
+  const [allowShowSnackbar, setAllowShowSnackbar] = useState(false);
 
   const showSnackbar = (message, severity = 'success') => {
   setSnackbarMessage(message);
@@ -148,6 +147,7 @@ const handleCancel = () => {
     showSnackbar('יש למלא את כל השדות החובה', 'error');
     return;
   }
+    setAllowShowSnackbar(true);
 
   const dtoToSend = {
     Name: formData.courseName,
@@ -209,21 +209,21 @@ useEffect(() => {
   }
   const prevStatus = prevSaveStatusRef.current;
   if (courseSaveStatus !== prevStatus) {
+     prevSaveStatusRef.current = courseSaveStatus;
 
-  if (courseSaveStatus === 'succeeded') {
+  if (courseSaveStatus === 'succeeded' && allowShowSnackbar) {
     showSnackbar('שמירת פרטי הקורס הסתיימה בהצלחה', 'success');
     const timer = setTimeout(() => {
       navigate('/courses');
     }, 2000);
      return () => clearTimeout(timer);
   }
-  if (courseSaveStatus === 'failed') {
+  if (courseSaveStatus === 'failed' && allowShowSnackbar) {
     showSnackbar(`אירעה שגיאה בעת שמירת הקורס: ${courseSaveError}`, 'error');
   }
-  prevSaveStatusRef.current = courseSaveStatus;
     dispatch(resetCourseSaveStatus());
   }
-}, [courseSaveStatus, courseSaveError, navigate, dispatch]);
+}, [courseSaveStatus, courseSaveError, navigate, dispatch, allowShowSnackbar]);
 
 
   useEffect(() => {
@@ -715,11 +715,19 @@ useEffect(() => {
 <Snackbar
   open={snackbarOpen}
   autoHideDuration={1000}
-  onClose={() => setSnackbarOpen(false)}
+   onClose={() => {
+    setSnackbarOpen(false);
+    setSnackbarMessage('');
+    setSnackbarSeverity('success'); // אופציונלי, אם אתה רוצה לאפס לרמת חומרה ברירת מחדל
+  }}
   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 >
   <Alert
-    onClose={() => setSnackbarOpen(false)}
+    onClose={() => {
+      setSnackbarOpen(false);
+      setSnackbarMessage('');
+      setSnackbarSeverity('success');
+    }}
     severity={snackbarSeverity}
     sx={{ width: '100%', direction: 'rtl' }}
   >
