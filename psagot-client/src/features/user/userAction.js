@@ -30,17 +30,27 @@ export const addUserAction = createAsyncThunk(
   async (newUser) => {
     const data = await addUser(newUser);
     return data;
-});
+  }
+);
 
 export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
     const data = await updatedUser(updateUser);
     return data;
 });
 
-export const loginAction = createAsyncThunk('user/login', async (loginUser) => {
-    const data = await login(loginUser); // ����� �� �� data
-    return data;
-});
+export const loginAction = createAsyncThunk(
+  'user/login',
+  async (loginUser, { rejectWithValue }) => {
+    try {
+      const data = await login(loginUser);
+      return data;
+    } catch (err) {
+      const message = err.response?.data || "שגיאה בהתחברות";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 
 export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", async () => {
         const data = await getCoordinators();
@@ -58,10 +68,19 @@ export const fetchAllLecturersAndCoordinators = createAsyncThunk('user/fetchAllL
   }
 );
 
-export const registerAction = createAsyncThunk('user/register', async (newUser) => {
-    const data = await register(newUser);
-    return data;
-});
+export const registerAction = createAsyncThunk(
+  'user/register',
+  async (newUser, { rejectWithValue }) => {
+    try {
+      const data = await register(newUser);
+      return data;
+    } catch (err) {
+      const message = err.response?.data || "Unknown error";
+      return rejectWithValue(message);
+    }
+  }
+);
+
 
 export const fetchUsersByPage = createAsyncThunk('user/getUsersByPage', async({pageNumber, pageSize}) => {
     const data = await getUsersByPage(pageNumber, pageSize);

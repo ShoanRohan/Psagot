@@ -56,6 +56,7 @@ const menuItems = [
 
 const SideBar = () => {
   const { selectedUser } = useSelector((state) => state.user);
+console.log(selectedUser);
 
   return (
     <Stack direction="column" spacing={0}>

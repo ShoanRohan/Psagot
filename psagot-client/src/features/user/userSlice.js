@@ -29,7 +29,7 @@ const userSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
-        setUser: (state, action) => {
+        setUsers: (state, action) => {
 
         },
         setPageNumber: (state, action) => {
@@ -71,7 +71,7 @@ const userSlice = createSlice({
             .addCase(addUserAction.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.selectedUser = action.payload;
-                state.user.push(action.payload);
+                state.users.push(action.payload);
             })
             .addCase(addUserAction.rejected, (state, action) => {
                 state.status = 'failed';
@@ -138,7 +138,8 @@ const userSlice = createSlice({
             })
             .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload;
+                state.teachers = action.payload.teachers;
+                 state.coordinators = action.payload.coordinators;
             })
             .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
                 state.status = 'failed';
@@ -151,7 +152,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchFilteredUseres.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.user = action.payload.users;
+                state.users = action.payload.users;
             })
             .addCase(fetchFilteredUseres.rejected, (state, action) => {
                 state.status = 'failed';
@@ -161,7 +162,7 @@ const userSlice = createSlice({
             .addCase(registerAction.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.selectedUser = action.payload;
-                state.user.push(action.payload);
+                state.users.push(action.payload);
             })
             .addCase(registerAction.rejected, (state, action) => {
                 state.status = 'failed';
@@ -188,5 +189,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUser, setPageNumber, setPageSize } = userSlice.actions;
+export const { setUsers, setPageNumber, setPageSize } = userSlice.actions;
 export default userSlice.reducer;
