@@ -106,6 +106,18 @@ export default function RoomsScheduleGrid() {
     }
   };
 
+  useEffect(() => {
+    const calendarApi = calendarRef.current?.getApi();
+    if (calendarApi) {
+      calendarApi.setOption('resources', visibleRooms);
+      calendarApi.refetchEvents();
+      calendarApi.gotoDate(formattedDate);
+    }
+  }, [currentPage, visibleRooms, formattedDate]);
+
+ 
+
+
   const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
 
   return (

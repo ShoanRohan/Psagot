@@ -7,6 +7,7 @@ import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
 import ExcelIcon from '../assets/icons/excelIcon.svg';
 import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 import CoursesPage from './CoursesPage';
+import RoomsGrid from '../components/RoomsGrid';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
@@ -32,24 +33,24 @@ const RoomsPage = () => {
           justifyContent: 'space-between',
           alignItems: 'center',
           mb: 2,
-          ml:8,
-          mr:-8,
+          ml: 8,
+          mr: -8,
           mt: 8,
           flexWrap: 'wrap',
           gap: 2,
-          
-        
+
+
         }}
       >
 
 
         <Typography
-         variant="h1"
+          variant="h1"
           sx={{
-            
+
             fontSize: '2.8rem',
             color: '#0D47A1',
-            fontWeight:900,
+            fontWeight: 900,
             margin: 0,
             width: "9.48%",
             height: "4.35%",
@@ -63,30 +64,30 @@ const RoomsPage = () => {
             textAlign: "right",
             color: "#112B83",
             textTransform: "capitalize",
-             
+
           }}
         >
           חדרים
         </Typography>
-        
- 
+
+
 
         {/* פס חיפוש ממורכז */}
         {viewMode === 'schedule' && (
-  <Box
-    sx={{
-      position: 'relative',
-      right: '45px', // מזיז ימינה
-      top: '-8px',   // מעלה מעט
-      flex: 1,
-      display: 'flex',
-      justifyContent: 'center',
-    }}
-  >
-    <RoomsScheduleSearch />
-   
-  </Box>
-)}
+          <Box
+            sx={{
+              position: 'relative',
+              right: '45px', // מזיז ימינה
+              top: '-8px',   // מעלה מעט
+              flex: 1,
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <RoomsScheduleSearch />
+
+          </Box>
+        )}
 
 
         <Box
@@ -95,8 +96,8 @@ const RoomsPage = () => {
             gap: 2,
             alignItems: 'center',
             flexWrap: 'wrap',
-       
-            
+
+
           }}
         >
           <Tooltip title="ייצוא לאקסל">
@@ -128,7 +129,7 @@ const RoomsPage = () => {
               color: '#fff',
               fontWeight: 'bold',
               px: 2,
-              ml:-8,
+              ml: -8,
               '&:hover': {
                 backgroundColor: '#115293',
               },
@@ -146,21 +147,21 @@ const RoomsPage = () => {
             transition: 'all 0.3s ease',
           }}
         >
-         
+
           {/* תצוגת רשימה */}
-          
+          <RoomsGrid />
         </Box>
 
         <Box
           sx={{
             display: viewMode === 'schedule' ? 'block' : 'none',
             transition: 'all 0.3s ease',
-            
 
-            
+
+
           }}
         >
-           <RoomsScheduleGrid/>
+          <RoomsScheduleGrid />
         </Box>
       </Box>
     </Box>
