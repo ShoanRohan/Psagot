@@ -20,4 +20,11 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+const getMeetingeByDate = async ({viewType,from,to}) => {
+      const response = await api.get('/Meeting/GetMeetingByDate', {
+    params: { viewType, from, to }
+  });
+   return response.data;
+};
+
+export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById,getMeetingeByDate };

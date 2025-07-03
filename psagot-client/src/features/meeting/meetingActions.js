@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById } from '../../utils/meetingUtil';
+import { getAllMeetings, updateMeeting, addMeeting, getMeetingeById, getMeetingeByDate } from '../../utils/meetingUtil';
 
 export const fetchAllMeetings = createAsyncThunk('meeting/fetchAllMeetings', async() => {
     const data = await getAllMeetings();
@@ -23,6 +23,19 @@ export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", 
     const data = await getMeetingeById(id);
     return data;
 });
+
+
+
+export const fetchMeetingByDate = createAsyncThunk("meeting/fetchGetMeetingsByDate",
+  async ({ viewType, from, to }, { rejectWithValue }) => {
+    try {
+      const data = await getMeetingeByDate({viewType, from, to});
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "Unknown error");
+    }
+  }
+);
 
 export const addMeetingAction = createAsyncThunk(
     "meeting/addMeetingAction",
