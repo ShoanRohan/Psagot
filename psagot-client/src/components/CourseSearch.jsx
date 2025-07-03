@@ -127,7 +127,7 @@ const CourseSearch = () => {
       year: filters.year ? parseInt(filters.year) : null,
       startDate: filters.startDate ? filters.startDate.toISOString() : null,
       endDate: filters.endDate ? filters.endDate.toISOString() : null,
-      coordinator: filters.coordinator || null,
+      coordinatorId: filters.coordinator? parseInt (filters.coordinator): null,
       statusId: filters.status || null,
     };
 
