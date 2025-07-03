@@ -88,8 +88,6 @@ const RoomsPage = () => {
 
           </Box>
         )}
-
-
         <Box
           sx={{
             display: 'flex',
