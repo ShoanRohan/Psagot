@@ -2,8 +2,10 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Stack, Box, Snackbar, Alert, TextField, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { addRoomAction } from '../features/room/roomActions';
+import { addRoomAction, updateRoomAction } from '../features/room/roomActions';
 import "./RoomDetails.css";
+import { setSelectedRoom } from '../features/room/roomSlice';
+import { useNavigate } from 'react-router-dom';
 
 function RoomEdit() {
   const [name, setName] = useState('');
@@ -16,6 +18,7 @@ function RoomEdit() {
 
   const { selectedRoom } = useSelector(state => state.room);
   const dispatch = useDispatch();
+  const navigate=useNavigate();
 
   useEffect(() => {
     if (selectedRoom && selectedRoom.roomId) {
@@ -38,20 +41,25 @@ function RoomEdit() {
   };
 
   const handleSave = () => {
-    const room = {
-      roomId: number,
+    let room = {
       name,
       capacity,
       projector: equipment.includes("projector"),
       computer: equipment.includes("computer"),
       speaker: equipment.includes("speaker"),
     };
+   room= selectedRoom? {...room, roomId: number}:room;
+   const method=selectedRoom? updateRoomAction: addRoomAction;
 
-    dispatch(addRoomAction(room));
+    dispatch(method(room));
     setMessage("החדר נשמר בהצלחה!");
     setError(false);
     setOpenSnackbar(true);
   };
+ const handleCancel=()=>{
+  dispatch(setSelectedRoom(null));
+  navigate('room');
+  }
 
   return (
     <Box>
@@ -66,6 +74,7 @@ function RoomEdit() {
         <Button
           variant="outlined"
           sx={{ borderRadius: '25px', px: 4, color: '#1976d2', borderColor: '#1976d2' }}
+          onClick={handleCancel}
         >
           ביטול
         </Button>
@@ -130,3 +139,4 @@ function RoomEdit() {
 }
 
 export default RoomEdit;
+

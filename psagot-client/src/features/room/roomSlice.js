@@ -21,6 +21,10 @@ const roomSlice = createSlice({
         setRoom: (state, action) => {
             
         },
+          setSelectedRoom: (state, action) => {
+           state.selectedRoom=action.payload; 
+        },
+
         setDisplayDate: (state, action) => {
             state.displayDate = action.payload;
         },
@@ -93,5 +97,5 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setDisplayDate,setRoom ,setViewMode } = roomSlice.actions;
+export const { setDisplayDate,setRoom ,setViewMode,setSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;
