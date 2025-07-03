@@ -149,7 +149,7 @@ const RoomsPage = () => {
         >
 
           {/* תצוגת רשימה */}
-          <RoomsGrid />
+          <RoomsGrid/>
         </Box>
 
         <Box
