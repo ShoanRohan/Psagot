@@ -40,14 +40,14 @@ const CourseScreen = () => {
 
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
         {tabIndex === 1 &&
-        <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-          <IconButton>
-            <img src={exlIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
-          </IconButton>
-          <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
-            הוספת נושא
-          </Button>
-        </Box>
+          <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+            <IconButton>
+              <img src={exlIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
+            </IconButton>
+            <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
+              הוספת נושא
+            </Button>
+          </Box>
         }
       </Box>
       <Typography className="course-status">סטטוס הקורס: {course ? course.statusName : "טוען..."}</Typography>
@@ -68,8 +68,8 @@ const CourseScreen = () => {
 
       {/* בר ניווט */}
       <Tabs value={tabIndex} onChange={handleTabChange} className="course-tabs">
-        <Tab label="פרטי קורס" className="course-tab" />
-        <Tab label="נושאי קורס" className="course-tab" />
+        <Tab label="פרטי קורס" className="course-tab" sx={{ fontSize: '18px' }} />
+        <Tab label="נושאי קורס" className="course-tab" sx={{ fontSize: '18px' }}/>
       </Tabs>
 
       {/* תוכן בהתאם ללשונית */}

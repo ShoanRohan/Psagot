@@ -132,7 +132,7 @@ const TopicsSearch = () => {
             </Select>
           </FormControl>
           <FormControl variant="standard" sx={sharedStyles}>
-            <InputLabel>סטאטוס</InputLabel>
+            <InputLabel>סטטוס</InputLabel>
             <Select
               value={filters.statusName}
               onChange={(e) => {
