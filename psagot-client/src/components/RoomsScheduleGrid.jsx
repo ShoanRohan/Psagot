@@ -14,15 +14,13 @@ export default function RoomsScheduleGrid() {
   const calendarRef = useRef(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-
   const { displayDate, roomSchedule, status, rooms, roomsStatus } = useSelector((state) => state.room);
-
   const [currentPage, setCurrentPage] = useState(0);
   const roomsPerPage = 10;
-
   const [openError, setOpenError] = useState(false);
 
 
+  //מגדיר את פורמט התאריך
   const formatDate = (date) => {
     if (!date)
       return '2025-02-02';
@@ -53,6 +51,7 @@ export default function RoomsScheduleGrid() {
     title: name,
   }));
 
+  //נוסחאת פייגיניישן
   const visibleRooms = allRooms.slice(
     currentPage * roomsPerPage,
     (currentPage + 1) * roomsPerPage
@@ -62,12 +61,12 @@ export default function RoomsScheduleGrid() {
     .filter(event => visibleRooms.some(room => room.id === event.roomName?.trim()))
     .map(({ courseName, topicName, startTime, endTime, lecturer, roomName, courseColor }) => ({
       title: courseName,
-      secondTitle: topicName,
       start: `${formattedDate}T${startTime?.trim()}`,
-      end: `${formattedDate}T${endTime?.trim()}`,
+      end: `${formattedDate}T${endTime?.trim()}`,    
+      color: courseColor,
+      secondTitle: topicName,
       lecturer,
       resourceId: roomName?.trim(),
-      color: courseColor,
     }));
 
   const lightenColor = (hex, factor) => {
@@ -79,6 +78,7 @@ export default function RoomsScheduleGrid() {
     return `#${r}${g}${b}`;
   };
 
+  //מטפלת בעיצוב האירועים
   const handleEventDidMount = (info) => {
     const eventElement = info.el;
     const courseColor = info.event.backgroundColor;
@@ -88,8 +88,9 @@ export default function RoomsScheduleGrid() {
     eventElement.style.borderRadius = "8px";
   };
 
+  //מטפלת בתצוגת האירועים (מבחינת תוכן)
   const renderEventContent = ({ event }) => (
-    <div style={{ fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
+    <div style={{ paddingRight:'1px',fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
       <div>{event.title}</div>
       <div style={{ fontSize: "10px", opacity: 0.8 }}>
         {event.extendedProps.secondTitle}<br />
@@ -98,6 +99,7 @@ export default function RoomsScheduleGrid() {
     </div>
   );
 
+  //דפדוף
   const handlePrevRooms = () => {
     if (currentPage > 0) {
       setCurrentPage(prevPage => prevPage - 1);
@@ -120,7 +122,20 @@ export default function RoomsScheduleGrid() {
     }
   }, [currentPage, visibleRooms, formattedDate]);
 
+  //מוודא שיש לאן לעבור בדפדוף
   const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
+
+  //אחראית על תצוגת עמודת השעות בתצוגת שבוע ויום
+  const renderSlotLabelContent = ({ date }) => {
+  const pad = n => n.toString().padStart(2, '0');
+  const end = new Date(date.getTime() + 3600000); 
+  return (
+    <div>
+      {`${pad(date.getHours())}:${pad(date.getMinutes())}-${pad(end.getHours())}:${pad(end.getMinutes())}`}
+    </div>
+  );
+};
+
   return (
     <>
       <Modal
@@ -276,7 +291,7 @@ export default function RoomsScheduleGrid() {
             plugins={[resourceTimeGridPlugin, interactionPlugin]}
             initialView="resourceTimeGridDay"
             initialDate={formattedDate}
-            slotLabelFormat={{ hour: "numeric", minute: "2-digit", hour12: false }}
+            slotLabelContent={renderSlotLabelContent}
             headerToolbar={false}
             slotMinTime="08:00:00"
             slotMaxTime="22:00:00"
