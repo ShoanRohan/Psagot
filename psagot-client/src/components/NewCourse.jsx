@@ -42,8 +42,8 @@ const NewCourse = () => {
 
 useEffect(() => {
   if (location.state?.fromUserClick) {
-    dispatch(resetCourseSaveStatus()); // איפוס הסטטוס כדי שלא תופיע הודעת פופאפ
-    window.history.replaceState({}, document.title); // מסיר את ה-state כדי לא להפעיל שוב על רענון
+    dispatch(resetCourseSaveStatus()); 
+    window.history.replaceState({}, document.title); 
   }
 }, [dispatch, location]);
 
@@ -77,7 +77,8 @@ const validateField = (name, value) => {
     case 'courseName':
       return value.trim() === '' ? 'יש להזין שם קורס' : '';
     case 'coordinatorId':
-       return isNaN(value) || value <= 0 ? 'יש להזין שם רכזת' : '';
+       const num = Number(value);
+       return isNaN(num) || value <= 0 ? 'יש להזין שם רכזת' : '';
     case 'year':
       return !/^\d{4}$/.test(value) ? 'יש להזין שנה תקינה (4 ספרות)' : '';
     case 'studentsCount':
@@ -129,8 +130,8 @@ const validateForm = () => {
 
 const handleChange = (e) => {
   const { name, value } = e.target;
-  const parsedValue = name === 'coordinatorId' ? Number(value) : value;
-  setFormData((prev) => ({ ...prev, [name]: parsedValue }));
+  console.log("formData.coordinatorId", formData.coordinatorId, typeof formData.coordinatorId);
+  setFormData((prev) => ({ ...prev, [name]: name === 'coordinatorId' && value ? Number(value) : value }));
   setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
 };
 
@@ -157,7 +158,7 @@ const handleCancel = () => {
     NumberOfStudents: parseInt(formData.studentsCount),
     Notes: formData.notes || null,
     StatusId: Number(formData.status),
-    CoordinatorId: Number(formData.coordinatorId),
+    CoordinatorId: formData.coordinatorId,
   };
 
   dispatch(addCourseAction(dtoToSend));
@@ -203,7 +204,7 @@ const handleAddDay = () => {
 useEffect(() => {
    if (!hasMounted.current) {
     hasMounted.current = true;
-    return; // דילוג על הרצה ראשונה כדי למנוע פופאפ שגוי
+    return;
   }
   const prevStatus = prevSaveStatusRef.current;
   if (courseSaveStatus !== prevStatus) {
@@ -343,17 +344,20 @@ useEffect(() => {
               label="שם רכזת"
               variant="standard"
               value={formData.coordinatorId}
-              onChange={handleChange}
-               error={!!errors.coordinatorId}
-               helperText={errors.coordinatorId}
+              onChange={(e) => {
+  console.log("בחרת רכזת", e.target.value);
+  handleChange(e);
+}}
+              error={!!errors.coordinatorId}
+              helperText={errors.coordinatorId}
               inputProps={{ dir: "rtl" }}
               InputLabelProps={{ sx: { right: 0 } }}
               sx={{ width: '200px', '& .MuiSelect-icon': { left: 0, right: 'auto' }, }}
             >
-               <MenuItem value="">בחר רכזת</MenuItem>
+               {/* <MenuItem value=""></MenuItem> */}
                {coordinators && coordinators.length > 0 ? (
-                coordinators.map((coord, index) => (
-                <MenuItem key={index} value={coord.coordinatorId}>
+                coordinators.map((coord) => (
+                <MenuItem key={coord.userId} value={coord.userId}>
                   {coord.name}
                 </MenuItem>
                 ))
