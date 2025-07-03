@@ -24,7 +24,11 @@ namespace DL
                 user.UserType = null;
                 var addedUser = await _context.Set<User>().AddAsync(user);
                 await _context.SaveChangesAsync();
-                return (addedUser.Entity, null);
+                var fullUser = await _context.Users
+            .Include(u => u.UserType)
+            .FirstOrDefaultAsync(u => u.UserId == addedUser.Entity.UserId);
+
+                return (fullUser, null);
             }
             catch (Exception ex)
             {
@@ -114,7 +118,7 @@ namespace DL
 
         public async Task<User> UserLoginAsync(string email, string password)
         {
-            var user = await _context.Users
+            var user = await _context.Users.Include(e=>e.UserType)
                 .FirstOrDefaultAsync(u => u.Email == email);
 
             return user;

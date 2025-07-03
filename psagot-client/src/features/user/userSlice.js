@@ -161,7 +161,7 @@ const userSlice = createSlice({
 
             .addCase(registerAction.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.selectedUser = action.payload.user;
                 state.users.push(action.payload);
             })
             .addCase(registerAction.rejected, (state, action) => {
