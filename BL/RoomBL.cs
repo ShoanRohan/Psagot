@@ -49,6 +49,5 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<RoomDTO>>(rooms), null);
         }
-
     }
 }

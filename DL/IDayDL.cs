@@ -14,8 +14,6 @@ namespace DL
         Task<(Day Day, string ErrorMessage)> AddDay(Day day);
         Task<(Day Day, string ErrorMessage)> UpdateDay(Day day);
     }
-
-
 }
 
     

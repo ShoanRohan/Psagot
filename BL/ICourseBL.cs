@@ -23,5 +23,4 @@ namespace BL
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetFilteredCourses(
             int? courseId, string courseName, string coordinatorName, int? year);
     }
-
 }

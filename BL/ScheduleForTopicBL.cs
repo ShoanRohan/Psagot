@@ -34,7 +34,6 @@ namespace BL
             return (_mapper.Map<ScheduleForTopicDTO >(schedule), null);
         }
 
-
         public async Task<(ScheduleForTopicDTO ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopicDTO scheduleForTopicDTO)
         {
             var scheduleForTopic = _mapper.Map<ScheduleForTopic>(scheduleForTopicDTO);
@@ -81,9 +80,6 @@ namespace BL
             if (addedSchedule == null) return (null, errorMessage);
             return (_mapper.Map<ScheduleForTopicDTO>(addedSchedule), null);
         }
-
     }
-
-
 }
 

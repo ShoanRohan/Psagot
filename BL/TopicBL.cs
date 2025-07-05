@@ -14,31 +14,21 @@ namespace BL
     {
         private readonly ITopicDL _topicDL;
         private readonly IMapper _mapper;
+
         public TopicBL(ITopicDL topicDL, IMapper mapper)
         {
             _topicDL = topicDL;
             _mapper = mapper;
         }
+
         public async Task<(List<TopicDTO> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId)
         {
             var (topics, errorMessage) = await _topicDL.GetAllTopicsForCourseByCourseId(courseId);
             if (topics == null || !topics.Any()) return (null, errorMessage);
-            //var topicDTOs = topics.Select(t => new TopicDTO
-            //{
-            //    TopicId = t.TopicId,
-            //    CourseId = t.CourseId,
-            //    Name = t.Name,
-            //    TeacherName = t.Teacher?.Name, 
-            //    StartDate = t.StartDate,
-            //    EndDate = t.EndDate,
-            //    NumberOfMeetings = t.NumberOfMeetings,
-            //    Computers = t.Computers,
-            //    Projector = t.Projector,
-            //    Microphone = t.Microphone,
-   
-            //}).ToList();
+
             return (topics.Select(t => _mapper.Map<TopicDTO>(t)).ToList(), null);
         }
+
         public async Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO)
         {
             var topic = _mapper.Map<Topic>(topicDTO);
@@ -48,6 +38,7 @@ namespace BL
 
             return (_mapper.Map<TopicDTO>(addTopic), null);
         }
+
         public async Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics()
         {
             var (topics, errorMessage) = await _topicDL.GetAllTopics();
@@ -65,18 +56,6 @@ namespace BL
 
             return (_mapper.Map<TopicDTO>(updatedTopic), null);
         }
-        /* public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId)
-         {
-             var (isDeleted, errorMessage) = await _topicDL.DeleteTopic(topicId);
-
-             if (!isDeleted)
-             {
-                 return (false, errorMessage);
-             }
-
-             return (true, null);
-         }
-        */
 
         public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId, bool forceDelete = false)
         {
@@ -100,7 +79,6 @@ namespace BL
             return (true, null);
         }
 
-
         public async Task<(TopicDTO Topic, string ErrorMessage)> GetTopicById(int id)
         {
             var (topic, errorMessage) = await _topicDL.GetTopicById(id);
@@ -110,6 +88,5 @@ namespace BL
 
             return (_mapper.Map<TopicDTO>(topic), null);
         }
-
     }
 }

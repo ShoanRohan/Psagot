@@ -56,7 +56,6 @@ namespace BL
             if (hasFutureMeetings)
             {
                 return (null, errorMessage, true);
-
             }
 
             if (updatedCourse == null) return (null, errorMessage, false);
@@ -90,8 +89,6 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
-
     }
-
 }
 

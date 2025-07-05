@@ -30,6 +30,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(ScheduleForTopic ScheduleForTopic, string ErrorMessage)> UpdateScheduleForTopic(ScheduleForTopic scheduleForTopic)
         {
             try
@@ -64,7 +65,7 @@ namespace DL
                 return (false, ex.Message);
             }
         }
-        
+
         public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopics, string ErrorMessage)> GetAllScheduleForTopics()
         {
             try
@@ -76,9 +77,10 @@ namespace DL
             {
                 return (null, ex.Message);
             }
-        
-    }
-    public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
+
+        }
+
+        public async Task<(IEnumerable<ScheduleForTopic> ScheduleForTopic, string ErrorMessage)> GetAllScheduleForTopicByTopicId(int topicId)
         {
             try
             {

@@ -16,7 +16,5 @@ namespace BL
         Task<(bool IsDeleted, string ErrorMessage)> DeleteTopic(int topicId, bool forceDelete);
         Task<(TopicDTO Topic, string ErrorMessage)> AddTopic(TopicDTO topicDTO);
         Task<(IEnumerable<TopicDTO> Topics, string ErrorMessage)> GetAllTopics();
-
-
     }
 }

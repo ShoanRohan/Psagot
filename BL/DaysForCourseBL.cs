@@ -100,9 +100,9 @@ namespace BL
                 foreach (var schedule in schedules)
                 {
                     var isScheduleCovered = newDays.Any(d =>
-                        d.DayId == schedule.DayId && 
-                        schedule.StartTime >= d.StartTime && 
-                        schedule.EndTime <= d.EndTime);  
+                        d.DayId == schedule.DayId &&
+                        schedule.StartTime >= d.StartTime &&
+                        schedule.EndTime <= d.EndTime);
 
                     if (!isScheduleCovered)
                     {

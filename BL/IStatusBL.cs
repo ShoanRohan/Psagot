@@ -7,7 +7,5 @@ namespace BL
     {
         Task<(IEnumerable<StatusCourseDTO> StatusCourses, string ErrorMessage)> GetAllStatusCourses();
         Task<(IEnumerable<StatusTopicDTO> StatusTopic, string ErrorMessage)> GetAllStatusTopics();
-
-
     }
 }

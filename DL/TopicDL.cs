@@ -17,6 +17,7 @@ namespace DL
             _context = context;
 
         }
+
         public async Task<(Topic Topic, string ErrorMessage)> GetTopicById(int topicId)
         {
             try
@@ -30,8 +31,6 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-
 
         public async Task<(List<Topic> Topics, string ErrorMessage)> GetAllTopicsForCourseByCourseId(int courseId)
         {
@@ -65,6 +64,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
         public async Task<(bool IsDeleted, string ErrorMessage)> DeleteTopicAndMeetings(int topicId)
         {
             try
@@ -107,7 +107,6 @@ namespace DL
             }
         }
 
-
         public async Task<(IEnumerable<Topic> Topics, string ErrorMessage)> GetAllTopics()
         {
             try
@@ -120,7 +119,5 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-
     }
 }
