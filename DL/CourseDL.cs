@@ -86,26 +86,28 @@ namespace DL
                 _context.Entry(course).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
 
-                var activeTopics = await _context.Set<Topic>()
+                if (isStatusChangeFromActive)
+                {
+                    var activeTopics = await _context.Set<Topic>()
                                  .Where(t => t.CourseId == course.CourseId && t.StatusId == 1)
                                  .ToListAsync();
-                if (activeTopics.Any())
-                {
-                    var newStatusIdForTopics = course.StatusId;
-
-                    foreach (var topic in activeTopics)
+                    if (activeTopics.Any())
                     {
-                        topic.StatusId = newStatusIdForTopics;
-                        _context.Entry(topic).State = EntityState.Modified;
+                        var newStatusIdForTopics = course.StatusId;
+
+                        foreach (var topic in activeTopics)
+                        {
+                            topic.StatusId = newStatusIdForTopics;
+                            _context.Entry(topic).State = EntityState.Modified;
+                        }
+                        await _context.SaveChangesAsync();
                     }
-                    await _context.SaveChangesAsync();
                 }
                 return (course, null, false);
             }
             catch (Exception ex)
             {
-                var innerExMessage = ex.InnerException?.Message ?? ex.Message;
-                return (null, $"שגיאה בעדכון קורס: {innerExMessage}", false);
+                return (null, $"שגיאה בעדכון קורס: {ex.Message}", false);
             }
         }
 
@@ -126,14 +128,13 @@ namespace DL
             }
             catch (Exception ex)
             {
-                var innerExMessage = ex.InnerException?.Message ?? ex.Message;
-                return $"שגיאה במחיקת מפגשים עתידיים: {innerExMessage}";
+                return $"שגיאה במחיקת מפגשים עתידיים: {ex.Message}";
             }
         }
 
         public async Task<(IEnumerable<Course> Courses, int TotalCount, string ErrorMessage)> GetPaginatedFilteredCourses(
             int skip, int pageSize,
-           int? courseId, string courseName, string coordinatorName, int? year)
+            int? courseId, string courseName, string coordinatorName, int? year)
         {
             try
             {
@@ -167,7 +168,7 @@ namespace DL
         }
 
         public async Task<(IEnumerable<Course> Courses, string ErrorMessage)> GetFilteredCourses(
-    int? courseId, string courseName, string coordinatorName, int? year)
+            int? courseId, string courseName, string coordinatorName, int? year)
         {
             try
             {
@@ -196,8 +197,5 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
-
-
     }
 }

@@ -38,12 +38,11 @@ namespace Psagot.Controllers
         }
 
         [HttpGet("GetPaginatedFilteredCourses/{page}/{pageSize}")]
-        public async Task<IActionResult> GetPaginatedFilteredCourses(
-           int page, int pageSize,
-       [FromQuery] int? courseId = null,
-       [FromQuery] string courseName = null,
-       [FromQuery] string coordinatorName = null,
-       [FromQuery] int? year = null)
+        public async Task<IActionResult> GetPaginatedFilteredCourses( int page, int pageSize,
+            [FromQuery] int? courseId = null,
+            [FromQuery] string courseName = null,
+            [FromQuery] string coordinatorName = null,
+            [FromQuery] int? year = null)
         {
             var (courses, totalCount, errorMessage) = await _courseBL.GetPaginatedFilteredCourses(page, pageSize, courseId, courseName, coordinatorName, year);
 
@@ -55,10 +54,10 @@ namespace Psagot.Controllers
 
         [HttpGet("GetFilteredCourses")]
         public async Task<IActionResult> GetFilteredCourses(
-[FromQuery] int? courseId = null,
-[FromQuery] string courseName = null,
-[FromQuery] string coordinatorName = null,
-[FromQuery] int? year = null)
+            [FromQuery] int? courseId = null,
+            [FromQuery] string courseName = null,
+            [FromQuery] string coordinatorName = null,
+            [FromQuery] int? year = null)
         {
             var (courses, errorMessage) = await _courseBL.GetFilteredCourses(courseId, courseName, coordinatorName, year);
 
@@ -99,7 +98,7 @@ namespace Psagot.Controllers
             var (updatedCourse, errorMessage, hasFutureMeetings) = await _courseBL.UpdateCourse(courseDTO);
             if (updatedCourse == null)
             {
-                if (errorMessage != null && errorMessage.Contains("מפגשים עתידיים") && errorMessage.Contains("לאשר מחיקה"))
+                if (hasFutureMeetings)
                 {
                     return Conflict(new { message = errorMessage, requiresConfirmation = true });
                 }

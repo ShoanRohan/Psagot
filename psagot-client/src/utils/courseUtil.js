@@ -17,23 +17,14 @@ const addCourse = async (courseDTO) => {
 
 const updateCourse = async (courseDTO, confirmDeleteFutureMeetings = false) => {
   try {
-    const url = confirmDeleteFutureMeetings
-      ? `/Course/UpdateCourse?confirmDeleteFutureMeetings=true`
-      : `/Course/UpdateCourse`;
-
+    const url = confirmDeleteFutureMeetings ? `/Course/UpdateCourse?confirmDeleteFutureMeetings=true` : `/Course/UpdateCourse`;
     const response = await api.put(url, courseDTO);
     return response.data;
   } catch (error) {
-    if (error.response && error.response.status === 409) {
-      return Promise.reject({
-        isConflict: true,
-        message:
-          error.response.data.message ||
-          "לקורס קיימים מפגשים עתידיים. במקרה של שינוי הסטטוס מפגשים אלו ימחקו האם להמשיך בשמירה?",
-        statusCode: 409,
-      });
+    if (error.response?.status === 409) {
+      throw({ isConflict: true, message: error.response.data.message, statusCode: 409 });
     }
-    return Promise.reject(error.response?.data?.message || error.message);
+    throw(error.response?.data?.message || error.message);
   }
 };
 
@@ -46,10 +37,4 @@ const getFilterPaginatedCourses = async (filterObject, page, pageSize) => {
   return response.data;
 };
 
-export {
-  getCourseById,
-  getAllCourses,
-  addCourse,
-  updateCourse,
-  getFilterPaginatedCourses,
-};
+export { getCourseById, getAllCourses, addCourse, updateCourse, getFilterPaginatedCourses };

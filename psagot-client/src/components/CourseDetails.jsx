@@ -185,7 +185,7 @@ const CourseDetails = () => {
                 setIsEditing(false);
                 dispatch(fetchCourseById(selectedCourse?.courseId));
             } else if (updateCourseAction.rejected.match(actionResult)) {
-                if (actionResult.payload && typeof actionResult.payload === 'object' && actionResult.payload.isConflict) {
+                if (actionResult.payload?.isConflict) {
                     handleShowConfirmation('שמירת פרטי קורס', 'לקורס קיימים מפגשים עתידיים, במקרה של שינוי הסטטוס מפגשים אלו ימחקו.','האם להמשיך בשמירה?', () => saveChanges(null, true));
                 } else {
                     handleShowResultDialog('שגיאה בשמירה', 'השמירה לא הצליחה. אנא נסה שוב.');
@@ -294,6 +294,7 @@ const CourseDetails = () => {
                                         });
                                         setIsValidForm(true);
                                     } setFieldErrors({});
+                                    dispatch(resetSelectedCourseStatus());
                                 }}>ביטול</Button>
                                 <Button variant="contained" sx={{ borderRadius: '50px', px: '24px', fontFamily: 'Rubik', mr: '15px' }}
                                     onClick={(e) => saveChanges(e, false)} disabled={isSaveButtonDisabled}> שמירה</Button>

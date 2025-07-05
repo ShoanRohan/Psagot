@@ -81,10 +81,7 @@ const courseSlice = createSlice({
             if (index !== -1) {
               state.courses[index] = action.payload;
             }
-            if (
-              state.selectedCourse &&
-              state.selectedCourse.courseId === action.payload.courseId
-            ) {
+            if (state.selectedCourse?.courseId === action.payload.courseId) {
               state.selectedCourse = action.payload;
             }
             state.selectedCourseStatus = "succeeded";
@@ -92,11 +89,7 @@ const courseSlice = createSlice({
           })
           .addCase(updateCourseAction.rejected, (state, action) => {
             state.selectedCourseStatus = "failed";
-            if (
-              action.payload &&
-              typeof action.payload === "object" &&
-              action.payload.isConflict
-            ) {
+            if (action.payload?.isConflict) {
               state.error = null;
             } else {
               state.error = action.payload || action.error.message;

@@ -35,9 +35,7 @@ export const deleteDaysForCourseAction = createAsyncThunk('daysForCourse/deleteD
     }
 });
 
-export const checkTopicsConflictAction = createAsyncThunk(
-    'daysForCourse/checkTopicsConflict',
-    async ({ courseId, newDays }, { rejectWithValue }) => {
+export const checkTopicsConflictAction = createAsyncThunk( 'daysForCourse/checkTopicsConflict', async ({ courseId, newDays }, { rejectWithValue }) => {
         try {
             const response = await checkTopicsConflicts({ courseId, newDays });
             return response;

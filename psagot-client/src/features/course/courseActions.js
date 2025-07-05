@@ -23,17 +23,14 @@ export const addCourseAction = createAsyncThunk("course/addCourseAction", async 
     return data;
   });
 
-  export const updateCourseAction = createAsyncThunk(
-    "course/updateCourseAction",
-    async ({ courseData, confirmDeleteFutureMeetings = false }, { rejectWithValue }) => {
-        try {
-            const data = await updateCourse(courseData, confirmDeleteFutureMeetings);
-            return data;
-        } catch (error) {
-            if (error && typeof error === 'object' && error.isConflict) {
-                return rejectWithValue(error);
-            }
-            return rejectWithValue(error || "שגיאה לא ידועה");
-        }
+export const updateCourseAction = createAsyncThunk( "course/updateCourseAction", async ({ courseData, confirmDeleteFutureMeetings = false }, { rejectWithValue }) => {
+  try {
+    const data = await updateCourse(courseData, confirmDeleteFutureMeetings);
+    return data;
+  } catch (error) {
+    if (error?.isConflict) {
+      return rejectWithValue(error);
     }
-);
+    return rejectWithValue(error || "שגיאה לא ידועה");
+  }
+});
