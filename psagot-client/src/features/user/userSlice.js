@@ -1,9 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoordinators, fetchAllCoordinators, fetchAllLecturersAndCoordinators, fetchFilteredUseres, fetchTeachers, fetchUsersByPage } from './userAction';
 
+
 const initialState = {
     coordinators: [],
     users: [],
+    user: {  userId: 5,
+    name: "שמחה שמואל",
+    email: "libat@psagot.co.il",
+    phone: "0586789012",
+    password: "52115ES",
+    userTypeId: 4,
+    userTypeName: "משתמש רגיל",
+    isActive: true},
     teachers: [],
     selectedUser: null,
     status: 'idle',

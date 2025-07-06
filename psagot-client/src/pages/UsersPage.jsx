@@ -23,6 +23,7 @@ import Deleteicone from '../assets/icons/Deleteicone.png';
 import { StyledTableCell } from '../styles/MeetingsTableStyle';
 import AddAndUpdateUserPopUp from '../components/AddAndUpdateUserPopUp';
 import ExportToExcel from '../components/ExportToExcel';
+import { useSelector,useDispatch } from 'react-redux';
 
 const UsersPage = () => {
   const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
@@ -59,7 +60,7 @@ const UsersPage = () => {
   };
 
   const handleAddUser = () => {
-    setOpenAddPopup(true);
+    setOpenDialog(true);
     // להפעיל פופאפ של הוספת משתמש אם קיים
   };
 
@@ -240,7 +241,7 @@ const UsersPage = () => {
              open = {openDialog} 
               onClose = {() => {setOpenDialog(false); setSelectedUser(null);  }}
               user={selectedUser}
-              onSave={(val)=> console.log(val)}/>
+             />
         </Box>
     );
 };

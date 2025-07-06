@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUserAction } from '../features/user/userAction';
 
 const EditProfile = () => {
-  const { selectedUser: user } = useSelector((state) => state.user);
+  const {  user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,7 +37,7 @@ const EditProfile = () => {
       .matches(/[0-9]/, "הסיסמה חייבת לכלול לפחות מספר אחד")
       .required("שדה חובה"),
     status: Yup.string().required("שדה חובה"),
-    permission: Yup.string().required("שדה חובה"),
+    userTypeName: Yup.string().required("שדה חובה"),
   });
 
   const formik = useFormik({
@@ -48,7 +48,7 @@ const EditProfile = () => {
       phone: user?.phone ?? "",
       password: "",
       status: user?.status ?? "active",
-      permission: user?.permission ?? "user",
+      userTypeName: user?.userTypeName ?? "user",
     },
     validationSchema,
     onSubmit: (values) => {
@@ -165,10 +165,10 @@ const EditProfile = () => {
               select
               variant="standard"
               label="הרשאה"
-              name="permission"
-              value={formik.values.permission}
+              name="userTypeName"
+              value={formik.values.userTypeName}
               onChange={formik.handleChange}
-              error={formik.touched.permission && Boolean(formik.errors.permission)}
+              error={formik.touched.userTypeName && Boolean(formik.errors.userTypeName)}
               fullWidth={false}
               sx={{ minWidth: 100 }}
               disabled

@@ -56,7 +56,7 @@ const menuItems = [
 ];
 
 const SideBar = () => {
-  const { selectedUser } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
 
   return (
     <Stack direction="column" spacing={0}>
@@ -82,10 +82,10 @@ const SideBar = () => {
       <Box className="user-profile-container">
         <Box className="user-info">
           <Typography className="user-name">
-            {selectedUser?.name ?? "משתמש לא מחובר"}
+            {user?.name ?? "משתמש לא מחובר"}
           </Typography>
           <Typography className="user-role">
-            {selectedUser?.userTypeName ?? "ללא תפקיד"}
+            {user?.userTypeName ?? "ללא תפקיד"}
           </Typography>
         </Box>
         <NavLink to="/edit-profile">

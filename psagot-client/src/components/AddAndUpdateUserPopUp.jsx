@@ -26,13 +26,13 @@ const AddAndUpdateUserPopUp = ({
   open = false,
   onClose = () => {},
   user,
-  onSave, 
 }) => {
   const { userTypes } = useSelector((state) => state.userType);
-  const currentUser = useSelector((state) => state.auth?.user || null);
+  const currentUser = useSelector((state) => state.user?.user || null);
+  const isNewUser = !user || !user.userId;
   const isAdmin = currentUser?.UserTypeName === "מנהל";
   const isEditingOther = currentUser?.userId !== user?.userId;
-  const canEditPermission = isAdmin && !isEditingOther;
+  const canEdite = isNewUser || (isAdmin && isEditingOther);
  const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(fetchAllUserTypes());
@@ -40,7 +40,7 @@ const AddAndUpdateUserPopUp = ({
  
 
   const defaultUserTypeId =
-    userTypes?.find((type) => type.name === "משתמש רגיל")?.id ?? 4;
+    userTypes?.find((type) => type.name === "משתמש רגיל")?.userTypeId ?? 4;
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -60,7 +60,7 @@ const AddAndUpdateUserPopUp = ({
             .required("שדה חובה"),
         }),
     status: Yup.string().required("שדה חובה"),
-    ...(canEditPermission && {permission: Yup.string().required("שדה חובה")}),
+    ...(canEdite && {userTypeName: Yup.string().required("שדה חובה")}),
   });
 
   const formik = useFormik({ 
@@ -70,18 +70,19 @@ const AddAndUpdateUserPopUp = ({
       email: user?.email ?? "",
       phone: user?.phone ?? "",
       password: "", 
-      isActive: user?.isActive ?? false,
+      isActive: user?.isActive ?? true,
       userTypeName: user?.userTypeName ?? "",
       userTypeId:
         user?.userTypeId !== undefined && user?.userTypeId !== null
           ? user.userTypeId
           : defaultUserTypeId,
-      status: user?.isActive ? "פעיל" : "לא פעיל",
+      status: user ? (user.isActive ? "פעיל" : "לא פעיל") : "פעיל",
     },
     validationSchema,
     onSubmit: async (values) => { 
+      console.log(values);
       const userTypeIdToSend =
-    userTypes?.find((type) => type.name === values.userTypeName)?.id ?? 4;
+    userTypes?.find((type) => type.name === values.userTypeName)?.userTypeId ?? 4;
       const userToSave = {
         ...values,
         isActive: values.status === "פעיל",
@@ -93,7 +94,6 @@ const AddAndUpdateUserPopUp = ({
         } else {
            await dispatch(addUserAction(userToSave));
         }
-        onSave && onSave(userToSave); 
         onClose();
       } catch (error) {
         console.error("שגיאה בשמירת המשתמש:", error);
@@ -179,10 +179,10 @@ const AddAndUpdateUserPopUp = ({
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="custom-select"
-                  //disabled={!canEditPermission || userTypes.length === 0}
+                  disabled={!canEdite}
                 >
                   {userTypes?.map((userType) => (
-                    <MenuItem key={userType.id} value={userType.name}>
+                    <MenuItem key={userType.userTypeId} value={userType.name}>
                       {userType.name}
                     </MenuItem>
                   ))}
@@ -198,7 +198,7 @@ const AddAndUpdateUserPopUp = ({
                         onChange={(e) =>
                           formik.setFieldValue("status", e.target.checked ? "פעיל" : "לא פעיל")
                         }
-                        disabled={!canEditPermission}
+                        disabled={!canEdite}
                       />
                     }
                     label="פעיל"
