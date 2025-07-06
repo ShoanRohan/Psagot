@@ -14,7 +14,7 @@ const initialState = {
   loading: false,
   error: null,
   pageIndex: 0,
-  pageSize: 2,
+  pageSize: 5,
   isSearchActive: false,
   totalFilteredCount: 0,
   filters: {
@@ -30,7 +30,6 @@ const roomSlice = createSlice({
   initialState,
   reducers: {
     setRooms: (state, action) => {
-      //כרגע ריק
     },
     setSelectedRoom: (state, action) => {
       state.selectedRoom = null
@@ -87,7 +86,7 @@ const roomSlice = createSlice({
         speakers = false,
         computers = false,
         pageIndex = 0,
-        pageSize = 10,
+        pageSize = 5,
         isNewSearch = false,
       } = action.payload;
       const filters = isNewSearch
