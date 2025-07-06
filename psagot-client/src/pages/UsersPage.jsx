@@ -16,20 +16,20 @@ import { useEffect, useState } from "react";
 import '../styles/usersPage.css';
 import { Pagination } from '@mui/material';
 import { fetchUsersByPage } from "../features/user/userAction";
-import { useDispatch, useSelector } from "react-redux";
 import { setPageSize, setPageNumber } from '../features/user/userSlice';
+import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
-import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { StyledTableCell } from '../styles/MeetingsTableStyle';
 import AddAndUpdateUserPopUp from '../components/AddAndUpdateUserPopUp';
+import ExportToExcel from '../components/ExportToExcel';
 
 const UsersPage = () => {
-    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
-
-    const dispatch = useDispatch();
+  const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
     const [selectedUser, setSelectedUser] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+  const [openAddPopup, setOpenAddPopup] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -47,22 +47,76 @@ const UsersPage = () => {
         dispatch(setPageSize(size)); // קריאה ל-setPage
     };
 
-    // שינוי דף
-const handlePageNumberChange = (newPage) => {
+  const handlePageNumberChange = (event, newPage) => {
     if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-        dispatch(setPageNumber(newPage));
+      dispatch(setPageNumber(newPage));
     }
-};
+  };
 
-    // שינוי סטטוס של משתמש
-    const handleStatusChange = (userId, status) => {
-        const newStatus = status ? "inactive" : "active";
-        // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
-    };
+  const handleStatusChange = (userId, status) => {
+    const newStatus = status ? "inactive" : "active";
+    // עדכון סטטוס לפי הצורך
+  };
 
-    return (
-        <Box>
-         <Box className="tablesize" sx={{overflowY:"auto"}} >
+  const handleAddUser = () => {
+    setOpenAddPopup(true);
+    // להפעיל פופאפ של הוספת משתמש אם קיים
+  };
+
+  return (
+    <Box>
+      <Box className="tablesize" sx={{ overflowY: "auto" }}>
+        
+        {/* כפתורי אקשן עליונים */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mb: 2 }}>
+          {/* כפתור ייצוא לאקסל */}
+          <ExportToExcel data={users} fileName="Users.xlsx" sheetName="משתמשים" />
+
+          {/* כפתור הוספת משתמש עם פלוס לפני המילה */}
+          <Button
+            variant="contained"
+            onClick={handleAddUser}
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '0px 24px',
+              width: '171px',
+              height: '44px',
+              backgroundColor: '#326DEF',
+              borderRadius: '50px',
+              color: '#FFFFFF',
+              fontFamily: 'Rubik, sans-serif',
+              fontSize: '16px',
+              fontWeight: 500,
+              textAlign: 'center',
+              boxShadow: 'none',
+              '&:hover': {
+                backgroundColor: '#295BCC',
+                boxShadow: 'none'
+              },
+              gap: 1,
+            }}
+          >
+            <Box
+              sx={{
+                width: 18,
+                height: 18,
+                borderRadius: '50%',
+                border: '1.5px solid white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              +
+            </Box>
+            הוספת משתמש
+          </Button>
+        </Box>
+
+        {/* כותרת */}
         <Typography
           variant="h1"
           align="right"
@@ -71,6 +125,7 @@ const handlePageNumberChange = (newPage) => {
             fontWeight: 700,
             fontSize: "40px",
             color: "#0D1783",
+            mb: 2,
           }}
         >
             משתמשים

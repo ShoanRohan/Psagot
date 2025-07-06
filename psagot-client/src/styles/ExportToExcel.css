@@ -7,23 +7,29 @@
   background-color: #F0F1F3 !important;
   border-radius: 7px !important;
   padding: 0 !important;
-  position: absolute;
-  left: 414px;
-  top: 84px;
+  position: fixed; /* חשוב: כדי שיהיה תמיד קבוע למעלה */
+  top: 20px;        /* מרחק מהחלק העליון של המסך */
+  left: 20px;       /* מיקום בצד שמאל */
   box-shadow: none !important;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
+  border: none;
+  z-index: 1000;    /* שיישב מעל שאר האלמנטים */
 }
 
 .xlsxButton:hover {
-  background-color: #f7f7f7 !important; /* בהיר יותר בעת מעבר עכבר */
+  background-color: #f7f7f7 !important;
 }
 
 .xlsxButton:active {
-  background-color: #dcdcdc !important; /* כהה יותר בעת לחיצה */
+  background-color: #dcdcdc !important;
 }
 
 .xlsxButton img {
-  width: 28px;
-  height: 28px;
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+  pointer-events: none;
 }
