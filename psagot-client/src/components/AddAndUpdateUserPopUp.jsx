@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -17,23 +17,30 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import "../styles/AddUserPopUp.css";
+import "../styles/AddAndUpdateUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
+import { addUserAction, updateUserAction } from "../features/user/userAction";
+import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 
 const AddAndUpdateUserPopUp = ({
   open = false,
   onClose = () => {},
   user,
-  onSave,
-  IsEdit = false,
+  onSave, 
 }) => {
   const { userTypes } = useSelector((state) => state.userType);
-  IsEdit = user && user.userId ? true : false;
-
-  const currentUser = useSelector((state) => state.auth.user);
+  const currentUser = useSelector((state) => state.auth?.user || null);
   const isAdmin = currentUser?.UserTypeName === "מנהל";
   const isEditingOther = currentUser?.userId !== user?.userId;
   const canEditPermission = isAdmin && !isEditingOther;
+ const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch(fetchAllUserTypes());
+  },[dispatch])
+ 
+
+  const defaultUserTypeId =
+    userTypes?.find((type) => type.name === "משתמש רגיל")?.id ?? 4;
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -43,7 +50,7 @@ const AddAndUpdateUserPopUp = ({
     phone: Yup.string()
       .matches(/^[0-9]{10}$/, "מספר טלפון חייב להכיל 10 ספרות")
       .required("שדה חובה"),
-    ...(IsEdit
+    ...(user?.userId
       ? {}
       : {
           password: Yup.string()
@@ -53,33 +60,55 @@ const AddAndUpdateUserPopUp = ({
             .required("שדה חובה"),
         }),
     status: Yup.string().required("שדה חובה"),
-    permission: Yup.string().required("שדה חובה"),
+    ...(canEditPermission && {permission: Yup.string().required("שדה חובה")}),
   });
 
-  const formik = useFormik({
+  const formik = useFormik({ 
     initialValues: {
       userId: user?.userId ?? 0,
       name: user?.name ?? "",
       email: user?.email ?? "",
       phone: user?.phone ?? "",
-      ...(IsEdit ? {} : { password: "" }),
+      password: "", 
       isActive: user?.isActive ?? false,
-      userTypeId: user?.userTypeId ?? -1,
+      userTypeName: user?.userTypeName ?? "",
+      userTypeId:
+        user?.userTypeId !== undefined && user?.userTypeId !== null
+          ? user.userTypeId
+          : defaultUserTypeId,
+      status: user?.isActive ? "פעיל" : "לא פעיל",
     },
     validationSchema,
-    onSubmit: (values) => {
-      onSave(values);
-      onClose();
-    },
+    onSubmit: async (values) => { 
+      const userTypeIdToSend =
+    userTypes?.find((type) => type.name === values.userTypeName)?.id ?? 4;
+      const userToSave = {
+        ...values,
+        isActive: values.status === "פעיל",
+        userTypeId: userTypeIdToSend,
+      };
+      try {
+        if (user?.userId) {
+           await dispatch(updateUserAction(userToSave));
+        } else {
+           await dispatch(addUserAction(userToSave));
+        }
+        onSave && onSave(userToSave); 
+        onClose();
+      } catch (error) {
+        console.error("שגיאה בשמירת המשתמש:", error);
+      }
+  },
     validateOnBlur: true,
     validateOnChange: true,
+    enableReinitialize: true,
   });
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <Box component="form" onSubmit={formik.handleSubmit} className="modal-container">
         <DialogTitle className="modal-header">
-          {IsEdit ? "עריכת משתמש" : "הוספת משתמש"}
+          {user?.userId ? "עריכת משתמש" : "הוספת משתמש"}
           <IconButton onClick={onClose} className="close-button">
             <CloseIcon />
           </IconButton>
@@ -92,7 +121,7 @@ const AddAndUpdateUserPopUp = ({
                 label="שם"
                 name="name"
                 variant="standard"
-                value={formik.values.name}
+                value={formik.values.name || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.name && Boolean(formik.errors.name)}
@@ -104,7 +133,7 @@ const AddAndUpdateUserPopUp = ({
                 label="מייל"
                 name="email"
                 variant="standard"
-                value={formik.values.email}
+                value={formik.values.email || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
@@ -116,7 +145,7 @@ const AddAndUpdateUserPopUp = ({
                 label="טלפון"
                 name="phone"
                 variant="standard"
-                value={formik.values.phone}
+                value={formik.values.phone || ""}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
@@ -126,14 +155,14 @@ const AddAndUpdateUserPopUp = ({
             </Box>
 
             <Box className="row">
-              {!IsEdit && (
+              {!user?.userId && (
                 <TextField
                   className="custom-input"
                   label="סיסמה"
                   name="password"
                   type="password"
                   variant="standard"
-                  value={formik.values.password}
+                  value={formik.values.password || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.password && Boolean(formik.errors.password)}
@@ -145,15 +174,15 @@ const AddAndUpdateUserPopUp = ({
               <FormControl variant="standard" fullWidth className="custom-input">
                 <InputLabel>הרשאה</InputLabel>
                 <Select
-                  name="permission"
-                  value={formik.values.permission}
+                  name="userTypeName"
+                  value={formik.values.userTypeName}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   className="custom-select"
-                  disabled={!canEditPermission}
+                  //disabled={!canEditPermission || userTypes.length === 0}
                 >
                   {userTypes?.map((userType) => (
-                    <MenuItem key={userType.id} value={userType.id}>
+                    <MenuItem key={userType.id} value={userType.name}>
                       {userType.name}
                     </MenuItem>
                   ))}
@@ -183,7 +212,7 @@ const AddAndUpdateUserPopUp = ({
           <Button className="modal-button" variant="outlined" onClick={onClose}>
             ביטול
           </Button>
-          <Button className="modal-button" variant="contained" color="primary" type="submit">
+          <Button className="modal-button" variant="contained" color="primary" type="submit" >
             שמור
           </Button>
         </DialogActions>

@@ -6,14 +6,15 @@ import '../styles/ExportToExcel.css';
 import xlsIcon from '../assets/icons/xls-icon.png';
 
 const ExportToExcel = ({ data, fileName = "document.xlsx", sheetName = "Sheet1" }) => {
+
   const handleExport = () => {
+    console.log('hvhvhvhv', data)
     if (!data || data.length === 0) return;
 
     const worksheet = XLSX.utils.json_to_sheet(data);
 
   
     const workbook = XLSX.utils.book_new();
-
   
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
     workbook.Workbook = {
@@ -33,11 +34,12 @@ const ExportToExcel = ({ data, fileName = "document.xlsx", sheetName = "Sheet1" 
       type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
     });
 
-    saveAs(blob, fileName);
+    saveAs(blob, fileName); 
+
   };
 
   return (
-    <IconButton disableRipple onClick={handleExport} className='xlsxButton'>
+    <IconButton  onClick={handleExport} className='xlsxButton'>
       <img src={xlsIcon} alt="Excel Icon" />
     </IconButton>
   );

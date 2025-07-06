@@ -1,4 +1,3 @@
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -13,7 +12,7 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import '../styles/usersPage.css';
 import { Pagination } from '@mui/material';
 import { fetchUsersByPage } from "../features/user/userAction";
@@ -23,27 +22,29 @@ import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { StyledTableCell } from '../styles/MeetingsTableStyle';
+import AddAndUpdateUserPopUp from '../components/AddAndUpdateUserPopUp';
 
 const UsersPage = () => {
     const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
-    // טוען את המשתמשים
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
+                dispatch(fetchUsersByPage({ pageNumber, pageSize })); 
             } catch (error) {
                 console.error("שגיאה בטעינת המשתמשים:", error);
             }
         };
         fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
+    }, [pageNumber, pageSize, dispatch,openDialog]);
 
     const handleChangePageSize = (event) => {
-        const size = Number(event.target.value); // עדכון ל-`event`
-        dispatch(setPageSize(size)); // קריאה ל-`setPage`
+        const size = Number(event.target.value); 
+        dispatch(setPageSize(size)); // קריאה ל-setPage
     };
 
     // שינוי דף
@@ -93,37 +94,45 @@ const handlePageNumberChange = (newPage) => {
                                     </TableRow>
                                   </TableHead>
                         <TableBody>
-                            {users?.map((user, index) => (
-                                <TableRow key={`${user.userId}-${index}`}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button
-                                            variant="contained"
-                                            className={user.isActive ? 'buttonActive' : 'buttonInactive'}
-                                            onClick={() => {
-                                                handleStatusChange(user.userId, user.isActive);
-                                            }}
-                                        >
-                                            {user.isActive ? "פעיל" : "לא פעיל"}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
-                                        <IconButton
-                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
-                                        >
-                                            <img src={Deleteicone} alt="delelte" className='deleteIcon' />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
-                                            <img src={Editicone} alt="edit" className='editIcon' />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+  {users?.map((user, index) => (
+    <TableRow key={`${user.userId}-${index}`}>
+      <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
+      <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
+      <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
+      <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
+      <TableCell sx={{ textAlign: 'center' }}>
+        <Button
+          variant="contained"
+          className={user.isActive ? 'buttonActive' : 'buttonInactive'}
+          onClick={() => {
+            handleStatusChange(user.userId, user.isActive);
+          }}
+        >
+          {user.isActive ? "פעיל" : "לא פעיל"}
+        </Button>
+      </TableCell>
+      <TableCell
+        sx={{
+          textAlign: 'center',
+          display: 'flex',
+          justifyContent: 'center',
+          height: '70%',
+        }}
+      >
+        <IconButton onClick={() => alert(`מחיקת משתמש ${user.userId}`)}>
+          <img src={Deleteicone} alt="delete" className='deleteIcon' />
+        </IconButton>
+        <IconButton onClick={() => {
+          setSelectedUser(user);
+          setOpenDialog(true);
+        }}>
+          <img src={Editicone} alt="edit" className='editIcon' />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
                     </Table>
                 </TableContainer>
                 {/* ניווט עמודים */}
@@ -172,6 +181,11 @@ const handlePageNumberChange = (newPage) => {
                     />
                 </Box>
             </Box>
+            <AddAndUpdateUserPopUp
+             open = {openDialog} 
+              onClose = {() => {setOpenDialog(false); setSelectedUser(null);  }}
+              user={selectedUser}
+              onSave={(val)=> console.log(val)}/>
         </Box>
     );
 };
