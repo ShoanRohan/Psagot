@@ -33,8 +33,9 @@
    border-radius: 20px;
    background-color: #DAF8E6 !important;
    color: #1A8245 !important;
-   width: 97px;
-   height: 39px;
+   /* width: 97px;
+   height: 39px; */
+   width: fit-content;
  }
 
  .buttonInactive {
@@ -46,20 +47,20 @@
  }
 
  .deleteIcon {
-   max-height: 80%;
+   max-height: 20px;
    /* או גובה מקסימלי אחר */
-   max-width: 80%;
+   max-width: 20px;
    /* או רוחב מקסימלי אחר */
    display: block;
    /* חשוב לשנות ל-block */
    margin: auto;
    /* מרכז את האייקון */
- }
+  }
 
  .editIcon {
-   max-height: 80%;
+   max-height: 20px;
    /* או גובה מקסימלי אחר */
-   max-width: 80%;
+   max-width: 20px;
    /* או רוחב מקסימלי אחר */
    display: block;
    /* חשוב לשנות ל-block */
@@ -96,7 +97,8 @@
   width: 100%;  /* מתאימה את הרוחב של הטבלה לגודל העמוד */
   height: 100vh; /* מתאימה את הגובה של הטבלה לגובה של חלון הדפדפן */
   overflow: auto; /* מאפשר גלילה אם התוכן גדול מהתא */
-
+line-height: 1.43;
+font-weight: 400;
 }
 
 /* עיצוב כותרות הטבלה */
@@ -108,5 +110,7 @@
   font-size: 0.8rem;
   background-color: #ffffff; 
   color: #000000; 
+  padding: 16px;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
 }
 
