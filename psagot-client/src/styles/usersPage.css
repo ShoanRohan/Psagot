@@ -33,9 +33,9 @@
    border-radius: 20px;
    background-color: #DAF8E6 !important;
    color: #1A8245 !important;
-   /* width: 97px;
-   height: 39px; */
-   width: fit-content;
+   width: 97px;
+   height: 39px;
+
  }
 
  .buttonInactive {
@@ -82,21 +82,18 @@
  }
 
  .titleUsers{
-   variant:"h1";
-    align-items:"right";
-    font-family: "Rubik", sans-serif;
+  font-family: "Rubik, sans-serif";
     font-weight: 700;
     font-size: 40px;
     color: #0D1783;
-    text-align: right;
+    text-align: right; /* יישור לימין */
  }
 
 
  .usersTable {
   border-collapse: collapse; 
   width: 100%;  /* מתאימה את הרוחב של הטבלה לגודל העמוד */
-  height: 100vh; /* מתאימה את הגובה של הטבלה לגובה של חלון הדפדפן */
-  overflow: auto; /* מאפשר גלילה אם התוכן גדול מהתא */
+  /* מאפשר גלילה אם התוכן גדול מהתא */
 line-height: 1.43;
 font-weight: 400;
 }
@@ -114,3 +111,21 @@ font-weight: 400;
   border-bottom: 1px solid rgba(224, 224, 224, 1);
 }
 
+.paginationPage {
+    height: 26px;
+    width: 49px;
+    border-radius: 10px;
+    border-width: 0.5px;
+    border-color: #F0F1F3;
+    padding-left: 0;
+    padding-right: 0;
+    font-size: 12px;
+    margin-left: 8px;
+    text-align: center;
+}
+
+.paginationPage .MuiSelect-select {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

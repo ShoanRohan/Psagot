@@ -61,9 +61,9 @@ const handlePageNumberChange = (newPage) => {
 
     return (
         <Box>
-         <Box className="tablesize" sx={{overflowY:"auto"}} >
-        <Typography
-          variant="h1"
+         <Box className="tablesize"   >
+        <Typography 
+         variant="h1"
           align="right"
           sx={{
             fontFamily: "Rubik, sans-serif",
@@ -74,8 +74,8 @@ const handlePageNumberChange = (newPage) => {
         >
             משתמשים
         </Typography>                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-                <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '700px', overflowY: 'auto' }}>
-                        <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="courses table">
+                <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '700px'}}>
+                        <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="courses table" className='usersTable'>
                                   <TableHead>
                                     <TableRow>
                                       {[
@@ -111,13 +111,10 @@ const handlePageNumberChange = (newPage) => {
                                         </Button>
                                     </TableCell>
                                     <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
-                                        <IconButton
-                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
-                                        >
+                                        <IconButton>
                                             <img src={Deleteicone} alt="delelte" className='deleteIcon' />
                                         </IconButton>
-                                        <IconButton
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
+                                        <IconButton>
                                             <img src={Editicone} alt="edit" className='editIcon' />
                                         </IconButton>
                                     </TableCell>
@@ -137,23 +134,7 @@ const handlePageNumberChange = (newPage) => {
               displayEmpty
               onChange={handleChangePageSize}
               value={pageSize}
-              sx={{
-                height: '26px',
-                width: '49px',
-                borderRadius: '10px',
-                borderWidth: '0.5px',
-                borderColor: '#F0F1F3',
-                pl: 0,
-                pr: 0,
-                fontSize: '12px',
-                ml: '8px',
-                textAlign: 'center',
-                '& .MuiSelect-select': {
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                },
-              }}
+              className="paginationPage"
                             >
                                 <MenuItem value={10}>10</MenuItem>
                                 <MenuItem value={20}>20</MenuItem>
