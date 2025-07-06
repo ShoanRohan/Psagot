@@ -29,7 +29,7 @@ const CustomTable = ({
   columnConfig = {},
   keyMap = {},
   rowsPerPageOptions = [10, 25, 50],
-  defaultRowsPerPage = 50,
+  defaultRowsPerPage = 10,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultRowsPerPage);
@@ -124,12 +124,83 @@ const CustomTable = ({
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear().toString().slice(-2);
-    return `${year}\\${month}\\${day}`;
+    return `${day}/${month}/${year}`; 
   };
 
   const formatTime = (timeString) => {
     if (!timeString) return '-';
     return timeString.substring(0, 5);
+  };
+
+  // פונקציה חכמה להמרת מספר לגימטריה (עבור "מספר חדר") - ללא גרש/גרשיים
+  const convertNumberToHebrewLetter = (num) => {
+    if (typeof num !== 'number' || num <= 0 || !Number.isInteger(num)) {
+      return num; // החזר את הערך המקורי אם הוא לא מספר שלם חיובי
+    }
+
+    // מיפוי אותיות בסיסיות
+    const units = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
+    const tens = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
+    const hundreds = ['', 'ק', 'ר', 'ש', 'ת']; // עד 400
+
+    let result = '';
+
+    // טיפול באלפים ומעלה
+    if (num >= 1000) {
+      const thousands = Math.floor(num / 1000);
+      if (thousands === 1) {
+        result += 'א'; 
+      } else if (thousands === 2) {
+        result += 'ב'; 
+      } else if (thousands > 2 && thousands <= 9) {
+        result += units[thousands]; 
+      }
+      num %= 1000;
+    }
+    
+    // טיפול במאות
+    if (num >= 100) {
+      const h = Math.floor(num / 100);
+      if (h <= 4) { // עד 400 (ת)
+        result += hundreds[h];
+      } else { // מעל 400, לדוגמה 500 = ת"ק, 600 = ת"ר וכו'
+        result += 'ת' + hundreds[h - 4]; 
+      }
+      num %= 100;
+    }
+
+    // טיפול בעשרות ויחידות
+    // מקרים מיוחדים: ט"ו (15) וט"ז (16)
+    if (num === 15) {
+      result += 'טו'; // שימו לב - הסרתי את הגרשיים מכאן
+    } else if (num === 16) {
+      result += 'טז'; // שימו לב - הסרתי את הגרשיים מכאן
+    } else {
+      const t = Math.floor(num / 10);
+      const u = num % 10;
+      if (t > 0) {
+        result += tens[t];
+      }
+      if (u > 0) {
+        result += units[u];
+      }
+    }
+
+    // *** החלק שהוסר: לוגיקת הוספת גרש/גרשיים ***
+    // (הוסר כל בלוק ה-if-else האחרון שטיפל ב-result.length)
+    // אם תרצה להחזיר את הגרש/גרשיים בעתיד, תוכל להחזיר את הקטע הזה.
+
+    return result;
+  };
+
+  // פונקציה להמרת מספר יום לשם יום בעברית (עבור "יום")
+  const convertDayNumberToHebrewName = (dayNum) => {
+    const daysOfWeek = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+    // Assuming your data 'יום' column is 1 for ראשון, 2 for שני etc.
+    if (typeof dayNum === 'number' && dayNum >= 1 && dayNum <= 7) {
+      return daysOfWeek[dayNum - 1];
+    }
+    return dayNum; // Return the original number if out of range or not a number
   };
 
   const renderCell = (row, col, index, colIndex) => {
@@ -159,6 +230,14 @@ const CustomTable = ({
     // Format time columns
     else if (col === 'שעת התחלה' || col === 'שעת סיום') {
       cellValue = formatTime(cellValue);
+    }
+    // Convert 'יום' column from number to Hebrew day name
+    else if (col === 'יום') {
+        cellValue = convertDayNumberToHebrewName(cellValue);
+    }
+    // Convert 'מספר חדר' column from number to Hebrew letter (Gematria)
+    else if (col === 'מספר חדר') { 
+        cellValue = convertNumberToHebrewLetter(cellValue);
     }
 
     return (
@@ -291,8 +370,8 @@ const CustomTable = ({
   };
 
   return (
-     <Box>
-      <Paper
+      <Box>
+       <Paper
         sx={{
           direction: 'rtl',
           overflow: 'visible',
