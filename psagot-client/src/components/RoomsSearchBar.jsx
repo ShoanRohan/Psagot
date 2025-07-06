@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import {
   filterRooms,
   resetFilter,
-  updateFilteredRooms,
 } from "../features/room/roomSlice";
 import "../styles/RoomsSearchBar.css";
 
@@ -28,34 +27,28 @@ const RoomsSearchBar = () => {
   const [roomSearch, setRoomSearch] = useState(roomSearchEmpty);
 
   const dispatch = useDispatch();
-  const validate = () => {
-    const isValid =
-      !roomSearch?.capacity ||
-      (!isNaN(roomSearch?.capacity) && roomSearch?.capacity > 0);
-    setCapacityError(isValid ? "" : "חייב להיות מספר חיובי");
-    return isValid;
-  };
+
   const clean = () => {
-    setRoomSearch(roomSearchEmpty); // תאפס את השדות בטופס
-    setCapacityError(""); // תאפס שגיאות
+    setRoomSearch(roomSearchEmpty);
+    setCapacityError("");
     dispatch(resetFilter());
   };
 
   const handleChangeRoomSearch = (e) => {
     let { name, value } = e.target;
     if (name === "equipment") {
-    setRoomSearch({ ...roomSearch, equipment: value });
-    return;
-  }
-     if (name === "capacity") {
-    if (value === "") {
-      setCapacityError("");
-    } else if (Number(value) <= 0) {
-      setCapacityError("חייב להיות מספר חיובי");
-    } else {
-      setCapacityError("");
+      setRoomSearch({ ...roomSearch, equipment: value });
+      return;
     }
-  }
+    if (name === "capacity") {
+      if (value === "") {
+        setCapacityError("");
+      } else if (Number(value) <= 0) {
+        setCapacityError("חייב להיות מספר חיובי")
+      } else {
+        setCapacityError("");
+      }
+    }
     setRoomSearch({ ...roomSearch, [name]: value });
   };
   const findRooms = () => {
@@ -64,17 +57,16 @@ const RoomsSearchBar = () => {
     const computers = roomSearch.equipment.includes("מחשבים");
     dispatch(
       filterRooms({
-      ...roomSearch,
-      projector,
-      speakers,
-      computers,
+        ...roomSearch,
+        projector,
+        speakers,
+        computers,
         isNewSearch: true,
       })
     );
-    dispatch(updateFilteredRooms());
   };
   return (
-      <Box className="rooms-search-bar">
+    <Box className="rooms-search-bar">
       <div className="search-fields">
         <TextField
           label="שם חדר"
@@ -105,7 +97,6 @@ const RoomsSearchBar = () => {
             ))}
           </Select>
         </FormControl>
-
         <TextField
           label="מספר מקומות"
           variant="outlined"
@@ -121,26 +112,24 @@ const RoomsSearchBar = () => {
       </div>
       <div className="search-buttons">
         {(roomSearch.roomName ||
-          roomSearch.capacity ||
-          roomSearch.equipment.length > 0) && (
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={clean}
-            className="clear-button"
-          >
-            ניקוי
-          </Button>
- 
-       )}
+          roomSearch.equipment.length > 0 ||
+          roomSearch.capacity) && (
+            <Button
+              variant="outlined"
+              onClick={clean}
+              className="clear-button"
+            >
+              ניקוי
+            </Button>
+          )}
         <Button
           variant="contained"
-          color="primary"
           startIcon={<SearchIcon />}
           disabled={
-            !roomSearch?.capacity?.length &&
-            !roomSearch?.roomName?.length &&
-            !roomSearch?.equipment?.length
+            (!roomSearch?.capacity?.length &&
+              !roomSearch?.roomName?.length &&
+              !roomSearch?.equipment?.length) ||
+            (roomSearch.capacity && Number(roomSearch.capacity) <= 0)
           }
           onClick={findRooms}
           className="search-button"
@@ -148,7 +137,7 @@ const RoomsSearchBar = () => {
           <span className="search-button-text">חיפוש</span>
         </Button>
       </div>
-      </Box>
+    </Box>
   );
 };
 export default RoomsSearchBar;

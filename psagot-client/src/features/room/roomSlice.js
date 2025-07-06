@@ -14,7 +14,7 @@ const initialState = {
   loading: false,
   error: null,
   pageIndex: 0,
-  pageSize: 2,
+  pageSize: 5,
   isSearchActive: false,
   totalFilteredCount: 0,
   filters: {
@@ -30,23 +30,24 @@ const roomSlice = createSlice({
   initialState,
   reducers: {
     setRooms: (state, action) => {
-      //כרגע ריק
     },
-
+    setSelectedRoom: (state, action) => {
+      state.selectedRoom = null
+    },
     updateFilteredRooms: (state) => {
       const allFiltered = state.isSearchActive
         ? state.rooms.filter(
-            (room) =>
-              (state.filters.roomName
-                ? room.name.includes(state.filters.roomName)
-                : true) &&
-              (state.filters.capacity
-                ? room.capacity >= state.filters.capacity
-                : true) &&
-              (state.filters.projector ? room.projector : true) &&
-              (state.filters.speakers ? room.speakers : true) &&
-              (state.filters.computers ? room.computers : true)
-          )
+          (room) =>
+            (state.filters.roomName
+              ? room.name.includes(state.filters.roomName)
+              : true) &&
+            (state.filters.capacity
+              ? room.capacity >= state.filters.capacity
+              : true) &&
+            (state.filters.projector ? room.projector : true) &&
+            (state.filters.speakers ? room.speakers : true) &&
+            (state.filters.computers ? room.computers : true)
+        )
         : state.rooms;
       state.totalFilteredCount = allFiltered.length;
       const start = state.pageIndex * state.pageSize;
@@ -62,17 +63,17 @@ const roomSlice = createSlice({
       const end = start + state.pageSize;
       const allFiltered = state.isSearchActive
         ? state.rooms.filter(
-            (room) =>
-              (state.filters.roomName
-                ? room.name.includes(state.filters.roomName)
-                : true) &&
-              (state.filters.capacity
-                ? room.capacity >= state.filters.capacity
-                : true) &&
-              (state.filters.projector ? room.projector : true) &&
-              (state.filters.speakers ? room.speakers : true) &&
-              (state.filters.computers ? room.computers : true)
-          )
+          (room) =>
+            (state.filters.roomName
+              ? room.name.includes(state.filters.roomName)
+              : true) &&
+            (state.filters.capacity
+              ? room.capacity >= state.filters.capacity
+              : true) &&
+            (state.filters.projector ? room.projector : true) &&
+            (state.filters.speakers ? room.speakers : true) &&
+            (state.filters.computers ? room.computers : true)
+        )
         : state.rooms;
 
       state.filteredRooms = allFiltered.slice(start, end);
@@ -85,7 +86,7 @@ const roomSlice = createSlice({
         speakers = false,
         computers = false,
         pageIndex = 0,
-        pageSize = 10,
+        pageSize = 5,
         isNewSearch = false,
       } = action.payload;
       const filters = isNewSearch
@@ -110,19 +111,19 @@ const roomSlice = createSlice({
       state.filteredRooms = allFiltered.slice(start, end);
     },
     resetFilter: (state) => {
-  state.filters = {
-    roomName: "",
-    capacity: "",
-    projector: false,
-    speakers: false,
-    computers: false,
-  };
-  state.pageIndex = 0;
-  state.isSearchActive = false;
-  const start = 0;
-  const end = state.pageSize;
-  state.filteredRooms = state.rooms.slice(start, end); // תצוגה רגילה
-},
+      state.filters = {
+        roomName: "",
+        capacity: "",
+        projector: false,
+        speakers: false,
+        computers: false,
+      };
+      state.pageIndex = 0;
+      state.isSearchActive = false;
+      const start = 0;
+      const end = state.pageSize;
+      state.filteredRooms = state.rooms.slice(start, end); // תצוגה רגילה
+    },
 
   },
   extraReducers: (builder) => {
@@ -153,21 +154,26 @@ const roomSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addRoomAction.fulfilled, (state, action) => {
-        state.rooms.push(action.payload);
+        state.status = 'succeeded';
+        let _rooms = [...state.rooms];
+        _rooms.push(action.payload);
+        state.rooms = _rooms;
       })
       .addCase(updateRoomAction.fulfilled, (state, action) => {
-        const index = state.rooms.findIndex(
-          (room) => room.id === action.payload.id
-        );
+        state.status = 'succeeded';
+        let _rooms = [...state.rooms];
+        const index = _rooms.findIndex((room) => room.id === action.payload.id);
         if (index !== -1) {
-          state.rooms[index] = action.payload;
+          _rooms[index] = action.payload;
         }
+        state.rooms = _rooms;
       });
   },
 });
 
 export const {
   setRoom,
+  setSelectedRoom,
   filterRooms,
   changePageSize,
   changePageIndex,
