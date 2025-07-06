@@ -12,7 +12,7 @@ import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectFilteredTopics } from '../features/topic/topicSlice';
 import { deleteTopicAction, fetchAllTopicForCourseByCourseId } from '../features/topic/topicActions';
-import { fetchAllTopic} from '../features/topic/topicActions';
+import { fetchAllTopic } from '../features/topic/topicActions';
 import editSvg from '../assets/icons/editIcon.svg'
 import deleteSvg from '../assets/icons/deleteIcon.svg'
 import Pagination from '@mui/material/Pagination';
@@ -58,12 +58,12 @@ export default function CourseTopicGrid() {
     }, [dispatch, courseId]);
 
     useEffect(() => {
-        if(error) {
+        if (error) {
             setShowWarning(true)
         }
-    },[error])
+    }, [error])
 
-    
+
     const formatDate = (dateString) => {
         if (!dateString) return '';
         const date = new Date(dateString);
@@ -78,7 +78,7 @@ export default function CourseTopicGrid() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [showWarning, setShowWarning] = React.useState(false);
     const [topicToDelete, setTopicToDelete] = React.useState(null);
-    
+
 
     const paginatedTopics = topics.slice(
         (currentPage - 1) * pageSize,
@@ -103,34 +103,35 @@ export default function CourseTopicGrid() {
 
 
     const handleDeleteClick = async (topicId) => {
-        // כאן תציגי את האזהרה
+
         setTopicToDelete(topicId);
-        await dispatch(deleteTopicAction({ topicId: topicId }));        
-      };
-      
-      const handleConfirmDelete = async () => {
+        await dispatch(deleteTopicAction({ topicId: topicId }));
+    };
+
+    const handleConfirmDelete = async () => {
         if (topicToDelete !== null) {
-          // מחיקה דרך ה-slice
-          await dispatch(deleteTopicAction({ topicId: topicToDelete, forceDelete: true }));
-      
-          // רענון הנושאים אחרי מחיקה
-          dispatch(fetchAllTopicForCourseByCourseId(courseId));
+            // מחיקה דרך ה-slice
+            await dispatch(deleteTopicAction({ topicId: topicToDelete, forceDelete: true }));
+
+            // רענון הנושאים אחרי מחיקה
+            dispatch(fetchAllTopicForCourseByCourseId(courseId));
         }
         // סגירת האזהרה
         setShowWarning(false);
         setTopicToDelete(null);
-      };
-      
-      const handleCancelDelete = () => {
+    };
+
+    const handleCancelDelete = () => {
         setShowWarning(false);
         setTopicToDelete(null);
-      };
-      
+    };
+
     return (
         <Box sx={{ width: '100%', marginTop: '8px', }}>
-            <TableContainer component={Paper} sx={{ width: 'unset', borderRadius: '10px',
-               p: "30px 20px 10px 20px" 
-                }}>
+            <TableContainer component={Paper} sx={{
+                width: 'unset', borderRadius: '10px',
+                p: "30px 20px 10px 20px"
+            }}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -187,10 +188,10 @@ export default function CourseTopicGrid() {
                                     <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleEditClick(topic)}>
                                         <img src={editSvg} alt='edit_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
-                                    </StyledTableCell>
-                                    <StyledTableCell>
-                                    <IconButton sx={{ bgcolor: '#F4F4F4'}} onClick={() => handleDeleteClick(topic?.topicId)}>
-                                        <img src={deleteSvg} alt='delete_icon' style={{marginTop: '0px'}} />
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                    <IconButton sx={{ bgcolor: '#F4F4F4' }} onClick={() => handleDeleteClick(topic?.topicId)}>
+                                        <img src={deleteSvg} alt='delete_icon' style={{ marginTop: '0px' }} />
                                     </IconButton>
                                 </StyledTableCell>
                             </TableRow>
@@ -198,47 +199,82 @@ export default function CourseTopicGrid() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <Box component={Paper} sx={{ p: "30px 20px 10px 20px", borderRadius: '10px', bgcolor: 'white', direction: 'ltr', width: 'unset', margin: '10px 0px  10px 0px', marginBottom: '40px' }}>
-                <Grid2 container>
-                    {/* עמודים */}
-                    <Grid2 xs={3}>
-                        <Pagination
-                            count={Math.ceil(topics.length / pageSize)} // מספר עמודים כולל
-                            page={currentPage} // עמוד נוכחי
-                            onChange={(event, value) => setCurrentPage(value)} // שינוי עמוד
-                            sx={{ '& .MuiPaginationItem-root': { fontSize: 12 } }}
-                        />
-                    </Grid2>
-                    {/* בחירת מספר שורות */}
-                    <Grid2 xs={9} textAlign="right" margin="auto">
+            <Box
+                component={Paper}
+                sx={{
+                    p: "30px 20px 10px 20px",
+                    borderRadius: "10px",
+                    bgcolor: "white",
+                    width: "unset",
+                    margin: "10px 0px",
+                    marginBottom: "40px",
+                }}
+            >
+                <Grid2 container alignItems="center" justifyContent="space-between">
+                    <Grid2 item xs={6} display="flex" justifyContent="start" alignItems="center">
+                        <Typography
+                            display="inline"
+                            fontFamily="Rubik"
+                            fontSize="14px"
+                            sx={{ ml: 1 }}
+                        >
+                            שורות לעמוד:
+                        </Typography>
                         <Select
-                            value={pageSize} // הערך שנבחר (10/20/50)
+                            value={pageSize}
                             onChange={(e) => {
-                                setPageSize(e.target.value); // עדכון מספר שורות
-                                setCurrentPage(1); // חזרה לעמוד ראשון
+                                setPageSize(e.target.value);
+                                setCurrentPage(1);
                             }}
                             IconComponent={(props) => (
-                                <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />
+                                <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: "small" }} />
                             )}
                             sx={{
-                                height: '26px',
-                                width: '60px',
-                                fontSize: '12px',
-                                borderRadius: '4px',
-                                borderColor: '#F0F1F3',
-                                mr: '15px',
-                                verticalAlign: 'middle'
+                                height: "26px",
+                                width: "60px",
+                                borderRadius: "10px",
+                                borderWidth: "0.5px",
+                                borderColor: "#F0F1F3",
+                                fontSize: "12px",
+                                ml: "8px",
+                                textAlign: "center",
+                                '& .MuiSelect-select': {
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                },
+                            }}
+                            MenuProps={{
+                                PaperProps: {
+                                    sx: {
+                                        textAlign: "center",
+                                        direction: "ltr",
+                                    },
+                                },
                             }}
                         >
-                            <MenuItem value={10}>10</MenuItem>
-                            <MenuItem value={20}>20</MenuItem>
-                            <MenuItem value={50}>50</MenuItem>
+                            <MenuItem value={10} sx={{ justifyContent: "center" }}>10</MenuItem>
+                            <MenuItem value={20} sx={{ justifyContent: "center" }}>20</MenuItem>
+                            <MenuItem value={50} sx={{ justifyContent: "center" }}>50</MenuItem>
                         </Select>
-                        {/* טקסט שמסביר מה בחרת */}
-                        <Typography display="inline" fontFamily="Rubik" fontSize="14px">:שורות לעמוד</Typography>
+                    </Grid2>
+
+                    
+                    <Grid2 item xs={6} display="flex" justifyContent="end">
+                        <Pagination
+                            count={Math.ceil(topics.length / pageSize)}
+                            page={currentPage}
+                            onChange={(event, value) => setCurrentPage(value)}
+                            sx={{
+                                direction: "ltr",
+                                ml: 2,
+                                "& .MuiPaginationItem-root": { fontSize: 12 },
+                            }}
+                        />
                     </Grid2>
                 </Grid2>
             </Box>
+
             <Dialog open={showWarning} onClose={handleCancelDelete}>
                 <DialogContent>
                     <Typography>{error}</Typography>
