@@ -66,13 +66,23 @@ namespace BL
             return (_mapper.Map<IEnumerable<UserDTO>>(users), null);
         }
 
-        //public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
-        //{
-        //    var (users, errorMessage) = await _userDL.GetAllCoordinators();
-        //    if (users == null) return (null, errorMessage);
+        public async Task<(IEnumerable<UserDTO> Users, int TotalCount, string ErrorMessage)> GetFilteredPagedUsers(
+            string username, string phone, string role, bool? isActive, int pageNumber, int pageSize)
+        {
+            var (users, totalCount, errorMessage) = await _userDL.GetFilteredPagedUsers(username, phone, role, isActive, pageNumber, pageSize);
 
-        //    return (_mapper.Map<List<UserDTO>>(users), null);
-        //}
+            if (users == null) return (null, 0, errorMessage);
+
+            return (_mapper.Map<IEnumerable<UserDTO>>(users), totalCount, null);
+        }
+
+        public async Task<(List<UserDTO> Users, string ErrorMessage)> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userDL.GetAllCoordinators();
+            if (users == null) return (null, errorMessage);
+
+            return (_mapper.Map<List<UserDTO>>(users), null);
+        }
 
         public async Task<(IEnumerable<UserDTO> users, string ErrorMassage)> GetCoordinatorsAndLecturers()
         {
@@ -89,6 +99,17 @@ namespace BL
 
             return (coordinators, null); ;
         }
+        
+
+        public async Task<(List<UserTableDTO> UsertableDto, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userDL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return (null, countUsers, errorMessage);
+
+            var userDTOs = _mapper.Map<List<UserTableDTO>>(users);
+            return (userDTOs, countUsers, null);
+        }
+
         public async Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers()
         {
             var (teachers, errorMessage) = await _userDL.GetTeachers();

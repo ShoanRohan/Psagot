@@ -20,13 +20,17 @@ namespace Psagot.Controllers
             _userBL = userBL;
         }
 
-        [HttpPost("AddUser")]
+        [HttpPost("Register")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)
         {
             if (userDTO == null)
                 return BadRequest("Invalid user data");
             try
             {
+                var user = await _userBL.UserLoginAsync(userDTO.Email, userDTO.Password);
+                if (user != null)
+                    return Conflict("המשתמש קיים כבר במערכת ");
+                
                 var (addedUser, errorMessage) = await _userBL.AddUser(userDTO);
                 if (addedUser == null)
                     return BadRequest(errorMessage);
@@ -38,7 +42,6 @@ namespace Psagot.Controllers
             }
             catch (Exception ex)
             {
-
                 return StatusCode(500, "Internal server error");
             }
         }
@@ -81,6 +84,22 @@ namespace Psagot.Controllers
             return Ok(coordinators);
         }
 
+        [HttpGet("GetFilteredPagedUsers")]
+        public async Task<IActionResult> GetFilteredPagedUsers(
+            [FromQuery] string username,
+            [FromQuery] string phone,
+            [FromQuery] string role,
+            [FromQuery] bool? isActive,
+            [FromQuery] int pageNumber,
+            [FromQuery] int pageSize)
+        {
+            var (users, totalCount, errorMessage) = await _userBL.GetFilteredPagedUsers(username, phone, role, isActive, pageNumber, pageSize);
+
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok(new { TotalCount = totalCount, Users = users });
+        }
+
         [HttpGet("GetTeachers")]
         public async Task<IActionResult> GetTeachers()
         {
@@ -102,7 +121,7 @@ namespace Psagot.Controllers
                 var user = await _userBL.UserLoginAsync(login.Email, login.Password);
 
                 if (user == null)
-                    return Unauthorized("Invalid email or password");
+                    return Unauthorized("המשתמש אינו קיים במערכת ");
                 return Ok(new
                 {
                     user = user,
@@ -111,18 +130,18 @@ namespace Psagot.Controllers
             catch (Exception ex)
             {
 
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, "Internal server error"+ex);
             }
 
         }
 
-        //[HttpGet("GetAllCoordinators")]
-        //public async Task<IActionResult> GetAllCoordinators()
-        //{
-        //    var (users, errorMessage) = await _userBL.GetAllCoordinators();
-        //    if (users == null) return BadRequest(errorMessage);
-        //    return Ok(users);
-        //}
+        [HttpGet("GetAllCoordinators")]
+        public async Task<IActionResult> GetAllCoordinators()
+        {
+            var (users, errorMessage) = await _userBL.GetAllCoordinators();
+            if (users == null) return BadRequest(errorMessage);
+            return Ok(users);
+        }
 
         [HttpGet("GetCoordinatorsAndLecturers")]
         public async Task<IActionResult> GetCoordinatorsAndLecturers()
@@ -132,5 +151,13 @@ namespace Psagot.Controllers
             return Ok(users);
         }
 
+        [HttpGet("GetUsersByPage")]
+        public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
+            if (users == null) return BadRequest(errorMessage);
+
+            return Ok( new{users, countUsers });
+        }
     }
 }
