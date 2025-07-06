@@ -1,67 +1,113 @@
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect } from "react";
-import '../styles/usersPage.css';
-import { Pagination } from '@mui/material';
-import { fetchUsersByPage } from "../features/user/userAction";
+import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Typography,
+  Paper,
+  IconButton,
+  MenuItem,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Pagination
+} from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
+import { fetchUsersByPage } from "../features/user/userAction";
 import { setPageSize, setPageNumber } from '../features/user/userSlice';
+import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
-import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { StyledTableCell } from '../styles/MeetingsTableStyle';
+import ExportToExcel from '../components/ExportToExcel';
+import '../styles/usersPage.css';
 
 const UsersPage = () => {
-    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+  const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const [openAddPopup, setOpenAddPopup] = useState(false);
 
-    const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUsersByPage({ pageNumber, pageSize }));
+  }, [pageNumber, pageSize, dispatch]);
 
-    // טוען את המשתמשים
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
-            } catch (error) {
-                console.error("שגיאה בטעינת המשתמשים:", error);
-            }
-        };
-        fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
+  const handleChangePageSize = (event) => {
+    dispatch(setPageSize(Number(event.target.value)));
+  };
 
-    const handleChangePageSize = (event) => {
-        const size = Number(event.target.value); // עדכון ל-`event`
-        dispatch(setPageSize(size)); // קריאה ל-`setPage`
-    };
-
-    // שינוי דף
-const handlePageNumberChange = (newPage) => {
+  const handlePageNumberChange = (event, newPage) => {
     if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-        dispatch(setPageNumber(newPage));
+      dispatch(setPageNumber(newPage));
     }
-};
+  };
 
-    // שינוי סטטוס של משתמש
-    const handleStatusChange = (userId, status) => {
-        const newStatus = status ? "inactive" : "active";
-        // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
-    };
+  const handleStatusChange = (userId, status) => {
+    const newStatus = status ? "inactive" : "active";
+    // עדכון סטטוס לפי הצורך
+  };
 
-    return (
-        <Box>
-         <Box className="tablesize" sx={{overflowY:"auto"}} >
+  const handleAddUser = () => {
+    setOpenAddPopup(true);
+    // להפעיל פופאפ של הוספת משתמש אם קיים
+  };
+
+  return (
+    <Box>
+      <Box className="tablesize" sx={{ overflowY: "auto" }}>
+        
+        {/* כפתורי אקשן עליונים */}
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 2, mb: 2 }}>
+          {/* כפתור ייצוא לאקסל */}
+          <ExportToExcel data={users} fileName="Users.xlsx" sheetName="משתמשים" />
+
+          {/* כפתור הוספת משתמש עם פלוס לפני המילה */}
+          <Button
+            variant="contained"
+            onClick={handleAddUser}
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '0px 24px',
+              width: '171px',
+              height: '44px',
+              backgroundColor: '#326DEF',
+              borderRadius: '50px',
+              color: '#FFFFFF',
+              fontFamily: 'Rubik, sans-serif',
+              fontSize: '16px',
+              fontWeight: 500,
+              textAlign: 'center',
+              boxShadow: 'none',
+              '&:hover': {
+                backgroundColor: '#295BCC',
+                boxShadow: 'none'
+              },
+              gap: 1,
+            }}
+          >
+            <Box
+              sx={{
+                width: 18,
+                height: 18,
+                borderRadius: '50%',
+                border: '1.5px solid white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              +
+            </Box>
+            הוספת משתמש
+          </Button>
+        </Box>
+
+        {/* כותרת */}
         <Typography
           variant="h1"
           align="right"
@@ -70,69 +116,62 @@ const handlePageNumberChange = (newPage) => {
             fontWeight: 700,
             fontSize: "40px",
             color: "#0D1783",
+            mb: 2,
           }}
         >
-            משתמשים
-        </Typography>                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-                <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '700px', overflowY: 'auto' }}>
-                        <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="courses table">
-                                  <TableHead>
-                                    <TableRow>
-                                      {[
-                                        'קוד משתמש', 'שם משתמש', 'מייל', 'הרשאה',
-                                        'סטטוס', 'עריכה', ''
-                                      ].map((header, i) => (
-                                        <StyledTableCell
-                                          key={i}
-                                          align="center"
-                                          sx={{ whiteSpace: 'nowrap', px: 1 }}
-                                        >
-                                          {header}
-                                        </StyledTableCell>
-                                      ))}
-                                    </TableRow>
-                                  </TableHead>
-                        <TableBody>
-                            {users?.map((user, index) => (
-                                <TableRow key={`${user.userId}-${index}`}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button
-                                            variant="contained"
-                                            className={user.isActive ? 'buttonActive' : 'buttonInactive'}
-                                            onClick={() => {
-                                                handleStatusChange(user.userId, user.isActive);
-                                            }}
-                                        >
-                                            {user.isActive ? "פעיל" : "לא פעיל"}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
-                                        <IconButton
-                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
-                                        >
-                                            <img src={Deleteicone} alt="delelte" className='deleteIcon' />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
-                                            <img src={Editicone} alt="edit" className='editIcon' />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                {/* ניווט עמודים */}
-                <Box className="boxStyle">
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography className='flexCenter'>
-                            מספר שורות:
-                        </Typography>
-                         <Select
+          משתמשים
+        </Typography>
+
+        {/* טבלת משתמשים */}
+        <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '700px', overflowY: 'auto' }}>
+          <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="users table">
+            <TableHead>
+              <TableRow>
+                {[
+                  'קוד משתמש', 'שם משתמש', 'מייל', 'הרשאה',
+                  'סטטוס', 'עריכה', ''
+                ].map((header, i) => (
+                  <StyledTableCell key={i} align="center" sx={{ whiteSpace: 'nowrap', px: 1 }}>
+                    {header}
+                  </StyledTableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {users?.map((user, index) => (
+                <TableRow key={`${user.userId}-${index}`}>
+                  <TableCell align="center">{user.userId}</TableCell>
+                  <TableCell align="center">{user.name}</TableCell>
+                  <TableCell align="center">{user.email}</TableCell>
+                  <TableCell align="center">{user.userTypeName}</TableCell>
+                  <TableCell align="center">
+                    <Button
+                      variant="contained"
+                      className={user.isActive ? 'buttonActive' : 'buttonInactive'}
+                      onClick={() => handleStatusChange(user.userId, user.isActive)}
+                    >
+                      {user.isActive ? "פעיל" : "לא פעיל"}
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <IconButton onClick={() => alert(`מחיקת משתמש ${user.userId}`)}>
+                      <img src={Deleteicone} alt="delete" className='deleteIcon' />
+                    </IconButton>
+                    <IconButton onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
+                      <img src={Editicone} alt="edit" className='editIcon' />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* פוטר עם פאגינציה ובחירת מספר שורות */}
+        <Box className="boxStyle" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Typography className='flexCenter'>מספר שורות:</Typography>
+            <Select
               IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
               displayEmpty
               onChange={handleChangePageSize}
@@ -154,26 +193,27 @@ const handlePageNumberChange = (newPage) => {
                   alignItems: 'center',
                 },
               }}
-                            >
-                                <MenuItem value={10}>10</MenuItem>
-                                <MenuItem value={20}>20</MenuItem>
-                                <MenuItem value={50}>50</MenuItem>
-                            </Select>
-                    </Box>
-                    <Pagination
-                        count={Math.ceil(totalUsers / pageSize)}
-                        page={pageNumber}
-                        onChange={handlePageNumberChange}
-                         sx={{
-                direction: 'ltr',
-                ml: 2, 
-                '& .MuiPaginationItem-root': { fontSize: 12 },
-              }}
-                    />
-                </Box>
-            </Box>
+            >
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={20}>20</MenuItem>
+              <MenuItem value={50}>50</MenuItem>
+            </Select>
+          </Box>
+
+          <Pagination
+            count={Math.ceil(totalUsers / pageSize)}
+            page={pageNumber}
+            onChange={handlePageNumberChange}
+            sx={{
+              direction: 'ltr',
+              ml: 2,
+              '& .MuiPaginationItem-root': { fontSize: 12 },
+            }}
+          />
         </Box>
-    );
+      </Box>
+    </Box>
+  );
 };
 
 export default UsersPage;

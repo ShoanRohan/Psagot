@@ -23,6 +23,7 @@ import TopicDialog from "../components/TopicDialog";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import api from "../utils/api";
+import ExportToExcel from "../components/ExportToExcel";
 
 const buttonStyles = {
   height: "44px",
@@ -190,6 +191,7 @@ const CoursesPage = () => {
           >
             הוספת קורס
           </Button>
+          <ExportToExcel data={courses} fileName= "קורסים.xlsx" />
           <IconButton
             onClick={exportAllCoursesToExcel}
             sx={{

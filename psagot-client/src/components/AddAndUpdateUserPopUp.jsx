@@ -17,7 +17,7 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import "../styles/AddUserPopUp.css";
+import "../styles/AddAndUpdateUserPopUp.css";
 import { useDispatch, useSelector } from "react-redux";
 
 const AddAndUpdateUserPopUp = ({
