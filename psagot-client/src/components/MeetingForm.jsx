@@ -9,6 +9,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 // ייבוא הפונקציות לשליפת נתונים מהבאקנד
 import { fetchAllRooms } from '../features/room/roomActions';
@@ -18,8 +19,6 @@ import { fetchAllUsers } from '../features/user/userAction';
 import { fetchAllMeetings, addMeetingAction, updateMeetingAction } from '../features/meeting/meetingActions';
 import { clearError } from '../features/meeting/meetingSlice';
 
-// ייבוא תמונת החץ של שדות ה OPTIONS
-import ChevronDownIcon from '../assets/icons/chevron-down.png';
 
 const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
   const dispatch = useDispatch();
@@ -704,63 +703,25 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
   };
 
-
-  return (
+ return (
     <>
       <h2>{isEditMode ? 'עריכת מפגש' : 'הוספת מפגש'}</h2>
 
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '0px', mb: 15 }}>
-        <Button
-          variant="outlined"
-          onClick={handleCancel}
-          sx={cancelButtonStyle}
-        >
-          ביטול
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleSaveMeeting}
-          sx={saveButtonStyle}
-        >
-          שמור
-        </Button>
+        <Button variant="outlined" onClick={handleCancel} sx={cancelButtonStyle}>ביטול</Button>
+        <Button variant="contained" onClick={handleSaveMeeting} sx={saveButtonStyle}>שמור</Button>
       </Box>
 
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: '1200px',
-          width: '100%',
-          minHeight: '434px',
-          backgroundColor: '#FFFFFF',
-          borderRadius: '10px',
-          paddingTop: '20px',
-          paddingRight: '30px',
-          paddingBottom: '40px',
-          paddingLeft: '30px',
-          boxShadow: '0px 0px 4px rgba(220,226,236,0.8)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '32px',
-          mt: '20px',
-          mx: 'auto', // מרכז את הקונטיינר
-        }}
-      >
-
-
-
+      <Container maxWidth={false} sx={{ maxWidth: '1200px', width: '100%', minHeight: '434px', backgroundColor: '#FFFFFF', borderRadius: '10px', paddingTop: '20px', paddingRight: '30px', paddingBottom: '40px', paddingLeft: '30px', boxShadow: '0px 0px 4px rgba(220,226,236,0.8)', display: 'flex', flexDirection: 'column', gap: '32px', mt: '20px', mx: 'auto' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h6" component="h2">
-            פרטים טכניים
-          </Typography>
+          <Typography variant="h6" component="h2">פרטים טכניים</Typography>
         </Box>
 
         <form>
           <Grid container spacing={6} sx={{ flexWrap: 'wrap' }}>
-
-            {/* שדה קורס עם Autocomplete */}
             <Grid item xs={3}>
               <Autocomplete
+                popupIcon={<ArrowDropDownIcon />}
                 options={courses}
                 getOptionLabel={(option) => option.name}
                 value={courses.find(c => c.courseId === formData.courseId) || null}
@@ -779,31 +740,14 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.courseId}
                     sx={textFieldStyle}
                     required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Box
-                            component="img"
-                            src={ChevronDownIcon}
-                            alt="Chevron"
-                            sx={{
-                              width: '26px',
-                              height: '25px',
-                            }}
-                          />
-                        </InputAdornment>
-
-                      )
-                    }}
                   />
                 )}
               />
-
             </Grid>
-            {/* שדה נושא עם Autocomplete כמו בדף המקורי */}
+
             <Grid item xs={3}>
               <Autocomplete
+                popupIcon={<ArrowDropDownIcon />}
                 options={filteredTopics}
                 getOptionLabel={(option) => option.name}
                 value={filteredTopics.find(t => t.topicId === formData.topicId) || null}
@@ -823,30 +767,14 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.topicId}
                     sx={textFieldStyle}
                     required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Box
-                            component="img"
-                            src={ChevronDownIcon}
-                            alt="Chevron"
-                            sx={{
-                              width: '26px',
-                              height: '25px',
-                            }}
-                          />
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 )}
               />
             </Grid>
 
-            {/* שדה מרצה עם Autocomplete וסינון */}
             <Grid item xs={3}>
               <Autocomplete
+                popupIcon={<ArrowDropDownIcon />}
                 options={users.filter(user => user.userTypeId === 4)}
                 getOptionLabel={(option) => option.name}
                 value={users.find(u => u.userId === formData.teacherId) || null}
@@ -865,30 +793,14 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.teacherId}
                     sx={textFieldStyle}
                     required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Box
-                            component="img"
-                            src={ChevronDownIcon}
-                            alt="Chevron"
-                            sx={{
-                              width: '26px',
-                              height: '25px',
-                            }}
-                          />
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 )}
               />
             </Grid>
 
-            {/* שדה חדר עם Autocomplete */}
             <Grid item xs={3}>
               <Autocomplete
+                popupIcon={<ArrowDropDownIcon />}
                 options={rooms}
                 getOptionLabel={(option) => option.name}
                 value={rooms.find(r => r.roomId === formData.roomId) || null}
@@ -906,22 +818,6 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.roomId}
                     sx={textFieldStyle}
                     required
-                    InputProps={{
-                      ...params.InputProps,
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <Box
-                            component="img"
-                            src={ChevronDownIcon}
-                            alt="Chevron"
-                            sx={{
-                              width: '26px',
-                              height: '25px',
-                            }}
-                          />
-                        </InputAdornment>
-                      )
-                    }}
                   />
                 )}
               />
@@ -1019,52 +915,31 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                   />
                 </Grid>
 
-                <Grid item xs={3}>
-                  <Autocomplete
-                    options={statusOptions}
-                    getOptionLabel={(option) => option.name}
-                    value={
-                      statusOptions.find((status) => status.statusCourseId === formData.statusCourseId) || null
-                    }
-                    onChange={(e, newValue) => {
-                      setFormData((prev) => ({
-                        ...prev,
-                        statusCourseId: newValue?.statusCourseId || ''
-                      }));
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder="סטטוס"
-                        error={!!validationErrors.statusCourseId}
-                        helperText={validationErrors.statusCourseId}
-                        required
-                        sx={{
-                          ...textFieldStyle,
-                          '& .MuiAutocomplete-input': {
-                            paddingRight: '40px !important',
-                          },
-                        }}
-                        InputProps={{
-                          ...params.InputProps,
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <Box
-                                component="img"
-                                src={ChevronDownIcon}
-                                alt="Chevron"
-                                sx={{
-                                  width: '26px',
-                                  height: '25px',
-                                }}
-                              />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    )}
+                 <Grid item xs={3}>
+              <Autocomplete
+                popupIcon={<ArrowDropDownIcon />}
+                options={statusOptions}
+                getOptionLabel={(option) => option.name}
+                value={statusOptions.find((status) => status.statusCourseId === formData.statusCourseId) || null}
+                onChange={(e, newValue) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    statusCourseId: newValue?.statusCourseId || ''
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder="סטטוס"
+                    error={!!validationErrors.statusCourseId}
+                    helperText={validationErrors.statusCourseId}
+                    sx={textFieldStyle}
+                    required
                   />
-                </Grid>
+                )}
+              />
+            </Grid>
+
 
                 <Grid item>
                   <Box
