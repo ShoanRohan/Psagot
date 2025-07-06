@@ -36,7 +36,7 @@ const CourseScreen = () => {
       console.warn("אין נושאים לייצוא");
       return;
     }
-  
+
     const worksheet = XLSX.utils.json_to_sheet(
       topics.map((topic) => ({
         "קוד מפגש": topic?.topicId,
@@ -46,25 +46,25 @@ const CourseScreen = () => {
         "תאריך סיום": new Date(topic?.endDate).toLocaleDateString("he-IL"),
         "מספר מפגשים": topic?.numberOfMeetings,
         "ציוד": [
-          topic?.computers ? 'מחשב' : null ,
-          topic?.projector ? 'מקרן' : null, 
+          topic?.computers ? 'מחשב' : null,
+          topic?.projector ? 'מקרן' : null,
           topic?.microphone ? 'הגברה' : null
         ].filter(Boolean).join(", "),
-  }))
+      }))
     );
-  
+
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "נושאים");
-  
+
     const excelBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
-  
+
     const fileData = new Blob([excelBuffer], {
       type: "application/octet-stream",
     });
-  
+
     saveAs(fileData, "topics.xlsx");
   };
 
@@ -81,14 +81,14 @@ const CourseScreen = () => {
 
         {/* קבוצה שמכילה את האייקון של האקסל וכפתור "הוספת נושא" */}
         {tabIndex === 1 &&
-        <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
-          <IconButton  onClick={handleExportTopicsToExcel}>
-            <img src={excelIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
-          </IconButton>
-          <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
-            הוספת נושא
-          </Button>
-        </Box>
+          <Box className="course-actions" sx={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+            <IconButton onClick={handleExportTopicsToExcel}>
+              <img src={excelIcon} alt="הורדת אקסל" style={{ width: "24px", height: "24px", marginTop: "0px" }} />
+            </IconButton>
+            <Button variant="contained" startIcon={<AddCircleOutlineIcon />} className="add-topic-btn">
+              הוספת נושא
+            </Button>
+          </Box>
         }
       </Box>
       <Typography className="course-status">סטטוס הקורס: {course ? course.statusName : "טוען..."}</Typography>
