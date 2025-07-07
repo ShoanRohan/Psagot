@@ -9,7 +9,8 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+//ייבוא תמונת החץ של שדות ה OPTIONS
+import ChevronDownIcon from '../assets/icons/chevron-down.png';
 
 // ייבוא הפונקציות לשליפת נתונים מהבאקנד
 import { fetchAllRooms } from '../features/room/roomActions';
@@ -65,8 +66,23 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
   const [statusOptions, setStatusOptions] = useState([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
 
+  //STATE לפתיחה וסגירה של החץ בכל השדות
+  const [openCourse, setOpenCourse] = useState(false);
+  const [openTopic, setOpenTopic] = useState(false);
+  const [openTeacher, setOpenTeacher] = useState(false);
+  const [openRoom, setOpenRoom] = useState(false);
+  const [openStatus, setOpenStatus] = useState(false);
+
+  //אם שווה TRUE, יפתח את האפשרויות של השדות. אם שווה FALSE, יסגור את השדה ע"י לחיצה על החץ
+  const handleChevronClickCourse = () => setOpenCourse(prev => !prev);
+  const handleChevronClickTopic = () => setOpenTopic(prev => !prev);
+  const handleChevronClickTeacher = () => setOpenTeacher(prev => !prev);
+  const handleChevronClickRoom = () => setOpenRoom(prev => !prev);
+  const handleChevronClickStatus = () => setOpenStatus(prev => !prev);
 
 
+
+  //הגדרת הודעת ה POP UP
   const [dialog, setDialog] = useState({
     open: false,
     type: 'success', // 'success', 'error', 'warning', 'info'
@@ -596,7 +612,7 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
         false,
         () => {
           closeDialog();
-          
+
           if (!isEditMode) {
             // איפוס הטופס כמו בדף המקורי
             setFormData({
@@ -703,7 +719,7 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
     }
   };
 
- return (
+  return (
     <>
       <h2>{isEditMode ? 'עריכת מפגש' : 'הוספת מפגש'}</h2>
 
@@ -721,7 +737,10 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
           <Grid container spacing={6} sx={{ flexWrap: 'wrap' }}>
             <Grid item xs={3}>
               <Autocomplete
-                popupIcon={<ArrowDropDownIcon />}
+                popupIcon={false}
+                open={openCourse}
+                onOpen={() => setOpenCourse(true)}
+                onClose={() => setOpenCourse(false)}
                 options={courses}
                 getOptionLabel={(option) => option.name}
                 value={courses.find(c => c.courseId === formData.courseId) || null}
@@ -740,14 +759,37 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.courseId}
                     sx={textFieldStyle}
                     required
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {params.InputProps.endAdornment}
+                          <InputAdornment position="end">
+                            <Box
+                              component="img"
+                              src={ChevronDownIcon}
+                              alt="Chevron"
+                              sx={{ width: 26, height: 25, cursor: 'pointer', ml: 1 }}
+                              onClick={handleChevronClickCourse}
+                            />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   />
                 )}
               />
             </Grid>
 
+
+
+
             <Grid item xs={3}>
               <Autocomplete
-                popupIcon={<ArrowDropDownIcon />}
+                popupIcon={false}
+                open={openTopic}
+                onOpen={() => setOpenTopic(true)}
+                onClose={() => setOpenTopic(false)}
                 options={filteredTopics}
                 getOptionLabel={(option) => option.name}
                 value={filteredTopics.find(t => t.topicId === formData.topicId) || null}
@@ -767,14 +809,35 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.topicId}
                     sx={textFieldStyle}
                     required
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {params.InputProps.endAdornment}
+                          <InputAdornment position="end">
+                            <Box
+                              component="img"
+                              src={ChevronDownIcon}
+                              alt="Chevron"
+                              sx={{ width: 26, height: 25, cursor: 'pointer', ml: 1 }}
+                              onClick={handleChevronClickTopic}
+                            />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   />
                 )}
               />
             </Grid>
 
+
             <Grid item xs={3}>
               <Autocomplete
-                popupIcon={<ArrowDropDownIcon />}
+                popupIcon={false}
+                open={openTeacher}
+                onOpen={() => setOpenTeacher(true)}
+                onClose={() => setOpenTeacher(false)}
                 options={users.filter(user => user.userTypeId === 4)}
                 getOptionLabel={(option) => option.name}
                 value={users.find(u => u.userId === formData.teacherId) || null}
@@ -793,6 +856,23 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.teacherId}
                     sx={textFieldStyle}
                     required
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {params.InputProps.endAdornment}
+                          <InputAdornment position="end">
+                            <Box
+                              component="img"
+                              src={ChevronDownIcon}
+                              alt="Chevron"
+                              sx={{ width: 26, height: 25, cursor: 'pointer', ml: 1 }}
+                              onClick={handleChevronClickTeacher}
+                            />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   />
                 )}
               />
@@ -800,7 +880,10 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
 
             <Grid item xs={3}>
               <Autocomplete
-                popupIcon={<ArrowDropDownIcon />}
+                popupIcon={false}
+                open={openRoom}
+                onOpen={() => setOpenRoom(true)}
+                onClose={() => setOpenRoom(false)}
                 options={rooms}
                 getOptionLabel={(option) => option.name}
                 value={rooms.find(r => r.roomId === formData.roomId) || null}
@@ -818,10 +901,29 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                     helperText={validationErrors.roomId}
                     sx={textFieldStyle}
                     required
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {params.InputProps.endAdornment}
+                          <InputAdornment position="end">
+                            <Box
+                              component="img"
+                              src={ChevronDownIcon}
+                              alt="Chevron"
+                              sx={{ width: 26, height: 25, cursor: 'pointer', ml: 1 }}
+                              onClick={handleChevronClickRoom}
+                            />
+                          </InputAdornment>
+                        </>
+                      ),
+                    }}
                   />
                 )}
               />
             </Grid>
+
+
 
             <Grid item xs={3}>
               <TextField
@@ -915,30 +1017,51 @@ const MeetingForm = ({ meeting: propMeeting, onSave, onCancel }) => {
                   />
                 </Grid>
 
-                 <Grid item xs={3}>
-              <Autocomplete
-                popupIcon={<ArrowDropDownIcon />}
-                options={statusOptions}
-                getOptionLabel={(option) => option.name}
-                value={statusOptions.find((status) => status.statusCourseId === formData.statusCourseId) || null}
-                onChange={(e, newValue) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    statusCourseId: newValue?.statusCourseId || ''
-                  }));
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="סטטוס"
-                    error={!!validationErrors.statusCourseId}
-                    helperText={validationErrors.statusCourseId}
-                    sx={textFieldStyle}
-                    required
+
+                <Grid item xs={3}>
+                  <Autocomplete
+                    popupIcon={false}
+                    open={openStatus}
+                    onOpen={() => setOpenStatus(true)}
+                    onClose={() => setOpenStatus(false)}
+                    options={statusOptions}
+                    getOptionLabel={(option) => option.name}
+                    value={statusOptions.find(status => status.statusCourseId === formData.statusCourseId) || null}
+                    onChange={(e, newValue) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        statusCourseId: newValue?.statusCourseId || ''
+                      }));
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder="סטטוס"
+                        error={!!validationErrors.statusCourseId}
+                        helperText={validationErrors.statusCourseId}
+                        sx={textFieldStyle}
+                        required
+                        InputProps={{
+                          ...params.InputProps,
+                          endAdornment: (
+                            <>
+                              {params.InputProps.endAdornment}
+                              <InputAdornment position="end">
+                                <Box
+                                  component="img"
+                                  src={ChevronDownIcon}
+                                  alt="Chevron"
+                                  sx={{ width: 26, height: 25, cursor: 'pointer', ml: 1 }}
+                                  onClick={handleChevronClickStatus}
+                                />
+                              </InputAdornment>
+                            </>
+                          ),
+                        }}
+                      />
+                    )}
                   />
-                )}
-              />
-            </Grid>
+                </Grid>
 
 
                 <Grid item>
