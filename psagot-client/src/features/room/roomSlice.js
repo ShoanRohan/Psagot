@@ -19,7 +19,6 @@ const initialState = {
     totalCount:0,
     searchStatus:'false'
 };
-    console.log(initialState.displayDate)
 
 const roomSlice = createSlice({
     name: 'room',
@@ -58,12 +57,10 @@ const roomSlice = createSlice({
                 state.roomsStatus = 'loading';
             })
             .addCase(fetchAllRooms.fulfilled, (state, action) => {
-                console.log(action.payload)
                 state.roomsStatus = 'succeeded';
                 state.rooms = action.payload;
                 state.totalCount = action.payload.length;
                 state.roomsWithPagination = state.rooms.slice(state.pageSize*(state.pageNumber-1),state.pageSize*state.pageNumber);
-                console.log(state.roomsWithPagination)
             })
             .addCase(fetchAllRooms.rejected, (state, action) => {
                 state.roomsStatus = 'failed';

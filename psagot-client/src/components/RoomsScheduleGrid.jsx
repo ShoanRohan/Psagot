@@ -1,5 +1,5 @@
-import React, { useEffect, useRef,useState  } from 'react';
-import { Box, useMediaQuery, useTheme,IconButton, Modal, Button, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Box, useMediaQuery, useTheme, IconButton, Modal, Button, Typography } from '@mui/material';
 import FullCalendar from "@fullcalendar/react";
 import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -20,7 +20,7 @@ export default function RoomsScheduleGrid() {
   const [openError, setOpenError] = useState(false);
 
 
-  //מגדיר את פורמט התאריך
+  //מגדיר את פורמט התאריך לפורמט fullcalendar
   const formatDate = (date) => {
     if (!date)
       return '2025-02-02';
@@ -32,6 +32,7 @@ export default function RoomsScheduleGrid() {
 
   const formattedDate = formatDate(displayDate);
 
+  //דואג שהטבלה תקבל נתונים עדכניים בכל עת   
   useEffect(() => {
     if (status === 'idle' && displayDate) {
       dispatch(fetchRoomsScheduleByDate(displayDate));
@@ -45,7 +46,7 @@ export default function RoomsScheduleGrid() {
     }
   }, [status, roomsStatus, dispatch, displayDate]);
 
-
+  //מיפוי החדרים לפי id+name
   const allRooms = rooms.map(({ name }) => ({
     id: name?.trim(),
     title: name,
@@ -57,18 +58,20 @@ export default function RoomsScheduleGrid() {
     (currentPage + 1) * roomsPerPage
   );
 
+  //מיפוי תוכן האירועים
   const events = roomSchedule
     .filter(event => visibleRooms.some(room => room.id === event.roomName?.trim()))
     .map(({ courseName, topicName, startTime, endTime, lecturer, roomName, courseColor }) => ({
       title: courseName,
       start: `${formattedDate}T${startTime?.trim()}`,
-      end: `${formattedDate}T${endTime?.trim()}`,    
+      end: `${formattedDate}T${endTime?.trim()}`,
       color: courseColor,
       secondTitle: topicName,
       lecturer,
       resourceId: roomName?.trim(),
     }));
 
+  //טיפול בהבהרה של הצבעים
   const lightenColor = (hex, factor) => {
     if (!hex) return '#ffffff';
     let color = parseInt(hex.slice(1), 16);
@@ -90,7 +93,7 @@ export default function RoomsScheduleGrid() {
 
   //מטפלת בתצוגת האירועים (מבחינת תוכן)
   const renderEventContent = ({ event }) => (
-    <div style={{ paddingRight:'1px',fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
+    <div style={{ paddingRight: '1px', fontFamily: "Rubik", fontSize: "12px", fontWeight: "bold", color: 'black' }}>
       <div>{event.title}</div>
       <div style={{ fontSize: "10px", opacity: 0.8 }}>
         {event.extendedProps.secondTitle}<br />
@@ -127,17 +130,19 @@ export default function RoomsScheduleGrid() {
 
   //אחראית על תצוגת עמודת השעות בתצוגת שבוע ויום
   const renderSlotLabelContent = ({ date }) => {
-  const pad = n => n.toString().padStart(2, '0');
-  const end = new Date(date.getTime() + 3600000); 
-  return (
-    <div>
-      {`${pad(date.getHours())}:${pad(date.getMinutes())}-${pad(end.getHours())}:${pad(end.getMinutes())}`}
-    </div>
-  );
-};
+    const pad = n => n.toString().padStart(2, '0');
+    const end = new Date(date.getTime() + 3600000);
+    return (
+      <div>
+        {`${pad(date.getHours())}:${pad(date.getMinutes())}-${pad(end.getHours())}:${pad(end.getMinutes())}`}
+      </div>
+    );
+  };
 
   return (
     <>
+
+      {/* טיפול בשגיאת שרת*/}
       <Modal
         open={openError}
         onClose={() => setOpenError(false)}
@@ -178,8 +183,7 @@ export default function RoomsScheduleGrid() {
         sx={{
           //הגדרות כלליות לטבלה
           position: 'absolute',
-          top: 130,
-          right: 350,
+          right: -150,
           width: '1480px',
           padding: "10px",
           borderRadius: "7px",
@@ -264,9 +268,9 @@ export default function RoomsScheduleGrid() {
         <IconButton onClick={handlePrevRooms} disabled={currentPage === 0} sx={{ mr: 1, p: 2 }}>
           <ArrowForwardIosIcon />
         </IconButton>
-
+        {/* הצגת הודעה בהעדר אירועים */}
         <Box sx={{ flexGrow: 1, overflowX: 'hidden' }}>
-
+          {/* הצג הודעה רק אם אין טעינה פעילה ואין אירועים */}
           {status === 'succeeded' && events.length === 0 && (
             <Box
               sx={{
@@ -297,6 +301,7 @@ export default function RoomsScheduleGrid() {
             slotMaxTime="22:00:00"
             contentHeight="auto"
             expandRows={true}
+            //מונע חפיפת אירועים
             slotEventOverlap={false}
             allDaySlot={false}
             slotDuration="01:00"

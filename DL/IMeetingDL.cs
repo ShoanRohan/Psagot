@@ -1,4 +1,5 @@
-﻿using Entities.Models;
+﻿using Entities.DTO;
+using Entities.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,7 @@ namespace DL
         Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting);
         Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings();
         Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting);
+        Task<List<Meeting>> GetMeetingsByDate(DateOnly from, DateOnly to);
+
     }
 }
