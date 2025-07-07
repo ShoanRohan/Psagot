@@ -61,5 +61,18 @@ namespace Psagot.Controllers
 
             return Ok(addedMeeting);
         }
+      
+        [HttpGet("GetMeetingByDate")]
+        public async Task<IActionResult> GetMeetingByDate([FromQuery] string viewType, [FromQuery] DateOnly from, [FromQuery] DateOnly to)
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetMeetingsByDate(viewType, from, to);
+
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                return BadRequest(new { error = errorMessage });
+            }
+
+            return Ok(meetings);
+        }
     }
 }
