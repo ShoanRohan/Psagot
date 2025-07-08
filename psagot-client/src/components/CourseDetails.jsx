@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Box,
     TextField,
@@ -9,19 +8,47 @@ import {
     InputLabel,
     Paper,
 } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCoordinators } from '../features/user/userAction';
 
 const CourseDetails = ({ course, setCourse }) => {
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 25 }, (_, i) => currentYear - 20 + i);
 
-    const handleChange = (field, value) => {
+    // סטייט לשמירת שגיאות
+    const [errors, setErrors] = useState({});
+
+    // פונקציית ולידציה לשדה ספציפי
+    const validateField = (name, value) => {
+        if (!value) return 'שדה חובה';
+        if ((name === 'numberOfStudents' || name === 'numberOfMeetings') && Number(value) > 100) {
+            return 'מקסימום 100';
+        }
+        return '';
+    };
+
+    // עדכון ערכים ושגיאות בשינוי שדה
+    const handleChange = (e) => {
+        const { name, value } = e.target;
         setCourse((prev) => ({
             ...prev,
-            [field]: value,
+            [name]: name === 'coordinatorId' && value ? Number(value) : value,
+        }));
+        setErrors((prev) => ({
+            ...prev,
+            [name]: validateField(name, value),
         }));
     };
 
-    if (!course) return null; 
+    const dispatch = useDispatch();
+    const coordinators = useSelector((state) => state.user.coordinators || []);
+
+    useEffect(() => {
+        dispatch(fetchCoordinators());
+    }, [dispatch]);
+
+    if (!course) return null;
 
     return (
         <Paper
@@ -64,8 +91,11 @@ const CourseDetails = ({ course, setCourse }) => {
                             fullWidth
                             label="שם קורס"
                             variant="standard"
+                            name="name"
                             value={course.name || ''}
-                            onChange={(e) => handleChange('name', e.target.value)}
+                            onChange={handleChange}
+                            error={!!errors.name}
+                            helperText={errors.name || ''}
                             inputProps={{
                                 dir: 'rtl',
                                 style: { textAlign: 'right', fontSize: '14px' },
@@ -74,31 +104,53 @@ const CourseDetails = ({ course, setCourse }) => {
                                 sx: { right: 0, left: 'unset', fontSize: '14px' },
                             }}
                         />
-                        <TextField
+                        <FormControl
                             fullWidth
-                            label="רכזת"
                             variant="standard"
-                            value={course.coordinator?.name || ''}
-                            InputProps={{ readOnly: true }}
-                            inputProps={{
-                                dir: 'rtl',
-                                style: { textAlign: 'right', fontSize: '14px' },
-                            }}
-                            InputLabelProps={{
-                                sx: { right: 0, left: 'unset', fontSize: '14px' },
-                            }}
-                        />
+                            sx={{ direction: 'rtl' }}
+                            error={!!errors.coordinatorId}
+                        >
+                            <InputLabel sx={{ right: 0, left: 'unset', fontSize: '14px' }}>
+                                רכזת
+                            </InputLabel>
+                            <Select
+                                name="coordinatorId"
+                                value={course.coordinatorId || ''}
+                                onChange={handleChange}
+                                inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
+                                sx={{
+                                    textAlign: 'right',
+                                    '& .MuiSelect-icon': { left: 7, right: 'unset' },
+                                }}
+                            >
+                                {coordinators.map((coordinator) => (
+                                    <MenuItem
+                                        key={coordinator.userId}
+                                        value={coordinator.userId}
+                                        sx={{ fontSize: '13px' }}
+                                    >
+                                        {coordinator.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                            {errors.coordinatorId && (
+                                <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                                    {errors.coordinatorId}
+                                </Typography>
+                            )}
+                        </FormControl>
                     </Box>
 
                     {/* קבוצה 2 */}
                     <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                        <FormControl fullWidth variant="standard" sx={{ direction: 'rtl' }}>
+                        <FormControl fullWidth variant="standard" sx={{ direction: 'rtl' }} error={!!errors.year}>
                             <InputLabel sx={{ right: 0, left: 'unset', fontSize: '14px' }}>
                                 שנה
                             </InputLabel>
                             <Select
+                                name="year"
                                 value={course.year || ''}
-                                onChange={(e) => handleChange('year', e.target.value)}
+                                onChange={handleChange}
                                 inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
                                 sx={{
                                     textAlign: 'right',
@@ -111,6 +163,11 @@ const CourseDetails = ({ course, setCourse }) => {
                                     </MenuItem>
                                 ))}
                             </Select>
+                            {errors.year && (
+                                <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                                    {errors.year}
+                                </Typography>
+                            )}
                         </FormControl>
 
                         <TextField
@@ -118,8 +175,9 @@ const CourseDetails = ({ course, setCourse }) => {
                             label="תאריך התחלה"
                             variant="standard"
                             type="date"
+                            name="startDate"
                             value={course.startDate || ''}
-                            onChange={(e) => handleChange('startDate', e.target.value)}
+                            onChange={handleChange}
                             InputLabelProps={{
                                 shrink: true,
                                 sx: { right: 0, left: 'unset', fontSize: '14px' },
@@ -128,6 +186,8 @@ const CourseDetails = ({ course, setCourse }) => {
                                 dir: 'rtl',
                                 style: { textAlign: 'right', fontSize: '14px' },
                             }}
+                            error={!!errors.startDate}
+                            helperText={errors.startDate || ''}
                         />
 
                         <TextField
@@ -135,8 +195,9 @@ const CourseDetails = ({ course, setCourse }) => {
                             label="תאריך סיום"
                             variant="standard"
                             type="date"
+                            name="endDate"
                             value={course.endDate || ''}
-                            onChange={(e) => handleChange('endDate', e.target.value)}
+                            onChange={handleChange}
                             InputLabelProps={{
                                 shrink: true,
                                 sx: { right: 0, left: 'unset', fontSize: '14px' },
@@ -145,6 +206,8 @@ const CourseDetails = ({ course, setCourse }) => {
                                 dir: 'rtl',
                                 style: { textAlign: 'right', fontSize: '14px' },
                             }}
+                            error={!!errors.endDate}
+                            helperText={errors.endDate || ''}
                         />
                     </Box>
 
@@ -155,32 +218,42 @@ const CourseDetails = ({ course, setCourse }) => {
                             label="מספר תלמידים"
                             variant="standard"
                             type="number"
+                            name="numberOfStudents"
                             value={course.numberOfStudents || ''}
-                            onChange={(e) => handleChange('numberOfStudents', e.target.value)}
+                            onChange={handleChange}
                             sx={{ width: '30%' }}
                             inputProps={{
                                 dir: 'rtl',
                                 style: { textAlign: 'right', fontSize: '14px' },
+                                min: 0,
+                                max: 100,
                             }}
                             InputLabelProps={{
                                 sx: { right: 0, left: 'unset', fontSize: '14px' },
                             }}
+                            error={!!errors.numberOfStudents}
+                            helperText={errors.numberOfStudents || ''}
                         />
                         <TextField
                             fullWidth
                             label="מספר מפגשים"
                             variant="standard"
                             type="number"
+                            name="numberOfMeetings"
                             value={course.numberOfMeetings || ''}
-                            onChange={(e) => handleChange('numberOfMeetings', e.target.value)}
+                            onChange={handleChange}
                             sx={{ width: '30%' }}
                             inputProps={{
                                 dir: 'rtl',
                                 style: { textAlign: 'right', fontSize: '14px' },
+                                min: 0,
+                                max: 100,
                             }}
                             InputLabelProps={{
                                 sx: { right: 0, left: 'unset', fontSize: '14px' },
                             }}
+                            error={!!errors.numberOfMeetings}
+                            helperText={errors.numberOfMeetings || ''}
                         />
                     </Box>
 
@@ -192,8 +265,9 @@ const CourseDetails = ({ course, setCourse }) => {
                             minRows={2}
                             label="הערות"
                             variant="standard"
+                            name="notes"
                             value={course.notes || ''}
-                            onChange={(e) => handleChange('notes', e.target.value)}
+                            onChange={handleChange}
                             sx={{ width: '60%' }}
                             inputProps={{
                                 dir: 'rtl',
@@ -207,7 +281,12 @@ const CourseDetails = ({ course, setCourse }) => {
 
                     {/* קבוצה 5 */}
                     <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                        <FormControl fullWidth variant="standard" sx={{ direction: 'rtl', width: '30%' }}>
+                        <FormControl
+                            fullWidth
+                            variant="standard"
+                            sx={{ direction: 'rtl', width: '30%' }}
+                            error={!!errors.statusId}
+                        >
                             <InputLabel
                                 sx={{
                                     display: 'flex',
@@ -219,8 +298,9 @@ const CourseDetails = ({ course, setCourse }) => {
                                 סטטוס
                             </InputLabel>
                             <Select
+                                name="statusId"
                                 value={course.statusId || ''}
-                                onChange={(e) => handleChange('statusId', e.target.value)}
+                                onChange={handleChange}
                                 inputProps={{ dir: 'rtl', style: { fontSize: '14px' } }}
                                 sx={{
                                     textAlign: 'right',
@@ -233,6 +313,11 @@ const CourseDetails = ({ course, setCourse }) => {
                                 <MenuItem value={1}>פעיל</MenuItem>
                                 <MenuItem value={2}>לא פעיל</MenuItem>
                             </Select>
+                            {errors.statusId && (
+                                <Typography variant="caption" color="error" sx={{ mt: 0.5 }}>
+                                    {errors.statusId}
+                                </Typography>
+                            )}
                         </FormControl>
 
                         <Box
@@ -246,8 +331,9 @@ const CourseDetails = ({ course, setCourse }) => {
                             <Typography sx={{ fontSize: '14px' }}>צבע לטבלה</Typography>
                             <input
                                 type="color"
+                                name="color"
                                 value={course.color || '#000000'}
-                                onChange={(e) => handleChange('color', e.target.value)}
+                                onChange={handleChange}
                                 style={{
                                     border: 'none',
                                     width: '30px',
