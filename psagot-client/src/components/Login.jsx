@@ -278,7 +278,7 @@ export default function Login() {
 				</Box>
 			</Box>
 
-			{/* Snackbar component */}
+			
 			<Snackbar
 				open={snackbarOpen}
 				autoHideDuration={4000}

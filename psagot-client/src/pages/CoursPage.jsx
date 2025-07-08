@@ -18,22 +18,20 @@ import {
 import { setCourse } from "../features/course/courseSlice";
 
 import TopicsGrid from "../components/TopicsGrid";
-import { useDispatch, useSelector } from "react-redux";
 import TopicSearch from "../components/TopicSearch";
-import { fetchCourseById,updateCourseAction } from "../features/course/courseActions";
 
 const CoursPage = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-
   const selectedCourse = useSelector((state) => state.course.selectedCourse);
+  const topics = useSelector((state) => state.topic.topics); 
   const [tabValue, setTabValue] = useState(0);
 
-  // Snackbar state
+  
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
-    severity: "success", // 'success' | 'error' | 'info' | 'warning'
+    severity: "success", 
   });
 
   const handleSnackbarClose = () => {
@@ -80,7 +78,6 @@ const CoursPage = () => {
 
   return (
     <Box sx={{ p: 3, backgroundColor: "#f5f7fa", minHeight: "100vh" }}>
-      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -98,7 +95,7 @@ const CoursPage = () => {
           </Typography>
         </Box>
 
-<Box sx={{ display: "flex", gap: 1 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Button
             variant="contained"
             color="primary"
@@ -119,26 +116,26 @@ const CoursPage = () => {
         </Box>
       </Box>
 
-      {/* Tabs */}
+      
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label="פרטי קורס" />
         <Tab label="נושאי קורס" />
       </Tabs>
 
-      {/* Tab Content */}
+      
       <Box sx={{ mt: 2 }}>
         {tabValue === 0 && selectedCourse && (
           <CourseDetails course={selectedCourse} setCourse={handleSetCourse} />
         )}
-        {tabValue === 1 && (
+        {tabValue === 1 && selectedCourse && (
           <>
-           <TopicSearch  />
-          <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse.id)} />
+            <TopicSearch />
+            <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse.courseId)} />
           </>
         )}
       </Box>
 
-      {/* Snackbar */}
+      
       <Snackbar
         open={snackbar.open}
         autoHideDuration={3000}

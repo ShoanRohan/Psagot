@@ -21,7 +21,7 @@ const CourseDetails = ({ course, setCourse }) => {
         }));
     };
 
-    if (!course) return null; // למנוע קריסה לפני שהנתונים נטענו
+    if (!course) return null; 
 
     return (
         <Paper
