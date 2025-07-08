@@ -74,6 +74,8 @@ const meetingSlice = createSlice({
                 state.isLoading = true;
                 state.error = null;
             })
+
+
             .addCase(addMeetingAction.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.isLoading = false;
@@ -85,7 +87,6 @@ const meetingSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.payload || action.error.message;
             })
-
 
             // Fetch Meeting By ID
             .addCase(fetchMeetingById.pending, (state) => {
@@ -109,15 +110,19 @@ const meetingSlice = createSlice({
             // Delete Meeting - מחזיר את כל המפגשים המעודכנים
             .addCase(deleteMeetingAction.pending, (state) => {
                 state.status = 'loading';
+                state.isLoading = true;  // הוסף את השורה הזאת!
+                state.error = null;
             })
             .addCase(deleteMeetingAction.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                // עדכון כל רשימת המפגשים עם הנתונים החדשים מהשרת
-                state.meetings = action.payload;
+                state.isLoading = false;
+                // מסנן את הפריט שנמחק
+                state.meetings = state.meetings.filter(meeting => meeting.meetingId !== action.payload);
                 state.error = null;
             })
             .addCase(deleteMeetingAction.rejected, (state, action) => {
                 state.status = 'failed';
+                state.isLoading = false;  // הוסף את השורה הזאת!
                 state.error = action.error.message;
             });
     },

@@ -180,6 +180,7 @@ public partial class PsagotDbContext : DbContext
 
             entity.HasOne(d => d.UserType).WithMany(p => p.Users)
 
+
                 .HasForeignKey(d => d.UserTypeId)
 
                 .OnDelete(DeleteBehavior.ClientSetNull)

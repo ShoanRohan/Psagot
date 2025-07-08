@@ -127,11 +127,14 @@ namespace BL
                 existingMeeting.TopicId = meetingDTO.TopicId;
                 existingMeeting.TeacherId = meetingDTO.TeacherId;
                 existingMeeting.MeetingDate = meetingDTO.MeetingDate;
+
                 
 
                 // חשב את התקינות והסיבה
                 var (reasons, isValid) = CalculateMeetingValidityAndReason(existingMeeting);
                 existingMeeting.IsValid = isValid;
+
+
 
                 // עדכן את המפגש בDB
                 var (updatedMeeting, errorMessage) = await _meetingDL.UpdateMeeting(existingMeeting);
@@ -287,7 +290,6 @@ namespace BL
         }
 
 
-    
         public async Task<(MeetingDTO Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
         {
             var (meeting, errorMessage) = await _meetingDL.DeleteMeeting(meetingId);

@@ -5,9 +5,10 @@ import { ExportIconButton } from "./ExportIconButton";
 import MeetingTable from "../components/MeetingTable";
 import MeetingButton from "../components/MeetingButton";
 
-const MeetingPage = ({ onEdit  }) => {
+const MeetingPage = ({ onEdit }) => {
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
+
 
   return (
     <div>
@@ -15,7 +16,7 @@ const MeetingPage = ({ onEdit  }) => {
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
           {/* הוספת מפגש */}
           <MeetingButton />
-          
+
           {/* ייצוא לאקסל */}
           <ExportIconButton
             data={meetings}
@@ -24,11 +25,13 @@ const MeetingPage = ({ onEdit  }) => {
           />
         </div>
       </Container>
-      
+
       {/* טבלת הפגישות */}
-       <MeetingTable onEdit={onEdit} />
+
+      <MeetingTable onEdit={onEdit} />
     </div>
   );
 };
 
 export default MeetingPage;
+

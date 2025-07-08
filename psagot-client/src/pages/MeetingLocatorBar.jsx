@@ -1,35 +1,36 @@
-// import React, { useEffect } from "react";
-// import { useDispatch, useSelector } from 'react-redux';
-// import { fetchAllUsers } from '../features/user/userAction';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllUsers } from '../features/user/userAction';
 
 
-// const MeetingLocatorBar = () => {    const dispatch = useDispatch();
-//     const users = useSelector(state => state.user.user || []);
-    
-//     useEffect(() => {
-//         dispatch(fetchAllUsers());
-//     }, [dispatch]);
-    
+const MeetingLocatorBar = () => {
+    const dispatch = useDispatch();
+    const users = useSelector(state => state.user.user || []);
 
-//     return (
-//         <div>
-//             <label htmlFor="lecturer-select">בחר מרצה:</label>
-//             <select
-//                 id="lecturer-select"
-//                 onChange={(e) => e.target.value}
-//             >
-//                 <option value="">שם מרצה</option>
-//                 {users?.filter(user => user.userTypeId === 4)
-//                         .map((lecturer) => (
-//                             <option key={`lecturer-${lecturer.id}`} value={lecturer.id}>
-//                                 {lecturer.name}
-//                             </option>
-//                         ))
-//                 }
-//             </select>
-//         </div>
-//     );
-// }
+    useEffect(() => {
+        dispatch(fetchAllUsers());
+    }, [dispatch]);
 
 
-// export default MeetingLocatorBar;
+    return (
+        <div>
+            <label htmlFor="lecturer-select">בחר מרצה:</label>
+            <select
+                id="lecturer-select"
+                onChange={(e) => e.target.value}
+            >
+                <option value="">שם מרצה</option>
+                {users?.filter(user => user.userTypeId === 4)
+                    .map((lecturer) => (
+                        <option key={`lecturer-${lecturer.id}`} value={lecturer.id}>
+                            {lecturer.name}
+                        </option>
+                    ))
+                }
+            </select>
+        </div>
+    );
+}
+
+
+export default MeetingLocatorBar;

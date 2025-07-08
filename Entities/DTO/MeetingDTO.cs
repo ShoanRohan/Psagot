@@ -37,6 +37,11 @@ namespace Entities.DTO
         public string? Reason { get; set; }
         public int Year { get; set; }
         public int StatusCourseId { get; set; }
+      
+        public string? CourseName { get; set; }
+        public string? TopicName { get; set; }
+        public string? TeacherName { get; set; }
+
 
 
     }

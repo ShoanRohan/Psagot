@@ -1,17 +1,18 @@
 import Button from '@mui/material/Button';
 import * as XLSX from 'xlsx';
 import excel from '../assets/icons/excel.png'
+import excel from '../assets/icons/excel.png';
 
 export const ExportIconButton = ({
   data,
-  fileName = "export",
-  sheetName = "Sheet1",
+  fileName = 'export',
+  sheetName = 'Sheet1',
 }) => {
   const handleExport = () => {
-    console.log("🔍 Exporting data:", data); // כאן בדיקה של הנתונים
+    console.log('🔍 Exporting data:', data); // בדיקה של הנתונים
 
     if (!Array.isArray(data) || data.length === 0) {
-      alert("אין נתונים לייצא");
+      alert('אין נתונים לייצוא');
       return;
     }
 
@@ -39,11 +40,8 @@ export const ExportIconButton = ({
         paddingLeft: '8px'
       }}
 
-
-
     >
       <img src={excel} alt="ייצוא לאקסל" style={{ height: '29px', width: '29px' }} />
     </Button>
   );
 };
-
