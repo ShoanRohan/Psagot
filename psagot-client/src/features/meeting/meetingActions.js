@@ -17,12 +17,13 @@ export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", 
     return data;
 });
 
+
 export const addMeetingAction = createAsyncThunk(
-  'meeting/addMeeting',
-  async (meetingData) => {
-    const data = await addMeeting(meetingData);
-    return data;
-  }
+    "meeting/addMeetingAction",
+    async (addNewMeeting) => {
+        const data = await addMeeting(addNewMeeting);
+        return data;
+    }
 );
 
 export const updateMeetingAction = createAsyncThunk(
@@ -37,6 +38,6 @@ export const deleteMeetingAction = createAsyncThunk(
   'meeting/deleteMeeting',
   async (meetingId) => {
     const data = await deleteMeeting(meetingId);
-    return data;
-  }
+    return data;
+  }
 );

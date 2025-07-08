@@ -39,7 +39,7 @@ public partial class Meeting
 
     public virtual ScheduleForTopic? ScheduleForTopic { get; set; }
 
-    public virtual User? Teacher { get; set; }
+    public virtual User? Teacher { get; set; }= null!;
 
     public virtual Topic? Topic { get; set; }
 }

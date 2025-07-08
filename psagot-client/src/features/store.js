@@ -10,6 +10,7 @@ import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
 
 
+
 const store = configureStore({
   reducer: {
     userType: userTypeReducer, 
@@ -24,6 +25,4 @@ const store = configureStore({
   },
 });
 
-export default store;
-
-
+export default store;

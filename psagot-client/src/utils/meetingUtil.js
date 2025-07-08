@@ -20,6 +20,7 @@ export const updateMeeting = async (meetingData) => {
   return response.data;
 };
 
+/*
 export const deleteMeeting = async (meetingId) => {
   // מוחק את המפגש
   await api.delete(`/Meeting/DeleteMeeting/${meetingId}`);
@@ -27,6 +28,12 @@ export const deleteMeeting = async (meetingId) => {
   // מביא את כל המפגשים המעודכנים (ללא המפגש שנמחק)
   const response = await api.get('/Meeting/GetAllMeetings');
   return response.data;
+};
+*/
+
+export const deleteMeeting = async (meetingId) => {
+  await api.delete(`/Meeting/DeleteMeeting/${meetingId}`);
+  return meetingId; // רק ה-ID
 };
 
 // אם יש פונקציה ישנה עם שגיאת כתיב, הסר אותה:
