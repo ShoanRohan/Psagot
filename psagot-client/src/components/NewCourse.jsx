@@ -8,11 +8,12 @@ import { fetchAllDays } from '../features/day/dayActions';
 import { addDaysForCourseAction } from '../features/daysForCourse/daysForCourseActions';
 import { DatePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
 import dayjs from "dayjs";
-
+import { resetCourseSaveStatus } from '../features/course/courseSlice';
+import { useRef } from 'react';
+import { fetchCoordinators } from '../features/user/userAction';  
 
 
 const NewCourse = () => {
@@ -26,7 +27,13 @@ const NewCourse = () => {
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success'); 
 
-  const { status: courseSaveStatus, error: courseSaveError } = useSelector((state) => state.course);
+  const { saveStatus: courseSaveStatus, error: courseSaveError } = useSelector((state) => state.course);
+  const location = useLocation();
+  const hasMounted = useRef(false);
+  const prevSaveStatusRef = useRef('idle');
+  const { coordinators, status: coordinatorsStatus } = useSelector((state) => state.user);
+  
+
 
   const showSnackbar = (message, severity = 'success') => {
   setSnackbarMessage(message);
@@ -34,8 +41,28 @@ const NewCourse = () => {
   setSnackbarOpen(true);
 };
 
+useEffect(() => {
+  if (location.state?.fromUserClick) {
+    dispatch(resetCourseSaveStatus()); 
+    window.history.replaceState({}, document.title); 
+  }
+}, [dispatch, location]);
+
+useEffect(() => {
+  if (!hasMounted.current) {
+    dispatch(resetCourseSaveStatus());
+  }
+}, [dispatch]);
+
+useEffect(() => {
+  if (coordinatorsStatus === 'idle') {
+    dispatch(fetchCoordinators());
+  }
+}, [coordinatorsStatus, dispatch]);
+
 const [errors, setErrors] = useState({
   courseName: '',
+  coordinatorId: '',
   year: '',
   studentsCount: '',
   meetingsCount: '',
@@ -50,6 +77,9 @@ const validateField = (name, value) => {
   switch (name) {
     case 'courseName':
       return value.trim() === '' ? 'יש להזין שם קורס' : '';
+    case 'coordinatorId':
+       const num = Number(value);
+       return isNaN(num) || value <= 0 ? 'יש להזין שם רכזת' : '';
     case 'year':
       return !/^\d{4}$/.test(value) ? 'יש להזין שנה תקינה (4 ספרות)' : '';
     case 'studentsCount':
@@ -78,7 +108,7 @@ const validateForm = () => {
 
   const [formData, setFormData] = useState({
     courseName: '',
-    coordinatorName: '',
+    coordinatorId: '',
     courseCode: '',
     startDate: null,
     endDate: null,
@@ -101,7 +131,8 @@ const validateForm = () => {
 
 const handleChange = (e) => {
   const { name, value } = e.target;
-  setFormData((prev) => ({ ...prev, [name]: value }));
+  console.log("formData.coordinatorId", formData.coordinatorId, typeof formData.coordinatorId);
+  setFormData((prev) => ({ ...prev, [name]: name === 'coordinatorId' && value ? Number(value) : value }));
   setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
 };
 
@@ -128,6 +159,7 @@ const handleCancel = () => {
     NumberOfStudents: parseInt(formData.studentsCount),
     Notes: formData.notes || null,
     StatusId: Number(formData.status),
+    CoordinatorId: formData.coordinatorId,
   };
 
   dispatch(addCourseAction(dtoToSend));
@@ -171,17 +203,27 @@ const handleAddDay = () => {
 };
 
 useEffect(() => {
+   if (!hasMounted.current) {
+    hasMounted.current = true;
+    return;
+  }
+  const prevStatus = prevSaveStatusRef.current;
+  if (courseSaveStatus !== prevStatus) {
+
   if (courseSaveStatus === 'succeeded') {
     showSnackbar('שמירת פרטי הקורס הסתיימה בהצלחה', 'success');
     const timer = setTimeout(() => {
       navigate('/courses');
-    }, 3000);
+    }, 2000);
      return () => clearTimeout(timer);
   }
   if (courseSaveStatus === 'failed') {
     showSnackbar(`אירעה שגיאה בעת שמירת הקורס: ${courseSaveError}`, 'error');
   }
-}, [courseSaveStatus, courseSaveError, navigate]);
+  prevSaveStatusRef.current = courseSaveStatus;
+    dispatch(resetCourseSaveStatus());
+  }
+}, [courseSaveStatus, courseSaveError, navigate, dispatch]);
 
 
   useEffect(() => {
@@ -194,7 +236,6 @@ useEffect(() => {
   useEffect(() => {
   dispatch(fetchAllDays());
 }, [dispatch]);
-  
   
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -241,7 +282,7 @@ useEffect(() => {
             disabled={
               Object.values(errors).some((x) => x !== '') ||
               !formData.courseName ||
-              !formData.coordinatorName ||
+              !formData.coordinatorId ||
               !formData.year ||
               !formData.startDate ||
               !formData.endDate ||
@@ -299,20 +340,31 @@ useEffect(() => {
           </Box>
           <Box sx={{ mr: 4 }}>
             <TextField
-              name="coordinatorName"
+              select
+              name="coordinatorId"
               label="שם רכזת"
               variant="standard"
-              value={formData.coordinatorName}
-              onChange={handleChange}
-               error={!!errors.coordinatorName}
-               helperText={errors.coordinatorName}
+              value={formData.coordinatorId}
+              onChange={(e) => handleChange(e)}
+              error={!!errors.coordinatorId}
+              helperText={errors.coordinatorId}
               inputProps={{ dir: "rtl" }}
               InputLabelProps={{ sx: { right: 0 } }}
-              sx={{ width: '200px' }}
-            />
+              sx={{ width: '200px', '& .MuiSelect-icon': { left: 0, right: 'auto' }, }}
+            >
+               {coordinators && coordinators.length > 0 ? (
+                coordinators.map((coord) => (
+                <MenuItem key={coord.userId} value={coord.userId}>
+                  {coord.name}
+                </MenuItem>
+                ))
+               ) : (
+               <MenuItem disabled value={undefined}>לא נמצאו רכזות</MenuItem>
+               )}
+            </TextField>
           </Box>
         </Stack>
-        {/* Middle Row */}
+       
         <Stack direction="row" justifyContent="flex-end" alignItems="center">
           <TextField
             name="year"
@@ -369,7 +421,7 @@ useEffect(() => {
 
           </LocalizationProvider>
         </Stack>
-     {  /* Third Row */}
+    
         <Stack direction="row" justifyContent="flex-end" alignItems="center">
           <TextField
             name="studentsCount"
@@ -400,7 +452,7 @@ useEffect(() => {
             />
           </Box>
         </Stack>
-        {/* Notes */}
+       
         <TextField
           name="notes"
           label="הערות"
@@ -430,7 +482,6 @@ useEffect(() => {
             helperText={errors.status}
             InputLabelProps={{ sx: { right: 0 } }}          
           >
-             <MenuItem value="">סטטוס</MenuItem>
             {status==="succeeded" && statuses?.length > 0 ? (
               console.log(statuses),
 
@@ -663,7 +714,7 @@ useEffect(() => {
 </Paper>
 <Snackbar
   open={snackbarOpen}
-  autoHideDuration={4000}
+  autoHideDuration={1000}
   onClose={() => setSnackbarOpen(false)}
   anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
 >
@@ -675,9 +726,6 @@ useEffect(() => {
     {snackbarMessage}
   </Alert>
 </Snackbar>
-
-
-
     </Box>
  );   
 };

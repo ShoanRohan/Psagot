@@ -13,9 +13,11 @@ const initialState = {
   courses: [],
   selectedCourse: null,
   status: 'idle',
+  saveStatus: 'idle',
   error: null,
   availableYears: [],
   courseStatuses: [],
+   savedCourse: null,
 };
 
 const courseSlice = createSlice({
@@ -24,6 +26,11 @@ const courseSlice = createSlice({
   reducers: {
     setCourse: (state, action) => {
       state.selectedCourse = action.payload;
+    },
+    resetCourseSaveStatus: (state) => {
+    state.saveStatus = 'idle';
+    state.error = null;
+    state.savedCourse = null;
     },
   },
   extraReducers: (builder) => {
@@ -51,14 +58,15 @@ const courseSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addCourseAction.pending, (state) => {
-        state.status = 'loading';
+        state.saveStatus = 'loading';
       })
       .addCase(addCourseAction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
+        state.saveStatus = 'succeeded';
+        state.savedCourse = action.payload;
         state.courses.push(action.payload);
       })
       .addCase(addCourseAction.rejected, (state, action) => {
-        state.status = 'failed';
+        state.saveStatus = 'failed';
         state.error = action.error.message;
       })      
       .addCase(updateCourseAction.fulfilled, (state, action) => {
@@ -79,5 +87,5 @@ const courseSlice = createSlice({
   },
 });
 
-export const { setCourse } = courseSlice.actions;
+export const { setCourse, resetCourseSaveStatus } = courseSlice.actions;
 export default courseSlice.reducer;

@@ -3,6 +3,7 @@ import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoo
 
 const initialState = {
     user: [],
+    coordinators: [],
     selectedUser: null,
     status: 'idle',
     error: null,
