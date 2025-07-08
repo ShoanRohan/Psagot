@@ -22,8 +22,7 @@ const updateMeeting = async (meetingData) => {
   return response.data;
 };
 
-
-export const deleteMeeting = async (meetingId) => {
+const deleteMeeting = async (meetingId) => {
   await api.delete(`/Meeting/DeleteMeeting/${meetingId}`);
   return meetingId; // רק ה-ID
 };

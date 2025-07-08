@@ -1,6 +1,5 @@
 import Button from '@mui/material/Button';
 import * as XLSX from 'xlsx';
-import excel from '../assets/icons/excel.png'
 import excel from '../assets/icons/excel.png';
 
 export const ExportIconButton = ({
