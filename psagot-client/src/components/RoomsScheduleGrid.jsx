@@ -66,8 +66,10 @@ export default function RoomsScheduleGrid() {
       start: `${formattedDate}T${startTime?.trim()}`,
       end: `${formattedDate}T${endTime?.trim()}`,
       color: courseColor,
-      secondTitle: topicName,
-      lecturer,
+      extendedProps: {
+        secondTitle: topicName,
+        lecturer: lecturer
+      },
       resourceId: roomName?.trim(),
     }));
 
