@@ -256,9 +256,6 @@ const MeetingTable = React.memo(({ onEdit }) => {
   }}>
       <Box
         sx={{
-          position: 'relative',
-          top: -70,
-          marginBottom: -10,
           textAlign: 'right',
           paddingBottom: 4,
           paddingRight: 0,

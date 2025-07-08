@@ -4,11 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { ExportIconButton } from "./ExportIconButton";
 import MeetingTable from "../components/MeetingTable";
 import MeetingButton from "../components/MeetingButton";
+import { useNavigate } from "react-router-dom";
 
-const MeetingPage = ({ onEdit }) => {
+
+const MeetingPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { meetings, status, error } = useSelector((state) => state.meeting);
 
+  const handleEditMeeting = (meeting) => {
+    navigate(`/edit-meeting/${meeting.meetingId}`, {
+      state: { meeting },
+    });
+  };
 
   return (
     <div>
@@ -28,7 +36,7 @@ const MeetingPage = ({ onEdit }) => {
 
       {/* טבלת הפגישות */}
 
-      <MeetingTable onEdit={onEdit} />
+      <MeetingTable onEdit={handleEditMeeting} />
     </div>
   );
 };
