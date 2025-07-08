@@ -344,7 +344,7 @@ export default function MeetingSchedule() {
                                     'dayGridMonth'
                         }
                         slotMinTime="08:00:00"
-                        slotMaxTime="23:00:00"
+                        slotMaxTime="22:00:00"
                         headerToolbar={false}
                         contentHeight="auto"
                         events={events}

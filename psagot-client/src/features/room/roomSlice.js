@@ -81,7 +81,7 @@ const roomSlice = createSlice({
                 state.status = 'loading';
             })
             .addCase(fetchRoomsScheduleByDate.fulfilled, (state, action) => {
-                // console.log('payload:', action.payload);
+               
                 state.status = 'succeeded';
                 state.roomSchedule = action.payload;
             })

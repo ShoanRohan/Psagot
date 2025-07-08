@@ -101,7 +101,7 @@ export default function RoomsScheduleGrid() {
       </div>
     </div>
   );
-
+  const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
   //דפדוף
   const handlePrevRooms = () => {
     if (currentPage > 0) {
@@ -110,7 +110,6 @@ export default function RoomsScheduleGrid() {
   };
 
   const handleNextRooms = () => {
-    const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
     if (currentPage < maxPage) {
       setCurrentPage(prevPage => prevPage + 1);
     }
@@ -124,9 +123,6 @@ export default function RoomsScheduleGrid() {
       calendarApi.gotoDate(formattedDate);
     }
   }, [currentPage, visibleRooms, formattedDate]);
-
-  //מוודא שיש לאן לעבור בדפדוף
-  const maxPage = Math.ceil(allRooms.length / roomsPerPage) - 1;
 
   //אחראית על תצוגת עמודת השעות בתצוגת שבוע ויום
   const renderSlotLabelContent = ({ date }) => {
