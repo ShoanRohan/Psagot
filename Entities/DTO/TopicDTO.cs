@@ -30,6 +30,8 @@ namespace Entities.DTO
         public bool Microphone { get; set; }
         public int? StatusId { get; set; }
 
-     
+
+       
+
     }
 }

@@ -1,11 +1,13 @@
 import React from 'react';
-import { Routes, Route} from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
 import CoursesPage from '../pages/CoursesPage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import MeetingPage from '../pages/MeetingPage';
+
 import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
@@ -43,6 +45,5 @@ const AppRouter = () => {
             <Route path="/register" element={<RegisterPage />} />
         </Routes>
     );
-};
-
+  }
 export default AppRouter;

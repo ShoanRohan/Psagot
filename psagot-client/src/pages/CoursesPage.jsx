@@ -4,7 +4,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import CourseGrid from "../components/CoursesGrid";
 import { useSelector } from "react-redux";
-import circlePlus from "../assets/icons/circle-plus.png";
+import circlePlus from "../assets/icons/circlePlus.svg";
 import exptExcel from "../assets/icons/excelExport.png";
 
 const CoursesPage = () => {

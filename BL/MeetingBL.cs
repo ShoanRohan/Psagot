@@ -129,9 +129,17 @@ namespace BL
                 existingMeeting.MeetingDate = meetingDTO.MeetingDate;
 
 
+
                 // חשב את התקינות והסיבה
                 var (reasons, isValid) = CalculateMeetingValidityAndReason(existingMeeting);
                 existingMeeting.IsValid = isValid;
+
+
+                
+
+                // חשב את התקינות והסיבה
+            
+
 
                 // עדכן את המפגש בDB
                 var (updatedMeeting, errorMessage) = await _meetingDL.UpdateMeeting(existingMeeting);

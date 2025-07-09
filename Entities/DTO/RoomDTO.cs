@@ -1,4 +1,6 @@
-﻿namespace Entities.DTO
+﻿using Entities.Models;
+
+namespace Entities.DTO
 {
     public class RoomDTO
     {
@@ -12,6 +14,8 @@
         public bool Speakers { get; set; }
 
         public int Capacity { get; set; }
+
+
     }
 }
 

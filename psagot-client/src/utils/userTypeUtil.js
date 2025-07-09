@@ -1,8 +1,8 @@
 import api from "./api";
 
 // CRUD functions
-const getAllUserTypes = async () => {
-    const response = await api.get('/UserType/GetAllUserTypes');
+const getAllUserType= async () => {
+    const response = await api.get('/UserType/GetAllUserType');
     return response.data;
 };
 
@@ -26,4 +26,4 @@ const deleteUserType = async (id) => {
     return response.data;
 };
 
-export { getAllUserTypes, getUserTypeById, addUserType, updateUserType, deleteUserType };
+export { getAllUserType, getUserTypeById, addUserType, updateUserType, deleteUserType };

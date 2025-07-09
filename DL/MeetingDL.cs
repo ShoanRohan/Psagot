@@ -64,7 +64,9 @@ namespace DL
              .Include(m => m.Topic)
                  .ThenInclude(t => t.ScheduleForTopics)
              .Include(m => m.Room)
+
              .Include(m => m.Teacher)
+
              .ToListAsync();
 
                 return (meetings, null);
@@ -115,3 +117,15 @@ namespace DL
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
