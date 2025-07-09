@@ -94,7 +94,8 @@ const CourseGrid = ({ courses }) => {
         const statusMap = {
           1: { text: "פעיל", style: { background: '#DAF8E6', color: '#1A8245' } },
           2: { text: "ממתין", style: { background: '#FEEBEB', color: '#B00020' } },
-          3: { text: "הסתיים", style: { background: '#E5E7EB80', color: '#374151' } },
+          3: { text: "מושהה", style: { background: '#E5E7EB80', color: '#374151' } },
+          4: { text: "הסתיים", style: { background: '#E5E7EB80', color: '#374151' } },
         };
         const currentStatus = statusMap[status] || {
           text: "לא ידוע", style: { background: '#E5E7EB80', color: '#374151' }
