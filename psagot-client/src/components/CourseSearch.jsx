@@ -127,7 +127,7 @@ const CourseSearch = () => {
       year: filters.year ? parseInt(filters.year) : null,
       startDate: filters.startDate ? filters.startDate.toISOString() : null,
       endDate: filters.endDate ? filters.endDate.toISOString() : null,
-      coordinatorId: filters.coordinator? parseInt (filters.coordinator): null,
+      coordinatorId: filters.coordinator ? parseInt(filters.coordinator) : null,
       statusId: filters.status || null,
     };
 
@@ -264,13 +264,13 @@ const CourseSearch = () => {
                 variant: 'standard',
                 sx: {
                   width: 125,
-                  direction: 'rtl', 
+                  direction: 'rtl',
                   input: {
                     fontFamily: 'Rubik',
                     fontSize: '14px',
                   },
                   '& .MuiInputAdornment-root': {
-                    marginRight: 0, 
+                    marginRight: 0,
                     marginLeft: 'unset',
                     alignItems: 'center',
                     height: '100%',
@@ -304,13 +304,13 @@ const CourseSearch = () => {
                 variant: 'standard',
                 sx: {
                   width: 125,
-                  direction: 'rtl', 
+                  direction: 'rtl',
                   input: {
                     fontFamily: 'Rubik',
                     fontSize: '14px',
                   },
                   '& .MuiInputAdornment-root': {
-                    marginRight: 0, 
+                    marginRight: 0,
                     marginLeft: 'unset',
                     alignItems: 'center',
                     height: '100%',

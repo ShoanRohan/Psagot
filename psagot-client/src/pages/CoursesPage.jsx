@@ -41,7 +41,7 @@ const CoursesPage = () => {
 
   return (
     <Container
-      maxWidth={false} 
+      maxWidth={false}
       sx={{
         maxWidth: "none !important",
         width: "96%",
@@ -53,103 +53,103 @@ const CoursesPage = () => {
 
       }}
     >
-<Box
-  sx={{
-    marginTop: "3%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    padding: "2% 1.25%", 
-    boxSizing: "border-box",
-  }}
->
- 
-  <Typography
-    variant="h1"
-    sx={{
-      color: "var(--Brand-90, #0D1783)",
-      textAlign: "right",
-      fontFamily: "Rubik",
-      fontSize: "4.5vh",
-      fontStyle: "normal",
-      fontWeight: 700,
-      lineHeight: "normal",
-      textTransform: "capitalize",
-    }}
-  >
-    קורסים
-  </Typography>
-
-
-  <Box
-    sx={{
-      display: "flex",
-      flexDirection: "row-reverse",
-      alignItems: "center",
-      gap: "16px", 
-    }}
-  >
-
-    <Button
-      variant="contained"
-      onClick={() => navigate('/newCourse')}
-      sx={{
-        width: "152px",
-        height: "40px",
-        borderRadius: "50vh",
-        padding: "0 16px",
-        gap: "8px",
-        backgroundColor: "#326DEF",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minWidth: "152px",
-        minHeight: "40px",
-      }}
-    >
-      <img src={circlePlus} alt="הוספת קורס" style={{ width: "16px", height: "16px" }} />
-      <Typography
+      <Box
         sx={{
-          fontFamily: "Rubik",
-          fontWeight: 400,
-          fontSize: "16px",
-          lineHeight: "100%",
-          textAlign: "center",
-          color: "#FFFFFF",
-          textTransform: "capitalize",
+          marginTop: "3%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "center",
+          width: "100%",
+          padding: "2% 1.25%",
+          boxSizing: "border-box",
         }}
       >
-        הוספת קורס
-      </Typography>
-    </Button>
 
-    <Button
-      onClick={exportToExcel}
-      sx={{
-        width: "40px",
-        height: "40px",
-        borderRadius: "8px",
-        padding: "0",
-        backgroundColor: "#F0F1F3",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        minWidth: "40px",
-        minHeight: "40px",
-      }}
-    >
-      <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: "24px", height: "24px" }} />
-    </Button>
-  </Box>
-</Box>
+        <Typography
+          variant="h1"
+          sx={{
+            color: "var(--Brand-90, #0D1783)",
+            textAlign: "right",
+            fontFamily: "Rubik",
+            fontSize: "4.5vh",
+            fontStyle: "normal",
+            fontWeight: 700,
+            lineHeight: "normal",
+            textTransform: "capitalize",
+          }}
+        >
+          קורסים
+        </Typography>
 
 
-      <CourseSearch  />
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row-reverse",
+            alignItems: "center",
+            gap: "16px",
+          }}
+        >
+
+          <Button
+            variant="contained"
+            onClick={() => navigate('/newCourse')}
+            sx={{
+              width: "152px",
+              height: "40px",
+              borderRadius: "50vh",
+              padding: "0 16px",
+              gap: "8px",
+              backgroundColor: "#326DEF",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minWidth: "152px",
+              minHeight: "40px",
+            }}
+          >
+            <img src={circlePlus} alt="הוספת קורס" style={{ width: "16px", height: "16px" }} />
+            <Typography
+              sx={{
+                fontFamily: "Rubik",
+                fontWeight: 400,
+                fontSize: "16px",
+                lineHeight: "100%",
+                textAlign: "center",
+                color: "#FFFFFF",
+                textTransform: "capitalize",
+              }}
+            >
+              הוספת קורס
+            </Typography>
+          </Button>
+
+          <Button
+            onClick={exportToExcel}
+            sx={{
+              width: "40px",
+              height: "40px",
+              borderRadius: "8px",
+              padding: "0",
+              backgroundColor: "#F0F1F3",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              minWidth: "40px",
+              minHeight: "40px",
+            }}
+          >
+            <img src={exptExcel} alt="ייצוא לאקסל" style={{ width: "24px", height: "24px" }} />
+          </Button>
+        </Box>
+      </Box>
+
+
+      <CourseSearch />
 
       <CourseGrid courses={courses} />
-     </Container>
+    </Container>
   );
 };
 

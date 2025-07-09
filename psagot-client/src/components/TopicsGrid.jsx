@@ -24,12 +24,12 @@ const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
   const [paginationModel, setPaginationModel] = useState({ pageSize: 10, page: 0 });
 
   useEffect(() => {
-  if (topics && topics.length > 0) {
-    setRows(topics);
-  } else {
-    setRows([]);
-  }
-}, [topics]);
+    if (topics && topics.length > 0) {
+      setRows(topics);
+    } else {
+      setRows([]);
+    }
+  }, [topics]);
 
   const formatDate = (params) => {
     const dateStr = typeof params === 'string' ? params : params?.value;
@@ -57,40 +57,41 @@ const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
     { field: 'endDate', headerName: 'תאריך סיום', flex: 1, headerAlign: 'center', align: 'center', valueFormatter: formatDate },
     { field: 'meetingsCount', headerName: 'מס מפגשים', flex: 1, headerAlign: 'center', align: 'center' },
     {
-  field: 'equipment',
-  headerName: 'ציוד',
-  flex: 1,
-  align: 'center',
-  headerAlign: 'center',
-  renderCell: (params) => {
-    const row = params.row;
-    const items = [];
-    if (row.computers) items.push("מחשבים");
-    if (row.projector) items.push("מקרן");
-    if (row.microphone) items.push("מיקרופון");
+      field: 'equipment',
+      headerName: 'ציוד',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => {
+        const row = params.row;
+        const items = [];
+        if (row.computers) items.push("מחשבים");
+        if (row.projector) items.push("מקרן");
+        if (row.microphone) items.push("מיקרופון");
 
-    return (
-      <Box
-        sx={{
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          maxWidth: '100%',
-          textAlign: 'center',
-        }}
-      >
-        {items.join(", ")}
-      </Box>
-    );
-  }
-},
-    {field: 'hasSchedule',headerName: 'שיבוץ',flex: 1,headerAlign: 'center',align: 'center',
-    renderCell: (params) => (
-    <Box sx={{ fontSize: '1.2vw', fontFamily: 'Rubik' }}>
-      {params.value ? '✔' : '✖'}
-    </Box>
-  )
-},
+        return (
+          <Box
+            sx={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              maxWidth: '100%',
+              textAlign: 'center',
+            }}
+          >
+            {items.join(", ")}
+          </Box>
+        );
+      }
+    },
+    {
+      field: 'hasSchedule', headerName: 'שיבוץ', flex: 1, headerAlign: 'center', align: 'center',
+      renderCell: (params) => (
+        <Box sx={{ fontSize: '1.2vw', fontFamily: 'Rubik' }}>
+          {params.value ? '✔' : '✖'}
+        </Box>
+      )
+    },
     {
       field: "statusId",
       headerName: "סטטוס",
@@ -168,129 +169,129 @@ const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
   const CustomPagination = () => {
     const pageCount = Math.ceil(rows.length / paginationModel.pageSize);
     return (
+      <Box
+        sx={{
+          borderRadius: "8px",
+          background: "#FFF",
+          boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
+          display: "flex",
+          padding: "1% 0.5%",
+          alignItems: "center",
+          alignSelf: "stretch",
+          marginTop: "1%",
+          width: "96%",
+        }}
+      >
+
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{
+            minWidth: 'fit-content',
+            flexWrap: 'nowrap',
+          }}
+        >
           <Box
+            component="span"
             sx={{
-              borderRadius: "8px",
-              background: "#FFF",
-              boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
-              display: "flex",
-              padding: "1% 0.5%",
-              alignItems: "center",
-              alignSelf: "stretch",
-              marginTop: "1%",
-              width: "96%",
+              fontSize: "0.75vw",
+              fontFamily: "Rubik",
+              whiteSpace: 'nowrap',
+              display: 'flex',
+              alignItems: 'center',
+              marginLeft: '16px',
             }}
           >
-    
-            <Stack
-              direction="row"
-              alignItems="center"
-              sx={{
-                minWidth: 'fit-content',
-                flexWrap: 'nowrap',
-              }}
-            >
-              <Box
-                component="span"
-                sx={{
-                  fontSize: "0.75vw",
-                  fontFamily: "Rubik",
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  marginLeft: '16px',
-                }}
-              >
-                מספר שורות :
-              </Box>
-    
-              <Select
-                size="small"
-                dir="ltr"
-                value={paginationModel.pageSize}
-                onChange={(e) =>
-                  setPaginationModel({ page: 0, pageSize: e.target.value })
-                }
-                variant="standard"
-                disableUnderline
-                IconComponent={UnfoldMoreIcon}
-                sx={{
-                  height: '28px',
-                  minWidth: '37%',
-                  borderRadius: '4px',
-                  border: '0.5px solid var(--Neutral-20, #F0F1F3)',
-                  fontSize: '0.7vw',
-                  fontFamily: 'Rubik',
-                  padding: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  '& .MuiSelect-select': {
-                    padding: '2px 8px 0 8px',
-                    display: 'flex',
-                    alignItems: 'flex-end',
-                    justifyContent: 'center',
-                  },
-                  '& .MuiSelect-icon': {
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    right: '8px',
-                    width: '18px',
-                    height: '18px',
-                  },
-                }}
-              >
-                {[10, 20, 50].map((size) => (
-                  <MenuItem
-                    key={size}
-                    value={size}
-                    sx={{
-                      fontSize: '0.75vw',
-                      paddingTop: '4px',
-                    }}
-                  >
-                    {size}
-                  </MenuItem>
-                ))}
-              </Select>
-            </Stack>
-    
-    
-    
-            <Box sx={{ flexGrow: 1 }} />
-    
-            <Pagination
-              dir="ltr"
-              count={pageCount}
-              page={paginationModel.page + 1}
-              onChange={(e, value) =>
-                setPaginationModel((prev) => ({ ...prev, page: value - 1 }))
-              }
-              shape="rounded"
-              siblingCount={0}
-              size="small"
-              
-              sx={{
-                '& .MuiPaginationItem-root': {
-                  backgroundColor: 'transparent',
-                   fontSize: '0.75vw',
-                },
-                '& .Mui-selected': {
-                  backgroundColor: 'var(--Neutral-10, #F6F7F9) !important',
-                  border: '0.5px solid var(--Neutral-20, #F0F1F3)',
-                  borderRadius: '3px',
-                   fontSize: '0.75vw',
-                },
-                '& .MuiPaginationItem-previousNext': {
-                  border: '0.5px solid var(--Neutral-20, #F0F1F3)',
-                  borderRadius: '3px',
-                   fontSize: '0.75vw',
-                },
-              }}
-            />
+            מספר שורות :
           </Box>
-        );
-      };
+
+          <Select
+            size="small"
+            dir="ltr"
+            value={paginationModel.pageSize}
+            onChange={(e) =>
+              setPaginationModel({ page: 0, pageSize: e.target.value })
+            }
+            variant="standard"
+            disableUnderline
+            IconComponent={UnfoldMoreIcon}
+            sx={{
+              height: '28px',
+              minWidth: '37%',
+              borderRadius: '4px',
+              border: '0.5px solid var(--Neutral-20, #F0F1F3)',
+              fontSize: '0.7vw',
+              fontFamily: 'Rubik',
+              padding: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              '& .MuiSelect-select': {
+                padding: '2px 8px 0 8px',
+                display: 'flex',
+                alignItems: 'flex-end',
+                justifyContent: 'center',
+              },
+              '& .MuiSelect-icon': {
+                top: '50%',
+                transform: 'translateY(-50%)',
+                right: '8px',
+                width: '18px',
+                height: '18px',
+              },
+            }}
+          >
+            {[10, 20, 50].map((size) => (
+              <MenuItem
+                key={size}
+                value={size}
+                sx={{
+                  fontSize: '0.75vw',
+                  paddingTop: '4px',
+                }}
+              >
+                {size}
+              </MenuItem>
+            ))}
+          </Select>
+        </Stack>
+
+
+
+        <Box sx={{ flexGrow: 1 }} />
+
+        <Pagination
+          dir="ltr"
+          count={pageCount}
+          page={paginationModel.page + 1}
+          onChange={(e, value) =>
+            setPaginationModel((prev) => ({ ...prev, page: value - 1 }))
+          }
+          shape="rounded"
+          siblingCount={0}
+          size="small"
+
+          sx={{
+            '& .MuiPaginationItem-root': {
+              backgroundColor: 'transparent',
+              fontSize: '0.75vw',
+            },
+            '& .Mui-selected': {
+              backgroundColor: 'var(--Neutral-10, #F6F7F9) !important',
+              border: '0.5px solid var(--Neutral-20, #F0F1F3)',
+              borderRadius: '3px',
+              fontSize: '0.75vw',
+            },
+            '& .MuiPaginationItem-previousNext': {
+              border: '0.5px solid var(--Neutral-20, #F0F1F3)',
+              borderRadius: '3px',
+              fontSize: '0.75vw',
+            },
+          }}
+        />
+      </Box>
+    );
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -326,7 +327,7 @@ const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
           position: 'relative',
           height: '100%',
           overflow: 'auto',
-          
+
           '&::-webkit-scrollbar': {
             width: '8px',
           },
@@ -351,11 +352,11 @@ const TopicsGrid = ({ topics, canEdit, onDeleteTopic, onEditTopic }) => {
           </Box>
           <DataGrid
             sx={{
-               "& .MuiDataGrid-columnHeader": {
-                 display: "grid",
-                 placeItems: "center",
-                 textAlign: "center",
-               },
+              "& .MuiDataGrid-columnHeader": {
+                display: "grid",
+                placeItems: "center",
+                textAlign: "center",
+              },
 
               "& .MuiDataGrid-footerContainer": {
                 borderTop: "none",

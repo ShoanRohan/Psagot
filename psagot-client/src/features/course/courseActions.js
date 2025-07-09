@@ -33,20 +33,20 @@ export const filterCourses = createAsyncThunk('courses/filterCourses', async (fi
   }
 });
 
-  export const fetchAvailableYears = createAsyncThunk('course/fetchAvailableYears', async (_, { rejectWithValue }) => {
-    try {
-      const years = await getExistingCourseYears();
-      return years;
-    } catch (error) {
-      return rejectWithValue(error.response?.data || error.message || 'שגיאה בקבלת השנים הקיימות');
-    }
+export const fetchAvailableYears = createAsyncThunk('course/fetchAvailableYears', async (_, { rejectWithValue }) => {
+  try {
+    const years = await getExistingCourseYears();
+    return years;
+  } catch (error) {
+    return rejectWithValue(error.response?.data || error.message || 'שגיאה בקבלת השנים הקיימות');
   }
+}
 );
 
 export const fetchCourseStatuses = createAsyncThunk('course/fetchCourseStatuses', async () => {
   const data = await GetAllStatusCourses();
-      return data;
-  }
+  return data;
+}
 );
 
 

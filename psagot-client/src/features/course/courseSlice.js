@@ -60,7 +60,7 @@ const courseSlice = createSlice({
       .addCase(addCourseAction.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.error.message;
-      })      
+      })
       .addCase(updateCourseAction.fulfilled, (state, action) => {
         const index = state.courses.findIndex((course) => course.id === action.payload.id);
         if (index !== -1) {

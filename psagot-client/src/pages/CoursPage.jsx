@@ -33,7 +33,6 @@ const CoursPage = () => {
     }
   }, [courseFromStore]);
 
-  // ✅ פתיחה אוטומטית של דיאלוג לפי topicId מה־URL
   useEffect(() => {
     const topicIdFromQuery = searchParams.get("topicId");
     if (topicIdFromQuery && topics.length > 0) {
@@ -121,7 +120,7 @@ const CoursPage = () => {
 
         {tabValue === 1 && (
           <>
-<Button
+            <Button
               variant="contained"
               color="secondary"
               onClick={() => handleOpenDialog({ courseId: selectedTopic?.id })}
@@ -130,7 +129,7 @@ const CoursPage = () => {
               ערוך נושא קורס
             </Button>
             <TopicSearch />
-            <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse?.id)}/>
+            <TopicsGrid topics={topics.filter(topic => topic.courseId === selectedCourse?.id)} />
             {selectedTopic && (
               <TopicDialog open={openDialog} onClose={handleCloseDialog} initialData={selectedTopic} />
             )}

@@ -28,21 +28,21 @@ const CourseGrid = ({ courses }) => {
   });
 
   useEffect(() => {
-  if (courses && courses.length > 0) {
-    const filtered = courses.map(course => ({
-      ...course,
-      isActive: course.statusId === 1,
-      coordinatorName: course.coordinator?.name || '',
-    }));
-    console.log('Mapped courses with coordinatorName:', filtered);
-    setRows(filtered);
-  } else {
-    setRows([]);
-  }
-}, [courses]);
+    if (courses && courses.length > 0) {
+      const filtered = courses.map(course => ({
+        ...course,
+        isActive: course.statusId === 1,
+        coordinatorName: course.coordinator?.name || '',
+      }));
+      console.log('Mapped courses with coordinatorName:', filtered);
+      setRows(filtered);
+    } else {
+      setRows([]);
+    }
+  }, [courses]);
 
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleEditClick = (id) => () => {
     navigate(`/cours/${id}`);
@@ -58,7 +58,7 @@ const navigate = useNavigate();
   const columns = [
     { field: 'courseId', headerName: 'קוד קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'name', headerName: 'שם קורס', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
-    { field: 'coordinatorName', headerName: 'שם רכזת', flex: 1, headerAlign: 'center', align: 'center' , },
+    { field: 'coordinatorName', headerName: 'שם רכזת', flex: 1, headerAlign: 'center', align: 'center', },
     { field: 'year', headerName: 'שנה', flex: 1, editable: true, headerAlign: 'center', align: 'center' },
     { field: 'startDate', headerName: 'תאריך התחלה', flex: 1, editable: true, headerAlign: 'center', align: 'center', valueFormatter: formatDayMonthFromParts },
     { field: 'endDate', headerName: 'תאריך סיום', flex: 1, editable: true, headerAlign: 'center', align: 'center', valueFormatter: formatDayMonthFromParts },
@@ -244,22 +244,22 @@ const navigate = useNavigate();
           shape="rounded"
           siblingCount={0}
           size="small"
-          
+
           sx={{
             '& .MuiPaginationItem-root': {
               backgroundColor: 'transparent',
-               fontSize: '0.75vw',
+              fontSize: '0.75vw',
             },
             '& .Mui-selected': {
               backgroundColor: 'var(--Neutral-10, #F6F7F9) !important',
               border: '0.5px solid var(--Neutral-20, #F0F1F3)',
               borderRadius: '3px',
-               fontSize: '0.75vw',
+              fontSize: '0.75vw',
             },
             '& .MuiPaginationItem-previousNext': {
               border: '0.5px solid var(--Neutral-20, #F0F1F3)',
               borderRadius: '3px',
-               fontSize: '0.75vw',
+              fontSize: '0.75vw',
             },
           }}
         />
@@ -303,7 +303,7 @@ const navigate = useNavigate();
           position: 'relative',
           height: '100%',
           overflow: 'auto',
-          
+
           '&::-webkit-scrollbar': {
             width: '8px',
           },
