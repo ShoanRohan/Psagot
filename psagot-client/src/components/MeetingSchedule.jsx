@@ -88,7 +88,7 @@ export default function MeetingSchedule() {
         const eventElement = info.el;
         const now = new Date();
         const eventEnd = new Date(info.event.end);
-
+        //טיפול באירועים שעבר זמנם
         if (eventEnd < now) {
             eventElement.style.opacity = "0.6";
         }
@@ -344,7 +344,7 @@ export default function MeetingSchedule() {
                                     'dayGridMonth'
                         }
                         slotMinTime="08:00:00"
-                        slotMaxTime="23:00:00"
+                        slotMaxTime="22:00:00"
                         headerToolbar={false}
                         contentHeight="auto"
                         events={events}
