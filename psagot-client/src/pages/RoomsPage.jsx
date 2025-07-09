@@ -88,16 +88,12 @@ const RoomsPage = () => {
 
           </Box>
         )}
-
-
         <Box
           sx={{
             display: 'flex',
             gap: 2,
             alignItems: 'center',
             flexWrap: 'wrap',
-
-
           }}
         >
           <Tooltip title="ייצוא לאקסל">
@@ -105,7 +101,6 @@ const RoomsPage = () => {
               <img src={ExcelIcon} alt="Excel" style={{ width: 32, height: 32 }} />
             </IconButton>
           </Tooltip>
-
           <Button
             variant="outlined"
             onClick={toggleView}
@@ -119,7 +114,6 @@ const RoomsPage = () => {
           >
             {viewMode === 'rooms' ? 'תצוגת לו"ז ' : 'תצוגת רשימה'}
           </Button>
-
           <Button
             variant="contained"
             onClick={handleAddRoom}
@@ -147,18 +141,13 @@ const RoomsPage = () => {
             transition: 'all 0.3s ease',
           }}
         >
-
           {/* תצוגת רשימה */}
           <RoomsGrid/>
         </Box>
-
         <Box
           sx={{
             display: viewMode === 'schedule' ? 'block' : 'none',
             transition: 'all 0.3s ease',
-
-
-
           }}
         >
           <RoomsScheduleGrid />

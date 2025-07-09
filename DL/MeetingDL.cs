@@ -1,4 +1,5 @@
 ﻿using Entities.Contexts;
+using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -71,5 +72,19 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+    
+        public async Task<List<Meeting>> GetMeetingsByDate(DateOnly from, DateOnly to)
+        {
+            return await _context.Meetings
+                .Include(m => m.Room)
+                .Include(m => m.ScheduleForTopic)
+                    .ThenInclude(sft => sft.Topic)
+                    .ThenInclude(t => t.Course)
+                .Where(m => m.IsValid)
+                .Where(m => m.MeetingDate >= from && m.MeetingDate <= to)
+                .ToListAsync();
+        }
+
     }
 }
+

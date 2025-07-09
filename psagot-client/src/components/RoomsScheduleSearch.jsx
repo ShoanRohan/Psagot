@@ -13,7 +13,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useEffect, useState } from 'react';
 import 'dayjs/locale/he';
-import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 
 const RoomsScheduleSearch = () => {
   const dispatch = useDispatch();
@@ -154,8 +153,6 @@ const RoomsScheduleSearch = () => {
           היום
         </Button>
       </Box>
-
-
     </>
   );
 };
