@@ -20,8 +20,13 @@ const updatedUser = async (updateUser) => {
     return response.data;
 };
 
+const getUsersWithPagination = async ({page,rows}) => {
+    const response = await api.get(`/User/GetUsersWithPagination?page=${page}&rows=${rows}`);
+    return response.data; 
+};
 
 
-export{getAllUsers, getUserById, addUser, updatedUser};
+
+export{getAllUsers, getUserById, addUser, updatedUser,getUsersWithPagination};
 
 

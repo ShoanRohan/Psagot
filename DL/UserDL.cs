@@ -29,6 +29,25 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<User> Users, string ErrorMessage, int total)> GetUsersWithPagination(int page, int rows)
+        {
+            try
+            {
+                int total = await _context.Users.CountAsync();
+                int skip = (page - 1) * rows;
+
+                var users = await _context.Users
+
+                    .Skip(skip)
+                    .Take(rows)
+                    .ToListAsync();
+                return (users, null, total);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message, 0);
+            }
+        }
         public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
         {
             try

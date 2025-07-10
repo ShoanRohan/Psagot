@@ -66,10 +66,7 @@ namespace Psagot.Controllers
         }
 
 
-
-            return Ok(meetings);
-            
-        }
+        
 
 
         [HttpDelete("DeleteMeeting/{id}")]

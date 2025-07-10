@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Entities.DTO;
 
 namespace DL
 {
@@ -14,7 +15,6 @@ namespace DL
         Task<(IEnumerable<User> User, string ErrorMessage)> GetAllUsers();
         Task<(User User, string ErrorMessage)> GetUserById(int id);
         Task<User> UserLoginAsync(string email, string password);
-
-
-    }
+        Task<(IEnumerable<User> Users, string ErrorMessage, int total)> GetUsersWithPagination(int page, int rows);
+}
 }

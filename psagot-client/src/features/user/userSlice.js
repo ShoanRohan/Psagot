@@ -1,15 +1,16 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchUserById, addUserAction, updateUserAction, fetchAllUsers } from './userAction';
+import {fetchUserById, addUserAction, updateUserAction, fetchAllUsers,fetchUsersWithPagination  } from './userAction';
 
 const initialState = {
     users: [],
     selectedUser: null,
     status: 'idle',
     error: null,
-    currentUser: null,//:אמור להכנס מה login
+    currentUser: null,
+    total: 0,
 };
 
-const userSlice = createSlice({
+const userSlice = createSlice( {
     name: 'user',
     initialState,
     reducers:{
@@ -42,17 +43,31 @@ const userSlice = createSlice({
             state.status =' failed';
             state.error =action.error.message;
         })
+          .addCase(fetchUsersWithPagination.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchUsersWithPagination.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.users = action.payload.users;
+        state.total = action.payload.total;
+      })
+      .addCase(fetchUsersWithPagination.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message;
+      })
         .addCase(addUserAction.fulfilled, (state, action) =>{
             state.user.puse(action.payload);
         })
+        
         .addCase(updateUserAction.fulfilled, (state, action)=> {
             const index = state.users.findIndex((user)=> user.id===action.payload.id);
             if (index !== -1) {
                 state.users[index]=action.payload;
             }
-        });
+        })
+        
 
-    },
+    }
 });
 
 export const { setUser } = userSlice.actions;

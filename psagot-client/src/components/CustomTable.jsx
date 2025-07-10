@@ -1,4 +1,14 @@
 import React from 'react';
+import {
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableContainer,
+  Paper
+} from '@mui/material';
+
 
 const CustomTable = ({ columns, data, keyMap, columnConfig }) => {
   return (
