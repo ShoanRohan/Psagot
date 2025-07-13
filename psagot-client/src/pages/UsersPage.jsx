@@ -1,142 +1,162 @@
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect } from "react";
-import '../styles/usersPage.css';
-import { Pagination } from '@mui/material';
-import { fetchUsersByPage } from "../features/user/userAction";
+import React, { useEffect, useState } from "react";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import Container from "@mui/material/Container";
+import { Stack } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import excelIcon from "../assets/icons/excelIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { setPageSize, setPageNumber } from '../features/user/userSlice';
-import Editicone from '../assets/icons/Editicone.png';
-import Deleteicone from '../assets/icons/Deleteicone.png';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import { fetchAllUsers } from "../features/user/userAction";
+
+const buttonStyles = {
+  height: "44px",
+  padding: "0px 20px",
+  gap: "8px",
+  borderRadius: "50px",
+  boxShadow: "none",
+  fontFamily: "Rubik",
+  fontWeight: 400,
+  fontSize: "16px",
+  lineHeight: "18.96px",
+  backgroundColor: "#326DEF",
+  color: "white",
+  "&:hover": {
+    backgroundColor: "#2857C4",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+  },
+  "&:active": {
+    backgroundColor: "#234E9D",
+    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.3)",
+  },
+};
 
 const UsersPage = () => {
-    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+    const{users}=useSelector(state=>state.user)
+    const dispatch=useDispatch()
+    useEffect(()=>{
+        dispatch(fetchAllUsers())
 
-    const dispatch = useDispatch();
+    },[])
 
-    // טוען את המשתמשים
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
-            } catch (error) {
-                console.error("שגיאה בטעינת המשתמשים:", error);
-            }
+    //- הודה לקובץ אקסל את המשתמשים- פונ שמיצא לאקסל
+    const exportAllUsersToExcel = () => {
+        if (!users || users.length === 0) return;
+    
+        const worksheet = XLSX.utils.json_to_sheet(users);
+    
+      
+        const workbook = XLSX.utils.book_new();
+    
+      
+        XLSX.utils.book_append_sheet(workbook, worksheet);
+        workbook.Workbook = {
+          Views: [
+            {
+              RTL: true, 
+            },
+          ],
         };
-        fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
+    
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: 'xlsx',
+          type: 'array'
+        });
+    
+        const blob = new Blob([excelBuffer], {
+          type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+        });
+    
+        saveAs(blob, "users.xlsx");
+      };
+      //הקומפוננטה שמוצגת על המסך
+  return (
+    <Container maxWidth={false} sx={{ width: '80vw', mx: 'auto', px: 2, pt: 3, pb: 3, overflowY: 'unset' }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+          direction: "rtl",
+        }}
+      >
+        <Typography
+          variant="h1"
+          align="right"
+          sx={{
+            fontFamily: "Rubik, sans-serif",
+            fontWeight: 700,
+            fontSize: "40px",
+            color: "#0D1783",
+          }}
+        >
+          משתמשים
+        </Typography>
 
-    const handleChangePageSize = (event) => {
-        const size = Number(event.target.value); // עדכון ל-`event`
-        dispatch(setPageSize(size)); // קריאה ל-`setPage`
-    };
+        <Stack direction="row" spacing={2} sx={{ direction: "ltr" }}>
+          <Button
+            variant="contained"
+            sx={{ ...buttonStyles, backgroundColor: "#326DEF" }}
 
-    // שינוי דף
-    const handlePageNumberChange = (newPage) => {
-        newPage = Number(newPage.target.textContent);
-        if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-            dispatch(setPageNumber(newPage));
-        }
-    };
+            startIcon={<AddCircleOutlineIcon />}
+            // onClick={() => setOpenDialog(true)}
+          >
+            הוספת משתמש
+          </Button>
+          <IconButton
+            onClick={exportAllUsersToExcel}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "44px",
+              width: "44px",
+              padding: 0,
+            }}
+          >
+            <Box
+              component="img"
+              src={excelIcon}
+              alt="ייצוא לאקסל"
+              sx={{
+                height: "24px",
+                width: "24px",
+                verticalAlign: "middle",
+                mt: "-4px",
+              }}
+            />
+          </IconButton>
+        </Stack>
+      </Box>
 
-    // שינוי סטטוס של משתמש
-    const handleStatusChange = (userId, status) => {
-        const newStatus = status ? "inactive" : "active";
-        // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
-    };
+      {/* <CourseSearch
+        filters={filters}
+        setFilters={setFilters}
+        onSearch={handleSearch}
+        initialState={initialState}
+      /> */}
 
-    return (
-        <Box>
-            <Box className="tablesize" >
-                <Typography className="titleRow" variant="h4" component="h2" >משתמשים</Typography>
-                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-                <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell className="bigtable">קוד משתמש</TableCell>
-                                <TableCell className="bigtable">שם משתמש</TableCell>
-                                <TableCell className="bigtable">מייל</TableCell> {/* יישור הכותרת למרכז */}
-                                <TableCell className="bigtable">הרשאה</TableCell>
-                                <TableCell className="bigtable">סטטוס</TableCell>
-                                <TableCell className="bigtable">עריכה</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users?.map((user, index) => (
-                                <TableRow key={`${user.userId}-${index}`}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button
-                                            variant="contained"
-                                            className={user.isActive ? 'buttonActive' : 'buttonInactive'}
-                                            onClick={() => {
-                                                handleStatusChange(user.userId, user.isActive);
-                                            }}
-                                        >
-                                            {user.isActive ? "פעיל" : "לא פעיל"}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
-                                        <IconButton
-                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
-                                        >
-                                            <img src={Deleteicone} alt="delelte" className='deleteIcon' />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
-                                            <img src={Editicone} alt="edit" className='editIcon' />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+      {/* <CourseGrid
+        totalCount={totalCount}
+        currentPage={currentPage}
+        pageSize={pageSize}
+        onPageChange={changePage}
+        onPageSizeChange={handlePageSizeChange}
+      /> */}
 
-                {/* ניווט עמודים */}
-                <Box className="boxStyle">
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography className='flexCenter'>
-                            מספר שורות:
-                        </Typography>
-                        <FormControl sx={{ minWidth: '10px', height: '46px' }}>
-                            <Select
-                                value={pageSize}
-                                onChange={handleChangePageSize}
-                                displayEmpty
-                            >
-                                <MenuItem value={10}>10</MenuItem>
-                                <MenuItem value={20}>20</MenuItem>
-                                <MenuItem value={50}>50</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Pagination
-                        count={Math.ceil(totalUsers / pageSize)}
-                        page={pageNumber}
-                        onChange={handlePageNumberChange}
-                    />
-                </Box>
-            </Box>
-        </Box>
-    );
+      {/* <TopicDialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        onSubmit={handleAddCourse}
+      /> */}
+    </Container>
+  );
 };
+
+
 
 export default UsersPage;
