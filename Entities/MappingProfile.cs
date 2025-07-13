@@ -11,6 +11,7 @@ public class MappingProfile : Profile
         CreateMap<User, UserDTO>()
             .ForMember(dest => dest.UserTypeName, opt => opt.MapFrom(src => src.UserType.Name))
             .ReverseMap();
+        CreateMap<User, UserTableDTO>().ReverseMap();
         CreateMap<Room, RoomDTO>().ReverseMap();
         CreateMap<Day, DayDTO>().ReverseMap();
         CreateMap<Meeting, MeetingDTO>().ReverseMap();
