@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicFotCourseByCourseId } from './topicActions';
+import { fetchAllTopic, fetchTopicById, addTopicAction, updateTopicAction, fetchAllTopicForCourseByCourseId } from './topicActions';
 
 const initialState = {
     topics: [],
     selectedTopic: null,
     status: 'idle', // state connected: idle - מצב התחלתי, loading- בטעינה, succeeded - הצלחה, failed - נכשל
     error: null,
+    topicsWithFilters: [],
 };
 
 const topicSlice = createSlice({
@@ -15,8 +16,16 @@ const topicSlice = createSlice({
         //write functions here - to save data to redux
         setTopic: (state, action) => {
             // state.topic = action.payload;
-        }
+        },
+setTopicsWithFilters: (state, action) => {
+    const{subject,
+        lecture,
+        status}=action.payload
+    state.topicsWithFilters = state.topics.filter(topic=>
+      (subject&& topic.name==subject) ||(lecture&&topic.teacherId==lecture)||(status&&topic.statusId==status)||(!status&&!subject&&!lecture)
+    )
     },
+},
     extraReducers: (builder) => {
         builder
             // Handle fetchAllTopic
@@ -74,21 +83,21 @@ const topicSlice = createSlice({
                 state.error = action.error.message;
             })
 
-            // Handle fetchAllTopicFotCourseByCourseId
-            .addCase(fetchAllTopicFotCourseByCourseId.pending, (state) => {
+            // Handle fetchAllTopicForCourseByCourseId
+            .addCase(fetchAllTopicForCourseByCourseId.pending, (state) => {
                 state.status = 'loading';
             })
-            .addCase(fetchAllTopicFotCourseByCourseId.fulfilled, (state, action) => {
+            .addCase(fetchAllTopicForCourseByCourseId.fulfilled, (state, action) => {
                 state.status = 'succeeded';
                 state.topics = action.payload;
             })
-            .addCase(fetchAllTopicFotCourseByCourseId.rejected, (state, action) => {
+            .addCase(fetchAllTopicForCourseByCourseId.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.error.message;
             });
     },
 });
 
-export const { setTopic } = topicSlice.actions;
+export const { setTopic,setTopicsWithFilters } = topicSlice.actions;
 export default topicSlice.reducer;
 

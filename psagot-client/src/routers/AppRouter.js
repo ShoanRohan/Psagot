@@ -10,6 +10,7 @@ import UserManagement from '../pages/UserManagement';
 import CreateCourse from '../components/CreateCourse';
 import RegisterPage from '../pages/RegisterPage';
 import UserSearch from '../components/UserSearch';
+import TopicsSearch from '../components/TopicsSearch';
 
 const AppRouter = () => {
     return (
@@ -19,10 +20,11 @@ const AppRouter = () => {
 
             {/* עמודי אפליקציה אחרי התחברות */}
             <Route path="/" element={<Layout />}>
-                <Route index element={<UserSearch />} />
+                <Route index element={<TopicsSearch />} />
                 <Route path="/user" element={<UserManagement />} />
                 <Route path="/courses" element={<CoursesPage />} />
                 <Route path='newCourse' element={<CreateCourse />} />
+                <Route path='/TopicsSearch' element={<TopicsSearch/>} />
             </Route>
 
             {/* עמוד התחברות */}
