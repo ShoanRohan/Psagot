@@ -1,215 +1,310 @@
 
 import * as React from "react";
 import {
-  Box,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Button,
+    Box,
+    MenuItem,
+    FormControl,
+    Button,
+    FormHelperText,
+    TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import FilterAltOffOutlinedIcon from "@mui/icons-material/FilterAltOffOutlined"; 
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 
-
-import { fetchAllUserTypes } from "../features/userType/userTypeActions"; 
+import { fetchAllUserTypes } from "../features/userType/userTypeActions"; // ודא שהנתיב נכון
 
 const sharedStyles = {
-  width: "150px",
-  height: "43px",
-  textAlign: "right",
-  direction: "rtl",
-  "& .MuiInputLabel-root": {
-    right: "0",
-    transformOrigin: "top right",
-  },
-  "& .MuiSelect-icon": {
-    right: "unset",
-    left: "0px",
-  },
+    width: "150px", // רוחב סטנדרטי לשדות החיפוש
+    textAlign: "right",
+    direction: "rtl",
+    "& .MuiInputLabel-root": {
+        right: "0",
+        transformOrigin: "top right",
+        left: "unset",
+    },
+    "& .MuiInputBase-root": {
+        height: "43px",
+    },
+    // הוספת סגנון עבור אייקון הסלקט ב-TextField
+    "& .MuiInputBase-root .MuiSelect-select": {
+        paddingRight: "32px !important", // מגדיל את הריפוד מימין כדי לפנות מקום לאייקון
+        paddingLeft: "14px", // שומר על ריפוד רגיל משמאל
+    },
+    "& .MuiInputBase-root .MuiSelect-icon": {
+        left: "12px", // ממקם את האייקון 12px מהשמאל
+        right: "unset", // מבטל את המיקום הימני המוגדר כברירת מחדל
+    },
 };
 
 const buttonStyles = {
-  minWidth: "100px",
-  height: "40px",
-  borderRadius: "50px",
-  boxShadow: "none",
-  fontFamily: "Rubik",
-  fontWeight: 400,
-  fontSize: "16px",
-  textTransform: "none",
+    minWidth: "100px",
+    height: "40px",
+    borderRadius: "50px",
+    boxShadow: "none",
+    fontFamily: "Rubik",
+    fontWeight: 400,
+    fontSize: "16px",
+    textTransform: "none",
 };
 
-const UsersSearch = ({ onFilterChange, onClearFilters }) => { 
-  const dispatch = useDispatch();
-  const { userTypes, status: userTypeStatus } = useSelector((state) => state.userType);
-  
-  const [usernames, setUsernames] = useState([]);
-  const [phones, setPhones] = useState([]);
-  const [roles, setRoles] = useState([]); 
+const UsersSearch = ({ onFilterChange, onClearFilters }) => {
+    const dispatch = useDispatch();
+    const { userTypes, status: userTypeStatus } = useSelector((state) => state.userType);
 
-  
-  const initialState = {
-    username: "",
-    phone: "",
-    role: "",
-    isActive: true, 
-  };
+    const [roles, setRoles] = useState([]);
 
-  const [filters, setFilters] = useState(initialState);
-  const [activeButton, setActiveButton] = useState(true);
+    // מצב התחלתי של הפילטרים
+    const initialState = {
+        username: "",
+        phone: "",
+        role: "",
+        isActive: true,
+    };
 
-  
-  useEffect(() => {
-   
-    if (userTypeStatus === "idle") { 
-      dispatch(fetchAllUserTypes());
-    }
-  }, [userTypeStatus, dispatch]);
+    const [filters, setFilters] = useState(initialState);
+    const [errors, setErrors] = useState({
+        username: "",
+        phone: "",
+        role: "",
+    });
 
-  
-  useEffect(() => {
-    if (userTypes && userTypes.length > 0) {
-      setRoles(userTypes);
-    }
-  }, [userTypes]);
+    // טעינת סוגי משתמשים (הרשאות) כאשר הקומפוננטה נטענת
+    useEffect(() => {
+        if (userTypeStatus === "idle") {
+            dispatch(fetchAllUserTypes());
+        }
+    }, [userTypeStatus, dispatch]);
+
+    // עדכון רשימת התפקידים כאשר userTypes משתנה
+    useEffect(() => {
+        if (userTypes && userTypes.length > 0) {
+            setRoles(userTypes);
+        }
+    }, [userTypes]);
+
+    // פונקציה לבדיקת תקינות כל הפילטרים הנוכחיים
+    const validateAllFilters = () => {
+        let isValid = true;
+        const newErrors = { username: "", phone: "", role: "" }; // איפוס שגיאות
+
+        // ולידציה לשם משתמש
+        if (filters.username) { // רק אם השדה לא ריק
+            if (filters.username.trim().length < 2) {
+                newErrors.username = "שם משתמש חייב להיות באורך 2 תווים לפחות";
+                isValid = false;
+            } else if (!/^[a-zA-Z\u0590-\u05FF\s]+$/.test(filters.username)) {
+                newErrors.username = "שם משתמש יכול להכיל אותיות ורווחים בלבד";
+                isValid = false;
+            }
+        }
+
+        // ולידציה לטלפון
+        if (filters.phone) { // רק אם השדה לא ריק
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(filters.phone)) {
+                newErrors.phone = "מספר טלפון לא תקין (10 ספרות בלבד)";
+                isValid = false;
+            }
+        }
+        // אין צורך בוולידציה מיוחדת ל-role אם הוא יכול להיות ריק (כי "הכל" היא אופציה)
+
+        setErrors(newErrors); // עדכן את השגיאות ב-state
+        return isValid;
+    };
+
+    // מטפל בשינוי של שדות הפילטר
+    const handleFilterChange = (e) => {
+        const { name, value, checked, type } = e.target;
+        const newValue = type === "checkbox" ? checked : value;
+
+        setFilters((prevFilters) => {
+            const updatedFilters = { ...prevFilters, [name]: newValue };
+
+            // עדכון שגיאות ספציפי לשדה ששונה באופן מיידי
+            const tempErrors = { ...errors };
+            if (name === "username") {
+                tempErrors.username = "";
+                if (newValue && newValue.trim().length < 2) {
+                    tempErrors.username = "שם משתמש חייב להיות באורך 2 תווים לפחות";
+                } else if (newValue && !/^[a-zA-Z\u0590-\u05FF\s]+$/.test(newValue)) {
+                    tempErrors.username = "שם משתמש יכול להכיל אותיות ורווחים בלבד";
+                }
+            } else if (name === "phone") {
+                tempErrors.phone = "";
+                if (newValue) {
+                    const phoneRegex = /^\d{10}$/;
+                    if (!phoneRegex.test(newValue)) {
+                        tempErrors.phone = "מספר טלפון לא תקין (10 ספרות בלבד)";
+                    }
+                }
+            }
+            // אין ולידציה ל-role כאן, כיוון שאין מגבלות על ערכים ריקים או לא תקינים ספציפית ל-role בחיפוש
+
+            setErrors(tempErrors); // עדכן את שגיאות ה-state
+            console.log("Updated Filters:", updatedFilters); // לצורך דיבוג
+            console.log("Updated Errors:", tempErrors);  // לצורך דיבוג
+            return updatedFilters;
+        });
+    };
+
+    // מטפל בלחיצה על כפתור "חיפוש"
+    const handleSearchClick = () => {
+        const isValid = validateAllFilters(); // בצע ולידציה לכל השדות לפני השליחה
+        if (isValid) {
+            // אם הולידציה עברה, שלח את הפילטרים לקומפוננטת האב
+            if (onFilterChange) {
+                onFilterChange(filters);
+            }
+        }
+    };
+
+    // מטפל בלחיצה על כפתור "ניקוי"
+    const handleClearFiltersClick = () => {
+        setFilters(initialState); // איפוס כל הפילטרים למצב ההתחלתי
+        setErrors({ username: "", phone: "", role: "" }); // איפוס כל השגיאות
+        if (onClearFilters) {
+            onClearFilters(initialState); // שלח את המצב ההתחלתי לקומפוננטת האב
+        }
+    };
+
+    // חישוב מצב הכפתור 'חיפוש' (disabled)
+    const isSearchButtonDisabled = (() => {
+        // בדוק אם יש שינוי כלשהו בפילטרים יחסית למצב ההתחלתי
+        const isChanged =
+            filters.username !== initialState.username ||
+            filters.phone !== initialState.phone ||
+            filters.role !== initialState.role ||
+            filters.isActive !== initialState.isActive;
+
+        // בדוק אם יש שגיאות כלשהן
+        const hasErrors = Object.values(errors).some((error) => error !== "");
+
+        // הכפתור יהיה מושבת אם:
+        // 1. אין שינוי בשדות (כלומר, הם זהים ל-initialState)
+        // או
+        // 2. יש שגיאות ולידציה כלשהן
+        return !isChanged || hasErrors;
+    })();
 
 
-  // פונקציה לטיפול בסינון נתונים
-  const handleFilterData = () => {
-    if (onFilterChange) {
-      onFilterChange(filters);
-    }
-    setActiveButton(true);
-  };
-
- 
-  const handleClearFilters = () => {
-    setFilters(initialState);
-    if (onClearFilters) {
-      onClearFilters(initialState);
-    }
-    setActiveButton(true);
-  };
-
-  return (
-    <Box sx={{ width: "100%" }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "10px 20px",
-          backgroundColor: "white",
-          fontFamily: "Rubik",
-          direction: "rtl",
-          borderRadius: "10px",
-          background: "#FFF",
-          padding: "30px 32px",
-          boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
-        }}
-      >
-        {/* שדות בחירה */}
-        <Box sx={{ display: "flex", gap: "20px" }}>
-          {/* שדה: שם משתמש */}
-          <FormControl variant="standard" sx={sharedStyles}>
-            <InputLabel>שם משתמש</InputLabel>
-            <Select
-              value={filters.username}
-              onChange={(e) => {
-                setFilters({ ...filters, username: e.target.value });
-                setActiveButton(false);
-              }}
-              sx={sharedStyles}
-            >
-              {usernames?.map((user) => (
-                <MenuItem key={user.id} value={user.name}>
-                  {user.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* שדה: טלפון */}
-          <FormControl variant="standard" sx={sharedStyles}>
-            <InputLabel>טלפון</InputLabel>
-            <Select
-              value={filters.phone}
-              onChange={(e) => {
-                setFilters({ ...filters, phone: e.target.value });
-                setActiveButton(false);
-              }}
-              sx={sharedStyles}
-            >
-              {phones?.map((p) => (
-                <MenuItem key={p.id} value={p.number}>
-                  {p.number}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* שדה: הרשאה */}
-          <FormControl variant="standard" sx={sharedStyles}>
-            <InputLabel>הרשאה</InputLabel>
-            <Select
-              value={filters.role}
-              onChange={(e) => {
-                setFilters({ ...filters, role: e.target.value });
-                setActiveButton(false);
-              }}
-              sx={sharedStyles}
-            >
-              {/* כעת ה-roles מגיעים מ-userTypes שנטענו מ-Redux */}
-              {roles?.map((r) => (
-                <MenuItem key={r.id} value={r.name}>
-                  {r.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* שדה: סטטוס פעיל */}
-          <FormControl variant="standard" sx={{ minWidth: 120, mt: 2 }}>
-            <label>
-              <input
-                type="checkbox"
-                checked={filters.isActive}
-                onChange={(e) => {
-                  setFilters({ ...filters, isActive: e.target.checked });
-                  setActiveButton(false);
+    return (
+        <Box sx={{ width: "100%" }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    padding: "10px 20px",
+                    backgroundColor: "white",
+                    fontFamily: "Rubik",
+                    direction: "rtl",
+                    borderRadius: "10px",
+                    background: "#FFF",
+                    padding: "30px 32px",
+                    boxShadow: "0px 0px 4px 0px rgba(220, 226, 236, 0.80)",
                 }}
-                style={{ marginLeft: "8px" }}
-              />
-              פעיל
-            </label>
-          </FormControl>
-        </Box>
-        {/* כפתורים */}
-        <Box sx={{ display: "flex", gap: "10px" }}>
-          <Button
-            variant="outlined"
-            sx={buttonStyles}
-            onClick={handleClearFilters} 
-          >
-            ניקוי
-          </Button>
+            >
+                {/* שדות בחירה */}
+                <Box sx={{ display: "flex", gap: "20px" }}>
+                    {/* שדה: שם משתמש (TextField) */}
+                    <FormControl variant="standard" sx={sharedStyles} error={!!errors.username}>
+                        <TextField
+                            id="username-input"
+                            name="username"
+                            label="שם משתמש"
+                            value={filters.username}
+                            onChange={handleFilterChange}
+                            variant="standard"
+                            fullWidth
+                            error={!!errors.username}
+                        />
+                        <FormHelperText sx={{ textAlign: "right" }}>
+                            {errors.username}
+                        </FormHelperText>
+                    </FormControl>
 
-          <Button
-            variant="contained"
-            sx={{ ...buttonStyles, backgroundColor: "#1976d2", color: "white" }}
-            startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
-            disabled={activeButton}
-            onClick={handleFilterData} 
-          >
-            חיפוש
-          </Button>
+                    {/* שדה: טלפון (TextField) */}
+                    <FormControl variant="standard" sx={sharedStyles} error={!!errors.phone}>
+                        <TextField
+                            id="phone-input"
+                            name="phone"
+                            label="טלפון"
+                            value={filters.phone}
+                            onChange={handleFilterChange}
+                            variant="standard"
+                            fullWidth
+                            error={!!errors.phone}
+                        />
+                        <FormHelperText sx={{ textAlign: "right" }}>
+                            {errors.phone}
+                        </FormHelperText>
+                    </FormControl>
+
+                    {/* שדה: הרשאה (TextField עם select) */}
+                    <FormControl variant="standard" sx={sharedStyles} error={!!errors.role}>
+                        <TextField
+                            id="role-select"
+                            name="role"
+                            select
+                            label="הרשאה"
+                            value={filters.role}
+                            onChange={handleFilterChange}
+                            variant="standard"
+                            fullWidth
+                            error={!!errors.role}
+                        >
+                            <MenuItem value="">
+                                <em>הכל</em>
+                            </MenuItem>
+                            {roles?.map((r) => (
+                                <MenuItem key={r.id} value={r.name}> {/* הוספת key={r.id} */}
+                                    {r.name}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                        <FormHelperText sx={{ textAlign: "right" }}>
+                            {errors.role}
+                        </FormHelperText>
+                    </FormControl>
+
+                    {/* שדה: סטטוס פעיל */}
+                    <FormControl variant="standard" sx={{ minWidth: 120, mt: 2, alignItems: "center", direction: "rtl" }}>
+                        <label style={{ display: "flex", alignItems: "center", cursor: "pointer" }}>
+                            <input
+                                type="checkbox"
+                                name="isActive"
+                                checked={filters.isActive}
+                                onChange={handleFilterChange}
+                                style={{ marginRight: "8px", accentColor: "#1976d2" }} // שינוי ל-marginRight עבור RTL
+                            />
+                            פעיל
+                        </label>
+                    </FormControl>
+                </Box>
+                {/* כפתורים */}
+                <Box sx={{ display: "flex", gap: "10px" }}>
+                    <Button
+                        variant="outlined"
+                        sx={{ ...buttonStyles, borderColor: "#D0D5DD", color: "#344054", "&:hover": { borderColor: "#D0D5DD", backgroundColor: "#F9FAFB" } }}
+                        onClick={handleClearFiltersClick}
+                    >
+                        ניקוי
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        sx={{ ...buttonStyles, backgroundColor: "#326DEF", color: "white", "&:hover": { backgroundColor: "#2857C4" }, "&:active": { backgroundColor: "#234E9D" } }}
+                        startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
+                        disabled={isSearchButtonDisabled}
+                        onClick={handleSearchClick}
+                    >
+                        חיפוש
+                    </Button>
+                </Box>
+            </Box>
         </Box>
-      </Box>
-    </Box>
-  );
+    );
 };
 
 export default UsersSearch;
