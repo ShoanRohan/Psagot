@@ -65,22 +65,6 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
         {
             try
             {
-                _context.Set<Meeting>().Update(meeting);
-                await _context.SaveChangesAsync();
-                return (meeting, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
-
-
-
-        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
-        {
-            try
-            {
                 var meetings = await _context.Set<Meeting>().ToListAsync();
                 return (meetings, null);
             }
@@ -97,6 +81,42 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
                 var addedMeeting = await _context.Set<Meeting>().AddAsync(meeting);
                 await _context.SaveChangesAsync();
                 return (addedMeeting.Entity, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
+
+        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
+        public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
+        {
+            try
+            {
+                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                return (meeting, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+        public async Task<(Meeting Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        {
+            try
+            {
+                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
+                if (meeting == null)
+                {
+                    return (null, "Meeting not found.");
+                }
+
+                _context.Set<Meeting>().Remove(meeting);
+                await _context.SaveChangesAsync();
+                return (meeting, null);
             }
             catch (Exception ex)
             {
