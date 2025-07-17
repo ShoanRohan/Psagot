@@ -23,6 +23,7 @@ const store = configureStore({
     meeting: meetingReducer, 
     daysForCourse: daysForCourseReducer, 
     topic: topicReducer,
+    day:dayReducer
   },
 });
 

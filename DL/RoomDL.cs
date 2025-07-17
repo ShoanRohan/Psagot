@@ -69,6 +69,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        //ממפה את המפגשים הנכונים מתוך תאריך נבחר
         public async Task<(List<RoomScheduleByDateDTO>, string ErrorMessage)> GetRoomsScheduleByDate(DateTime dateTime)
         {
             try
