@@ -1,9 +1,8 @@
-//19.5.25
 import React, { useEffect, useState } from 'react';
 import { Button, Stack, Box, Snackbar, Alert, TextField, MenuItem, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { addRoomAction, updateRoomAction } from '../features/room/roomActions';
-import "./RoomDetails.css";
+import './RoomDetails.css';
 import { setSelectedRoom } from '../features/room/roomSlice';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,14 +10,15 @@ function RoomEdit() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
   const [capacity, setCapacity] = useState('');
-  const [equipment, setEquipment] = useState([]); // שונה ממבנה אובייקט למערך
+  const [equipment, setEquipment] = useState([]);
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
-  const { selectedRoom } = useSelector(state => state.room);
+  const { selectedRoom } = useSelector((state) => state.room);
   const dispatch = useDispatch();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedRoom && selectedRoom.roomId) {
@@ -26,40 +26,93 @@ function RoomEdit() {
       setCapacity(selectedRoom.capacity);
       setName(selectedRoom.name);
 
-      // המרה מאובייקט למערך
       const selectedEquipment = [];
-      if (selectedRoom.projector) selectedEquipment.push("projector");
-      if (selectedRoom.computer) selectedEquipment.push("computer");
-      if (selectedRoom.speaker) selectedEquipment.push("speaker");
+      if (selectedRoom.projector) selectedEquipment.push('projector');
+      if (selectedRoom.computer) selectedEquipment.push('computer');
+      if (selectedRoom.speaker) selectedEquipment.push('speaker');
       setEquipment(selectedEquipment);
     }
   }, [selectedRoom]);
 
-  const handleEquipmentChange = (event) => {
-    const { value } = event.target;
-    setEquipment(value);
+  const validateField = (field, value) => {
+    switch (field) {
+      case 'name':
+        return value.trim() ? '' : 'יש להזין שם חדר';
+      case 'capacity':
+        return !value || Number(value) <= 0 ? 'יש להזין מספר מקומות חוקי' : '';
+      case 'equipment':
+        return value.length === 0 ? 'יש לבחור לפחות פריט אחד' : '';
+      default:
+        return '';
+    }
   };
 
-  const handleSave = () => {
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    setName(value);
+    setFormErrors((prev) => ({ ...prev, name: validateField('name', value) }));
+  };
+
+  const handleCapacityChange = (e) => {
+    const value = e.target.value;
+    setCapacity(value);
+    setFormErrors((prev) => ({ ...prev, capacity: validateField('capacity', value) }));
+  };
+
+  const handleEquipmentChange = (e) => {
+    const value = e.target.value;
+    setEquipment(value);
+    setFormErrors((prev) => ({ ...prev, equipment: validateField('equipment', value) }));
+  };
+
+  const handleSave = async () => {
+    const errors = {
+      name: validateField('name', name),
+      capacity: validateField('capacity', capacity),
+      equipment: validateField('equipment', equipment),
+    };
+
+    setFormErrors(errors);
+
+    if (Object.values(errors).some((msg) => msg)) {
+      setMessage('אנא תקן את השגיאות בטופס');
+      setError(true);
+      setOpenSnackbar(true);
+      return;
+    }
+
     let room = {
       name,
-      capacity,
-      projector: equipment.includes("projector"),
-      computer: equipment.includes("computer"),
-      speaker: equipment.includes("speaker"),
+      capacity: Number(capacity),
+      projector: equipment.includes('projector'),
+      computer: equipment.includes('computer'),
+      speaker: equipment.includes('speaker'),
     };
-   room= selectedRoom? {...room, roomId: number}:room;
-   const method=selectedRoom? updateRoomAction: addRoomAction;
 
-    dispatch(method(room));
-    setMessage("החדר נשמר בהצלחה!");
-    setError(false);
-    setOpenSnackbar(true);
+    if (selectedRoom) {
+      room.roomId = number;
+    }
+
+    const action = selectedRoom ? updateRoomAction : addRoomAction;
+
+    try {
+      await dispatch(action(room)).unwrap();
+      setMessage(selectedRoom ? 'החדר עודכן בהצלחה' : 'החדר נוסף בהצלחה');
+      setError(false);
+      setOpenSnackbar(true);
+      dispatch(setSelectedRoom(null));
+      navigate('/rooms');
+    } catch (err) {
+      setMessage('אירעה שגיאה, נסה שנית');
+      setError(true);
+      setOpenSnackbar(true);
+    }
   };
- const handleCancel=()=>{
-  dispatch(setSelectedRoom(null));
-  navigate('room');
-  }
+
+  const handleCancel = () => {
+    dispatch(setSelectedRoom(null));
+    navigate('/rooms');
+  };
 
   return (
     <Box>
@@ -90,27 +143,34 @@ function RoomEdit() {
               variant="standard"
               className="text-field"
               value={name}
-              onChange={(e) => setName(e.target.value)}
-              InputProps={{ className: "text-input" }}
+              onChange={handleNameChange}
+              error={!!formErrors.name}
+              helperText={formErrors.name}
+              InputProps={{ className: 'text-input' }}
             />
+
             <TextField
               label="מספר חדר"
               variant="standard"
               type="number"
               className="text-field"
               value={number}
-              onChange={(e) => setNumber(e.target.value)}
-              InputProps={{ className: "text-input" }}
+              disabled
+              InputProps={{ className: 'text-input' }}
             />
+
             <TextField
               label="מספר מקומות"
               variant="standard"
               type="number"
               className="text-field"
               value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
-              InputProps={{ className: "text-input" }}
+              onChange={handleCapacityChange}
+              error={!!formErrors.capacity}
+              helperText={formErrors.capacity}
+              InputProps={{ className: 'text-input' }}
             />
+
             <TextField
               select
               label="ציוד"
@@ -119,7 +179,9 @@ function RoomEdit() {
               SelectProps={{ multiple: true }}
               value={equipment}
               onChange={handleEquipmentChange}
-              InputProps={{ className: "text-input" }}
+              error={!!formErrors.equipment}
+              helperText={formErrors.equipment}
+              InputProps={{ className: 'text-input' }}
             >
               <MenuItem value="projector">מקרן</MenuItem>
               <MenuItem value="computer">מחשב</MenuItem>
@@ -130,7 +192,7 @@ function RoomEdit() {
       </Box>
 
       <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
-        <Alert severity={error ? "error" : "success"} onClose={() => setOpenSnackbar(false)}>
+        <Alert severity={error ? 'error' : 'success'} onClose={() => setOpenSnackbar(false)}>
           {message}
         </Alert>
       </Snackbar>
@@ -139,4 +201,3 @@ function RoomEdit() {
 }
 
 export default RoomEdit;
-
