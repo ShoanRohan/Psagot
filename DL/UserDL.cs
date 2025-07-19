@@ -144,14 +144,14 @@ namespace DL
                 var query = _context.Set<User>().AsQueryable();
 
                 // סינון לפי הפרמטרים שהתקבלו, תוך בדיקה שהם לא NULL כמחרוזת
-                if (!string.IsNullOrEmpty(username) && username.ToUpper() != "NULL")
+                if (!string.IsNullOrEmpty(username))
                 {
-                    query = query.Where(u => u.Name.Contains(username));
+                    query = query.Where(u => u.Name.Contains(username)).Include(u => u.UserType).AsQueryable();
                 }
 
                 if (!string.IsNullOrEmpty(phone) && phone.ToUpper() != "NULL")
                 {
-                    query = query.Where(u => u.Phone.Contains(phone));
+                    query = query.Where(u => u.Phone.Contains(phone)).Include(u => u.UserType).AsQueryable();
                 }
 
                 if (!string.IsNullOrEmpty(role) && role.ToUpper() != "NULL")
@@ -162,12 +162,13 @@ namespace DL
                         userType => userType.UserTypeId, // השדה המזהה של UserType
                         (user, userType) => new { User = user, UserType = userType }) // שילוב הנתונים
                         .Where(u => u.UserType.Name == role) // סינון לפי שם ה-Role
-                        .Select(u => u.User); // חזרה לאובייקט המקורי של ה-User
+                        .Select(u => u.User) // חזרה לאובייקט המקורי של ה-User
+                        .Include(u => u.UserType).AsQueryable();
                 }
 
                 if (isActive.HasValue)
                 {
-                    query = query.Where(u => u.IsActive == isActive);
+                    query = query.Where(u => u.IsActive == isActive).Include(u => u.UserType).AsQueryable();
                 }
 
                 // חישוב כמות כללית של המשתמשים שמתאימים לחיפוש

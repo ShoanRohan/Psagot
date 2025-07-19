@@ -23,9 +23,10 @@ import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
 import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import { StyledTableCell } from '../styles/MeetingsTableStyle';
+import UserSearchBar from '../components/UserSearchBar';
 
 const UsersPage = () => {
-    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+    const { users, status, error, pageNumber, pageSize, totalUsers, isSearchActive } = useSelector((state) => state.user);
 
     const dispatch = useDispatch();
 
@@ -38,8 +39,9 @@ const UsersPage = () => {
                 console.error("שגיאה בטעינת המשתמשים:", error);
             }
         };
-        fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
+        if(!isSearchActive)
+            fetchUsers();
+    }, [pageNumber, pageSize, dispatch, isSearchActive]);
 
     const handleChangePageSize = (event) => {
         const size = Number(event.target.value); // עדכון ל-`event`
@@ -73,7 +75,9 @@ const handlePageNumberChange = (newPage) => {
           }}
         >
             משתמשים
-        </Typography>                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
+        </Typography>  
+        <UserSearchBar></UserSearchBar>
+                     {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
                 <TableContainer component={Paper} sx={{ marginBottom: 2, maxHeight: '700px', overflowY: 'auto' }}>
                         <Table sx={{ width: '100%', tableLayout: 'auto' }} aria-label="courses table">
                                   <TableHead>
@@ -177,3 +181,5 @@ const handlePageNumberChange = (newPage) => {
 };
 
 export default UsersPage;
+
+

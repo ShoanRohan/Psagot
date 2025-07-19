@@ -14,7 +14,7 @@ const initialState = {
   loading: false,
   error: null,
   pageIndex: 0,
-  pageSize: 2,
+  pageSize: 5,
   isSearchActive: false,
   totalFilteredCount: 0,
   filters: {
