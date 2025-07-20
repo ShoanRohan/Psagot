@@ -145,9 +145,7 @@ const RoomsPage = () => {
             transition: 'all 0.3s ease',
           }}
         >
-
           {/* תצוגת רשימה */}
-          <RoomsGrid/>
         </Box>
 
         <Box
