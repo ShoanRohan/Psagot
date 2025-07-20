@@ -61,5 +61,16 @@ namespace Psagot.Controllers
 
             return Ok(addedMeeting);
         }
+        [HttpPost("GetMeetingsByDate")]
+        public async Task<IActionResult> GetMeetingsByDate([FromBody] MeetingDateRangeDTO range)
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetMeetingsByDate(range.From, range.To);
+
+            if (meetings == null)
+                return BadRequest(errorMessage);
+
+            return Ok(meetings);
+        }
+
     }
 }

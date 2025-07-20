@@ -6,6 +6,7 @@ import LoginPage from '../pages/LoginPage';
 import RoomsScheduleSearch from '../components/RoomsScheduleSearch';
 import HomePage from '../pages/HomePage';
 import RoomsSearch from '../components/RoomsSearch';
+import MeetingSchedule from '../components/MeetingSchedule';
 
 
 
@@ -13,8 +14,7 @@ const AppRouter = () => {
     return (
         
         <Routes>  
-           
-
+           <Route path="/" element={<MeetingSchedule />} />
            <Route path="/" element={<RoomsSearch />} />  {/* זה יטען כברירת מחדל */}
 
              <Route path='/home' element={<Layout/>}>

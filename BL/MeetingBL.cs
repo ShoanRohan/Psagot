@@ -58,5 +58,13 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+        public async Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetMeetingsByDate(DateOnly from, DateOnly to)
+        {
+            var (meetings, errorMessage) = await _meetingDL.GetMeetingsByDate(from, to);
+            if (meetings == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<MeetingDTO>>(meetings), null);
+        }
+
     }
 }

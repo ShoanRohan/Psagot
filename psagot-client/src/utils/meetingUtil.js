@@ -1,6 +1,6 @@
-import api from "./api"
+import api from "./api";
 
-const getAllMeetings = async() => {
+const getAllMeetings = async () => {
     const response = await api.get('/Meeting/GetAllMeetings');
     return response.data;
 };
@@ -20,4 +20,19 @@ const getMeetingeById = async (id) => {
     return response.data;
 };
 
-export { getAllMeetings, updateMeeting, addMeeting, getMeetingeById };
+const getMeetingsByDate = async (viewType, from, to) => {
+    const response = await api.post('/Meeting/GetMeetingsByDate', {
+        viewType,
+        from,
+        to
+    });
+    return response.data;
+};
+
+export {
+    getAllMeetings,
+    updateMeeting,
+    addMeeting,
+    getMeetingeById,
+    getMeetingsByDate
+};

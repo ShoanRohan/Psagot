@@ -13,5 +13,7 @@ namespace BL
         Task<(MeetingDTO MeetingDTO, string ErrorMessage)> UpdateMeeting(MeetingDTO meetingDTO);
         Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetAllMeetings();
         Task<(MeetingDTO Meeting, string ErrorMessage)> AddMeeting(MeetingDTO meetingDTO);
+        Task<(IEnumerable<MeetingDTO> Meetings, string ErrorMessage)> GetMeetingsByDate(DateOnly from, DateOnly to);
+
     }
 }

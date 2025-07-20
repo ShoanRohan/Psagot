@@ -71,5 +71,21 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetMeetingsByDate(DateOnly from, DateOnly to)
+        {
+            try
+            {
+                var meetings = await _context.Set<Meeting>()
+                    .Where(m => m.MeetingDate >= from && m.MeetingDate <= to)
+                    .ToListAsync();
+
+                return (meetings, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
     }
 }
