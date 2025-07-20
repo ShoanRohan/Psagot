@@ -27,16 +27,16 @@ const UserSearchBar = () => {
     pageSize:pageSize, 
     pageNumber:pageNumber
   };
-  const [phoneError, setPhoneError] = useState("");
+  /*const [phoneError, setPhoneError] = useState("");*/
 
-  const validateForm = () => {
+  /*const validateForm = () => {
     if (searchFields.phone.trim() && !/^\d+$/.test(searchFields.phone)) {
       //setPhoneError("מספר טלפון חייב להכיל ספרות בלבד");
       //return false;
     }
     setPhoneError("");
     return true;
-  };
+  };*/
 
   const handleChange = (e) => {
     const { name, value } = e.target;    
@@ -46,7 +46,7 @@ const UserSearchBar = () => {
   };
 
   const handleSearch = () => {
-    if (validateForm()) {
+   // if (validateForm()) {
       // יצירת אובייקט דינמי עם הפרמטרים
       const filteredUsersParamaters = {
         ...searchFields,
@@ -55,11 +55,11 @@ const UserSearchBar = () => {
       };
 
       // שליחה לפונקציה ב-Redux
-
+console.log(filteredUsersParamaters)
       dispatch(fetchFilteredUseres(filteredUsersParamaters));
       console.log("users: ", users);
     }
-  };
+  //};
   const clean = () => {
       setSearchFields(userSearchEmpty); // תאפס את השדות בטופס
     //  dispatch(fetchFilteredUseres(earchFields));
@@ -104,8 +104,8 @@ const UserSearchBar = () => {
             className="textField"
             value={searchFields.phone}
             onChange={handleChange}
-            error={!!phoneError}
-            helperText={phoneError}
+            //error={!!phoneError}
+            //helperText={phoneError}
           />
         </Grid>
 
