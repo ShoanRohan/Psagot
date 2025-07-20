@@ -75,7 +75,7 @@ const RoomsGrid = () => {
 
   const renderEquipment = (room) => {
     const items = [];
-    if (room.computer) items.push("מחשב");
+    if (room.computers) items.push("מחשבים");
     if (room.speakers) items.push("רמקולים");
     if (room.projector) items.push("מקרן");
     return items.join(", ");
@@ -104,10 +104,18 @@ const RoomsGrid = () => {
       <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
         <TableHead>
           <TableRow>
-            <StyledTableCell>שם חדר</StyledTableCell>
-            <StyledTableCell>מספר חדר</StyledTableCell>
-            <StyledTableCell>מס' מקומות</StyledTableCell>
-            <StyledTableCell>ציוד</StyledTableCell>
+            <StyledTableCell>
+              <b>שם חדר</b>             
+              </StyledTableCell>
+            <StyledTableCell>
+              <b>מספר חדר</b>       
+              </StyledTableCell>
+            <StyledTableCell>
+               <b>מס' מקומות</b>   
+            </StyledTableCell>
+            <StyledTableCell>
+              <b>ציוד </b>               
+            </StyledTableCell>
             <StyledTableCell
               align="center"
               sx={{ width: "70px" }}
@@ -149,7 +157,7 @@ const RoomsGrid = () => {
         onPageChange={handleChangePage}
         rowsPerPage={pageSize}
         onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[2, 3, 25, 50]}
+        rowsPerPageOptions={[5, 10, 25, 50]}
         labelRowsPerPage="מספר שורות:"
         labelDisplayedRows={() => `עמוד ${pageIndex + 1}`}
         ActionsComponent={TablePaginationActions}
