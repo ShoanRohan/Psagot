@@ -7,13 +7,14 @@ import { DataGrid, GridRowModes,  GridActionsCellItem} from "@mui/x-data-grid";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import editIcon from "../assets/icons/edit.png";
+import { useNavigate } from "react-router-dom";
 
 
 const UserGrid = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.user);
   
-
+  const navigate = useNavigate();
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -30,6 +31,7 @@ const UserGrid = () => {
   }, [users]);
 
   const handleEditClick = (id) => () => {
+    navigate(`/userUpdate/${id}`);
 
   };
 

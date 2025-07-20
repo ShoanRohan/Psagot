@@ -12,7 +12,8 @@ import courses from "../assets/icons/courses.svg";
 
 const Sidebar = () => {
     const user = useSelector((state) => state.user.selectedUser);
-    const isAdmin = user?.role === "admin";
+    const isAdmin = true
+    //  user?.role === "admin";
     const navigate = useNavigate();
 
     const navItems = [

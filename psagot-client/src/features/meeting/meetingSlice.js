@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById } from '../meeting/meetingActions';
+
 
 import { fetchAllMeetings, updateMeetingAction, addMeetingAction, fetchMeetingById,  fetchMeetings , deleteMeetingAction} from '../meeting/meetingActions';
 
@@ -138,20 +138,20 @@ const meetingSlice = createSlice({
                 state.error = action.error.message;
             })
             
-            // Delete Meeting - מחזיר את כל המפגשים המעודכנים
-            .addCase(deleteMeetingAction.pending, (state) => {
-                state.status = 'loading';
-            })
-            .addCase(deleteMeetingAction.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                // עדכון כל רשימת המפגשים עם הנתונים החדשים מהשרת
-                state.meetings = action.payload;
-                state.error = null;
-            })
-            .addCase(deleteMeetingAction.rejected, (state, action) => {
-                state.status = 'failed';
-                state.error = action.error.message;
-            });
+            // // Delete Meeting - מחזיר את כל המפגשים המעודכנים
+            // .addCase(deleteMeetingAction.pending, (state) => {
+            //     state.status = 'loading';
+            // })
+            // .addCase(deleteMeetingAction.fulfilled, (state, action) => {
+            //     state.status = 'succeeded';
+            //     // עדכון כל רשימת המפגשים עם הנתונים החדשים מהשרת
+            //     state.meetings = action.payload;
+            //     state.error = null;
+            // })
+            // .addCase(deleteMeetingAction.rejected, (state, action) => {
+            //     state.status = 'failed';
+            //     state.error = action.error.message;
+            // });
 
     },
 });

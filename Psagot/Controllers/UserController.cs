@@ -59,8 +59,7 @@ namespace Psagot.Controllers
             if (user == null) return NotFound(errorMessage);
 
             return Ok(user);
-        }
-
+        } 
         [HttpGet("GetAllUsers")]
         public async Task<IActionResult> GetAllUsers()
         {

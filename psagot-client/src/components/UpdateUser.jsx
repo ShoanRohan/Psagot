@@ -20,8 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import { updateUserAction, fetchUserById } from '../features/user/userAction';
+
 import { fetchAllUserTypes } from '../features/userType/userTypeActions';
-const EditUser = () => {
+const UpdateUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -34,7 +35,7 @@ const EditUser = () => {
   // Local state
   const [isEditing, setIsEditing] = useState(false);
    const [successMessage, setSuccessMessage] = useState('');
-   const [returnPath, setReturnPath] = useState('/');
+   const [returnPath, setReturnPath] = useState('/users');
   const [formData, setFormData] = useState({
     userId: 0,
     name: '',
@@ -49,7 +50,7 @@ const EditUser = () => {
 
   const [validationErrors, setValidationErrors] = useState({});
 
-  // Load user data - הוסף dependency array נכון
+
   useEffect(() => {
     if (userId) {
       dispatch(fetchUserById(userId));
@@ -68,21 +69,20 @@ const EditUser = () => {
         email: selectedUser.email || '',
         phone: selectedUser.phone || '',
         password: '',
-        userTypeId: selectedUser.userTypeId || '',
+        userTypeId: selectedUser.userTypeId || userType?.userTypeId || '',
         userTypeName: selectedUser.userTypeName || userType?.name|| '',
         isActive: selectedUser.isActive !== undefined ? selectedUser.isActive : true,
-        role: selectedUser.role || ''
       });
     }
   }, [selectedUser, userId ]); // הוסף userId לבדיקה
-  useEffect(() => {
-   const referrer = document.referrer;
-  if (referrer.includes('/user')) {
-    setReturnPath('/user');
-  } else {
-    setReturnPath('/');
-  }
-}, []);
+  // useEffect(() => {
+  //  const referrer = document.referrer;
+  // if (referrer.includes('/users')) {
+  //   setReturnPath('/users');
+  // } else {
+  //   setReturnPath('/');
+  // }
+// }, []);
   // Handle input changes
   const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -95,7 +95,7 @@ const EditUser = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
 
-    // Clear validation error when user starts typing
+ 
     if (validationErrors[name]) {
       setValidationErrors(prev => ({
         ...prev,
@@ -122,8 +122,8 @@ const EditUser = () => {
       errors.phone = 'טלפון הוא שדה חובה';
     }
 
-    if (!formData.userTypeId) {
-      errors.userTypeId = 'סוג משתמש הוא שדה חובה';
+    if (!formData.userTypeName) {
+      errors.userTypeName = 'סוג משתמש הוא שדה חובה';
     }
 
     setValidationErrors(errors);
@@ -136,7 +136,18 @@ const EditUser = () => {
       return;
     }
     try {
-    await dispatch(updateUserAction(formData));
+
+    const userType = userTypes.find(type => type.name === formData.userTypeName)
+    const password = formData.password ? formData.password : selectedUser?.password;
+    // setFormData(prev => ({
+    //   ...prev,
+    //   userTypeId: 2 || '',
+    // }));
+  const fromD ={...formData, userTypeId: userType?.userTypeId || '',password: password };
+
+  const { userTypeName, ...rest } = fromD;
+  
+    await dispatch(updateUserAction(fromD));
     setSuccessMessage('המשתמש עודכן בהצלחה');
     setTimeout(() => {
       navigate(returnPath);
@@ -145,6 +156,7 @@ const EditUser = () => {
     // השגיאה תטופל ב-Redux
   }
 };
+
 
 // הוסף Alert להצלחה
 {successMessage && (
@@ -346,7 +358,7 @@ const EditUser = () => {
 
                 {/* User Type */}
                 <Grid item xs={12} md={6}>
-                  <FormControl fullWidth error={!!validationErrors.userTypeId}>
+                  <FormControl fullWidth error={!!validationErrors.userTypeName}>
                     <InputLabel 
                       sx={{ 
                         left: 14, 
@@ -386,9 +398,9 @@ const EditUser = () => {
   ))}
 </Select>
 
-                    {validationErrors.userTypeId && (
+                    {validationErrors.userTypeName && (
                       <Typography variant="caption" color="error" sx={{ mt: 1, textAlign: 'left' }}>
-                        {validationErrors.userTypeId}
+                        {validationErrors.userTypeName}
                       </Typography>
                     )}
                   </FormControl>
@@ -432,4 +444,4 @@ const EditUser = () => {
 };
 
 
-export default EditUser;
+export default UpdateUser; 

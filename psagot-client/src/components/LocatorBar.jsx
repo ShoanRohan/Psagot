@@ -75,9 +75,8 @@ const LocatorBar = () => {
         flexDirection: 'row',
       }}
     >
-      {/* כפתור חיפוש בצד שמאל */}
       
-      {/* כל השדות בצד ימין */}
+    
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Course */}
         <FormControl variant="standard" sx={{ minWidth: 150 }}>

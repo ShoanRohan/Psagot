@@ -69,5 +69,10 @@ namespace BL
 
             return (_mapper.Map<MeetingDTO>(addedMeeting), null);
         }
+
+        public Task<(MeetingDTO Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

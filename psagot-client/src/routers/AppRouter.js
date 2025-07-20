@@ -6,8 +6,8 @@ import MeetingLocatorBar from '../pages/MeetingLocatorBar';
 import LocatorBar from '../components/LocatorBar';
 import MeetingTable from '../components/MeetingTable';
 import MeetingsPage from '../components/MeetingsPage';
-import EditUser from '../components/EditUser';
-
+import UpdateUser from '../components/UpdateUser';
+import UserManagement from '../pages/UserManagement';
 
 
 
@@ -16,13 +16,15 @@ const AppRouter = () => {
     return (
         
         <Routes>
-             <Route path='/' element={<Layout/>}></Route>
+                <Route path='/' element={<Layout/>}>
                 {/* <Route index element={<HomePage/>}></Route> */}
                 <Route path='LocatorBar' element={<LocatorBar/>}></Route>
                 <Route path='MeetingLocatorBar' element={<MeetingLocatorBar/>}/>
                 <Route path='/' element={<MeetingsPage/>}/>
                 <Route path='MeetingTable' element={<MeetingTable/>}/>   
-                <Route path='/user/:userId' element={<EditUser/>}/>
+                <Route path='/userUpdate/:userId' element={<UpdateUser/>}/>
+                <Route path='/users' element={<UserManagement/>}/>
+                </Route>
        </Routes>  
            
     );}

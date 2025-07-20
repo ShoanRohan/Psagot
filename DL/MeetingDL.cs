@@ -61,18 +61,18 @@ namespace DL
         }
     
 
-public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
-        {
-            try
-            {
-                var meetings = await _context.Set<Meeting>().ToListAsync();
-                return (meetings, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
+       //public async Task<(IEnumerable<Meeting> Meetings, string ErrorMessage)> UpdateMeeting(Meeting meeting)
+       // {
+       //     try
+       //     {
+       //         var meetings = await _context.Set<Meeting>().ToListAsync();
+       //         return (meetings, null);
+       //     }
+       //     catch (Exception ex)
+       //     {
+       //         return (null, ex.Message);
+       //     }
+       // }
 
         public async Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting)
         {
@@ -90,7 +90,7 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
 
 
 
-        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
+        //public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings() 
         public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
         {
             try
@@ -124,37 +124,14 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
             }
         }
 
-        public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
+        Task<(Meeting Meeting, string ErrorMessage)> IMeetingDL.UpdateMeeting(Meeting meeting)
         {
-            try
-            {
-                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
-                return (meeting, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
+            throw new NotImplementedException();
         }
 
-        public async Task<(Meeting Meeting, string ErrorMessage)> DeleteMeeting(int meetingId)
+        public Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
         {
-            try
-            {
-                var meeting = await _context.Set<Meeting>().FindAsync(meetingId);
-                if (meeting == null)
-                {
-                    return (null, "Meeting not found.");
-                }
-
-                _context.Set<Meeting>().Remove(meeting);
-                await _context.SaveChangesAsync();
-                return (meeting, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
+            throw new NotImplementedException();
         }
     }
 }
