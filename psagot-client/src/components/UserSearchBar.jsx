@@ -9,19 +9,23 @@ import { resetFilter } from "../features/user/userSlice";
 
 const UserSearchBar = () => {
   const dispatch = useDispatch();
-  const { status, error } = useSelector((state) => state.user);
+  const { status, error, pageSize, pageNumber } = useSelector((state) => state.user);
   const users = useSelector((state) => state.user.user);
   const [searchFields, setSearchFields] = useState({
     username: "",
     phone: "",
     role: "",
     isActive: true,
+    pageSize:pageSize, 
+    pageNumber:pageNumber
   });
   const userSearchEmpty = {
     username: "",
     phone: "",
     role: "",
     isActive: true,
+    pageSize:pageSize, 
+    pageNumber:pageNumber
   };
   const [phoneError, setPhoneError] = useState("");
 
@@ -46,8 +50,8 @@ const UserSearchBar = () => {
       // יצירת אובייקט דינמי עם הפרמטרים
       const filteredUsersParamaters = {
         ...searchFields,
-        pageNumber: 1, // אמור לבוא מהטופס
-        pageSize: 3, // אמור להיות בסטייט גלובלי
+       // pageNumber: 1, // אמור לבוא מהטופס
+       // pageSize: 4, // אמור להיות בסטייט גלובלי
       };
 
       // שליחה לפונקציה ב-Redux
