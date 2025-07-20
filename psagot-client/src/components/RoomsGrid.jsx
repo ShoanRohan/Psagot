@@ -51,6 +51,10 @@ export default function RoomsGrid() {
       border: 0,
     },
   }));
+  const handleDeleteRoom = (id)=>{
+    if (! id) return;
+    dispatch(deleteRoomAction(id))
+  }
   return (
     <Box
       dir="rtl"
@@ -89,7 +93,7 @@ export default function RoomsGrid() {
                 <StyledTableCell align="center">
                   <Box display="flex" gap={2} justifyContent="left">
                     <Paper sx={{ borderRadius: 3, padding: 1, backgroundColor: "#FAFAFA", boxShadow: "none" }}>
-                      <IconButton sx={{ padding: 0 }}>
+                      <IconButton sx={{ padding: 0 }} onClick={() => handleDeleteRoom(row.roomId)}>
                         <DeleteOutlinedIcon sx={{ fontSize: "20px" }} />
                       </IconButton>
                     </Paper>
