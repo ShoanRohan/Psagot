@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import {
     Box,
@@ -107,7 +106,6 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                 isValid = false;
             }
         }
-        // אין צורך בוולידציה מיוחדת ל-role אם הוא יכול להיות ריק (כי "הכל" היא אופציה)
 
         setErrors(newErrors); // עדכן את השגיאות ב-state
         return isValid;
@@ -139,11 +137,10 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                     }
                 }
             }
-            // אין ולידציה ל-role כאן, כיוון שאין מגבלות על ערכים ריקים או לא תקינים ספציפית ל-role בחיפוש
-
+            
             setErrors(tempErrors); // עדכן את שגיאות ה-state
-            console.log("Updated Filters:", updatedFilters); // לצורך דיבוג
-            console.log("Updated Errors:", tempErrors);  // לצורך דיבוג
+            // console.log("Updated Filters:", updatedFilters); // לצורך דיבוג - ניתן להפעיל להבנת מצב הפילטרים
+            // console.log("Updated Errors:", tempErrors);  // לצורך דיבוג - ניתן להפעיל להבנת מצב השגיאות
             return updatedFilters;
         });
     };
@@ -170,7 +167,6 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
 
     // חישוב מצב הכפתור 'חיפוש' (disabled)
     const isSearchButtonDisabled = (() => {
-        // בדוק אם יש שינוי כלשהו בפילטרים יחסית למצב ההתחלתי
         const isChanged =
             filters.username !== initialState.username ||
             filters.phone !== initialState.phone ||
@@ -217,7 +213,7 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                             onChange={handleFilterChange}
                             variant="standard"
                             fullWidth
-                            error={!!errors.username}
+                            error={!!errors.username} // קובע אם יוצג קו תחתון אדום
                         />
                         <FormHelperText sx={{ textAlign: "right" }}>
                             {errors.username}
@@ -234,7 +230,7 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                             onChange={handleFilterChange}
                             variant="standard"
                             fullWidth
-                            error={!!errors.phone}
+                            error={!!errors.phone} // קובע אם יוצג קו תחתון אדום
                         />
                         <FormHelperText sx={{ textAlign: "right" }}>
                             {errors.phone}
@@ -252,13 +248,13 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                             onChange={handleFilterChange}
                             variant="standard"
                             fullWidth
-                            error={!!errors.role}
+                            error={!!errors.role} // קובע אם יוצג קו תחתון אדום
                         >
                             <MenuItem value="">
                                 <em>הכל</em>
                             </MenuItem>
                             {roles?.map((r) => (
-                                <MenuItem key={r.id} value={r.name}> {/* הוספת key={r.id} */}
+                                <MenuItem key={r.id} value={r.name}>
                                     {r.name}
                                 </MenuItem>
                             ))}
@@ -292,15 +288,32 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                         ניקוי
                     </Button>
 
-                    <Button
-                        variant="contained"
-                        sx={{ ...buttonStyles, backgroundColor: "#326DEF", color: "white", "&:hover": { backgroundColor: "#2857C4" }, "&:active": { backgroundColor: "#234E9D" } }}
-                        startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
-                        disabled={isSearchButtonDisabled}
-                        onClick={handleSearchClick}
-                    >
-                        חיפוש
-                    </Button>
+      <Button
+    variant="contained"
+    sx={{
+        ...buttonStyles,
+        backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#326DEF",
+        color: isSearchButtonDisabled ? "#ECEFF1" : "white",
+        cursor: isSearchButtonDisabled ? "not-allowed" : "pointer",
+        boxShadow: isSearchButtonDisabled ? "none" : undefined,
+        "&:hover": {
+            backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#2857C4",
+        },
+        "&:active": {
+            backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#234E9D",
+        },
+    }}
+    startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
+    onClick={() => {
+        if (!isSearchButtonDisabled) {
+            handleSearchClick();
+        }
+    }}
+>
+    חיפוש
+</Button>
+
+
                 </Box>
             </Box>
         </Box>

@@ -9,8 +9,9 @@ public class MappingProfile : Profile
         CreateMap<DateTime, DateOnly>().ConvertUsing(dt => DateOnly.FromDateTime(dt));
         CreateMap<UserType, UserTypeDTO>().ReverseMap();
         CreateMap<User, UserDTO>()
-            .ForMember(dest => dest.UserTypeName, opt => opt.MapFrom(src => src.UserType.Name))
-            .ReverseMap();
+            .ForMember(dest => dest.UserTypeName, opt => opt.MapFrom(src => src.UserType.Name));
+        CreateMap<UserDTO, User>()
+        .ForMember(dest => dest.UserType, opt => opt.Ignore());
         CreateMap<Room, RoomDTO>().ReverseMap();
         CreateMap<Day, DayDTO>().ReverseMap();
         CreateMap<Meeting, MeetingDTO>().ReverseMap();

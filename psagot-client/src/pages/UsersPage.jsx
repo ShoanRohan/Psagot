@@ -10,9 +10,10 @@ import excelIcon from "../assets/icons/excelIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import *as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { fetchAllUsers } from "../features/user/userAction";
+import { addUserAction, fetchAllUsers } from "../features/user/userAction";
 import UsersSearch from '../components/UsersSearch';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import { fetchAllUserTypes } from "../features/userType/userTypeActions";
 
 const buttonStyles = {
     height: "44px",
@@ -64,26 +65,34 @@ const UsersPage = () => {
     const dispatch = useDispatch();
 
     const [currentFilters, setCurrentFilters] = useState({
-        username: "",
+        name: "",
         phone: "",
-        role: "",
+        userTypeName: "",
         isActive: true,
     });
+    const { userTypes, status: userTypeStatus } = useSelector((state) => state.userType);
 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [formValues, setFormValues] = useState({
-        username: "",
+        name: "",
         email: "",
         phone: "",
         password: "",
-        role: "",
-        isActive: true, // שינוי: השם שונה מ-status ל-isActive והערך ההתחלתי הוא בוליאני
+        userTypeName: "",
+        isActive: true, 
     });
+    
     const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
         dispatch(fetchAllUsers(currentFilters));
     }, [dispatch, currentFilters]);
+
+    useEffect(() => {
+        if (userTypeStatus === "idle") {
+            dispatch(fetchAllUserTypes());
+        }
+    }, [userTypeStatus, dispatch]);
 
     // פונקציה זו נקראת מ-UsersSearch כאשר כפתור "חיפוש" נלחץ
     const handleFilterChange = (filters) => {
@@ -97,6 +106,7 @@ const UsersPage = () => {
         console.log("Filters cleared in UsersPage.");
     };
 
+    // יצוא לאקסל
     const exportAllUsersToExcel = () => {
         if (!users || users.length === 0) return;
         const worksheet = XLSX.utils.json_to_sheet(users);
@@ -112,12 +122,12 @@ const UsersPage = () => {
 
     const handleOpenDialog = () => {
         setFormValues({ // איפוס ערכי הטופס והשגיאות בפתיחת דיאלוג חדש
-            username: "",
+            name: "",
             email: "",
             phone: "",
             password: "",
-            role: "",
-            isActive: true, // שינוי: איפוס isActive ל-true
+            userTypeName: "",
+            isActive: true, 
         });
         setFormErrors({});
         setDialogOpen(true);
@@ -127,74 +137,94 @@ const UsersPage = () => {
         setDialogOpen(false);
     };
 
+    // פונקציה לולידציה של שדה בודד
+    const validateField = (name, value) => {
+        let error = "";
+        switch (name) {
+            case "name":
+                if (!value.trim()) {
+                    error = "שם משתמש הוא שדה חובה";
+                } else if (value.trim().length < 2) {
+                    error = "שם משתמש חייב להיות באורך 2 תווים לפחות";
+                } else if (!/^[א-תA-Za-z\s]+$/.test(value)) {
+                    error = "שם משתמש יכול להכיל אותיות ורווחים בלבד";
+                }
+                break;
+            case "email":
+                if (!value.trim()) {
+                    error = "מייל הוא שדה חובה";
+                } else if (!/\S+@\S+\.\S+/.test(value)) {
+                    error = "פורמט מייל לא תקין";
+                }
+                break;
+            case "phone":
+                if (!value.trim()) {
+                    error = "טלפון הוא שדה חובה";
+                } else if (!/^\d{10}$/.test(value)) {
+                    error = "מספר טלפון לא תקין (10 ספרות בלבד)";
+                }
+                break;
+            case "password":
+                if (!value.trim()) {
+                    error = "סיסמה היא שדה חובה";
+                } else if (value.trim().length < 6) {
+                    error = "סיסמה חייבת להיות באורך 6 תווים לפחות";
+                }
+                break;
+            case "userTypeName":
+                if (!value) {
+                    error = "הרשאה היא שדה חובה";
+                }
+                break;
+            default:
+                break;
+        }
+        return error;
+    };
+
     const handleFormChange = (e) => {
         const { name, value, checked, type } = e.target;
+        const newValue = type === 'checkbox' ? checked : value;
+
         setFormValues((prevValues) => ({
             ...prevValues,
-            [name]: type === 'checkbox' ? checked : value, // טיפול מיוחד לתיבת סימון
+            [name]: newValue,
         }));
+
+        // הפעלת ולידציה עבור השדה הספציפי ששונה
+        const error = validateField(name, newValue);
         setFormErrors((prevErrors) => ({
             ...prevErrors,
-            [name]: "",
+            [name]: error,
         }));
     };
 
-    const validateForm = () => {
+    const validateAllFormFields = () => {
         let isValid = true;
         const newErrors = {};
 
-        if (!formValues.username.trim()) {
-            newErrors.username = "שם משתמש הוא שדה חובה";
-            isValid = false;
-        } else if (formValues.username.trim().length < 2) {
-            newErrors.username = "שם משתמש חייב להיות באורך 2 תווים לפחות";
-            isValid = false;
-        } else if (!/^[א-תA-Za-z\s]+$/.test(formValues.username)) {
-            newErrors.username = "שם משתמש יכול להכיל אותיות ורווחים בלבד";
-            isValid = false;
+        // עובר על כל השדות ב-formValues ומפעיל עליהם ולידציה
+        for (const [name, value] of Object.entries(formValues)) {
+            const error = validateField(name, value);
+            if (error) {
+                newErrors[name] = error;
+                isValid = false;
+            }
         }
-
-        if (!formValues.email.trim()) {
-            newErrors.email = "מייל הוא שדה חובה";
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(formValues.email)) {
-            newErrors.email = "פורמט מייל לא תקין";
-            isValid = false;
-        }
-
-        if (!formValues.phone.trim()) {
-            newErrors.phone = "טלפון הוא שדה חובה";
-            isValid = false;
-        } else if (!/^\d{10}$/.test(formValues.phone)) {
-            newErrors.phone = "מספר טלפון לא תקין (10 ספרות בלבד)";
-            isValid = false;
-        }
-
-        if (!formValues.password.trim()) {
-            newErrors.password = "סיסמה היא שדה חובה";
-            isValid = false;
-        } else if (formValues.password.trim().length < 6) {
-            newErrors.password = "סיסמה חייבת להיות באורך 6 תווים לפחות";
-            isValid = false;
-        }
-
-        if (!formValues.role) {
-            newErrors.role = "הרשאה היא שדה חובה";
-            isValid = false;
-        }
-
         setFormErrors(newErrors);
         return isValid;
     };
 
     const handleSaveUser = () => {
-        if (validateForm()) {
+        if (validateAllFormFields()) { // קורא לפונקציה שבודקת את כל השדות
             console.log("User saved:", formValues);
+            const userType = userTypes.find(u => u.name === formValues.userTypeName);
+            const userTypeId = userType ? userType.userTypeId : null; // ודא ש-userType נמצא
+            const userToSend = { ...formValues, userTypeId: userTypeId };
+            dispatch(addUserAction(userToSend));
             handleCloseDialog();
         }
     };
-
-    const rolesOptions = ["מנהל", "עובד", "לקוח"]; // דוגמה להרשאות
 
     return (
         <Container maxWidth={false} sx={{ width: "80vw", mx: "auto", px: 2, pt: 3, pb: 3, overflowY: "unset" }}>
@@ -248,19 +278,19 @@ const UsersPage = () => {
                     gap: '24px 16px',
                 }}>
                     {/* שדות הוספת משתמש */}
-                    <FormControl variant="standard" sx={sharedDialogFieldStyles} error={!!formErrors.username}>
+                    <FormControl variant="standard" sx={sharedDialogFieldStyles} error={!!formErrors.name}>
                         <TextField
-                            id="username-dialog-input"
-                            name="username"
+                            id="name-dialog-input"
+                            name="name"
                             label="שם"
-                            value={formValues.username}
+                            value={formValues.name}
                             onChange={handleFormChange}
                             variant="standard"
                             fullWidth
-                            error={!!formErrors.username}
+                            error={!!formErrors.name}
                         />
                         <FormHelperText sx={{ textAlign: "right" }}>
-                            {formErrors.username}
+                            {formErrors.name}
                         </FormHelperText>
                     </FormControl>
 
@@ -313,29 +343,29 @@ const UsersPage = () => {
                         </FormHelperText>
                     </FormControl>
 
-                    <FormControl variant="standard" sx={sharedDialogFieldStyles} error={!!formErrors.role}>
+                    <FormControl variant="standard" sx={sharedDialogFieldStyles} error={!!formErrors.userTypeName}>
                         <TextField
-                            id="role-dialog-select"
-                            name="role"
+                            id="userTypeName-dialog-select"
+                            name="userTypeName"
                             select
                             label="הרשאה"
-                            value={formValues.role}
+                            value={formValues.userTypeName}
                             onChange={handleFormChange}
                             variant="standard"
                             fullWidth
-                            error={!!formErrors.role}
+                            error={!!formErrors.userTypeName}
                         >
                             <MenuItem value="">
                                 <em>בחר הרשאה</em>
                             </MenuItem>
-                            {rolesOptions.map((role) => (
-                                <MenuItem key={role} value={role}>
-                                    {role}
+                            {userTypes.map((userType) => (
+                                <MenuItem key={userType.userTypeId} value={userType.name}>
+                                    {userType.name}
                                 </MenuItem>
                             ))}
                         </TextField>
                         <FormHelperText sx={{ textAlign: "right" }}>
-                            {formErrors.role}
+                            {formErrors.userTypeName}
                         </FormHelperText>
                     </FormControl>
 
