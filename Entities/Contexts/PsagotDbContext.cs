@@ -50,6 +50,7 @@ public partial class PsagotDbContext : DbContext
             entity.HasOne(d => d.Status).WithMany(p => p.Courses)
                 .HasForeignKey(d => d.StatusId)
                 .HasConstraintName("FK_Courses_Status");
+
         });
 
         modelBuilder.Entity<Day>(entity =>

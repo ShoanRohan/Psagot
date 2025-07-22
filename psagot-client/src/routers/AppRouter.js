@@ -14,13 +14,13 @@ import UserManagement from '../pages/UserManagement';
 
 const AppRouter = () => {
     return (
-        
         <Routes>
                 <Route path='/' element={<Layout/>}>
                 {/* <Route index element={<HomePage/>}></Route> */}
                 <Route path='LocatorBar' element={<LocatorBar/>}></Route>
                 <Route path='MeetingLocatorBar' element={<MeetingLocatorBar/>}/>
-                <Route path='/' element={<MeetingsPage/>}/>
+            <Route path='/' element={<UserPage />} />
+            <Route path='MeetingsPage' element={<MeetingsPage />} />
                 <Route path='MeetingTable' element={<MeetingTable/>}/>   
                 <Route path='/userUpdate/:userId' element={<UpdateUser/>}/>
                 <Route path='/users' element={<UserManagement/>}/>
@@ -29,4 +29,4 @@ const AppRouter = () => {
            
     );}
 
-export default AppRouter;
+export default AppRouter;  

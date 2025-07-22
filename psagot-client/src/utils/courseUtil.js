@@ -19,5 +19,9 @@ const updateCourse = async (courseDTO) => {
     const response = await api.put('/Course/UpdateCourse', courseDTO);
     return response.data;
 };
+const DeletCourse = async (courseDTO) => {
+    const response = await api.put('/Course/DeletCourse ', courseDTO);
+    return response.data;
+};
 
-export { getCourseById, getAllCourses, addCourse, updateCourse };
+export { getCourseById, getAllCourses, addCourse, updateCourse ,DeletCourse};

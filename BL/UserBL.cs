@@ -2,6 +2,7 @@
 using DL;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,6 +19,17 @@ namespace BL
             _mapper = mapper;
         }
 
+        public async Task<(IEnumerable<UserDTO> users, string errorMessage,int total)> GetUsersWithPagination(int page, int rows)
+        {
+                var (users, errorMessage, total) = await _userDL.GetUsersWithPagination(page, rows);
+              
+                 if (users == null)
+
+                return (null, "שגיאה בשליפת משתמשים",total);
+
+                return (_mapper.Map<IEnumerable<UserDTO>>(users), null,total);
+            }
+        
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
             var userEntity = _mapper.Map<User>(userDTO);

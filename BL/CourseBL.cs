@@ -12,7 +12,6 @@ namespace BL
 {
     public class CourseBL : ICourseBL
     {
-
         private readonly ICourseDL _courseDL;
         private readonly IMapper _mapper;
 
@@ -21,8 +20,6 @@ namespace BL
             _courseDL = courseDL;
             _mapper = mapper;
         }
-
-      
 
         public async Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id)
         {
@@ -45,10 +42,18 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
             return (_mapper.Map<CourseDTO>(addedCourse), null);
         }
-
-        public Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course)
+        public async Task<bool> DeleteCourse(int id)
         {
-            throw new NotImplementedException();
+            int u = _mapper.Map<int>(id);
+            bool isRemove = await _courseDL.DeleteCourse(u);
+            return isRemove;
+        }
+        public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
+        {
+            var course = _mapper.Map<Course>(courseDTO);
+            var (updatedCourse, errorMessage) = await _courseDL.UpdateCourse(course);
+            if (updatedCourse == null) return (null, errorMessage);
+            return (_mapper.Map<CourseDTO>(updatedCourse), null);
+        }
         }
     }
-}

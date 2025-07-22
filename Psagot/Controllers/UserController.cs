@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
+
 namespace Psagot.Controllers
 {
     [Route("api/[controller]")]
@@ -18,7 +19,19 @@ namespace Psagot.Controllers
         public UserController(IUserBL userBL)
         {
             _userBL = userBL;
+
         }
+        [HttpGet("GetUsersWithPagination")]
+        public async Task<IActionResult> GetUsersWithPagination(int page = 1, int rows = 10)
+        {
+            var (users, errorMessage,total) = await _userBL.GetUsersWithPagination(page, rows);
+
+            if (users == null)
+                return BadRequest(errorMessage);
+
+            return Ok(new { users ,total});
+        }
+
 
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser([FromBody] UserDTO userDTO)

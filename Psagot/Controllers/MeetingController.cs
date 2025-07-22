@@ -58,15 +58,11 @@ namespace Psagot.Controllers
             return Ok(meeting);
         }
 
-        //[HttpPost("AddMeeting")]
-        //public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
-        //{
-        //    var (addedMeeting, errorMessage) = await _meetingBL.AddMeeting(meetingDTO);
-        //    if (addedMeeting == null) return BadRequest(errorMessage);
-        //    return Ok(addedMeeting);
-        //}
-
-        //return Ok(meeting);
+            var (meeting, errorMessage) = await _meetingBL.GetMeetingById(id);
+            if (meeting == null)
+            {
+                return NotFound(errorMessage ?? "Meeting not found.");
+            }
 
 
         [HttpGet("GetMeetings")]
@@ -77,8 +73,12 @@ namespace Psagot.Controllers
             if (meetings == null) return BadRequest(errorMessage);
             return Ok(meetings);
         }
+
+
+ 
+
         [HttpDelete("DeleteMeeting/{id}")]
-        public async Task<IActionResult> DeleteMeeting([FromRoute] int id)
+       public async Task<IActionResult> DeleteMeeting([FromRoute] int id)
         {
             if (id <= 0)
             {

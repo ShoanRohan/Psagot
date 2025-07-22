@@ -9,10 +9,11 @@ namespace BL
 { 
         public interface ICourseBL
         {
-            Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO course);
             Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
             Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses();
-        }
-    
+        Task<bool> DeleteCourse(int id);
+        Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
+
+    }
 }
