@@ -27,11 +27,11 @@ const addUser = async (newUser) => {
   const response = await api.post("/User/AddUser", newUser);
   return response.data;
 };
-
-const updatedUser = async (updateUser) => {
-  const response = await api.put("/User/UpdateUser", updateUser);
+ const updatedUser = async (userData) => {
+  const response = await api.put("/User/UpdateUser", userData);
   return response.data;
 };
+
 
 const getAllLecturersAndCoordinators = async () => {
   const response = await api.get("/User/GetAllLecturersAndCoordinators");

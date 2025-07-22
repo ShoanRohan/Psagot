@@ -35,11 +35,20 @@ export const addUserAction = createAsyncThunk(
     return data;
 });
 
-export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
-    const data = await updatedUser(updateUser);
-    return data;
+
+export const updateUserAction = createAsyncThunk(
+  'user/updateUserAction',
+  async (userData, thunkAPI) => {
+    try {
+      const data = await updatedUser(userData); 
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
+
+
 
 export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", async () => {
         const data = await getCoordinators();
@@ -59,3 +68,5 @@ export const fetchUsersByPage = createAsyncThunk('user/fetchUsersByPage', async(
     const data = await getUsersByPage(pageNumber, pageSize);
     return data;
 });
+
+
