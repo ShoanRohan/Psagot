@@ -1,7 +1,10 @@
 ﻿using BL;
 using Entities.DTO;
+using Entities.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -12,22 +15,30 @@ namespace Psagot.Controllers
     public class MeetingController : ControllerBase
     {
         private readonly IMeetingBL _meetingBL;
+        private readonly ILogger<MeetingController> _logger;
 
-        public MeetingController(IMeetingBL meetingBL)
+        public MeetingController(IMeetingBL meetingBL, ILogger<MeetingController> logger)
         {
             _meetingBL = meetingBL;
+            _logger = logger;
         }
 
         [HttpPut("UpdateMeeting")]
         public async Task<IActionResult> UpdateMeeting([FromBody] MeetingDTO meetingDTO)
         {
             var (updatedMeeting, errorMessage) = await _meetingBL.UpdateMeeting(meetingDTO);
-
             if (updatedMeeting == null) return BadRequest(errorMessage);
-
             return Ok(updatedMeeting);
         }
 
+        [HttpGet("GetAllMeetings")]
+        public async Task<IActionResult> GetAllMeetings()
+        {
+            var (meetings, errorMessage) = await _meetingBL.GetAllMeetings();
+            if (meetings == null) return BadRequest(errorMessage);
+
+            return Ok(meetings);
+        }
 
         [HttpPost("AddMeeting")]
         public async Task<IActionResult> AddMeeting([FromBody] MeetingDTO meetingDTO)
@@ -41,19 +52,14 @@ namespace Psagot.Controllers
         [HttpGet("GetMeetingById/{id}")]
         public async Task<IActionResult> GetMeetingById([FromRoute] int id)
         {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid meeting ID.");
-            }
-
+            if (id <= 0) return BadRequest("Invalid meeting ID.");
             var (meeting, errorMessage) = await _meetingBL.GetMeetingById(id);
-            if (meeting == null)
-            {
-                return NotFound(errorMessage ?? "Meeting not found.");
-            }
-
+            if (meeting == null) return NotFound(errorMessage ?? "Meeting not found.");
             return Ok(meeting);
         }
+
+        
+
 
         [HttpGet("GetMeetings")]
 
@@ -61,13 +67,11 @@ namespace Psagot.Controllers
         {
             var (meetings, totalRecords, errorMessage) = await _meetingBL.GetMeetings(userName, courseName, subjectName, date, page, rows);
             if (meetings == null) return BadRequest(errorMessage);
-
-            return Ok(new { meetings, totalRecords });
+            return Ok(meetings);
         }
 
 
-        
-
+ 
 
         [HttpDelete("DeleteMeeting/{id}")]
        public async Task<IActionResult> DeleteMeeting([FromRoute] int id)

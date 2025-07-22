@@ -3,7 +3,7 @@ using Entities.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace API.Controllers
+namespace Psagot.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

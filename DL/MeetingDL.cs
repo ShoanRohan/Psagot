@@ -59,34 +59,18 @@ namespace DL
         }
     
 
-public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting meeting)
-        {
-            try
-            {
-                _context.Set<Meeting>().Update(meeting);
-                await _context.SaveChangesAsync();
-                return (meeting, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
-
-
-
-        public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
-        {
-            try
-            {
-                var meetings = await _context.Set<Meeting>().ToListAsync();
-                return (meetings, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
+       //public async Task<(IEnumerable<Meeting> Meetings, string ErrorMessage)> UpdateMeeting(Meeting meeting)
+       // {
+       //     try
+       //     {
+       //         var meetings = await _context.Set<Meeting>().ToListAsync();
+       //         return (meetings, null);
+       //     }
+       //     catch (Exception ex)
+       //     {
+       //         return (null, ex.Message);
+       //     }
+       // }
 
         public async Task<(Meeting Meeting, string ErrorMessage)> AddMeeting(Meeting meeting)
         {
@@ -102,6 +86,9 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
             }
         }
 
+
+
+        //public async Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings() 
         public async Task<(Meeting Meeting, string ErrorMessage)> GetMeetingById(int meetingId)
         {
             try
@@ -133,6 +120,16 @@ public async Task<(Meeting Meeting, string ErrorMessage)> UpdateMeeting(Meeting 
             {
                 return (null, ex.Message);
             }
+        }
+
+        Task<(Meeting Meeting, string ErrorMessage)> IMeetingDL.UpdateMeeting(Meeting meeting)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<(IEnumerable<Meeting> Meeting, string ErrorMessage)> GetAllMeetings()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -24,21 +24,19 @@ export const fetchMeetingById = createAsyncThunk("meeting/fetchGetMeetingById", 
     return data;
 });
 
+export const deleteMeetingAction = createAsyncThunk(
+  'meeting/deleteMeetingAction',
+  async (meetingId) => {
+    const data = await deleteMeetingById (meetingId);
+    return data;
+  }
+);
 export const addMeetingAction = createAsyncThunk(
     "meeting/addMeetingAction",
     async (addNewMeeting) => {
         const data = await addMeeting(addNewMeeting);
         return data;
     });
-
-// הוספת פעולה חדשה למחיקת מפגש
-export const deleteMeetingAction = createAsyncThunk(
-    "meeting/deleteMeetingAction",
-    async (meetingId) => {
-        const data = await deleteMeetingById(meetingId);
-        return data; // מחזיר את ה-ID של המפגש שנמחק
-    }
-);
 
 export const fetchMeetings = createAsyncThunk(
     "meeting/fetchMeetings",

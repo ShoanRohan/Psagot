@@ -20,8 +20,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import EditIcon from '@mui/icons-material/Edit';
 import { updateUserAction, fetchUserById } from '../features/user/userAction';
+
 import { fetchAllUserTypes } from '../features/userType/userTypeActions';
-const EditUser = () => {
+const UpdateUser = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -34,7 +35,7 @@ const EditUser = () => {
   // Local state
   const [isEditing, setIsEditing] = useState(false);
    const [successMessage, setSuccessMessage] = useState('');
-   const [returnPath, setReturnPath] = useState('/');
+   const [returnPath, setReturnPath] = useState('/users');
   const [formData, setFormData] = useState({
     userId: 0,
     name: '',
@@ -49,7 +50,7 @@ const EditUser = () => {
 
   const [validationErrors, setValidationErrors] = useState({});
 
-  // Load user data - הוסף dependency array נכון
+
   useEffect(() => {
     if (userId) {
       dispatch(fetchUserById(userId));
@@ -68,25 +69,24 @@ const EditUser = () => {
         email: selectedUser.email || '',
         phone: selectedUser.phone || '',
         password: '',
-        userTypeId: selectedUser.userTypeId || '',
+        userTypeId: selectedUser.userTypeId || userType?.userTypeId || '',
         userTypeName: selectedUser.userTypeName || userType?.name|| '',
         isActive: selectedUser.isActive !== undefined ? selectedUser.isActive : true,
-        role: selectedUser.role || ''
       });
     }
   }, [selectedUser, userId ]); // הוסף userId לבדיקה
-  useEffect(() => {
-   const referrer = document.referrer;
-  if (referrer.includes('/user')) {
-    setReturnPath('/user');
-  } else {
-    setReturnPath('/');
-  }
-}, []);
-  // Handle input changes
-  const handleInputChange = (event) => {
+//   useEffect(() => {
+//    const referrer = document.referrer;
+//   if (referrer.includes('/users')) {
+//     setReturnPath('/users');
+//   } else {
+//     setReturnPath('/');
+//   }
+// }, []);
+        //שינוי ערך שדה
+    const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-     if (name === 'userTypeName' &&  currentUser & currentUser?.role !== 'admin' && 
+    if (name === 'userTypeName' &&  currentUser & currentUser?.role !== 'admin' && 
       currentUser?.userId === formData.userId) {
     return; // לא מאפשר שינוי
   }
@@ -95,7 +95,7 @@ const EditUser = () => {
       [name]: type === 'checkbox' ? checked : value
     }));
 
-    // Clear validation error when user starts typing
+ 
     if (validationErrors[name]) {
       setValidationErrors(prev => ({
         ...prev,
@@ -103,8 +103,51 @@ const EditUser = () => {
       }));
     }
   };
+  // הוסף פונקציה לבדיקת טלפון ישראלי
+const validatePhoneNumber = (phone) => {
+  // הסר רווחים ומקפים
+  const cleanPhone = phone.replace(/[\s-]/g, '');
+  const israeliPhoneRegex = /^(\+972|972|0)?(5[0-9]|7[2-9]|2|3|4|8|9)[0-9]{7}$/;
+  return israeliPhoneRegex.test(cleanPhone);
+};
+const validateEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email);
+};
+const validatePassword = (password) => {
+  if (!password || password.trim() === '') {
+    return { isValid: true, message: '' }; // סיסמה ריקה מותרת (תשתמש במקורית)
+  }
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+  if (password.length < minLength) {
+    return { isValid: false, message: `הסיסמה חייבת להכיל לפחות ${minLength} תווים` };
+  }
+  
+  if (!hasUpperCase) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות אות גדולה אחת' };
+  }
+  
+  if (!hasLowerCase) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות אות קטנה אחת' };
+  }
+  
+  if (!hasNumbers) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות ספרה אחת' };
+  }
+  
+  if (!hasSpecialChar) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות תו מיוחד אחד' };
+  }
+  
+  return { isValid: true, message: '' };
+};
 
-  // Validation function
+  //בדיקת תקינות
   const validateForm = () => {
     const errors = {};
 
@@ -121,51 +164,59 @@ const EditUser = () => {
     if (!formData.phone.trim()) {
       errors.phone = 'טלפון הוא שדה חובה';
     }
-
-    if (!formData.userTypeId) {
-      errors.userTypeId = 'סוג משתמש הוא שדה חובה';
+       else if(!validatePhoneNumber(formData.phone)) {
+    errors.phone = 'מספר טלפון לא תקין (נדרש מספר ישראלי)';
+  }
+    
+    if (!formData.userTypeName) {
+      errors.userTypeName = 'סוג משתמש הוא שדה חובה';
     }
 
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  // Handle save
+//  שמירה
   const handleSave = async () => {
     if (!validateForm()) {
       return;
     }
     try {
-    await dispatch(updateUserAction(formData));
+
+    const userType = userTypes.find(type => type.name === formData.userTypeName)
+    const password = formData.password ? formData.password : selectedUser?.password;
+    // setFormData(prev => ({
+    //   ...prev,
+    //   userTypeId: 2 || '',
+    // }));
+  const fromD ={...formData, userTypeId: userType?.userTypeId || '',password: password };
+
+  const { userTypeName, ...rest } = fromD;
+  
+     dispatch(updateUserAction(fromD));
     setSuccessMessage('המשתמש עודכן בהצלחה');
-    setTimeout(() => {
-      navigate(returnPath);
-    }, 2000);
+    // setTimeout(() => {
+       navigate(returnPath);
+       
+    // }, 2000);
   } catch (error) {
-    // השגיאה תטופל ב-Redux
+  
   }
 };
-
-// הוסף Alert להצלחה
 {successMessage && (
   <Alert severity="success" sx={{ mb: 2 }}>
     {successMessage}
   </Alert>
 )};
-
-   
-  
-
-  // Handle edit
+ // עריכה
   const handleEdit = () => {
     setIsEditing(true);
   };
-
-  // Handle cancel
+  //ביטול
   const handleCancel = () => {
-    setIsEditing(false);
-    navigate(returnPath);
-    // Reset form data to original values
+      setIsEditing(false);
+      navigate(returnPath);
+   
     if (selectedUser) {
       setFormData({
         userId: selectedUser.userId || 0,
@@ -181,14 +232,10 @@ const EditUser = () => {
     }
     setValidationErrors({});
   };
-
-  // If no userId in params, redirect to users list
   if (!userId) {
     navigate('/user');
     return null;
   }
-
-  // הוסף loading state
   if (status === 'loading') {
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
@@ -196,9 +243,7 @@ const EditUser = () => {
       </Box>
     );
   }
-
-  return (
-    
+ return (
     <Box sx={{ p: 3, maxWidth: 1200, mx: 'auto' }}>
       {/* Header */}
       <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
@@ -255,7 +300,7 @@ const EditUser = () => {
           
           <Divider sx={{ mb: 3 }} />
 
-          {/* Form - Fields aligned to the left */}
+         
           <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Box sx={{ width: '100%', maxWidth: 700 }}>
               <Grid container spacing={3} direction="row">
@@ -346,7 +391,7 @@ const EditUser = () => {
 
                 {/* User Type */}
                 <Grid item xs={12} md={6}>
-                  <FormControl fullWidth error={!!validationErrors.userTypeId}>
+                  <FormControl fullWidth error={!!validationErrors.userTypeName}>
                     <InputLabel 
                       sx={{ 
                         left: 14, 
@@ -363,8 +408,7 @@ const EditUser = () => {
                       }}
                     >
                       סוג משתמש
-                    </InputLabel>
-                    <Select
+                    </InputLabel><Select
   name="userTypeName"
   value={formData.userTypeName}
   onChange={handleInputChange}
@@ -386,19 +430,13 @@ const EditUser = () => {
   ))}
 </Select>
 
-                    {validationErrors.userTypeId && (
+                    {validationErrors.userTypeName && (
                       <Typography variant="caption" color="error" sx={{ mt: 1, textAlign: 'left' }}>
-                        {validationErrors.userTypeId}
+                        {validationErrors.userTypeName}
                       </Typography>
                     )}
                   </FormControl>
                 </Grid>
-
-                {/* Role */}
-                
-                
-
-                {/* Is Active */}
                 <Grid item xs={12}>
                   <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
                     <FormControlLabel
@@ -432,4 +470,4 @@ const EditUser = () => {
 };
 
 
-export default EditUser;
+export default UpdateUser; 

@@ -29,6 +29,7 @@ const MeetingTable = ({ onEdit }) => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [openDescriptionDialog, setOpenDescriptionDialog] = useState(false);
   const [currentMeeting, setCurrentMeeting] = useState(null);
+  const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [editedDescription, setEditedDescription] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -94,6 +95,7 @@ const MeetingTable = ({ onEdit }) => {
   const handleSaveDescription = () => {
     if (currentMeeting) {
       setIsSaving(true);
+
       const updatedMeeting = {
         ...currentMeeting,
         description: editedDescription
@@ -176,19 +178,19 @@ const MeetingTable = ({ onEdit }) => {
   const columnConfig = {
     'חלק מהמערכת?': {
       render: (row) => (
-        <Chip
-          label={row.isPartOfSchedule ? 'כן' : 'לא'}
-          color={row.isPartOfSchedule ? 'success' : 'default'}
-          variant="outlined"
+        <Chip 
+          label={row.isPartOfSchedule ? 'כן' : 'לא'} 
+          color={row.isPartOfSchedule ? 'success' : 'default'} 
+          variant="outlined" 
         />
       )
     },
     'האם השיבוץ תקין?': {
       render: (row) => (
-        <Chip
-          label={row.isValid ? 'תקין' : 'שגוי'}
-          color={row.isValid ? 'success' : 'error'}
-          variant="outlined"
+        <Chip 
+          label={row.isValid ? 'תקין' : 'שגוי'} 
+          color={row.isValid ? 'success' : 'error'} 
+          variant="outlined" 
         />
       )
     },

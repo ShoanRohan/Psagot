@@ -24,6 +24,7 @@ const userSlice = createSlice( {
             state.status = 'loading';
         })
         .addCase(fetchAllUsers.fulfilled, (state, action) =>{
+            console.log("Users from API:", action.payload);
             state.status ='succeeded';
             state.users =action.payload;
         })
@@ -35,7 +36,7 @@ const userSlice = createSlice( {
             state.status ='loading';
 
         })
-        .addCase(fetchUserById. fulfilled, (state, action)=>{
+        .addCase(fetchUserById.fulfilled, (state, action)=>{
             state.status ='succeeded';
             state.selectedUser =action.payload;
         })
@@ -56,11 +57,11 @@ const userSlice = createSlice( {
         state.error = action.error.message;
       })
         .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.puse(action.payload);
+            state.users.push(action.payload);
         })
         
         .addCase(updateUserAction.fulfilled, (state, action)=> {
-            const index = state.users.findIndex((user)=> user.id===action.payload.id);
+            const index = state.users.findIndex((user)=> user.userId===action.payload.userId);
             if (index !== -1) {
                 state.users[index]=action.payload;
             }
