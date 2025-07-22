@@ -10,6 +10,8 @@ import {
   CancelButton,
   SaveButton,
   ActionsContainer,
+  ContentTextBold,
+  ContentTextRegular
 } from "../styles/GenericPopupStyle";
 
 const GenericPopup = ({
@@ -18,7 +20,8 @@ const GenericPopup = ({
   onSave,
   onCancel,
   title,
-  children,
+  subTitle,
+  content,
   showCancelButton = true,
   showSaveButton = true,
 }) => {
@@ -32,7 +35,12 @@ const GenericPopup = ({
       </TitleGeneric>
       <DialogContent>
         <Grid2 container direction="column" alignItems="center" textAlign="center">
-          {children}
+          <ContentTextBold>
+            {subTitle}
+          </ContentTextBold>
+          <ContentTextRegular>
+            {content}
+          </ContentTextRegular>
         </Grid2>
       </DialogContent>
       <ActionsContainer>
@@ -57,7 +65,8 @@ GenericPopup.propTypes = {
   onSave: PropTypes.func,
   onCancel: PropTypes.func,
   title: PropTypes.string,
-  children: PropTypes.node,
+  subTitle: PropTypes.string,
+  content: PropTypes.string,
   showCancelButton: PropTypes.bool,
   showSaveButton: PropTypes.bool,
 };

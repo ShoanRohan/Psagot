@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
@@ -6,11 +6,10 @@ import CalendarPage from '../pages/CalendarPage';
 import CoursesPage from "../pages/CoursesPage";
 import MeetingsTable from '../components/MeetingsTable';
 import RoomTable from '../components/RoomTable';
-import RoomsHeader from '../components/RoomsHeader';
 import CourseScreen from "../components/CourseScreen";
 import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
-import RoomsViewPage from '../pages/RoomsViewPage';
+import EditProfile from '../components/EditProfile';
 
 const AppRouter = () => {
     return (
@@ -24,7 +23,8 @@ const AppRouter = () => {
                 <Route path='/rooms' element={<Rooms />} />
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
-                <Route path='/rooms-table' element={<RoomsViewPage />} />
+                {/* <Route path='/rooms-table' element={<RoomsViewPage />} /> */}
+                <Route path='/edit-profile' element={<EditProfile />} />
             </Route>
         </Routes>
     );

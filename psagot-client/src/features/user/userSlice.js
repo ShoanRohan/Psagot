@@ -9,8 +9,9 @@ const initialState = {
     status: 'idle',
     error: null,
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 5,
     totalUsers: 0,
+    isSearchActive: false,
 };
 
 const userSlice = createSlice({
@@ -25,7 +26,15 @@ const userSlice = createSlice({
         },
         setPageSize: (state, action) => {
             state.pageSize = action.payload
-        }
+        },
+            resetFilter: (state) => {
+
+              state.pageNumber = 1;
+              state.isSearchActive = false;
+              const start = 0;
+              const end = state.pageSize;
+              state.users = state.users.slice(start, end); // תצוגה רגילה
+            },
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAllUsers.pending, (state) => {
@@ -121,7 +130,8 @@ const userSlice = createSlice({
             })
             .addCase(fetchFilteredUseres.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                state.user = action.payload.users;
+                state.users = action.payload.users;
+                state.isSearchActive = true;
             })
             .addCase(fetchFilteredUseres.rejected, (state, action) => {
                 state.status = "failed";
@@ -130,5 +140,5 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUser, setPageNumber, setPageSize } = userSlice.actions;
+export const { setUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
 export default userSlice.reducer;

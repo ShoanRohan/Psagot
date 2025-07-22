@@ -79,9 +79,9 @@ const UsersPage = () => {
         phone: "",
         password: "",
         userTypeName: "",
-        isActive: true, 
+        isActive: true,
     });
-    
+
     const [formErrors, setFormErrors] = useState({});
 
     useEffect(() => {
@@ -127,7 +127,7 @@ const UsersPage = () => {
             phone: "",
             password: "",
             userTypeName: "",
-            isActive: true, 
+            isActive: true,
         });
         setFormErrors({});
         setDialogOpen(true);
