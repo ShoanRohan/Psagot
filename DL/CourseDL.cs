@@ -1,4 +1,3 @@
-﻿
 using Entities.Contexts;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -18,12 +17,12 @@ namespace DL
         {
             _context = context;
         }
-
         public async Task<(Course Course, string ErrorMessage)> GetCourseById(int id)
         {
             try
             {
                 var course = await _context.Set<Course>().FindAsync(id);
+                await _context.SaveChangesAsync();
                 return (course, null);
             }
             catch (Exception ex)
@@ -44,6 +43,20 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+        public async Task<(IEnumerable<StatusCourse> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            try
+            {
+                var statusCourses = await _context.Set<StatusCourse>().ToListAsync();
+                return (statusCourses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
         {
             try
@@ -85,5 +98,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+
     }
 }

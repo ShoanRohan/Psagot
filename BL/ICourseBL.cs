@@ -1,4 +1,4 @@
-﻿using DL;
+using DL;
 using Entities.DTO;
 using System;
 using System.Collections.Generic;
@@ -11,10 +11,13 @@ namespace BL
     public interface ICourseBL
     {
         Task<(IEnumerable<CourseDTO> Courses, string ErrorMessage)> GetAllCourses();
+        Task<(IEnumerable<StatusCourseDTO> Courses, string ErrorMessage)> GetStatusCourses();
+
         Task<(CourseDTO Course, string ErrorMessage)> GetCourseById(int id);
         Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO);
         Task<bool> DeleteCourse(int id);
         Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO);
+
 
     }
 }

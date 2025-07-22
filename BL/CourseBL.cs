@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DL;
 using Entities.DTO;
 using Entities.Models;
@@ -36,6 +36,14 @@ namespace BL
 
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
+
+        public async Task<(IEnumerable<StatusCourseDTO> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            var (statusCourses, errorMessage) = await _courseDL.GetStatusCourses();
+            if (statusCourses == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<StatusCourseDTO>>(statusCourses), null);
+        }
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -60,6 +68,7 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+
 
     }
 }
