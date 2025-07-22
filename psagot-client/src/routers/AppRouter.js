@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import MeetingLocatorBar from '../pages/MeetingLocatorBar';
 import LocatorBar from '../components/LocatorBar';
 import MeetingTable from '../components/MeetingTable';
 import MeetingsPage from '../components/MeetingsPage';
@@ -15,9 +14,8 @@ const AppRouter = () => {
              <Route path='/' element={<Layout/>}>
                 {/* <Route index element={<HomePage/>}></Route> */}
                 <Route path='LocatorBar' element={<LocatorBar/>}></Route>
-                <Route path='MeetingLocatorBar' element={<MeetingLocatorBar/>}/>
-            <Route path='/' element={<UserPage />} />
-            <Route path='MeetingsPage' element={<MeetingsPage />} />
+            <Route path='/Users' element={<UserPage />} />
+            <Route path='Meetings' element={<MeetingsPage />} />
                 <Route path='MeetingTable' element={<MeetingTable/>}/>   
                 <Route path='/user/:userId' element={<EditUser/>}/>
                 </Route>

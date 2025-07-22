@@ -30,7 +30,7 @@ const LocatorBar = () => {
   const { topics } = useSelector((state) => state.topic);
   const { courses } = useSelector((state) => state.course);
   const {pageNumber, pageSize} =useSelector((state) => state.meeting);
-  const users = useSelector((state) => state.user.user || []);
+  const users = useSelector((state) => state.user.users || []);
   
   useEffect(() => {
     dispatch(fetchAllCourses());

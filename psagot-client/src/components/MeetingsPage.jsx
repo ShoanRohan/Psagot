@@ -5,8 +5,9 @@ import MeetingTable from './MeetingTable'
 const MeetingsPage = () => {
   return (
     <>
-
+<LocatorBar/>
 <MeetingTable/>
+
 </>
   )
 }

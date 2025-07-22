@@ -13,8 +13,6 @@ namespace DL
     {
         private readonly PsagotDbContext _context;
 
-
-
         public MeetingDL(PsagotDbContext context)
         {
             _context = context;
