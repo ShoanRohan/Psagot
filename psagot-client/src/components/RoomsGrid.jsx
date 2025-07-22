@@ -138,11 +138,11 @@ const RoomsGrid = () => {
                     gap: 0.5,
                   }}
                 >
-                  <IconButton sx={{ color: "#1976d2", p: 0.5 }}>
-                    <DeleteOutlineIcon fontSize="small" />
-                  </IconButton>
                   <IconButton color="primary" sx={{ p: 0.5 }}>
                     <EditOutlinedIcon fontSize="small" />
+                  </IconButton>
+                  <IconButton sx={{ color: "#1976d2", p: 0.5 }}>
+                    <DeleteOutlineIcon fontSize="small" />
                   </IconButton>
                 </Box>
               </StyledTableCell>

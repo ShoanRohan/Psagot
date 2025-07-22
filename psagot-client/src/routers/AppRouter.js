@@ -10,6 +10,7 @@ import CourseScreen from "../components/CourseScreen";
 import Rooms from '../pages/Rooms';
 import UsersPage from '../pages/UsersPage';
 import EditProfile from '../components/EditProfile';
+import RoomsViewPage from '../pages/RoomsViewPage';
 
 const AppRouter = () => {
     return (
@@ -23,7 +24,7 @@ const AppRouter = () => {
                 <Route path='/rooms' element={<Rooms />} />
                 <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/meetings/:id" element={<h1>���� �����</h1>}/>
-                {/* <Route path='/rooms-table' element={<RoomsViewPage />} /> */}
+                <Route path='/rooms-table' element={<RoomsViewPage />} />
                 <Route path='/edit-profile' element={<EditProfile />} />
             </Route>
         </Routes>
