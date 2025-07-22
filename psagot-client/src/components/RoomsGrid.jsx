@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
+import UnfoldMoreOutlinedIcon from '@mui/icons-material/UnfoldMoreOutlined';
 import CircularProgress from "@mui/material/CircularProgress";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -21,12 +22,15 @@ import {
   updateFilteredRooms,
 } from "../features/room/roomSlice";
 import TablePaginationActions from "./TablePaginationActions"
+import { Select, Typography, MenuItem , Pagination} from "@mui/material";
+import { Grid } from "@mui/system";
 
 const StyledTableCell = styled(TableCell)(() => ({
   fontSize: "14px",
   textAlign: "right",
   whiteSpace: "nowrap",
   borderBottom: "none",
+ 
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -36,6 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:hover": {
     backgroundColor: "#f1f1f1",
   },
+  
 }));
 
 const RoomsGrid = () => {
@@ -97,24 +102,55 @@ const RoomsGrid = () => {
     return <Box> שגיאה בטעינת חדרים :{roomError}</Box>;
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+    <>
+        <Box
+      sx={{
+        margin: "auto",
+        borderRadius: "10px",
+        backgroundColor: "white",
+        direction: "ltr",
+        boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
+      }}
     >
-      <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
-        <TableHead>
+<TableContainer
+  sx={{
+    maxHeight: 500,
+    overflowY: 'auto',
+direction:'ltr',
+    '&::-webkit-scrollbar': {
+      width: '1px',
+    },
+'& table':{
+  direction:'rtl'
+},
+    '&::-webkit-scrollbar-track': {
+      backgroundColor: '#f0f0f0',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: '#1976d2', // כחול של MUI
+      borderRadius: '1px',
+    },
+    '&::-webkit-scrollbar-thumb:hover': {
+      backgroundColor: '#1565c0', // כחול כהה יותר בהובר
+    },
+    scrollbarWidth: 'thin', // Firefox
+    scrollbarColor: '#1976d2 #f0f0f0',
+  }}
+>
+      <Table stickyHeader sx={{ borderCollapse: "separate", borderSpacing: 0 , padding:"15px"}}>
+        <TableHead sx={{fontWeight: "bold"}}>
           <TableRow>
             <StyledTableCell>
-              <b>שם חדר</b>             
+              שם חדר          
               </StyledTableCell>
             <StyledTableCell>
-              <b>מספר חדר</b>       
+              מספר חדר    
               </StyledTableCell>
             <StyledTableCell>
-               <b>מס' מקומות</b>   
+               מס' מקומות
             </StyledTableCell>
             <StyledTableCell>
-              <b>ציוד </b>               
+              ציוד             
             </StyledTableCell>
             <StyledTableCell
               align="center"
@@ -150,41 +186,79 @@ const RoomsGrid = () => {
           ))}
         </TableBody>
       </Table>
-      <TablePagination
-        component="div"
-        count={totalFilteredCount}
-        page={pageIndex}
-        onPageChange={handleChangePage}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        labelRowsPerPage="מספר שורות:"
-        labelDisplayedRows={() => `עמוד ${pageIndex + 1}`}
-        ActionsComponent={TablePaginationActions}
-        sx={{
-          borderTop: "1px solid #e0e0e0",
-          direction: "ltr",
-          "& .MuiTablePagination-toolbar": {
-            justifyContent: "flex-end",
-            paddingRight: "16px",
-            paddingLeft: "16px",
-            minHeight: "48px",
-          },
-          "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
-            {
-              fontSize: "13px",
-              color: "#6b6b6b",
-            },
-          "& .MuiTablePagination-actions button": {
-            borderRadius: "4px",
-            minWidth: "32px",
-            height: "32px",
-            margin: "0 2px",
-            color: "#1976d2",
-          },
-        }}
-      />
-    </TableContainer>
+      </TableContainer></Box>
+<Box
+  sx={{
+   // margin:"auto",
+    px: 2,
+    //py: 2,
+    //width: '100%',
+//height:'40px',
+    bgcolor: 'white',
+    direction: 'rtl',
+    borderRadius: "10px",
+    boxShadow: "0px 4px 12px rgba(220, 226, 236, 0.8)",
+    mt: 2
+  }}
+>
+  <Grid container alignItems="self-end" justifyContent="space-between">
+    <Grid item  display="inline-flex" justifyContent="start" alignItems="center">
+      <Typography
+textAlign="right"
+        display="inline"
+        fontFamily="Rubik"
+        fontSize="14px"
+//        sx={{ ml: 1 }}
+      >
+מספר שורות:
+      </Typography>
+      <Select
+        IconComponent={(props) => <UnfoldMoreOutlinedIcon {...props} sx={{ fontSize: 'small' }} />}
+        displayEmpty
+        onChange={(e) => dispatch(changePageSize(Number(e.target.value)))}
+        value={pageSize}
+        sx={{
+          height: '26px',
+          width: '49px',
+          borderRadius: '10px',
+          borderWidth: '0.5px',
+          borderColor: '#F0F1F3',
+          pl: 0,
+          pr: 0,
+          fontSize: '12px',
+//          ml: '8px',
+          textAlign: 'center',
+          '& .MuiSelect-select': {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+width:'49px'
+          },
+        }}
+      >
+        {[10, 25, 50].map((size) => (
+          <MenuItem key={size} value={size} sx={{ justifyContent: 'center' }}>
+            {size}
+          </MenuItem>
+        ))}
+      </Select>
+    </Grid>
+
+    <Grid item xs={6} display="inline-flex" justifyContent="end">
+      <Pagination
+        onChange={(event, value) => dispatch(changePageIndex(value - 1))}
+        count={Math.ceil(totalFilteredCount / pageSize)}
+        page={pageIndex + 1}
+        sx={{
+          direction: 'ltr',
+ml:0,
+          '& .MuiPaginationItem-root': { fontSize: 12 },
+        }}
+      />
+    </Grid>
+  </Grid>
+</Box>
+    </>
   );
 };
 

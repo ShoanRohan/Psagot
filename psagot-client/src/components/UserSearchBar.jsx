@@ -9,7 +9,7 @@ import { resetFilter } from "../features/user/userSlice";
 
 const UserSearchBar = () => {
   const dispatch = useDispatch();
-  const { status, error, pageSize, pageNumber } = useSelector((state) => state.user);
+  const { pageSize, pageNumber } = useSelector((state) => state.user);
   const users = useSelector((state) => state.user.user);
   const [searchFields, setSearchFields] = useState({
     username: "",
@@ -40,26 +40,13 @@ const UserSearchBar = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;    
-    const trimmedValue = value.trim();  
-    console.log(value+"&"+ trimmedValue)
-    setSearchFields({ ...searchFields, [name]: trimmedValue });
+    setSearchFields({ ...searchFields, [name]: value });
   };
 
   const handleSearch = () => {
-   // if (validateForm()) {
-      // יצירת אובייקט דינמי עם הפרמטרים
-      const filteredUsersParamaters = {
-        ...searchFields,
-       // pageNumber: 1, // אמור לבוא מהטופס
-       // pageSize: 4, // אמור להיות בסטייט גלובלי
-      };
-
-      // שליחה לפונקציה ב-Redux
-console.log(filteredUsersParamaters)
-      dispatch(fetchFilteredUseres(filteredUsersParamaters));
-      console.log("users: ", users);
+      dispatch(fetchFilteredUseres(searchFields));
     }
-  //};
+
   const clean = () => {
       setSearchFields(userSearchEmpty); // תאפס את השדות בטופס
     //  dispatch(fetchFilteredUseres(earchFields));

@@ -9,12 +9,12 @@ import {
 const initialState = {
   rooms: [],
   selectedRoom: null,
-  status: "idle",
+  status: "idle",// מצב: idle - התחלתי, loading - בטעינה, succeeded - הצלחה, failed - נכשל
   filteredRooms: [],
   loading: false,
   error: null,
   pageIndex: 0,
-  pageSize: 5,
+  pageSize: 10,
   isSearchActive: false,
   totalFilteredCount: 0,
   filters: {
@@ -87,7 +87,7 @@ const roomSlice = createSlice({
         speakers = false,
         computers = false,
         pageIndex = 0,
-        pageSize = 5,
+        pageSize = 10,
         isNewSearch = false,
       } = action.payload;
       const filters = isNewSearch
