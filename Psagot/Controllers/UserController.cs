@@ -17,7 +17,7 @@ namespace Psagot.Controllers
 
         public UserController(IUserBL userBL)
         {
-            _userBL = userBL;
+            _userBL = userBL ;
         }
 
         [HttpPost("AddUser")]
