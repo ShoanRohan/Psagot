@@ -75,18 +75,18 @@ const UpdateUser = () => {
       });
     }
   }, [selectedUser, userId ]); // הוסף userId לבדיקה
-  // useEffect(() => {
-  //  const referrer = document.referrer;
-  // if (referrer.includes('/users')) {
-  //   setReturnPath('/users');
-  // } else {
-  //   setReturnPath('/');
-  // }
+//   useEffect(() => {
+//    const referrer = document.referrer;
+//   if (referrer.includes('/users')) {
+//     setReturnPath('/users');
+//   } else {
+//     setReturnPath('/');
+//   }
 // }, []);
-  // Handle input changes
-  const handleInputChange = (event) => {
+        //שינוי ערך שדה
+    const handleInputChange = (event) => {
     const { name, value, type, checked } = event.target;
-     if (name === 'userTypeName' &&  currentUser & currentUser?.role !== 'admin' && 
+    if (name === 'userTypeName' &&  currentUser & currentUser?.role !== 'admin' && 
       currentUser?.userId === formData.userId) {
     return; // לא מאפשר שינוי
   }
@@ -103,8 +103,51 @@ const UpdateUser = () => {
       }));
     }
   };
+  // הוסף פונקציה לבדיקת טלפון ישראלי
+const validatePhoneNumber = (phone) => {
+  // הסר רווחים ומקפים
+  const cleanPhone = phone.replace(/[\s-]/g, '');
+  const israeliPhoneRegex = /^(\+972|972|0)?(5[0-9]|7[2-9]|2|3|4|8|9)[0-9]{7}$/;
+  return israeliPhoneRegex.test(cleanPhone);
+};
+const validateEmail = (email) => {
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  return emailRegex.test(email);
+};
+const validatePassword = (password) => {
+  if (!password || password.trim() === '') {
+    return { isValid: true, message: '' }; // סיסמה ריקה מותרת (תשתמש במקורית)
+  }
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  
+  if (password.length < minLength) {
+    return { isValid: false, message: `הסיסמה חייבת להכיל לפחות ${minLength} תווים` };
+  }
+  
+  if (!hasUpperCase) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות אות גדולה אחת' };
+  }
+  
+  if (!hasLowerCase) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות אות קטנה אחת' };
+  }
+  
+  if (!hasNumbers) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות ספרה אחת' };
+  }
+  
+  if (!hasSpecialChar) {
+    return { isValid: false, message: 'הסיסמה חייבת להכיל לפחות תו מיוחד אחד' };
+  }
+  
+  return { isValid: true, message: '' };
+};
 
-  // Validation function
+  //בדיקת תקינות
   const validateForm = () => {
     const errors = {};
 
@@ -121,7 +164,10 @@ const UpdateUser = () => {
     if (!formData.phone.trim()) {
       errors.phone = 'טלפון הוא שדה חובה';
     }
-
+       else if(!validatePhoneNumber(formData.phone)) {
+    errors.phone = 'מספר טלפון לא תקין (נדרש מספר ישראלי)';
+  }
+    
     if (!formData.userTypeName) {
       errors.userTypeName = 'סוג משתמש הוא שדה חובה';
     }
@@ -130,7 +176,7 @@ const UpdateUser = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Handle save
+//  שמירה
   const handleSave = async () => {
     if (!validateForm()) {
       return;
@@ -147,37 +193,30 @@ const UpdateUser = () => {
 
   const { userTypeName, ...rest } = fromD;
   
-    await dispatch(updateUserAction(fromD));
+     dispatch(updateUserAction(fromD));
     setSuccessMessage('המשתמש עודכן בהצלחה');
-    setTimeout(() => {
-      navigate(returnPath);
-    }, 2000);
+    // setTimeout(() => {
+       navigate(returnPath);
+       
+    // }, 2000);
   } catch (error) {
-    // השגיאה תטופל ב-Redux
+  
   }
 };
-
-
-// הוסף Alert להצלחה
 {successMessage && (
   <Alert severity="success" sx={{ mb: 2 }}>
     {successMessage}
   </Alert>
 )};
-
-   
-  
-
-  // Handle edit
+ // עריכה
   const handleEdit = () => {
     setIsEditing(true);
   };
-
-  // Handle cancel
+  //ביטול
   const handleCancel = () => {
-    setIsEditing(false);
-    navigate(returnPath);
-    // Reset form data to original values
+      setIsEditing(false);
+      navigate(returnPath);
+   
     if (selectedUser) {
       setFormData({
         userId: selectedUser.userId || 0,
@@ -193,14 +232,10 @@ const UpdateUser = () => {
     }
     setValidationErrors({});
   };
-
-  // If no userId in params, redirect to users list
   if (!userId) {
     navigate('/user');
     return null;
   }
-
-  // הוסף loading state
   if (status === 'loading') {
     return (
       <Box sx={{ p: 3, textAlign: 'center' }}>
@@ -208,9 +243,7 @@ const UpdateUser = () => {
       </Box>
     );
   }
-
-  return (
-    
+ return (
     <Box sx={{ p: 3, maxWidth: 1200, mx: 'auto' }}>
       {/* Header */}
       <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: 'center', mb: 3 }}>
@@ -267,7 +300,7 @@ const UpdateUser = () => {
           
           <Divider sx={{ mb: 3 }} />
 
-          {/* Form - Fields aligned to the left */}
+         
           <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
             <Box sx={{ width: '100%', maxWidth: 700 }}>
               <Grid container spacing={3} direction="row">
@@ -375,8 +408,7 @@ const UpdateUser = () => {
                       }}
                     >
                       סוג משתמש
-                    </InputLabel>
-                    <Select
+                    </InputLabel><Select
   name="userTypeName"
   value={formData.userTypeName}
   onChange={handleInputChange}
@@ -405,12 +437,6 @@ const UpdateUser = () => {
                     )}
                   </FormControl>
                 </Grid>
-
-                {/* Role */}
-                
-                
-
-                {/* Is Active */}
                 <Grid item xs={12}>
                   <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
                     <FormControlLabel

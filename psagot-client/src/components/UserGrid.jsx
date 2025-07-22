@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const UserGrid = () => {
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.user);
+  const users = useSelector((state) => state.user.users);
   
   const navigate = useNavigate();
   const [rows, setRows] = useState([]);

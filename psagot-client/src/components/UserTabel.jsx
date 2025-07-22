@@ -26,10 +26,11 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Menu, MenuItem } from '@mui/material'
 import { fetchUsersWithPagination } from '../features/user/userAction';
+import { useNavigate } from 'react-router-dom';
 
 
 
-const UserTable = ({ onEdit }) => {
+const UserTable = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
@@ -38,6 +39,7 @@ const UserTable = ({ onEdit }) => {
 
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { users ,total} = useSelector(state => state.user);
 
   useEffect(() => {
@@ -86,6 +88,10 @@ const handleChangePage = (value) => {
     'סטטוס': 'isActive',
     'מזהה': 'userId',
   }), []);
+ const handleEditClick = (id) => () => {
+    navigate(`/userUpdate/${id}`);
+
+  };
 
   const renderStatusChip = useCallback((row) => (
     <Chip
@@ -97,11 +103,11 @@ const handleChangePage = (value) => {
 
   const renderEditButton = useCallback((row) => (
     <Tooltip title="עריכה">
-      <IconButton onClick={() => onEdit?.(row)} size="small" sx={{ color: '#2D50E6' }}>
+      <IconButton   onClick={handleEditClick(row.userId)}size="small" sx={{ color: '#2D50E6' }}>
         <EditIcon />
       </IconButton>
     </Tooltip>
-  ), [onEdit]);
+  ), []);
 
   const handleDelete = (user) => {
     setUserToDelete(user);

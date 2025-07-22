@@ -57,11 +57,11 @@ const userSlice = createSlice( {
         state.error = action.error.message;
       })
         .addCase(addUserAction.fulfilled, (state, action) =>{
-            state.user.push(action.payload);
+            state.users.push(action.payload);
         })
         
         .addCase(updateUserAction.fulfilled, (state, action)=> {
-            const index = state.user.findIndex((user)=> user.userId===action.payload.userId);
+            const index = state.users.findIndex((user)=> user.userId===action.payload.userId);
             if (index !== -1) {
                 state.users[index]=action.payload;
             }

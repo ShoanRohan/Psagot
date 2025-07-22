@@ -58,11 +58,7 @@ namespace Psagot.Controllers
             return Ok(meeting);
         }
 
-            var (meeting, errorMessage) = await _meetingBL.GetMeetingById(id);
-            if (meeting == null)
-            {
-                return NotFound(errorMessage ?? "Meeting not found.");
-            }
+        
 
 
         [HttpGet("GetMeetings")]

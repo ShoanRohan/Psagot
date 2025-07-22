@@ -10,11 +10,12 @@ import exptExsel from '../assets/icons/image 6.png';
 
 const UserManagement = () => {
 
-  const users = useSelector((state) => state.user.user); // קבלת הנתונים מה-Redux
+  const users = useSelector((state) => state.user.users); // קבלת הנתונים מה-Redux
 
   // פונקציה לייצוא הנתונים לאקסל
   const exportToExcel = () => {
-    if (!users || users.length === 0) {
+    if (true) {
+     
       alert("אין נתונים לייצוא!");
       return;
     }
