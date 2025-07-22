@@ -3,6 +3,7 @@ import React from 'react'
 import { saveAs } from 'file-saver';
 import { useSelector } from 'react-redux';
 import UserTable from './UserTabel';
+import UserGrid from './UserGrid';
 import {Box, Button } from '@mui/material';
 import { Image } from '@mui/icons-material';
 import excel from '../assets/icons/excel.png';
@@ -34,7 +35,7 @@ const exportToExcel = (data, fileName = 'משתמשים.xlsx') => {
 </Box>
 
 
-    <UserTable/> 
+    <UserGrid/> 
     </>
   )
 }

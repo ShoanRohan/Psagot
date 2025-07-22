@@ -17,7 +17,7 @@ const AppRouter = () => {
                 <Route path='/' element={<Layout/>}>
                 {/* <Route index element={<HomePage/>}></Route> */}
                 <Route path='LocatorBar' element={<LocatorBar />}></Route>
-                <Route path='/user/:userId' element={<EditUser />} />
+        
                 <Route path='MeetingsPage' element={<MeetingsPage />} />
                 <Route path='MeetingTable' element={<MeetingTable/>}/>   
                 <Route path='/userUpdate/:userId' element={<UpdateUser/>}/>
