@@ -10,10 +10,11 @@ import excelIcon from "../assets/icons/excelIcon.svg";
 import { useDispatch, useSelector } from "react-redux";
 import *as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { addUserAction, fetchAllUsers } from "../features/user/userAction";
+import { addUserAction, fetchAllUsers, fetchFilteredUseres } from "../features/user/userAction";
 import UsersSearch from '../components/UsersSearch';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
+import UsersTable from "../components/UsersTable";
 
 const buttonStyles = {
     height: "44px",
@@ -97,6 +98,7 @@ const UsersPage = () => {
     // פונקציה זו נקראת מ-UsersSearch כאשר כפתור "חיפוש" נלחץ
     const handleFilterChange = (filters) => {
         setCurrentFilters(filters);
+        dispatch(fetchFilteredUseres(filters))
         console.log("Filters applied in UsersPage:", filters);
     };
 
@@ -244,7 +246,7 @@ const UsersPage = () => {
 
             {/* העברת הפונקציות ל-UsersSearch */}
             <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
-
+            <UsersTable/>
             {/* דיאלוג הוספת משתמש */}
             <Dialog
                 open={dialogOpen}
