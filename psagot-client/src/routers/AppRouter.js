@@ -1,22 +1,46 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route} from 'react-router-dom';
 import HomePage from '../pages/HomePage';
 import Layout from '../pages/Layout';
-import Login from '../components/Login';
+import CoursesPage from '../pages/CoursesPage';
 import LoginPage from '../pages/LoginPage';
-import UserManagement from '../pages/UserManagement';
+import RegisterPage from '../pages/RegisterPage';
+import MeetingPage from '../pages/MeetingPage';
+import MeetingForm from '../components/MeetingForm';
 
 const AppRouter = () => {
-    return (
+   
+
+    return (         
         <Routes>
-            <Route path='/' element={<Layout />}>
-                <Route path='/' element={<LoginPage />} />
-                <Route path='/courses' element={<span>page Courses</span>} />
-                <Route path='/meetings' element={<span>page Meetings</span>} />
-                <Route path='/users' element={<UserManagement />} />
-                <Route path='/rooms' element={<span>page Rooms</span>} />
-                <Route path="/calendar" element={<span>calander Rooms</span>} />
+            {/* Protected routes wrapped by Layout */}
+            <Route path="/" element={<Layout />}>
+                {/* Default route when accessing '/' */}
+                <Route index element={<HomePage />} />
+                
+                {/* Main application routes */}
+                <Route path="courses" element={<CoursesPage />} />
+                 <Route 
+        path="/meetings" 
+        element={<MeetingPage  />} 
+      />
+      <Route 
+        path="/edit-meeting/:meetingId" 
+        element={<MeetingForm />} 
+      />
+      <Route 
+        path="/add-meeting" 
+        element={<MeetingForm />} 
+      />
+                
+                {/* Future routes - uncomment when ready */}
+                {/* <Route path="rooms" element={<RoomsPage />} /> */}
+                {/* <Route path="calendar" element={<CalendarPage />} /> */}
             </Route>
+
+            {/* Standalone routes (authentication pages) */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
         </Routes>
     );
 };
