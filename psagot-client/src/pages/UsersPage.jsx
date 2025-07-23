@@ -246,7 +246,7 @@ const UsersPage = () => {
 
             {/* העברת הפונקציות ל-UsersSearch */}
             <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
-            <UsersTable/>
+            <UsersTable />
             {/* דיאלוג הוספת משתמש */}
             <Dialog
                 open={dialogOpen}
