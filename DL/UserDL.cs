@@ -175,6 +175,7 @@ namespace DL
                 int totalCount = await query.CountAsync();
 
                 // דפדוף (Pagination)
+                //var users = query;
                 var users = await query
                     .Skip((pageNumber - 1) * pageSize)
                     .Take(pageSize)
