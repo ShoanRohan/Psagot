@@ -15,6 +15,7 @@ namespace DL
         Task<(List<Room> rooms, int totalCount, string ErrorMessage)> GetAllRoomsBySearchWithPagination(
          string roomName, bool mic, bool projector, bool computer, int numOfSeats,
          int pageNumber, int pageSize, bool searchStatus);
+        Task<(int Id, string ErrorMessage)> DeleteRoom(int id);
 
 
     }

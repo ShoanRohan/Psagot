@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getAllRooms, getRoomById, addRoom, updateRoom,getAllRoomsBySearchWithPagination ,getRoomsScheduleByDate  } from '../../utils/roomUtil';
+import { getAllRooms, getRoomById, addRoom, updateRoom,getAllRoomsBySearchWithPagination ,getRoomsScheduleByDate, deleteRoom,  } from '../../utils/roomUtil';
 
 
 export const fetchAllRooms = createAsyncThunk('room/fetchAllRooms', async () => {
@@ -37,5 +37,16 @@ export const fetchRoomsScheduleByDate = createAsyncThunk('room/GetRoomsScheduleB
   async (dateTime) => {
     const data = await getRoomsScheduleByDate(dateTime);
     return data;
+  }
+);
+export const deleteRoomAction = createAsyncThunk(
+  'room/deleteRoomAction',
+  async (id, { rejectWithValue }) => {
+    try {
+      await deleteRoom(id);
+      return id;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
 );
