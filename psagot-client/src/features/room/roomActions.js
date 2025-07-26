@@ -25,6 +25,7 @@ export const updateRoomAction = createAsyncThunk('room/updateRoomAction', async 
   return data;
 });
 
+///Pagination /א
 export const fetchAllRoomsBySearchWithPagination = createAsyncThunk(
   'room/GethAllRoomsBySearchWithPagination',
   async ({ searchRoom, pageNumber, pageSize, searchStatus }) => {

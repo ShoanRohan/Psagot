@@ -61,10 +61,8 @@ export default function RoomsGrid() {
       border: 0,
     },
   }));
-  // const handleDeleteRoom = (id)=>{
-  //   if (! id) return;
-  //   dispatch(deleteRoomAction(id))
-  // }
+  // מחיקה
+ 
   const handleDeleteRoom = async (id) => {
     if (!id) return;
 
