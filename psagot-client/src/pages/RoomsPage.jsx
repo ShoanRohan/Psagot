@@ -8,10 +8,12 @@ import ExcelIcon from '../assets/icons/excelIcon.svg';
 import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
 import CoursesPage from './CoursesPage';
 import RoomsGrid from '../components/RoomsGrid';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
-  const viewMode = useSelector((state) => state.room.viewMode);
+  const {viewMode, rooms} = useSelector((state) => state.room);
 
   const toggleView = () => {
     dispatch(setViewMode(viewMode === 'rooms' ? 'schedule' : 'rooms'));
@@ -22,8 +24,21 @@ const RoomsPage = () => {
   };
 
   const handleExportToExcel = () => {
-    alert("ייצוא לאקסל - פעולה לא מוגדרת עדיין");
-  };
+      
+  // המרת נתוני המשתמשים ל־Sheet
+  const worksheet = XLSX.utils.json_to_sheet(rooms);
+
+  // יצירת קובץ Excel
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'חדרים');
+
+  // כתיבה לקובץ מסוג blob
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+
+  // שמירה בדפדפן
+  saveAs(blob, 'Rooms.xlsx');
+};
 
   return (
     <Box>

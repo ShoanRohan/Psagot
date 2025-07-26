@@ -67,6 +67,12 @@ namespace BL
 
             return (_mapper.Map<List<RoomDTO>>(rooms),( totalCount),null);
         }
+        public async Task<(int Id, string ErrorMessage)> DeleteRoom(int id)
+        {
+            var (deletedId, errorMessage) = await _roomDL.DeleteRoom(id);
+            if (deletedId == 0) return (0, errorMessage);
+            return (deletedId, null);
+        }
 
 
     }

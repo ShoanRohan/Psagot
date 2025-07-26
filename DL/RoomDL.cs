@@ -144,5 +144,26 @@ namespace DL
                 return (new List<Room>(), 0, ex.Message);
             }
         }
+        public async Task<(int Id, string ErrorMessage)> DeleteRoom(int id)
+        {
+            try
+            {
+                var room = await _context.Set<Room>().FindAsync(id);
+                if (room == null) return (0, "חדר לא קיים");
+                var meetings = await _context.Set<Meeting>().Where(e => e.RoomId == id && e.MeetingDate >= DateOnly.FromDateTime(DateTime.Now)).ToListAsync();
+                if (meetings.Count != 0) return (0, "לא ניתן למחוק, קיימים מפגשים פעילים המשויכים לחדר זה");
+                else
+                {
+                    _context.Set<Room>().Remove(room);
+                    await _context.SaveChangesAsync();
+                    return (id, null);
+
+                }
+            }
+            catch (Exception ex)
+            {
+                return (0, ex.Message);
+            }
+        }
     }
     }

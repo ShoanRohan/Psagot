@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllRoomsBySearchWithPagination, 
+import { fetchAllRooms, fetchRoomById, addRoomAction, updateRoomAction,fetchAllRoomsBySearchWithPagination,deleteRoomAction, 
     fetchRoomsScheduleByDate  } from './roomActions';
 
 const initialState = {
@@ -113,7 +113,23 @@ const roomSlice = createSlice({
                 if (index !== -1) {
                     state.rooms[index] = action.payload;
                 }
-            });
+            })
+            
+            .addCase(deleteRoomAction.pending, (state) => {
+                 state.status = 'loading';
+            })
+            .addCase(deleteRoomAction.fulfilled, (state, action) => {
+                state.rooms = state.rooms.filter(room => room.roomId !== action.payload);
+                const start = (state.pageNumber - 1) * state.pageSize;
+                const end = start + state.pageSize;
+                state.roomsWithPagination = state.rooms.slice(start, end);
+                state.totalCount = state.rooms.length;
+                state.status = 'succeeded';
+            })
+            .addCase(deleteRoomAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
+            });        
     },
 });
 

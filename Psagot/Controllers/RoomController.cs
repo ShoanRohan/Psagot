@@ -75,6 +75,13 @@ namespace Psagot.Controllers
                 return NotFound(errorMessage);
             return Ok(new { rooms, totalCount });
         }
+        [HttpDelete("DeleteRoom/{id}")]
+        public async Task<IActionResult> DeleteRoom([FromRoute] int id)
+        {
+            var result = await _roomBL.DeleteRoom(id);
+            if (result.Id == null) return BadRequest(result.ErrorMessage);
+            return Ok(result.Id);
+        }
     }
 }
 

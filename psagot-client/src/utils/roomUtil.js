@@ -43,5 +43,9 @@ const getAllRoomsBySearchWithPagination = async (searchRoom, pageNumber, pageSiz
     const response = await api.get(`/Room/GetAllRoomsBySearchWithPagination`, { params });
     return response.data;
 };
+const deleteRoom = async (id) => {
+    const response = await api.delete(`/Room/DeleteRoom/${id}`);
+    return response.data;
+};
 
-export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomsScheduleByDate,getAllRoomsBySearchWithPagination };
+export { addRoom, updateRoom,getAllRooms, getRoomById,getRoomsScheduleByDate,getAllRoomsBySearchWithPagination,deleteRoom };

@@ -12,10 +12,20 @@ import { fetchAllRooms } from '../features/room/roomActions';
 import { useEffect } from 'react';
 import { tableCellClasses } from '@mui/material/TableCell';
 import { setPageNumber, setPageSize } from '../features/room/roomSlice';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { deleteRoomAction } from '../features/room/roomActions';
+
+
 
 export default function RoomsGrid() {
   const dispatch = useDispatch();
   const { status, roomsWithPagination, pageNumber, pageSize, totalCount } = useSelector((state) => state.room);
+  const [snackbar, setSnackbar] = React.useState({//הוספה
+  open: false,
+  message: '',
+  severity: 'success', // או 'error'//עד כאן
+});
 
   useEffect(() => {
     if (status === 'idle') {
@@ -51,11 +61,39 @@ export default function RoomsGrid() {
       border: 0,
     },
   }));
-  const handleDeleteRoom = (id)=>{
-    if (! id) return;
-    dispatch(deleteRoomAction(id))
-  }
+  // מחיקה
+ 
+  const handleDeleteRoom = async (id) => {
+    if (!id) return;
+
+    try {
+      const resultAction = await dispatch(deleteRoomAction(id));
+        console.log("ID למחיקה:", id);
+
+      if (deleteRoomAction.fulfilled.match(resultAction)) {
+        setSnackbar({
+          open: true,
+          message: `חדר מספר ${resultAction.payload} נמחק בהצלחה`,
+          severity: 'success',
+        });
+      }
+      else {
+        const errorMessage = resultAction.payload || 'שגיאה כללית במחיקה';
+        throw errorMessage;
+      }
+    }
+    catch (error) {
+      setSnackbar({
+        open: true,
+        message: error,
+        severity: 'error',
+      });
+    }
+  };
+
+  
   return (
+    <>
     <Box
       dir="rtl"
       sx={{
@@ -140,5 +178,25 @@ export default function RoomsGrid() {
         />
       </Box>
     </Box>
+    {/* /////מחיקה של החדרים//// */}
+    <Snackbar
+      open={snackbar.open}
+      autoHideDuration={3000}
+      onClose={() => setSnackbar({ ...snackbar, open: false })}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <MuiAlert
+        elevation={6}
+        variant="filled"
+        onClose={() => setSnackbar({ ...snackbar, open: false })}
+        severity={snackbar.severity}
+        sx={{ width: '100%' }}
+      >
+        {snackbar.message}
+      </MuiAlert>
+    </Snackbar>
+
+    </>
+     
   );
 }
