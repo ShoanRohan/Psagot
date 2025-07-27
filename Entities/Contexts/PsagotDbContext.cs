@@ -196,5 +196,6 @@ public partial class PsagotDbContext : DbContext
         OnModelCreatingPartial(modelBuilder);
     }
 
+
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

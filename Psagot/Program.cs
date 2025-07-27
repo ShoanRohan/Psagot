@@ -1,6 +1,5 @@
 using BL;
 using DL;
-
 using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
@@ -13,10 +12,15 @@ namespace Psagot
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<PsagotDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
 
+            // חיבור למסד נתונים
+            builder.Services.AddDbContext<PsagotDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("PsagotDbContext")));
+
+            // אוטומפר
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            // רישום שירותים
             builder.Services.AddScoped<IUserTypeDL, UserTypeDL>();
             builder.Services.AddScoped<IUserTypeBL, UserTypeBL>();
             builder.Services.AddScoped<IUserDL, UserDL>();
@@ -27,28 +31,37 @@ namespace Psagot
             builder.Services.AddScoped<IRoomBL, RoomBL>();
             builder.Services.AddScoped<IMeetingDL, MeetingDL>();
             builder.Services.AddScoped<IMeetingBL, MeetingBL>();
-            builder.Services.AddScoped<IDaysForCourseDL,DaysForCourseDL>();
+            builder.Services.AddScoped<IDaysForCourseDL, DaysForCourseDL>();
             builder.Services.AddScoped<IDaysForCourseBL, DaysForCourseBL>();
             builder.Services.AddScoped<IScheduleForTopicBL, ScheduleForTopicBL>();
             builder.Services.AddScoped<ITopicBL, TopicBL>();
-            builder.Services.AddScoped<IScheduleForTopicDL,ScheduleForTopicDL >();
+            builder.Services.AddScoped<IScheduleForTopicDL, ScheduleForTopicDL>();
             builder.Services.AddScoped<ITopicDL, TopicDL>();
             builder.Services.AddScoped<IStatusDL, StatusDL>();
             builder.Services.AddScoped<IStatusBL, StatusBL>();
-
-
             builder.Services.AddScoped<ICourseDL, CourseDL>();
             builder.Services.AddScoped<ICourseBL, CourseBL>();
 
+            // CORS פתוח
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             builder.Services.AddControllers();
-            builder.Services.AddCors();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
-            app.UseCors((service) => service.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-            // Configure the HTTP request pipeline.
+            // הפעלת CORS
+            app.UseCors("AllowAll");
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -56,12 +69,8 @@ namespace Psagot
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

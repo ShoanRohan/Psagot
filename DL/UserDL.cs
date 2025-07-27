@@ -1,4 +1,5 @@
-﻿using Entities.Contexts;
+﻿using Azure.Identity;
+using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
 using Microsoft.EntityFrameworkCore;
@@ -218,6 +219,31 @@ namespace DL
             catch (Exception ex)
             {
                 return (null, 0, ex.Message);
+            }
+        }
+        public async Task<(bool, string)> DeleteUser(int id)
+        {
+
+            try
+            {
+                var recordMeeting=  await _context.Meetings.Where(t => t.TeacherId == id).ToListAsync();
+                var recordTopic =await _context.Topics.Where(t => t.TeacherId == id).ToListAsync();
+                var recordCourse =await _context.Courses.Where(t => t.CoordinatorId == id).ToListAsync();
+                if( recordMeeting.Any() || recordTopic.Any() || recordCourse.Any())
+                {
+                    return (false, "User in use-she is a coordinatior or a teacher");
+                }
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                    return (false, "User not found");
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, "Error deleting user: " + ex.Message);
             }
         }
     }

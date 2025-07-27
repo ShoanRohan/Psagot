@@ -24,6 +24,7 @@ namespace BL
         Task<(List<CoordinatorDTO> Coordinators, string ErrorMessage)> GetCoordinators();
 
         Task<(List<TeacherDTO> Teachers, string ErrorMessage)> GetTeachers();
+        Task<(bool, string)> DeleteUser(int id);
     }
 }
 

@@ -24,11 +24,15 @@ const addUser = async (newUser) => {
   const response = await api.post("/User/AddUser", newUser);
   return response.data;
 };
-
-const updatedUser = async (updateUser) => {
-  const response = await api.put("/User/UpdateUser", updateUser);
+ const updatedUser = async (userData) => {
+  const response = await api.put("/User/UpdateUser", userData);
   return response.data;
 };
+const deleteUser = async(userId) =>{
+  const response = await api.delete(`/User/DeleteUser/${userId}`);
+  return response.data;
+};
+
 
 const getAllLecturersAndCoordinators = async () => {
   const response = await api.get("/User/GetAllLecturersAndCoordinators");
@@ -49,6 +53,6 @@ const getUsersByPage = async (pageNumber, pageSize) => {
     return response.data;
 };
 
-export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getFilteredUsers, getTeachers, getUsersByPage };
+export { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getAllLecturersAndCoordinators, getCoordinators, getFilteredUsers, getTeachers, getUsersByPage,deleteUser };
 
 

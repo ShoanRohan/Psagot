@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoordinators, fetchAllCoordinators, fetchAllLecturersAndCoordinators, fetchFilteredUseres, fetchTeachers, fetchUsersByPage } from './userAction';
-
+import { fetchUserById, addUserAction, updateUserAction, fetchAllUsers, fetchCoordinators, fetchAllCoordinators, fetchAllLecturersAndCoordinators, fetchFilteredUseres, fetchTeachers, fetchUsersByPage, deleteUserAction } from './userAction';
 const initialState = {
     coordinators: [],
     users: [],
@@ -9,7 +8,7 @@ const initialState = {
     status: 'idle',
     error: null,
     pageNumber: 1,
-    pageSize: 5,
+    pageSize: 10,
     totalUsers: 0,
     isSearchActive: false,
 };
@@ -35,6 +34,9 @@ const userSlice = createSlice({
               const end = state.pageSize;
               state.users = state.users.slice(start, end); // תצוגה רגילה
             },
+            setUsers: (state, action) => {
+        state.users = action.payload;
+    }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAllUsers.pending, (state) => {
@@ -61,14 +63,25 @@ const userSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(addUserAction.fulfilled, (state, action) => {
-                state.users.push(action.payload);
+                state.users.push(action.payload.user);
             })
-            .addCase(updateUserAction.fulfilled, (state, action) => {
-                const index = state.users.findIndex((user) => user.id === action.payload.id);
-                if (index !== -1) {
-                    state.users[index] = action.payload;
-                }
-            }).addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
+            
+                  .addCase(updateUserAction.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateUserAction.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const updatedUser = action.payload;
+        const index = state.users.findIndex(u => u.userId === updatedUser.userId);
+        if (index !== -1) {
+          state.users[index] = updatedUser;
+        }
+      })
+      .addCase(updateUserAction.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) => {
@@ -136,7 +149,11 @@ const userSlice = createSlice({
             .addCase(fetchFilteredUseres.rejected, (state, action) => {
                 state.status = "failed";
                 state.error = action.error.message;
-            });
+            })
+            .addCase(deleteUserAction.fulfilled, (state, action) => {
+      state.users = state.users.filter(u => u.userId !== action.payload);
+      state.totalUsers = state.totalUsers - 1;
+    });
     },
 });
 

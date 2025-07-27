@@ -1,5 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators, getTeachers, getFilteredUsers, getUsersByPage } from "../../utils/userUtil";
+import { getAllUsers, getAllCoordinators, getUserById, addUser, updatedUser, getCoordinators, getAllLecturersAndCoordinators, getTeachers, getFilteredUsers, getUsersByPage, deleteUser } from "../../utils/userUtil";
+import axios from "axios";
+
+
 
 export const fetchAllUsers = createAsyncThunk(
   "user/fetchAllUsers",
@@ -35,11 +38,20 @@ export const addUserAction = createAsyncThunk(
     return data;
 });
 
-export const updateUserAction =createAsyncThunk('user/updateUserAction', async(updateUser)=>{
-    const data = await updatedUser(updateUser);
-    return data;
+
+export const updateUserAction = createAsyncThunk(
+  'user/updateUserAction',
+  async (userData, thunkAPI) => {
+    try {
+      const data = await updatedUser(userData); 
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
 );
+
+
 
 export const fetchCoordinators = createAsyncThunk("user/fetchCoordinators", async () => {
         const data = await getCoordinators();
@@ -59,3 +71,23 @@ export const fetchUsersByPage = createAsyncThunk('user/fetchUsersByPage', async(
     const data = await getUsersByPage(pageNumber, pageSize);
     return data;
 });
+
+//מחיקת משתמש
+export const deleteUserAction = createAsyncThunk(
+  'user/deleteUser',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const data = await deleteUser(userId);
+      return data;
+    } catch (err) {
+      // החזרת שגיאה מסודרת
+      return rejectWithValue(
+        err?.response?.data || err.message || "שגיאה במחיקת משתמש"
+      );
+    }
+  }
+);
+
+
+
+

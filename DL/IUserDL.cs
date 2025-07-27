@@ -22,5 +22,6 @@ namespace DL
         Task<(List<User> Users, string ErrorMessage)> GetAllCoordinators();
         Task<(List<User> Users, int countUsers, string ErrorMessage)> GetUsersByPage(int pageNumber, int pageSize);
         Task<(IEnumerable<User> Users, string ErrorMessage)> GetCoordinatorsAndLecturers();
+        Task<(bool, string)> DeleteUser(int id);
     }
 }

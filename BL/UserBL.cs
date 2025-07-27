@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DL;
+using Entities.Contexts;
 using Entities.DTO;
 using Entities.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -16,7 +18,13 @@ namespace BL
         {
             _userDL = userDL;
             _mapper = mapper;
+
         }
+        public async Task<(bool, string)> DeleteUser(int id)
+        {
+            return await _userDL.DeleteUser(id);
+        }
+
 
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
@@ -117,5 +125,7 @@ namespace BL
 
             return (teachers, null); ;
         }
+       
+
     }
 }

@@ -100,6 +100,47 @@
 }
 
 /* עיצוב כותרות הטבלה */
+.customTable th {
+  font-weight: bold;
+  background-color: #f9f9f9;
+}
+
+.customTable td {
+  text-align: right;
+  font-size: 15px;
+}
+
+.evenRow {
+  background-color: #ffffff;
+}
+
+.oddRow {
+  background-color: #f7f7f7;
+}
+
+.iconImage {
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  filter: brightness(0) saturate(100%) invert(14%) sepia(93%) saturate(2017%) hue-rotate(212deg) brightness(95%) contrast(94%);
+}
+
+.tablesize {
+  direction: rtl;
+  padding: 20px;
+}
+
+.titleRow {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.boxStyle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: rtl;
+}
 .usersTable th {
   font-weight: bold;
   font-family:"Rubik",sans-serif;
@@ -108,5 +149,86 @@
   font-size: 0.8rem;
   background-color: #ffffff; 
   color: #000000; 
+    height: 32px !important;
+  padding: 4px 8px !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+}
+/* שורות טבלה – גובה מצומצם */
+.MuiTableRow-root {
+  height: 30px !important;
+  min-height: 30px !important;
 }
 
+/* תאי טבלה – ריווח מינימלי */
+.MuiTableCell-root,
+.customTable td,
+.customTable th {
+  height: 30px !important;
+  padding: 2px 4px !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  vertical-align: middle !important;
+  text-align: right;
+}
+/* רק שורות גוף הטבלה – ללא הכותרת */
+.customTable tbody .MuiTableRow-root {
+  height: 24px !important;
+  min-height: 24px !important;
+}
+
+.customTable tbody .MuiTableCell-root {
+  height: 24px !important;
+  padding: 2px 6px !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  vertical-align: middle !important;
+}
+
+
+
+/* אייקונים – הגדלה וריווח */
+.iconImage {
+  width: 26px !important;
+  height: 26px !important;
+  margin-left: 10px;
+  margin-right: 0;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* כפתור פעיל/לא פעיל */
+.buttonActive,
+.buttonInactive {
+  border-radius: 20px;
+  width: 90px !important;
+  height: 34px !important;
+  font-size: 11px !important;
+  padding: 4px 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* צבעים */
+.buttonActive {
+  background-color: #DAF8E6 !important;
+  color: #1A8245 !important;
+}
+
+.buttonInactive {
+  background-color: #E5E7EB !important;
+  color: #374151 !important;
+}
+
+ .popUpBox {
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 400px; 
+}
