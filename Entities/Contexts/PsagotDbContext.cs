@@ -13,25 +13,15 @@ public partial class PsagotDbContext : DbContext
     }
 
     public virtual DbSet<Course> Courses { get; set; }
-
     public virtual DbSet<Day> Days { get; set; }
-
     public virtual DbSet<DaysForCourse> DaysForCourses { get; set; }
-
     public virtual DbSet<Meeting> Meetings { get; set; }
-
     public virtual DbSet<Room> Rooms { get; set; }
-
     public virtual DbSet<ScheduleForTopic> ScheduleForTopics { get; set; }
-
     public virtual DbSet<StatusCourse> StatusCourses { get; set; }
-
     public virtual DbSet<StatusTopic> StatusTopics { get; set; }
-
     public virtual DbSet<Topic> Topics { get; set; }
-
     public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<UserType> UserTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -113,7 +103,19 @@ public partial class PsagotDbContext : DbContext
         {
             entity.HasKey(e => e.RoomId).HasName("PK__Rooms__328639392BA854D6");
 
-            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.RoomId)
+                .ValueGeneratedOnAdd(); // מספר רץ
+
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            entity.Property(e => e.Capacity)
+                .IsRequired();
+
+            entity.Property(e => e.Projector);
+            entity.Property(e => e.Computers);
+            entity.Property(e => e.Speakers);
         });
 
         modelBuilder.Entity<ScheduleForTopic>(entity =>
