@@ -195,7 +195,6 @@ const AddUser = () => {
                             variant="standard"
                             fullWidth
                         >
-                            <MenuItem value=""><em>בחר הרשאה</em></MenuItem>
                             {userTypes.map((ut) => (
                                 <MenuItem key={ut.userTypeId} value={ut.name}>{ut.name}</MenuItem>
                             ))}

@@ -48,7 +48,7 @@ namespace DL
         {
             try
             {
-                room.RoomId = 0;  // חשוב - איפוס ה־RoomId כדי למסד הנתונים לייצר אוטומטית
+              //  room.RoomId = 0;  // חשוב - איפוס ה־RoomId כדי למסד הנתונים לייצר אוטומטית
                 bool exists = await _context.Rooms.AnyAsync(r => r.Name == room.Name);
                 if (exists)
                     return (null, "כבר קיים חדר עם שם זהה.");

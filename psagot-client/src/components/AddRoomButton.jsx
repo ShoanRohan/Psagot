@@ -81,11 +81,7 @@ const addRoomValidationSchema = yup.object({
         .string()
         .required('שם חדר הוא שדה חובה')
         .max(50, 'שם חדר ארוך מדי (מקסימום 50 תווים)'),
-    roomId: yup
-        .string()
-        .required('מספר חדר הוא שדה חובה')
-        .matches(/^[0-9]+$/, 'מספר חדר יכול להכיל רק ספרות')
-        .max(10, 'מספר חדר ארוך מדי (מקסימום 10 תווים)'),
+    // שדה roomId נשאר בטופס אך לא חובה כי לא נשלח
     capacity: yup
         .number()
         .required('מספר מקומות הוא שדה חובה')
@@ -104,7 +100,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
     const formik = useFormik({
         initialValues: {
             name: "",
-            roomId: "",
+            roomId: "", // נשאר כאן רק כדי להציג אותו אבל לא נשתמש בו
             capacity: "",
             equipment: [],
         },
@@ -112,9 +108,9 @@ const AddRoomButton = ({ onShowSnackbar }) => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
+                // יוצרים את האובייקט לשרת בלי roomId
                 const roomToSend = {
                     name: values.name,
-                    roomId: parseInt(values.roomId, 10),
                     capacity: parseInt(values.capacity),
                     projector: values.equipment.includes("מקרן"),
                     speakers: values.equipment.includes("רמקולים"),
@@ -229,12 +225,9 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                                     type="text"
                                     variant="standard"
                                     value={formik.values.roomId}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
+                                    disabled // שדה לא ניתן לעריכה
                                     fullWidth
                                     InputLabelProps={{ shrink: true }}
-                                    error={formik.touched.roomId && Boolean(formik.errors.roomId)}
-                                    helperText={formik.touched.roomId && formik.errors.roomId}
                                 />
                             </FormControl>
                         </div>
