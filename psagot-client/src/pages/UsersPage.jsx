@@ -1,6 +1,4 @@
 
-import { useEffect, useState } from "react";
-// UsersPage.jsx
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -11,14 +9,14 @@ import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
 import *as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import {  fetchAllUsers } from "../features/user/userAction";
+import {  fetchAllUsers, fetchFilteredUseres, fetchUsersByPage, updateUserAction } from "../features/user/userAction";
 import UsersSearch from '../components/UsersSearch';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
-import UsersSearch from '../components/UsersSearch';
 import UsersTable from "../components/UsersTable";
 import UpdateUser from '../components/UpdateUser';
-
+import AddUser from "../components/AddUser";
+import excelIcon from "../assets/icons/excelIcon.svg"
 const UsersPage = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -46,9 +44,9 @@ const UsersPage = () => {
   });
   const [formErrors, setFormErrors] = useState({});
 
-  useEffect(() => {
-    dispatch(fetchAllUsers(currentFilters));
-  }, [dispatch, currentFilters]);
+  // useEffect(() => {
+  //   dispatch(fetchAllUsers(currentFilters));
+  // }, [dispatch, currentFilters]);
 
   useEffect(() => {
     if (userTypeStatus === "idle") {
@@ -174,9 +172,6 @@ if (selectedUser.password?.trim()) {
   userToSend.password = selectedUser.password;
 }
 
-
-
-
   try {
   console.log("📤 userToSend:", JSON.stringify(userToSend, null, 2));
   await dispatch(updateUserAction(userToSend)).unwrap();
@@ -211,6 +206,7 @@ if (selectedUser.password?.trim()) {
                <Container>
    <UsersTable
   onEditUser={(user) => {
+    console.log(user);
     setSelectedUser(user);
     setOpen(true);
   }}

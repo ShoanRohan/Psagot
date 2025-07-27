@@ -23,7 +23,7 @@ const UpdateUser = ({
     }));
   };
   
-
+console.log(selectedUser);
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <Box sx={{
@@ -53,10 +53,9 @@ const UpdateUser = ({
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth error={!!errors.userTypeId}>
                   <InputLabel>הרשאה</InputLabel>
-                  <Select name="userTypeId" value={selectedUser.userTypeId || ""} onChange={handleFieldChange}>
-  <MenuItem value=""><em>בחר הרשאה</em></MenuItem>
+                  <Select name="userTypeName" value={selectedUser.userTypeName || ""} onChange={handleFieldChange}>
   {userTypes.map((type) => (
-    <MenuItem key={type.userTypeId} value={type.userTypeId}>
+    <MenuItem key={type.userTypeId} value={type.name}>
       {type.name}
     </MenuItem>
   ))}

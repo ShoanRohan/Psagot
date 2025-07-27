@@ -63,7 +63,7 @@ const UsersTable = ({ onEditUser }) => {
       setSnackbarOpen(true);
     }
   };
-
+console.log(users);
     return (
     <Box sx={{ overflowX: 'auto', maxWidth: '100%' }}>
       <TableContainer component={Paper} sx={{ maxHeight: '500px', overflow: 'auto', marginBottom: 2 }}>
