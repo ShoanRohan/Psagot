@@ -87,22 +87,21 @@ const AddUser = () => {
             case "name":
                 if (!value.trim()) error = "שדה חובה";
                 else if (value.trim().length < 2) error = "לפחות 2 תווים";
-                else if (!/^[א-תA-Za-z\\s]+$/.test(value)) error = "אותיות ורווחים בלבד";
+                else if (!/^[א-תA-Za-z\s]+$/.test(value)) error = "אותיות ורווחים בלבד";
                 break;
             case "email":
                 const trimmedEmail = value.trim();
                 if (!trimmedEmail) error = "שדה חובה";
-                else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/.test(trimmedEmail)) error = "מייל לא תקין";
-             break;
-
-             case "phone":
-            const cleanPhone = value.replace(/\\D/g, '');
-            if (!value.trim()) {
-                error = "טלפון הוא שדה חובה";
-            } else if (cleanPhone.length !== 10) {
-                error = "מספר טלפון לא תקין (10 ספרות בלבד)";
-            }
-            break;
+                else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(trimmedEmail)) error = "מייל לא תקין";
+                break;
+            case "phone":
+                const cleanPhone = value.replace(/\D/g, '');
+                if (!value.trim()) {
+                    error = "טלפון הוא שדה חובה";
+                } else if (cleanPhone.length !== 10) {
+                    error = "מספר טלפון לא תקין (10 ספרות בלבד)";
+                }
+                break;
             case "password":
                 if (!value.trim()) error = "שדה חובה";
                 else if (value.trim().length < 6) error = "לפחות 6 תווים";
@@ -229,8 +228,9 @@ const AddUser = () => {
                     </FormControl>
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-                    <Button onClick={handleClose} variant="outlined">ביטול</Button>
+                    {/* כפתור שמור מצד ימין */}
                     <Button onClick={handleSave} variant="contained" sx={{ backgroundColor: '#326DEF', color: 'white' }}>שמור</Button>
+                    <Button onClick={handleClose} variant="outlined">ביטול</Button>
                 </DialogActions>
             </Dialog>
         </>
