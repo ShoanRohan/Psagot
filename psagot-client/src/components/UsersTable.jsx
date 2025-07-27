@@ -1,142 +1,163 @@
+// components/UsersTable.jsx
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { useEffect } from "react";
-import '../styles/usersPage.css';
-import { Pagination } from '@mui/material';
-import { fetchUsersByPage } from "../features/user/userAction";
-import { useDispatch, useSelector } from "react-redux";
-import { setPageSize, setPageNumber } from '../features/user/userSlice';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  Box, Button, Typography, Paper, IconButton, MenuItem, FormControl, Select,
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  Snackbar, Pagination
+} from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
+import { deleteUserAction, fetchUsersByPage, updateUserAction } from '../features/user/userAction';
+import { setPageNumber, setPageSize } from '../features/user/userSlice';
 import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
+import '../styles/usersPage.css';
 
-const UsersTable = () => {
-    const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
-    const dispatch = useDispatch();
+const UsersTable = ({ onEditUser }) => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
 
-    // טוען את המשתמשים
-    useEffect(() => {
-        const fetchUsers = async () => {
-            try {
-                dispatch(fetchUsersByPage({ pageNumber, pageSize })); // קבלת כל המשתמשים
-            } catch (error) {
-                console.error("שגיאה בטעינת המשתמשים:", error);
-            }
-        };
-        fetchUsers();
-    }, [pageNumber, pageSize, dispatch]);
+  const dispatch = useDispatch();
+  const { users, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
+  const { userTypes } = useSelector((state) => state.userType);
 
-    const handleChangePageSize = (event) => {
-        const size = Number(event.target.value); // עדכון ל-`event`
-        dispatch(setPageSize(size)); // קריאה ל-`setPage`
-    };
+  const onPageSizeChange = (newSize) => dispatch(setPageSize(newSize));
+  const onPageNumberChange = (newPage) => dispatch(setPageNumber(newPage));
 
-    // שינוי דף
-    const handlePageNumberChange = (newPage) => {
-        newPage = Number(newPage.target.textContent);
-        if (newPage >= 1 && newPage <= Math.ceil(totalUsers / pageSize)) {
-            dispatch(setPageNumber(newPage));
-        }
-    };
+  const handleToggleUserStatus = async (user) => {
+    try {
+      const userType = userTypes.find(t => t.name === user.userTypeName);
+      const updatedUser = {
+        ...user,
+        isActive: !user.isActive,
+        userTypeId: userType?.userTypeId || 0,
+        userTypeName: userType?.name || '',
+        role: user.role || '',
+        password: user.password || '',
+      };
 
-    // שינוי סטטוס של משתמש
-    const handleStatusChange = (userId, status) => {
-        const newStatus = status ? "inactive" : "active";
-        // כאן תוכל לשלוח בקשה לשרת לעדכון סטטוס
-    };
+      await dispatch(updateUserAction(updatedUser)).unwrap();
+      dispatch(fetchUsersByPage({ pageNumber, pageSize }));
+    } catch (error) {
+      console.error('שגיאה בסטטוס:', error);
+    }
+  };
+
+  const handleDeleteUser = async (userId) => {
+    try {
+      if (!window.confirm('האם אתה בטוח שברצונך למחוק את המשתמש?')) return;
+      await dispatch(deleteUserAction(userId)).unwrap();
+      dispatch(fetchUsersByPage({ pageNumber, pageSize }));
+      setSnackbarMessage('המשתמש נמחק בהצלחה');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+    } catch (err) {
+      setSnackbarMessage(typeof err === 'string' ? err : 'שגיאה כללית במחיקה');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
+  };
 
     return (
-        <Box>
-            <Box className="tablesize" >
-                <Typography className="titleRow" variant="h4" component="h2" >משתמשים</Typography>
-                {error && <Box className="boxError">{error}</Box>}  {/* הצגת הודעת שגיאה אם יש */}
-                <TableContainer component={Paper} sx={{ marginBottom: 2 }}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell className="bigtable">קוד משתמש</TableCell>
-                                <TableCell className="bigtable">שם משתמש</TableCell>
-                                <TableCell className="bigtable">מייל</TableCell> {/* יישור הכותרת למרכז */}
-                                <TableCell className="bigtable">הרשאה</TableCell>
-                                <TableCell className="bigtable">סטטוס</TableCell>
-                                <TableCell className="bigtable">עריכה</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {users?.map((user, index) => (
-                                <TableRow key={`${user.userId}-${index}`}>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userId}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.name}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.email}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>{user.userTypeName}</TableCell>
-                                    <TableCell sx={{ textAlign: 'center' }}>
-                                        <Button
-                                            variant="contained"
-                                            className={user.isActive ? 'buttonActive' : 'buttonInactive'}
-                                            onClick={() => {
-                                                handleStatusChange(user.userId, user.isActive);
-                                            }}
-                                        >
-                                            {user.isActive ? "פעיל" : "לא פעיל"}
-                                        </Button>
-                                    </TableCell>
-                                    <TableCell sx={{ textAlign: 'center', display: 'flex', justifyContent: 'center', height: '70%' }}>
-                                        <IconButton
-                                            onClick={() => alert(`מחיקת משתמש ${user.userId}`)}
-                                        >
-                                            <img src={Deleteicone} alt="delelte" className='deleteIcon' />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={() => alert(`עריכת משתמש ${user.userId}`)}>
-                                            <img src={Editicone} alt="edit" className='editIcon' />
-                                        </IconButton>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+    <Box sx={{ overflowX: 'auto', maxWidth: '100%' }}>
+      <TableContainer component={Paper} sx={{ maxHeight: '500px', overflow: 'auto', marginBottom: 2 }}>
+        <Table stickyHeader className="customTable" size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell align="right">קוד משתמש</TableCell>
+              <TableCell align="right">שם משתמש</TableCell>
+              <TableCell align="right">מייל</TableCell>
+              <TableCell align="right">הרשאה</TableCell>
+              <TableCell align="right">סטטוס</TableCell>
+              <TableCell align="right">עריכה</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users?.map((user, index) => (
+              <TableRow key={`${user.userId}-${index}`} className={index % 2 === 0 ? 'evenRow' : 'oddRow'}>
+                {[user.userId, user.name, user.email, user.userTypeName].map((field, i) => (
+                  <TableCell key={i} align="right" className="customTableCell">
+                    {field}
+                  </TableCell>
+                ))}
+                <TableCell align="right">
+                  <Button
+                    variant="contained"
+                    className={user.isActive ? 'buttonActive' : 'buttonInactive'}
+                    onClick={() => handleToggleUserStatus(user)}
+                  >
+                    {user.isActive ? 'פעיל' : 'לא פעיל'}
+                  </Button>
+                </TableCell>
+                <TableCell align="right">
+                  <Box className="flexCenter">
+                    <IconButton onClick={() => handleDeleteUser(user.userId)}>
+                      <img src={Deleteicone} alt="delete" className="iconImage" />
+                    </IconButton>
+                    <IconButton onClick={() => onEditUser(user)} disableRipple>
+                      <img src={Editicone} alt="edit" className="iconImage" />
+                    </IconButton>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
 
-                {/* ניווט עמודים */}
-                <Box className="boxStyle">
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                        <Typography className='flexCenter'>
-                            מספר שורות:
-                        </Typography>
-                        <FormControl sx={{ minWidth: '10px', height: '46px' }}>
-                            <Select
-                                value={pageSize}
-                                onChange={handleChangePageSize}
-                                displayEmpty
-                            >
-                                <MenuItem value={10}>10</MenuItem>
-                                <MenuItem value={20}>20</MenuItem>
-                                <MenuItem value={50}>50</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box>
-                    <Pagination
-                        count={Math.ceil(totalUsers / pageSize)}
-                        page={pageNumber}
-                        onChange={handlePageNumberChange}
-                    />
-                </Box>
-            </Box>
-        </Box>
-    );
+      <Box className="boxStyle">
+        <Typography>מספר שורות:</Typography>
+        <FormControl sx={{ minWidth: 80 }}>
+          <Select value={pageSize} onChange={(e) => onPageSizeChange(Number(e.target.value))}>
+            <MenuItem value={10}>10</MenuItem>
+            <MenuItem value={20}>20</MenuItem>
+            <MenuItem value={50}>50</MenuItem>
+          </Select>
+        </FormControl>
+        <Pagination
+          count={Math.ceil(totalUsers / pageSize)}
+          page={pageNumber}
+          onChange={(e, newPage) => onPageNumberChange(newPage)}
+        />
+      </Box>
+
+      <Snackbar
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        sx={{
+          top: '50% !important',
+          transform: 'translateY(-50%)',
+          '& .MuiPaper-root': {
+            minWidth: '500px',
+            fontSize: '20px',
+            padding: '20px',
+            textAlign: 'center',
+          },
+        }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity={snackbarSeverity}
+          sx={{
+            width: '100%',
+            fontSize: '18px',
+            fontWeight: 'bold',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </Box>
+  );
 };
 
 export default UsersTable;

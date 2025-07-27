@@ -17,7 +17,7 @@ namespace Psagot.Controllers
 
         public UserController(IUserBL userBL)
         {
-            _userBL = userBL ;
+            _userBL = userBL;
         }
 
         [HttpPost("AddUser")]
@@ -147,6 +147,20 @@ namespace Psagot.Controllers
             if (users == null) return BadRequest(errorMessage);
             return Ok(users);
         }
+        [HttpDelete("DeleteUser/{id}")]
+        public async Task<IActionResult> DeleteUser([FromRoute] int id)
+        {
+            var (deleted, errorMessage) = await _userBL.DeleteUser(id);
+            if (!deleted)
+            {
+                if (errorMessage == "User not found")
+                    return NotFound(errorMessage); // 🔁 404 במקום 400
+                return BadRequest(errorMessage);
+            }
+
+            return NoContent(); // 204
+        }
+
 
         [HttpGet("GetUsersByPage")]
         public async Task<IActionResult> GetUsersByPage([FromQuery] int pageNumber, [FromQuery] int pageSize)
@@ -154,7 +168,8 @@ namespace Psagot.Controllers
             var (users, countUsers, errorMessage) = await _userBL.GetUsersByPage(pageNumber, pageSize);
             if (users == null) return BadRequest(errorMessage);
 
-            return Ok( new{users, countUsers });
+            return Ok(new { users, countUsers });
         }
+
     }
 }
