@@ -25,30 +25,31 @@ const initialState = {
     computers: false,
   },
 };
+
+const applyFilters = (rooms, filters) => {
+  return rooms.filter(
+    (room) =>
+      (filters.roomName ? room.name.includes(filters.roomName) : true) &&
+      (filters.capacity ? room.capacity >= filters.capacity : true) &&
+      (filters.projector ? room.projector : true) &&
+      (filters.speakers ? room.speakers : true) &&
+      (filters.computers ? room.computers : true)
+  );
+};
+
 const roomSlice = createSlice({
   name: "room",
   initialState,
   reducers: {
     setRooms: (state, action) => {
-      //כרגע ריק
+      // כרגע ריק
     },
     setSelectedRoom: (state, action) => {
-      state.selectedRoom = null
+      state.selectedRoom = null;
     },
     updateFilteredRooms: (state) => {
       const allFiltered = state.isSearchActive
-        ? state.rooms.filter(
-          (room) =>
-            (state.filters.roomName
-              ? room.name.includes(state.filters.roomName)
-              : true) &&
-            (state.filters.capacity
-              ? room.capacity >= state.filters.capacity
-              : true) &&
-            (state.filters.projector ? room.projector : true) &&
-            (state.filters.speakers ? room.speakers : true) &&
-            (state.filters.computers ? room.computers : true)
-        )
+        ? applyFilters(state.rooms, state.filters)
         : state.rooms;
       state.totalFilteredCount = allFiltered.length;
       const start = state.pageIndex * state.pageSize;
@@ -60,23 +61,11 @@ const roomSlice = createSlice({
     },
     changePageIndex: (state, action) => {
       state.pageIndex = action.payload;
+      const allFiltered = state.isSearchActive
+        ? applyFilters(state.rooms, state.filters)
+        : state.rooms;
       const start = state.pageIndex * state.pageSize;
       const end = start + state.pageSize;
-      const allFiltered = state.isSearchActive
-        ? state.rooms.filter(
-          (room) =>
-            (state.filters.roomName
-              ? room.name.includes(state.filters.roomName)
-              : true) &&
-            (state.filters.capacity
-              ? room.capacity >= state.filters.capacity
-              : true) &&
-            (state.filters.projector ? room.projector : true) &&
-            (state.filters.speakers ? room.speakers : true) &&
-            (state.filters.computers ? room.computers : true)
-        )
-        : state.rooms;
-
       state.filteredRooms = allFiltered.slice(start, end);
     },
     filterRooms: (state, action) => {
@@ -96,20 +85,14 @@ const roomSlice = createSlice({
       if (isNewSearch) {
         state.filters = filters;
       }
-      const allFiltered = state.rooms.filter(
-        (room) =>
-          (filters.roomName ? room.name.includes(filters.roomName) : true) &&
-          (filters.capacity ? room.capacity >= filters.capacity : true) &&
-          (filters.projector ? room.projector : true) &&
-          (filters.speakers ? room.speakers : true) &&
-          (filters.computers ? room.computers : true)
-      );
+      const allFiltered = applyFilters(state.rooms, filters);
       state.isSearchActive = true;
       state.pageIndex = pageIndex;
       state.pageSize = pageSize;
       const start = pageIndex * state.pageSize;
       const end = start + state.pageSize;
       state.filteredRooms = allFiltered.slice(start, end);
+      state.totalFilteredCount = allFiltered.length;
     },
     resetFilter: (state) => {
       state.filters = {
@@ -123,9 +106,9 @@ const roomSlice = createSlice({
       state.isSearchActive = false;
       const start = 0;
       const end = state.pageSize;
-      state.filteredRooms = state.rooms.slice(start, end); // תצוגה רגילה
+      state.filteredRooms = state.rooms.slice(start, end);
+      state.totalFilteredCount = state.rooms.length;
     },
-
   },
   extraReducers: (builder) => {
     builder
@@ -137,7 +120,7 @@ const roomSlice = createSlice({
         state.rooms = action.payload;
         const start = state.pageIndex * state.pageSize;
         const end = start + state.pageSize;
-        state.totalFilteredCount=  state.rooms.length;
+        state.totalFilteredCount = state.rooms.length;
         state.filteredRooms = state.rooms.slice(start, end);
       })
       .addCase(fetchAllRooms.rejected, (state, action) => {
@@ -156,25 +139,40 @@ const roomSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addRoomAction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        let _rooms = [...state.rooms];
-        _rooms.push(action.payload);
-        state.rooms = _rooms;
+        state.status = "succeeded";
+        // אם יש fetchAllRooms אחרי הוספה, אפשר להסיר את השורה הבאה
+        state.rooms.push(action.payload);
+        // עדכון filteredRooms
+        const allFiltered = state.isSearchActive
+          ? applyFilters(state.rooms, state.filters)
+          : state.rooms;
+        state.totalFilteredCount = allFiltered.length;
+        const start = state.pageIndex * state.pageSize;
+        const end = start + state.pageSize;
+        state.filteredRooms = allFiltered.slice(start, end);
       })
       .addCase(updateRoomAction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        let _rooms = [...state.rooms];
-        const index = _rooms.findIndex((room) => room.id === action.payload.id);
+        state.status = "succeeded";
+        const index = state.rooms.findIndex(
+          (room) => room.roomId === action.payload.roomId // או 'id' לפי המודל שלך
+        );
         if (index !== -1) {
-          _rooms[index] = action.payload;
+          state.rooms[index] = action.payload;
         }
-        state.rooms = _rooms;
+        // עדכון filteredRooms
+        const allFiltered = state.isSearchActive
+          ? applyFilters(state.rooms, state.filters)
+          : state.rooms;
+        state.totalFilteredCount = allFiltered.length;
+        const start = state.pageIndex * state.pageSize;
+        const end = start + state.pageSize;
+        state.filteredRooms = allFiltered.slice(start, end);
       });
   },
 });
 
 export const {
-  setRoom,
+  setRooms,
   setSelectedRoom,
   filterRooms,
   changePageSize,
