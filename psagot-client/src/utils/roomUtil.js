@@ -2,12 +2,12 @@ import api from "./api";
 
 // CRUD functions
 const addRoom = async (room) => {
-    const response = await api.post('/Room', room);
+    const response = await api.post('/Room/AddRoom', room);
     return response.data;
 };
 
 const updateRoom = async (room) => {
-    const response = await api.put('/Room', room);
+    const response = await api.put('/Room/UpdateRoom', room);
     return response.data;
 };
 

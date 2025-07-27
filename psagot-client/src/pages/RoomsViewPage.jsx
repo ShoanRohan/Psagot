@@ -9,7 +9,7 @@ const [currentDate, setCurrentDate] = useState(dayjs());
 
   return (
     <Box>
-    <RoomsHeader  currentDate={currentDate} setCurrentDate={setCurrentDate}/>
+    <RoomsHeader  currentDate={currentDate} setCurrentDate={setCurrentDate}/>   
     <RoomTable date={currentDate.format('YYYY-MM-DD')} />
     </Box>
   )

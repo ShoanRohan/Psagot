@@ -9,138 +9,62 @@ const initialState = {
     status: 'idle',
     error: null,
     pageNumber: 1,
-    pageSize: 10,
+    pageSize: 5,
     totalUsers: 0,
+    isSearchActive: false,
 };
 
 const userSlice = createSlice({
-  name: 'user',
-  initialState,
-  reducers: {
-    setUser: (state, action) => {
-      // פונקציה ריקה כרגע
+    name: 'user',
+    initialState,
+    reducers: {
+        setUser: (state, action) => {
+
+        },
+        setPageNumber: (state, action) => {
+            state.pageNumber = action.payload
+        },
+        setPageSize: (state, action) => {
+            state.pageSize = action.payload
+        },
+            resetFilter: (state) => {
+
+              state.pageNumber = 1;
+              state.isSearchActive = false;
+              const start = 0;
+              const end = state.pageSize;
+              state.users = state.users.slice(start, end); // תצוגה רגילה
+            },
     },
-    setPageNumber: (state, action) => {
-      state.pageNumber = action.payload;
-    },
-    setPageSize: (state, action) => {
-      state.pageSize = action.payload;
-    }
-  },
-  extraReducers: (builder) => {
-    builder
-      // fetchAllUsers
-      .addCase(fetchAllUsers.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAllUsers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = action.payload;
-      })
-      .addCase(fetchAllUsers.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
+    extraReducers: (builder) => {
+        builder.addCase(fetchAllUsers.pending, (state) => {
+            state.status = 'loading';
+        })
+            .addCase(fetchAllUsers.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.users = action.payload;
+            })
+            .addCase(fetchAllUsers.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchUserById.pending, (state) => {
+                state.status = 'loading';
 
-      // fetchUserById
-      .addCase(fetchUserById.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchUserById.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.selectedUser = action.payload;
-      })
-      .addCase(fetchUserById.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // addUser
-      .addCase(addUserAction.fulfilled, (state, action) => {
-        state.users.push(action.payload);
-      })
-
-      // fetchAllLecturersAndCoordinators
-      .addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = action.payload;
-      })
-      .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // fetchCoordinators
-      .addCase(fetchCoordinators.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchCoordinators.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.coordinators = action.payload;
-      })
-      .addCase(fetchCoordinators.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // fetchAllCoordinators
-      .addCase(fetchAllCoordinators.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchAllCoordinators.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.coordinators = action.payload;
-      })
-      .addCase(fetchAllCoordinators.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // fetchTeachers
-      .addCase(fetchTeachers.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchTeachers.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.teachers = action.payload;
-      })
-      .addCase(fetchTeachers.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // fetchUsersByPage
-      .addCase(fetchUsersByPage.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchUsersByPage.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = action.payload.users;
-        state.totalUsers = action.payload.countUsers;
-      })
-      .addCase(fetchUsersByPage.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // fetchFilteredUseres
-      .addCase(fetchFilteredUseres.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(fetchFilteredUseres.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.users = action.payload.users; // תיקון: state.user => state.users
-      })
-      .addCase(fetchFilteredUseres.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message;
-      })
-
-      // ✅ updateUserAction - השילוב שביקשת
-      .addCase(updateUserAction.pending, (state) => {
+            })
+            .addCase(fetchUserById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.selectedUser = action.payload;
+            })
+            .addCase(fetchUserById.rejected, (state, action) => {
+                state.status = ' failed';
+                state.error = action.error.message;
+            })
+            .addCase(addUserAction.fulfilled, (state, action) => {
+                state.users.push(action.payload);
+            })
+            
+                  .addCase(updateUserAction.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(updateUserAction.fulfilled, (state, action) => {
@@ -154,9 +78,78 @@ const userSlice = createSlice({
       .addCase(updateUserAction.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload || action.error.message;
-      });
-  },
+      })
+      .addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.users = action.payload;
+            })
+            .addCase(fetchAllLecturersAndCoordinators.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchCoordinators.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.coordinators = action.payload;
+            })
+            .addCase(fetchCoordinators.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchCoordinators.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUsersByPage.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchUsersByPage.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.users = action.payload.users;
+                state.totalUsers = action.payload.countUsers;
+            })
+            .addCase(fetchUsersByPage.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchAllCoordinators.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.coordinators = action.payload;
+            })
+            .addCase(fetchAllCoordinators.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchAllCoordinators.pending, (state) => {
+                state.status = 'loading';
+
+            })
+            .addCase(fetchTeachers.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.teachers = action.payload;
+            })
+            .addCase(fetchTeachers.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            .addCase(fetchTeachers.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchFilteredUseres.pending, (state) => {
+                state.status = "loading";
+            })
+            .addCase(fetchFilteredUseres.fulfilled, (state, action) => {
+                state.status = "succeeded";
+                state.users = action.payload.users;
+                state.isSearchActive = true;
+            })
+            .addCase(fetchFilteredUseres.rejected, (state, action) => {
+                state.status = "failed";
+                state.error = action.error.message;
+            });
+    },
 });
 
-export const { setUser, setPageNumber, setPageSize } = userSlice.actions;
+export const { setUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
 export default userSlice.reducer;

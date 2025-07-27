@@ -17,7 +17,7 @@ namespace Psagot.Controllers
 
         public UserController(IUserBL userBL)
         {
-            _userBL = userBL;
+            _userBL = userBL ;
         }
 
         [HttpPost("AddUser")]
@@ -83,10 +83,10 @@ namespace Psagot.Controllers
 
         [HttpGet("GetFilteredPagedUsers")]
         public async Task<IActionResult> GetFilteredPagedUsers(
-            [FromQuery] string username,
-            [FromQuery] string phone,
-            [FromQuery] string role,
-            [FromQuery] bool? isActive,
+            [FromQuery] string? username,
+            [FromQuery] string? phone,
+            [FromQuery] string? role,
+            [FromQuery] bool isActive,
             [FromQuery] int pageNumber,
             [FromQuery] int pageSize)
         {

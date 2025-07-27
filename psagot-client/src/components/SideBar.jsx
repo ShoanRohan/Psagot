@@ -16,6 +16,7 @@ import '../styles/SideBar.css';
 import { useSelector } from 'react-redux';
 import ScheduleOutlinedIcon from '@mui/icons-material/ScheduleOutlined';
 
+
 const menuItems = [
   {
     path: "/",
@@ -94,9 +95,11 @@ const SideBar = () => {
             {selectedUser?.userTypeName ?? "ללא תפקיד"}
           </Typography>
         </Box>
-        <Avatar className="user-avatar">
-          <AccountCircleIcon />
-        </Avatar>
+        <NavLink to="/edit-profile">
+          <Avatar className="user-avatar" sx={{ cursor: 'pointer' }}>
+            <AccountCircleIcon />
+          </Avatar>
+        </NavLink>
       </Box>
     </Stack>
   );

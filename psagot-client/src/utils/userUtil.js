@@ -16,10 +16,7 @@ const getUserById = async (id) => {
 };
 
 const getFilteredUsers = async (filteredUsersParamaters) => {
-  const response =
-    await api.get(`/User/GetFilteredPagedUsers?username=${filteredUsersParamaters.username}
-        &phone=${filteredUsersParamaters.phone}&role=${filteredUsersParamaters.role}&isActive=${filteredUsersParamaters.isActive}
-        &pageNumber=${filteredUsersParamaters.pageNumber}&pageSize=${filteredUsersParamaters.pageSize}`);
+  const response = await api.get(`/User/GetFilteredPagedUsers?username=${filteredUsersParamaters.username}&phone=${filteredUsersParamaters.phone}&role=${filteredUsersParamaters.role}&isActive=${filteredUsersParamaters.isActive}&pageNumber=${filteredUsersParamaters.pageNumber}&pageSize=${filteredUsersParamaters.pageSize}`);
   return response.data;
 };
 
