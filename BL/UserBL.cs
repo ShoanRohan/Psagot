@@ -29,7 +29,7 @@ namespace BL
         public async Task<(UserDTO User, string ErrorMessage)> AddUser(UserDTO userDTO)
         {
             var userEntity = _mapper.Map<User>(userDTO);
-
+            // BCrypt ספריה שמצפינה את הסיסמה 
             userEntity.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
             var (addedUser, errorMessage) = await _userDL.AddUser(userEntity);
 

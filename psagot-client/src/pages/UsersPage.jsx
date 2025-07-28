@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import *as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 // ייבוא פעולות (Actions) לניהול משתמשים
-import {  fetchAllUsers, fetchFilteredUseres, fetchUsersByPage, updateUserAction } from "../features/user/userAction";
+import { fetchAllUsers, fetchFilteredUseres, fetchUsersByPage, updateUserAction } from "../features/user/userAction";
 // ייבוא קומפוננטות
 import UsersSearch from '../components/UsersSearch';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
@@ -48,63 +48,63 @@ const UsersPage = () => {
   }, [pageNumber, pageSize, dispatch]);
 
   // שינוי פילטרים והבאת משתמשים מסוננים
-    const handleFilterChange = (filters) => {
-        setCurrentFilters(filters);
-        dispatch(fetchFilteredUseres(filters));
-        console.log("Filters applied in UsersPage:", filters);
-    };
+  const handleFilterChange = (filters) => {
+    setCurrentFilters(filters);
+    dispatch(fetchFilteredUseres(filters));
+    console.log("Filters applied in UsersPage:", filters);
+  };
 
-    // איפוס פילטרים
-    const handleClearFilters = (initialStateFromSearch) => {
-        setCurrentFilters(initialStateFromSearch);
-      console.log("Filters cleared in UsersPage.");
-    };
+  // איפוס פילטרים
+  const handleClearFilters = (initialStateFromSearch) => {
+    setCurrentFilters(initialStateFromSearch);
+    console.log("Filters cleared in UsersPage.");
+  };
 
-    // ייצוא רשימת המשתמשים לאקסל
-    const exportAllUsersToExcel = () => {
+  // ייצוא רשימת המשתמשים לאקסל
+  const exportAllUsersToExcel = () => {
     if (!users || users.length === 0) return;
     const worksheet = XLSX.utils.json_to_sheet(users);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet);
-             workbook.Workbook = {
-               Views: [{ RTL: true }],
+    workbook.Workbook = {
+      Views: [{ RTL: true }],
     };
-        const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-        const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-        saveAs(blob, "users.xlsx");
-    };
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
+    saveAs(blob, "users.xlsx");
+  };
 
-  
 
-    return (
-        <Container maxWidth={false} sx={{ width: "80vw", mx: "auto", px: 2, pt: 3, pb: 3, overflowY: "unset" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, direction: "rtl" }}>
-              {/* כותרת ראשית של הדף */}
-              <Typography variant="h4" sx={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, fontSize: "30px", color: "#0D1783" }}>
-                  משתמשים
-              </Typography>
-                <Stack direction="row" spacing={2} sx={{ direction: "ltr" }}>
-                    <AddUser />
-                    <IconButton onClick={exportAllUsersToExcel} sx={{ height: "44px", width: "44px" }}>
-                      <Box component="img" src={excelIcon} alt="ייצוא לאקסל" sx={{ height: "24px", width: "24px", mt: "-4px" }} />
-                    </IconButton>
-                  </Stack>
-            </Box>
-              <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
 
-              {/*ייבוא טבלת משתמשים*/}
-               <Container>
-          <UsersTable  
-             setOpen={setOpen}
-                  />
-            </Container>
-               {/* ייבוא קומפוננטת  עריכת משתמש */}
-            <UpdateUser
-             open={open}
-             setOpen={setOpen}
-            />
-        </Container>
-    );
+  return (
+    <Container maxWidth={false} sx={{ width: "80vw", mx: "auto", px: 2, pt: 3, pb: 3, overflowY: "unset" }}>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, direction: "rtl" }}>
+        {/* כותרת ראשית של הדף */}
+        <Typography variant="h4" sx={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, fontSize: "30px", color: "#0D1783" }}>
+          משתמשים
+        </Typography>
+        <Stack direction="row" spacing={2} sx={{ direction: "ltr" }}>
+          <AddUser />
+          <IconButton onClick={exportAllUsersToExcel} sx={{ height: "44px", width: "44px" }}>
+            <Box component="img" src={excelIcon} alt="ייצוא לאקסל" sx={{ height: "24px", width: "24px", mt: "-4px" }} />
+          </IconButton>
+        </Stack>
+      </Box>
+      <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
+
+      {/*ייבוא טבלת משתמשים*/}
+      <Container>
+        <UsersTable
+          setOpen={setOpen}
+        />
+      </Container>
+      {/* ייבוא קומפוננטת  עריכת משתמש */}
+      <UpdateUser
+        open={open}
+        setOpen={setOpen}
+      />
+    </Container>
+  );
 };
 
 export default UsersPage;
