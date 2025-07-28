@@ -63,7 +63,6 @@ const userSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(addUserAction.fulfilled, (state, action) => {
-                state.users.push(action.payload.user);
             })
             
                   .addCase(updateUserAction.pending, (state) => {

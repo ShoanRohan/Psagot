@@ -1,4 +1,6 @@
-// AddUser.jsx
+// קומפוננטה להוספת משתמש חדש - AddUser.jsx
+// כולל טופס פתיחה בתוך Dialog (חלון קופץ) עם ולידציה ושליחת נתונים ל־Redux
+
 import React, { useState } from "react";
 import {
     Button, Dialog, DialogActions, DialogContent, DialogTitle,
@@ -9,6 +11,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserAction } from "../features/user/userAction";
 
+// עיצוב לכפתור הראשי
 const buttonStyles = {
     height: "44px",
     padding: "0px 20px",
@@ -30,6 +33,7 @@ const buttonStyles = {
     },
 };
 
+// עיצוב משותף לכל שדות הטופס בתוך הדיאלוג
 const sharedDialogFieldStyles = {
     textAlign: "right",
     direction: "rtl",
@@ -55,7 +59,9 @@ const AddUser = () => {
     const dispatch = useDispatch();
     const { userTypes } = useSelector((state) => state.userType);
 
+    // state לפתיחת חלון
     const [dialogOpen, setDialogOpen] = useState(false);
+    // state לערכי הטופס
     const [formValues, setFormValues] = useState({
         name: "",
         email: "",
@@ -64,8 +70,10 @@ const AddUser = () => {
         userTypeName: "",
         isActive: true,
     });
+    // state לשגיאות בטופס
     const [formErrors, setFormErrors] = useState({});
 
+    // פתיחת הדיאלוג ואיפוס הערכים
     const handleOpen = () => {
         setFormValues({
             name: "",
@@ -79,8 +87,10 @@ const AddUser = () => {
         setDialogOpen(true);
     };
 
+    // סגירת הדיאלוג
     const handleClose = () => setDialogOpen(false);
 
+    // פונקציית בדיקה לשדה בודד (ולידציה)
     const validateField = (name, value) => {
         let error = "";
         switch (name) {
@@ -115,6 +125,7 @@ const AddUser = () => {
         return error;
     };
 
+    // טיפול בשינוי ערך של שדה בטופס
     const handleChange = (e) => {
         const { name, value, checked, type } = e.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -123,6 +134,7 @@ const AddUser = () => {
         setFormErrors((prev) => ({ ...prev, [name]: validateField(name, newValue) }));
     };
 
+    // בדיקת תקינות לכל השדות
     const validateAll = () => {
         const errors = {};
         let valid = true;
@@ -137,6 +149,7 @@ const AddUser = () => {
         return valid;
     };
 
+    // שמירת המשתמש החדש (שליחת אקשן ל־Redux)
     const handleSave = () => {
         if (!validateAll()) return;
 
@@ -150,9 +163,11 @@ const AddUser = () => {
 
     return (
         <>
+            {/* כפתור לפתיחת חלון ההוספה */}
             <Button onClick={handleOpen} variant="contained" sx={buttonStyles} startIcon={<AddCircleOutlineIcon />}>
                 הוספת משתמש
             </Button>
+            {/* הדיאלוג עצמו */}
             <Dialog open={dialogOpen} onClose={handleClose}>
                 <DialogTitle sx={{ direction: 'rtl' }}>הוספת משתמש חדש</DialogTitle>
                 <DialogContent
@@ -164,6 +179,7 @@ const AddUser = () => {
                         gap: '24px 16px',
                     }}
                 >
+                    {/* שדות טקסט בסיסיים */}
                     {[
                         { name: 'name', label: 'שם' },
                         { name: 'email', label: 'מייל' },
@@ -185,6 +201,7 @@ const AddUser = () => {
                         </FormControl>
                     ))}
 
+                    {/* בחירת סוג הרשאה (Dropdown) */}
                     <FormControl variant="standard" sx={sharedDialogFieldStyles} error={!!formErrors.userTypeName}>
                         <TextField
                             name="userTypeName"
@@ -202,6 +219,7 @@ const AddUser = () => {
                         <FormHelperText>{formErrors.userTypeName}</FormHelperText>
                     </FormControl>
 
+                    {/* סימון משתמש פעיל/לא פעיל */}
                     <FormControl sx={{ ...sharedDialogFieldStyles, alignItems: 'flex-end', justifyContent: 'center' }}>
                         <FormControlLabel
                             control={
@@ -227,8 +245,9 @@ const AddUser = () => {
                     </FormControl>
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-                    {/* כפתור שמור מצד ימין */}
+                    {/* כפתור שמירה */}
                     <Button onClick={handleSave} variant="contained" sx={{ backgroundColor: '#326DEF', color: 'white' }}>שמור</Button>
+                    {/* כפתור ביטול */}
                     <Button onClick={handleClose} variant="outlined">ביטול</Button>
                 </DialogActions>
             </Dialog>

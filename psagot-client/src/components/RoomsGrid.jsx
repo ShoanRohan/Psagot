@@ -13,7 +13,7 @@ import TablePagination from "@mui/material/TablePagination";
 import CircularProgress from "@mui/material/CircularProgress";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import AddIcon from "@mui/icons-material/Add"; // ייבוא חדש: AddIcon
+import AddIcon from "@mui/icons-material/Add"; 
 import { styled } from "@mui/material/styles";
 import { fetchAllRooms } from "../features/room/roomActions";
 import {
@@ -354,30 +354,7 @@ const RoomsGrid = () => {
             component={Paper}
             sx={{ borderRadius: "8px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
         >
-            {/* כפתור "הוספת חדר" - חדש - **נמחק כעת** */}
-            {/*
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', padding: '16px' }}>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    sx={{
-                        ...buttonStyles,
-                        backgroundColor: "#326DEF",
-                        color: "white",
-                        fontSize: "14px",
-                        height: "40px",
-                        padding: "0 20px",
-                        '&:hover': {
-                            backgroundColor: "#2857C4",
-                        },
-                    }}
-                    onClick={handleAddClick}
-                >
-                    הוספת חדר
-                </Button>
-            </Box>
-            */}
-
+           
             <Table sx={{ borderCollapse: "separate", borderSpacing: 0 }}>
                 <TableHead>
                     <TableRow>

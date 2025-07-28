@@ -251,7 +251,6 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                             error={!!errors.role} // קובע אם יוצג קו תחתון אדום
                         >
                             <MenuItem value="">
-                                <em>הכל</em>
                             </MenuItem>
                             {roles?.map((r) => (
                                 <MenuItem key={r.id} value={r.name}>

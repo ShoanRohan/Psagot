@@ -20,6 +20,7 @@ import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { addRoomAction } from '../features/room/roomActions';
 
+// סגנונות לכפתור הוספה הראשי
 const buttonStyles = {
     height: "44px",
     padding: "0px 20px",
@@ -42,6 +43,7 @@ const buttonStyles = {
     },
 };
 
+// סגנונות לכפתורי הפופאפ (הוסף, ביטול)
 const popupButtonStyles = {
     minWidth: "100px",
     height: "40px",
@@ -53,6 +55,7 @@ const popupButtonStyles = {
     textTransform: "none",
 };
 
+// סגנונות לשדות בטופס, כולל תמיכה בכיווניות RTL ועיצוב של תוויות וכניסות
 const sharedDialogFieldStyles = {
     textAlign: "right",
     direction: "rtl",
@@ -76,12 +79,12 @@ const sharedDialogFieldStyles = {
     },
 };
 
+// הגדרת סכמת ולידציה לטופס באמצעות yup
 const addRoomValidationSchema = yup.object({
     name: yup
         .string()
         .required('שם חדר הוא שדה חובה')
         .max(50, 'שם חדר ארוך מדי (מקסימום 50 תווים)'),
-    // שדה roomId נשאר בטופס אך לא חובה כי לא נשלח
     capacity: yup
         .number()
         .required('מספר מקומות הוא שדה חובה')
@@ -93,14 +96,16 @@ const addRoomValidationSchema = yup.object({
         .of(yup.string()),
 });
 
+// הקומפוננטה הראשית של כפתור הוספת חדר הכוללת את הפופאפ עם הטופס
 const AddRoomButton = ({ onShowSnackbar }) => {
     const dispatch = useDispatch();
     const [openAddRoomPopup, setOpenAddRoomPopup] = useState(false);
 
+    // שימוש ב-formik לניהול הטופס והולידציה
     const formik = useFormik({
         initialValues: {
             name: "",
-            roomId: "", // נשאר כאן רק כדי להציג אותו אבל לא נשתמש בו
+            roomId: "",
             capacity: "",
             equipment: [],
         },
@@ -108,7 +113,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
         validateOnChange: true,
         onSubmit: async (values) => {
             try {
-                // יוצרים את האובייקט לשרת בלי roomId
+                // הכנת האובייקט לשליחה לשרת, המרה של capacity למספר, וסימון ציוד
                 const roomToSend = {
                     name: values.name,
                     capacity: parseInt(values.capacity),
@@ -117,14 +122,20 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                     computers: values.equipment.includes("מחשבים"),
                 };
 
+                // שליחת האקשן להוספת חדר ב-Redux
                 await dispatch(addRoomAction(roomToSend)).unwrap();
 
+                // סגירת הפופאפ ואיפוס הטופס
                 handleCloseAddRoomPopup();
+
+                // הצגת הודעת הצלחה (אם פונקציה הועברה)
                 if (onShowSnackbar) {
                     onShowSnackbar("חדר נוסף בהצלחה!", "success");
                 }
             } catch (error) {
                 console.error("Error adding room:", error);
+
+                // הצגת הודעת שגיאה במקרה של כישלון
                 if (onShowSnackbar) {
                     onShowSnackbar(
                         "שגיאה בהוספת חדר: " +
@@ -136,11 +147,13 @@ const AddRoomButton = ({ onShowSnackbar }) => {
         },
     });
 
+    // פונקציה לפתיחת הפופאפ ואיפוס הטופס
     const handleOpenAddRoomPopup = () => {
         formik.resetForm();
         setOpenAddRoomPopup(true);
     };
 
+    // פונקציה לסגירת הפופאפ ואיפוס הטופס
     const handleCloseAddRoomPopup = () => {
         setOpenAddRoomPopup(false);
         formik.resetForm();
@@ -148,6 +161,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
 
     return (
         <>
+            {/* כפתור לפתיחת הפופאפ */}
             <Button
                 variant="contained"
                 sx={buttonStyles}
@@ -157,6 +171,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                 הוספת חדר
             </Button>
 
+            {/* חלון הפופאפ עם הטופס */}
             <Dialog
                 open={openAddRoomPopup}
                 onClose={handleCloseAddRoomPopup}
@@ -193,12 +208,14 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                     padding: "20px 30px 20px 30px",
                     overflowY: 'unset',
                 }}>
+                    {/* טופס עם שדות שם, מספר חדר, מספר מקומות וציוד */}
                     <form
                         onSubmit={formik.handleSubmit}
                         style={{ display: "flex", flexDirection: "column", gap: 20 }}
                         noValidate
                         autoComplete="off"
                     >
+                        {/* שורה ראשונה - שם חדר ומספר חדר (מספר חדר לא ניתן לעריכה) */}
                         <div style={{ display: "flex", gap: 16, flexDirection: "row", flexWrap: "wrap" }}>
                             <FormControl variant="standard" sx={sharedDialogFieldStyles} style={{ flex: 1, minWidth: 150 }}>
                                 <TextField
@@ -225,13 +242,14 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                                     type="text"
                                     variant="standard"
                                     value={formik.values.roomId}
-                                    disabled // שדה לא ניתן לעריכה
+                                    disabled
                                     fullWidth
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
                         </div>
 
+                        {/* שורה שנייה - מספר מקומות ובחירת ציוד */}
                         <div style={{ display: "flex", gap: 16, flexDirection: "row", flexWrap: "wrap" }}>
                             <FormControl variant="standard" sx={sharedDialogFieldStyles} style={{ flex: 1, minWidth: 150 }}>
                                 <TextField
@@ -280,6 +298,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                                         },
                                     }}
                                 >
+                                    {/* אפשרויות ציוד עם תיבות סימון */}
                                     {['מקרן', 'רמקולים', 'מחשבים'].map((option) => (
                                         <MenuItem key={option} value={option} sx={{ fontFamily: "Rubik", textAlign: "right" }}>
                                             <Checkbox checked={formik.values.equipment.includes(option)} />
@@ -287,6 +306,7 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                                         </MenuItem>
                                     ))}
                                 </Select>
+                                {/* הצגת הודעת שגיאה אם יש */}
                                 {formik.touched.equipment && formik.errors.equipment && (
                                     <Typography variant="caption" color="error" sx={{ textAlign: "right", direction: "rtl", mt: 0.5 }}>
                                         {formik.errors.equipment}
@@ -296,26 +316,9 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                         </div>
                     </form>
                 </DialogContent>
-                <DialogActions sx={{ justifyContent: "center", paddingBottom: "20px", paddingTop: "0px" }}>
-                    <Button
-                        onClick={handleCloseAddRoomPopup}
-                        variant="outlined"
-                        sx={{
-                            ...popupButtonStyles,
-                            borderColor: "#D0D5DD",
-                            color: "#344054",
-                            "&:hover": {
-                                borderColor: "#D0D5DD",
-                                backgroundColor: "#F9FAFB",
-                            },
-                            "&:active": {
-                                backgroundColor: "#EDEFF3",
-                                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.3)",
-                            },
-                        }}
-                    >
-                        ביטול
-                    </Button>
+                {/* אזור הכפתורים בפופאפ */}
+                <DialogActions sx={{ justifyContent: "center", paddingBottom: "20px", paddingTop: "0px", flexDirection: "row" }}>
+                    {/* סדר הכפתורים: קודם הוסף, אחר כך ביטול */}
                     <Button
                         type="submit"
                         onClick={formik.handleSubmit}
@@ -335,6 +338,26 @@ const AddRoomButton = ({ onShowSnackbar }) => {
                         }}
                     >
                         הוסף
+                    </Button>
+                    <Button
+                        onClick={handleCloseAddRoomPopup}
+                        variant="outlined"
+                        sx={{
+                            ...popupButtonStyles,
+                            borderColor: "#D0D5DD",
+                            color: "#344054",
+                            "&:hover": {
+                                borderColor: "#D0D5DD",
+                                backgroundColor: "#F9FAFB",
+                            },
+                            "&:active": {
+                                backgroundColor: "#EDEFF3",
+                                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.3)",
+                            },
+                            marginLeft: "10px"  // ריווח בין הכפתורים
+                        }}
+                    >
+                        ביטול
                     </Button>
                 </DialogActions>
             </Dialog>

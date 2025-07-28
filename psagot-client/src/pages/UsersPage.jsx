@@ -1,4 +1,4 @@
-
+// ייבוא ספריות React, hooks וקומפוננטות עיצוב
 import React, { useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -9,7 +9,9 @@ import Stack from "@mui/material/Stack";
 import { useDispatch, useSelector } from "react-redux";
 import *as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+// ייבוא פעולות (Actions) לניהול משתמשים
 import {  fetchAllUsers, fetchFilteredUseres, fetchUsersByPage, updateUserAction } from "../features/user/userAction";
+// ייבוא קומפוננטות
 import UsersSearch from '../components/UsersSearch';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
 import { fetchAllUserTypes } from "../features/userType/userTypeActions";
@@ -17,22 +19,31 @@ import UsersTable from "../components/UsersTable";
 import UpdateUser from '../components/UpdateUser';
 import AddUser from "../components/AddUser";
 import excelIcon from "../assets/icons/excelIcon.svg"
+import UserSearchBar from "../components/UserSearchBar";
+
 const UsersPage = () => {
+  // state עבור המשתמש הנבחר לעריכה
   const [selectedUser, setSelectedUser] = useState(null);
+  // state לפתיחת/סגירת חלון עריכה
   const [open, setOpen] = useState(false);
+  // state עבור שגיאות טפסים
   const [errors, setErrors] = useState({});
+  // שליפת מידע מה־redux (משתמשים, סטטוס וכו')
   const { users, status, error, pageNumber, pageSize, totalUsers } = useSelector((state) => state.user);
   const loggedInUser = useSelector((state) => state.auth?.loggedInUser || {});
   const dispatch = useDispatch();
 
+  // פילטרים לחיפוש
   const [currentFilters, setCurrentFilters] = useState({
     name: "",
     phone: "",
     userTypeName: "",
     isActive: true
   });
+  // שליפת סוגי משתמשים מה־redux
   const { userTypes, status: userTypeStatus } = useSelector((state) => state.userType);
 
+  // state לדיאלוג הוספת משתמש
   const [dialogOpen, setDialogOpen] = useState(false);
   const [formValues, setFormValues] = useState({
     name: "",
@@ -44,31 +55,32 @@ const UsersPage = () => {
   });
   const [formErrors, setFormErrors] = useState({});
 
-  // useEffect(() => {
-  //   dispatch(fetchAllUsers(currentFilters));
-  // }, [dispatch, currentFilters]);
-
+  // useEffect – טוען סוגי משתמשים כשהסטטוס idle
   useEffect(() => {
     if (userTypeStatus === "idle") {
       dispatch(fetchAllUserTypes());
     }
   }, [userTypeStatus, dispatch]);
 
+  // useEffect – טוען משתמשים בעמוד הנוכחי
   useEffect(() => {
     dispatch(fetchUsersByPage({ pageNumber, pageSize }));
   }, [pageNumber, pageSize, dispatch]);
 
+  // שינוי פילטרים והבאת משתמשים מסוננים
     const handleFilterChange = (filters) => {
         setCurrentFilters(filters);
         dispatch(fetchFilteredUseres(filters));
         console.log("Filters applied in UsersPage:", filters);
     };
 
+    // איפוס פילטרים
     const handleClearFilters = (initialStateFromSearch) => {
         setCurrentFilters(initialStateFromSearch);
       console.log("Filters cleared in UsersPage.");
     };
 
+    // ייצוא רשימת המשתמשים לאקסל
     const exportAllUsersToExcel = () => {
     if (!users || users.length === 0) return;
     const worksheet = XLSX.utils.json_to_sheet(users);
@@ -81,6 +93,8 @@ const UsersPage = () => {
         const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
         saveAs(blob, "users.xlsx");
     };
+
+    // פתיחת דיאלוג הוספת משתמש חדש
     const handleOpenDialog = () => {
     setFormValues({
       name: "",
@@ -94,10 +108,12 @@ const UsersPage = () => {
     setDialogOpen(true);
   };
 
+  // סגירת הדיאלוג
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
 
+  // פונקציה שבודקת ולידציה לשדות הטופס
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
@@ -127,6 +143,7 @@ const UsersPage = () => {
     return error;
   };
 
+ // שינוי ערכי שדות הטופס והצגת שגיאות אם יש
  const handleFieldChange = (e) => {
   const { name, value } = e.target;
 
@@ -137,6 +154,7 @@ const UsersPage = () => {
 };
 
 
+ // עדכון פרטי המשתמש הנבחר לאחר ולידציה
  const handleUpdateUser = async () => {
   const newErrors = {};
   let isValid = true;
@@ -167,7 +185,7 @@ const userToSend = {
   role: selectedUser.role || ""
 };
 
-// רק אם שונה הסיסמה, הוסף:
+// הוספת סיסמה רק אם היא הוזנה
 if (selectedUser.password?.trim()) {
   userToSend.password = selectedUser.password;
 }
@@ -183,14 +201,11 @@ if (selectedUser.password?.trim()) {
 
 };
 
-
-
-
-
+    // החלק שמחזיר את ה־JSX (המסך בפועל)
     return (
         <Container maxWidth={false} sx={{ width: "80vw", mx: "auto", px: 2, pt: 3, pb: 3, overflowY: "unset" }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, direction: "rtl" }}>
-              {/* שינוי כאן: גודל גופן והזחה שמאלה כמו בצילום מסך */}
+              {/* כותרת ראשית של הדף */}
               <Typography variant="h4" sx={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, fontSize: "30px", color: "#0D1783" }}>
                   משתמשים
               </Typography>
@@ -201,7 +216,7 @@ if (selectedUser.password?.trim()) {
                     </IconButton>
                   </Stack>
             </Box>
-
+{/* <UserSearchBar/> */}
               <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
                <Container>
    <UsersTable
@@ -213,8 +228,7 @@ if (selectedUser.password?.trim()) {
 />
     </Container>
 
-              {/* <AddUser/> */}
-               {/* ייבוא קומפוננטת  עריכת משתמש */}
+              {/* קומפוננטת עדכון משתמש */}
     <UpdateUser
   open={open}
   setOpen={setOpen}
@@ -227,6 +241,5 @@ if (selectedUser.password?.trim()) {
         </Container>
     );
 };
-
 
 export default UsersPage;
