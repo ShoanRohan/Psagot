@@ -22,22 +22,14 @@ namespace DL
         {
             try
             {
-                var addedUser = await _context.Set<User>().AddAsync(user);
+                await _context.Set<User>().AddAsync(user);
                 await _context.SaveChangesAsync();
-                return (addedUser.Entity, null);
-            }
-            catch (Exception ex)
-            {
-                return (null, ex.Message);
-            }
-        }
-        public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
-        {
-            try
-            {
-                _context.Set<User>().Update(user);
-                await _context.SaveChangesAsync();
-                return (user, null);
+
+                var userWithType = await _context.Users
+                    .Include(u => u.UserType)
+                    .FirstOrDefaultAsync(u => u.UserId == user.UserId);
+
+                return (userWithType, null);
             }
             catch (Exception ex)
             {
@@ -45,11 +37,34 @@ namespace DL
             }
         }
 
+        public async Task<(User User, string ErrorMessage)> UpdateUser(User user)
+        {
+            try
+            {
+                _context.Set<User>().Update(user);
+                await _context.SaveChangesAsync();
+
+                var userWithType = await _context.Users
+                    .Include(u => u.UserType)
+                    .FirstOrDefaultAsync(u => u.UserId == user.UserId);
+
+                return (userWithType, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
         public async Task<(User User, string ErrorMessage)> GetUserById(int id)
         {
             try
             {
-                var user = await _context.Set<User>().FindAsync(id);
+                var user = await _context.Users
+    .Include(u => u.UserType)
+    .FirstOrDefaultAsync(u => u.UserId == id);
+
                 return (user, null);
             }
             catch (Exception ex)

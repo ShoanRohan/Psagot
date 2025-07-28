@@ -1,5 +1,3 @@
-// components/UsersTable.jsx
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -8,8 +6,8 @@ import {
   Snackbar, Pagination
 } from '@mui/material';
 import MuiAlert from '@mui/material/Alert';
-import { deleteUserAction, fetchUsersByPage, updateUserAction } from '../features/user/userAction';
-import { setPageNumber, setPageSize } from '../features/user/userSlice';
+import { deleteUserAction, fetchUserById, fetchUsersByPage, updateUserAction } from '../features/user/userAction';
+import { setPageNumber, setPageSize, setSelectUser } from '../features/user/userSlice';
 import Editicone from '../assets/icons/Editicone.png';
 import Deleteicone from '../assets/icons/Deleteicone.png';
 import '../styles/usersPage.css';
@@ -18,7 +16,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const UsersTable = ({ onEditUser }) => {
+const UsersTable = ({ setOpen }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -63,19 +61,25 @@ const UsersTable = ({ onEditUser }) => {
       setSnackbarOpen(true);
     }
   };
-console.log(users);
-    return (
-    <Box sx={{ overflowX: 'auto', maxWidth: '100%' }}>
-      <TableContainer component={Paper} sx={{ maxHeight: '500px', overflow: 'auto', marginBottom: 2 }}>
-        <Table stickyHeader className="customTable" size="small">
+  const handleEditUser=async(user) => {
+    // dispatch(setSelectUser(user));
+    dispatch(fetchUserById(user.userId));
+    setOpen(true)
+  }
+
+
+  return (
+    <Box className="tableWrapper">
+      <TableContainer component={Paper} className="tableContainer">
+        <Table className="customTable" size="small">
           <TableHead>
             <TableRow>
-              <TableCell align="right">קוד משתמש</TableCell>
-              <TableCell align="right">שם משתמש</TableCell>
-              <TableCell align="right">מייל</TableCell>
-              <TableCell align="right">הרשאה</TableCell>
-              <TableCell align="right">סטטוס</TableCell>
-              <TableCell align="right">עריכה</TableCell>
+              <TableCell align="right" className="customTableCell">קוד משתמש</TableCell>
+              <TableCell align="right" className="customTableCell">שם משתמש</TableCell>
+              <TableCell align="right" className="customTableCell">מייל</TableCell>
+              <TableCell align="right" className="customTableCell">הרשאה</TableCell>
+              <TableCell align="right" className="customTableCell">סטטוס</TableCell>
+              <TableCell align="right" className="customTableCell">עריכה</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,7 +90,7 @@ console.log(users);
                     {field}
                   </TableCell>
                 ))}
-                <TableCell align="right">
+                <TableCell align="right" className="customTableCell">
                   <Button
                     variant="contained"
                     className={user.isActive ? 'buttonActive' : 'buttonInactive'}
@@ -95,12 +99,12 @@ console.log(users);
                     {user.isActive ? 'פעיל' : 'לא פעיל'}
                   </Button>
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="right" className="customTableCell">
                   <Box className="flexCenter">
                     <IconButton onClick={() => handleDeleteUser(user.userId)}>
                       <img src={Deleteicone} alt="delete" className="iconImage" />
                     </IconButton>
-                    <IconButton onClick={() => onEditUser(user)} disableRipple>
+                    <IconButton onClick={() => handleEditUser(user)} disableRipple>
                       <img src={Editicone} alt="edit" className="iconImage" />
                     </IconButton>
                   </Box>
