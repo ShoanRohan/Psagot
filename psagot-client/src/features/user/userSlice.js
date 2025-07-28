@@ -11,6 +11,7 @@ const initialState = {
     pageSize: 10,
     totalUsers: 0,
     isSearchActive: false,
+    selectUser: null
 };
 
 const userSlice = createSlice({
@@ -25,6 +26,9 @@ const userSlice = createSlice({
         },
         setPageSize: (state, action) => {
             state.pageSize = action.payload
+        },
+        setSelectUser:(state,action) => {
+             state.selectUser=action.payload
         },
             resetFilter: (state) => {
 
@@ -56,7 +60,7 @@ const userSlice = createSlice({
             })
             .addCase(fetchUserById.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.selectedUser = action.payload;
+                state.selectUser = action.payload;
             })
             .addCase(fetchUserById.rejected, (state, action) => {
                 state.status = ' failed';
@@ -156,5 +160,6 @@ const userSlice = createSlice({
     },
 });
 
-export const { setUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
+export const { setUser,setSelectUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
 export default userSlice.reducer;
+

@@ -141,7 +141,7 @@
   gap: 10px;
   direction: rtl;
 }
-.usersTable th {
+/* .usersTable th {
   font-weight: bold;
   font-family:"Rubik",sans-serif;
   text-align: center;
@@ -153,64 +153,95 @@
   padding: 4px 8px !important;
   font-size: 12px !important;
   line-height: 1.1 !important;
-}
-/* שורות טבלה – גובה מצומצם */
-.MuiTableRow-root {
-  height: 30px !important;
-  min-height: 30px !important;
+} */
+/* כללי */
+.tablesize {
+  direction: rtl;
+  padding: 20px;
 }
 
-/* תאי טבלה – ריווח מינימלי */
-.MuiTableCell-root,
-.customTable td,
-.customTable th {
-  height: 30px !important;
-  padding: 2px 4px !important;
-  font-size: 11px !important;
-  line-height: 1.1 !important;
-  vertical-align: middle !important;
+/* כותרת עמוד */
+.titleUsers {
+  font-family: "Rubik", sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #0D1783;
   text-align: right;
 }
-/* רק שורות גוף הטבלה – ללא הכותרת */
-.customTable tbody .MuiTableRow-root {
-  height: 24px !important;
-  min-height: 24px !important;
+
+/* טבלת משתמשים */
+.customTable {
+  border-collapse: collapse;
+  width: 100%;
+  direction: rtl;
+  font-family: 'Rubik', sans-serif;
+}
+.MuiTableRow-root {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
 }
 
-.customTable tbody .MuiTableCell-root {
-  height: 24px !important;
-  padding: 2px 6px !important;
-  font-size: 11px !important;
-  line-height: 1.1 !important;
+.MuiTableCell-root {
+  height: 32px !important;
+  padding: 4px 6px !important;
+  line-height: 1.2 !important;
+  font-size: 13px !important;
   vertical-align: middle !important;
 }
 
-
-
-/* אייקונים – הגדלה וריווח */
-.iconImage {
-  width: 26px !important;
-  height: 26px !important;
-  margin-left: 10px;
-  margin-right: 0;
-  display: inline-block;
-  vertical-align: middle;
+/* גובה שורות בטבלה */
+.customTable .MuiTableRow-root {
+  height: 32px !important;
+  min-height: 32px !important;
+  max-height: 32px !important;
 }
 
-/* כפתור פעיל/לא פעיל */
+/* תאים בטבלה */
+.customTable th,
+.customTable td,
+.customTable .MuiTableCell-root {
+  text-align: right;
+  font-size: 13px !important;
+  height: 32px !important;
+  padding: 4px 6px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
+
+/* סגנון תא מותאם אישית */
+.customTableCell {
+  padding: 4px 6px !important;
+}
+
+/* עיצוב כותרת טבלה */
+.customTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #000000;
+}
+
+/* שורות מתחלפות */
+.customTable .evenRow {
+  background-color: #ffffff;
+}
+
+.customTable .oddRow {
+  background-color: #f9f9f9;
+}
+
+/* עיצוב כפתורים */
 .buttonActive,
 .buttonInactive {
-  border-radius: 20px;
-  width: 90px !important;
-  height: 34px !important;
-  font-size: 11px !important;
-  padding: 4px 10px !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 12px !important;
+  padding: 2px 10px !important;
+  height: 26px !important;
+  line-height: 1.2 !important;
+  border-radius: 16px !important;
+  box-shadow: none !important;
+  min-height: 26px !important;
 }
 
-/* צבעים */
 .buttonActive {
   background-color: #DAF8E6 !important;
   color: #1A8245 !important;
@@ -221,8 +252,33 @@
   color: #374151 !important;
 }
 
- .popUpBox {
+/* אייקונים */
+.iconImage {
+  width: 16px !important;
+  height: 16px !important;
+  margin-left: 6px !important;
+  display: inline-block;
+  filter: brightness(0) saturate(100%) invert(14%) sepia(93%) saturate(2017%) hue-rotate(212deg) brightness(95%) contrast(94%);
+}
 
+/* מרכז אייקונים בתא */
+.flexCenter {
+  display: flex;
+  align-items: center;
+}
+
+/* תיבת פאגינציה */
+.boxStyle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  direction: rtl;
+  margin-top: 10px;
+  padding: 8px 16px;
+}
+
+/* פופ-אפ */
+.popUpBox {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -230,5 +286,17 @@
   background: white;
   padding: 24px;
   border-radius: 12px;
-  width: 400px; 
+  width: 400px;
+}
+.tableContainer {
+  max-height: 70vh;
+  overflow-y: auto;
+  overflow-x: auto;
+  direction: rtl;
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+.customTable {
+  min-width: 1200px;
 }
