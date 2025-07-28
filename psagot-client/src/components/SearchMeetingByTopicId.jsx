@@ -11,8 +11,6 @@ import Stack from '@mui/material/Stack';
 import SearchIcon from "@mui/icons-material/Search";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import dayjs from 'dayjs';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { fetchAllTopics } from '../features/topic/topicActions';
@@ -46,13 +44,11 @@ export default function SearchMeetingByTopicId() {
   };
 
   const handleSearch = () => {
-  //   const selectedDate = date ?? dayjs(); // אם לא נבחר תאריך, נשתמש בתאריך של היום
-
     dispatch(fetchAllMeetingsBySearch({
-      courseId: course, // הכניסי כאן Course ID מתאים אם צריך
+      courseId: course, 
       topicId: topic,
       teacherName: lecturer,
-      date: date.toString(),
+      date: date.toISOString().split('T')[0],
       pageNumber,
       pageSize,
     }));
@@ -62,7 +58,7 @@ export default function SearchMeetingByTopicId() {
     <div className="father">
       <div className='son'>
 
-        <div className="topic">
+        <div className="course">
           <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
             <InputLabel id="course-label">קורס</InputLabel>
             <Select
@@ -96,8 +92,6 @@ export default function SearchMeetingByTopicId() {
           </FormControl>
         </div>
 
-
-
         <div className="lecturer">
           <Box component="form" noValidate autoComplete="off">
             <TextField
@@ -117,16 +111,6 @@ export default function SearchMeetingByTopicId() {
           </Box>
         </div>
       </div>
-{/* 
-      <div className='date'>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            label="בחר תאריך"
-            value={date}
-            onChange={(newValue) => setDate(newValue)}
-          />
-        </LocalizationProvider>
-      </div> */}
 
 <LocalizationProvider dateAdapter={AdapterDateFns}>
   <DatePicker

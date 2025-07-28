@@ -28,6 +28,7 @@
     border-bottom-width: 1px;
     /* border-bottom: 1px solid rgba(198, 198, 198, 1);
     flex: 1; */    
+    align-items: center;
     
 }
 .search{
@@ -41,4 +42,12 @@
 
 .son{
     display: flex;
+}
+.course{
+        width: 200px;
+    height: 45px;
+    border-bottom-width: 1px;
+    /* border-bottom: 1px solid rgba(198, 198, 198, 1); 
+     flex: 1; */
+     margin-bottom: 20px;
 }
