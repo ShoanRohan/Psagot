@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextField,Button,Checkbox,FormControlLabel,Box,Grid} from "@mui/material";
+import { TextField, Button, Checkbox, FormControlLabel, Box, Grid } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { fetchFilteredUseres } from "../features/user/userAction";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,16 +16,16 @@ const UserSearchBar = () => {
     phone: "",
     role: "",
     isActive: true,
-    pageSize:pageSize, 
-    pageNumber:pageNumber
+    pageSize: pageSize,
+    pageNumber: pageNumber
   });
   const userSearchEmpty = {
     username: "",
     phone: "",
     role: "",
     isActive: true,
-    pageSize:pageSize, 
-    pageNumber:pageNumber
+    pageSize: pageSize,
+    pageNumber: pageNumber
   };
   /*const [phoneError, setPhoneError] = useState("");*/
 
@@ -39,37 +39,37 @@ const UserSearchBar = () => {
   };*/
 
   const handleChange = (e) => {
-    const { name, value } = e.target;    
+    const { name, value } = e.target;
     setSearchFields({ ...searchFields, [name]: value });
   };
 
   const handleSearch = () => {
-      dispatch(fetchFilteredUseres(searchFields));
-    }
+    dispatch(fetchFilteredUseres(searchFields));
+  }
 
   const clean = () => {
-      setSearchFields(userSearchEmpty); // תאפס את השדות בטופס
-      dispatch(fetchFilteredUseres());
-     // setCapacityError(""); // תאפס שגיאות
-      dispatch(resetFilter());
-    };
+    setSearchFields(userSearchEmpty); // תאפס את השדות בטופס
+    dispatch(fetchFilteredUseres());
+    // setCapacityError(""); // תאפס שגיאות
+    dispatch(resetFilter());
+  };
 
   const buttonStyles = {
-  height: "44px",
-  padding: "0px 20px",
-  gap: "8px",
-  borderRadius: "50px",
-  boxShadow: "none",
-  fontFamily: "Rubik",
-  fontWeight: 400,
-  fontSize: "16px",
-  lineHeight: "18.96px",
-};
+    height: "44px",
+    padding: "0px 20px",
+    gap: "8px",
+    borderRadius: "50px",
+    boxShadow: "none",
+    fontFamily: "Rubik",
+    fontWeight: 400,
+    fontSize: "16px",
+    lineHeight: "18.96px",
+  };
 
   return (
     <Box className="rooms-search-bar">
-       <Grid className="search-fields">
-      
+      <Grid className="search-fields">
+
         <Grid item xs={12} sm={3}>
           <TextField
             fullWidth
@@ -91,8 +91,8 @@ const UserSearchBar = () => {
             className="textField"
             value={searchFields.phone}
             onChange={handleChange}
-            //error={!!phoneError}
-            //helperText={phoneError}
+          //error={!!phoneError}
+          //helperText={phoneError}
           />
         </Grid>
 
@@ -124,28 +124,28 @@ const UserSearchBar = () => {
             label="פעיל"
           />
         </Grid>
-      
+
       </Grid>
       <div className="search-buttons">
-              <Button
-                variant="outlined"
-                //sx={buttonStyles}
-                className="clear-button"
-                onClick={clean}
-              >
-                ניקוי
-              </Button>
+        <Button
+          variant="outlined"
+          //sx={buttonStyles}
+          className="clear-button"
+          onClick={clean}
+        >
+          ניקוי
+        </Button>
 
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<Search style={{ padding: "5px" }} />}
-       // sx={{ borderRadius: "20px", minWidth: "120px", marginRight: 2 }}
-        className="search-button"
-        onClick={handleSearch}
-      >
-        <span className="search-button-text">חיפוש</span>
-      </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Search style={{ padding: "5px" }} />}
+          // sx={{ borderRadius: "20px", minWidth: "120px", marginRight: 2 }}
+          className="search-button"
+          onClick={handleSearch}
+        >
+          <span className="search-button-text">חיפוש</span>
+        </Button>
       </div>
     </Box>
   );

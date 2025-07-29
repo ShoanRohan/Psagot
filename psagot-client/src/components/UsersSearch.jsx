@@ -137,7 +137,7 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                     }
                 }
             }
-            
+
             setErrors(tempErrors); // עדכן את שגיאות ה-state
             // console.log("Updated Filters:", updatedFilters); // לצורך דיבוג - ניתן להפעיל להבנת מצב הפילטרים
             // console.log("Updated Errors:", tempErrors);  // לצורך דיבוג - ניתן להפעיל להבנת מצב השגיאות
@@ -287,30 +287,30 @@ const UsersSearch = ({ onFilterChange, onClearFilters }) => {
                         ניקוי
                     </Button>
 
-      <Button
-    variant="contained"
-    sx={{
-        ...buttonStyles,
-        backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#326DEF",
-        color: isSearchButtonDisabled ? "#ECEFF1" : "white",
-        cursor: isSearchButtonDisabled ? "not-allowed" : "pointer",
-        boxShadow: isSearchButtonDisabled ? "none" : undefined,
-        "&:hover": {
-            backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#2857C4",
-        },
-        "&:active": {
-            backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#234E9D",
-        },
-    }}
-    startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
-    onClick={() => {
-        if (!isSearchButtonDisabled) {
-            handleSearchClick();
-        }
-    }}
->
-    חיפוש
-</Button>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            ...buttonStyles,
+                            backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#326DEF",
+                            color: isSearchButtonDisabled ? "#ECEFF1" : "white",
+                            cursor: isSearchButtonDisabled ? "not-allowed" : "pointer",
+                            boxShadow: isSearchButtonDisabled ? "none" : undefined,
+                            "&:hover": {
+                                backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#2857C4",
+                            },
+                            "&:active": {
+                                backgroundColor: isSearchButtonDisabled ? "#B0BEC5" : "#234E9D",
+                            },
+                        }}
+                        startIcon={<SearchIcon sx={{ marginLeft: 1 }} />}
+                        onClick={() => {
+                            if (!isSearchButtonDisabled) {
+                                handleSearchClick();
+                            }
+                        }}
+                    >
+                        חיפוש
+                    </Button>
 
 
                 </Box>

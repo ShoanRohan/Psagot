@@ -27,20 +27,20 @@ const userSlice = createSlice({
         setPageSize: (state, action) => {
             state.pageSize = action.payload
         },
-        setSelectUser:(state,action) => {
-             state.selectUser=action.payload
+        setSelectUser: (state, action) => {
+            state.selectUser = action.payload
         },
-            resetFilter: (state) => {
+        resetFilter: (state) => {
 
-              state.pageNumber = 1;
-              state.isSearchActive = false;
-              const start = 0;
-              const end = state.pageSize;
-              state.users = state.users.slice(start, end); // תצוגה רגילה
-            },
-            setUsers: (state, action) => {
-        state.users = action.payload;
-    }
+            state.pageNumber = 1;
+            state.isSearchActive = false;
+            const start = 0;
+            const end = state.pageSize;
+            state.users = state.users.slice(start, end); // תצוגה רגילה
+        },
+        setUsers: (state, action) => {
+            state.users = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchAllUsers.pending, (state) => {
@@ -68,23 +68,23 @@ const userSlice = createSlice({
             })
             .addCase(addUserAction.fulfilled, (state, action) => {
             })
-            
-                  .addCase(updateUserAction.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(updateUserAction.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        const updatedUser = action.payload;
-        const index = state.users.findIndex(u => u.userId === updatedUser.userId);
-        if (index !== -1) {
-          state.users[index] = updatedUser;
-        }
-      })
-      .addCase(updateUserAction.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.payload || action.error.message;
-      })
-      .addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
+
+            .addCase(updateUserAction.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(updateUserAction.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                const updatedUser = action.payload;
+                const index = state.users.findIndex(u => u.userId === updatedUser.userId);
+                if (index !== -1) {
+                    state.users[index] = updatedUser;
+                }
+            })
+            .addCase(updateUserAction.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload || action.error.message;
+            })
+            .addCase(fetchAllLecturersAndCoordinators.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(fetchAllLecturersAndCoordinators.fulfilled, (state, action) => {
@@ -154,12 +154,12 @@ const userSlice = createSlice({
                 state.error = action.error.message;
             })
             .addCase(deleteUserAction.fulfilled, (state, action) => {
-      state.users = state.users.filter(u => u.userId !== action.payload);
-      state.totalUsers = state.totalUsers - 1;
-    });
+                state.users = state.users.filter(u => u.userId !== action.payload);
+                state.totalUsers = state.totalUsers - 1;
+            });
     },
 });
 
-export const { setUser,setSelectUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
+export const { setUser, setSelectUser, setPageNumber, setPageSize, resetFilter } = userSlice.actions;
 export default userSlice.reducer;
 

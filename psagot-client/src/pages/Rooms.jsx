@@ -17,7 +17,7 @@ import * as XLSX from 'xlsx'; // ספריית XLSX לייצוא אקסל
 import { saveAs } from 'file-saver'; // ספריית FileSaver לשמירת הקובץ
 
 // ייבוא אייקון אקסל - יש לוודא שהנתיב נכון
-import excelIcon from '../assets/icons/excelIcon.svg'; 
+import excelIcon from '../assets/icons/excelIcon.svg';
 
 // קומפוננטת Alert מותאמת ל־Snackbar של MUI
 const Alert = React.forwardRef(function Alert(props, ref) {
