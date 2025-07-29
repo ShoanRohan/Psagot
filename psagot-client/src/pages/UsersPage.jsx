@@ -65,11 +65,8 @@ const UsersPage = () => {
         const blob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
         saveAs(blob, "users.xlsx");
     };
-
-  
-
     return (
-        <Container maxWidth={false} sx={{ width: "80vw", mx: "auto", px: 2, pt: 3, pb: 3, overflowY: "unset" }}>
+       <Container maxWidth={false} sx={{ px: 2, pt: 3, pb: 3 }}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3, direction: "rtl" }}>
               <Typography variant="h4" sx={{ fontFamily: "Rubik, sans-serif", fontWeight: 700, fontSize: "30px", color: "#0D1783" }}>
                   משתמשים
@@ -84,11 +81,9 @@ const UsersPage = () => {
               <UsersSearch onFilterChange={handleFilterChange} onClearFilters={handleClearFilters} />
 
               {/*ייבוא טבלת משתמשים*/}
-               <Container>
           <UsersTable  
              setOpen={setOpen}
                   />
-            </Container>
                {/* ייבוא קומפוננטת  עריכת משתמש */}
             <UpdateUser
              open={open}

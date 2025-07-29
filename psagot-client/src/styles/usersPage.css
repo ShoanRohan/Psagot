@@ -1,166 +1,67 @@
- .tablesize {
-   Height: 100%;
-   width: 100%;
-   margin: "auto";
-   padding-top: 30px;
-   padding-right: 20px;
-   padding-bottom: 10px;
-   padding-left: 20px;
- }
-
- .bigtable {
-   text-align: center !important;
-   font-weight: bold !important;
-   font-size: 16px !important;
-   width: 1442px !important;
-   height: 79px !important;
-   display: flex;
- }
-
- .boxError {
-   color: "red";
-   margin-bottom: 16;
- }
-
- .titleRow {
-   font-size: 50px !important;
-   /* גודל הכותרת ב-pixels */
-   font-weight: bold;
-   /* אם תרצה להדגיש את הכותרת */
- }
-
- .buttonActive {
-   border-radius: 20px;
-   background-color: #DAF8E6 !important;
-   color: #1A8245 !important;
-   width: 97px;
-   height: 39px;
- }
-
- .buttonInactive {
-   border-radius: 20px;
-   background-color: #E5E7EB !important;
-   color: #374151 !important;
-   width: 97px;
-   height: 39px;
- }
-
- .deleteIcon {
-   max-height: 80%;
-   /* או גובה מקסימלי אחר */
-   max-width: 80%;
-   /* או רוחב מקסימלי אחר */
-   display: block;
-   /* חשוב לשנות ל-block */
-   margin: auto;
-   /* מרכז את האייקון */
- }
-
- .editIcon {
-   max-height: 80%;
-   /* או גובה מקסימלי אחר */
-   max-width: 80%;
-   /* או רוחב מקסימלי אחר */
-   display: block;
-   /* חשוב לשנות ל-block */
-   margin: auto;
-   /* מרכז את האייקון */
- }
-
- .boxStyle {
-   display: flex;
-   align-items: center;
-   justify-content: space-between;
-   margin-top: 16px;
-   /* 2 ב-MUI בדרך כלל שווה ל-16px */
- }
-
- .flexCenter {
-   display: flex;
-   align-items: center;
- }
-
- .titleUsers{
-   variant:"h1";
-    align-items:"right";
-    font-family: "Rubik", sans-serif;
-    font-weight: 700;
-    font-size: 40px;
-    color: #0D1783;
-    text-align: right;
- }
-
-
- .usersTable {
-  border-collapse: collapse; 
-  width: 100%;  /* מתאימה את הרוחב של הטבלה לגודל העמוד */
-  height: 100vh; /* מתאימה את הגובה של הטבלה לגובה של חלון הדפדפן */
-  overflow: auto; /* מאפשר גלילה אם התוכן גדול מהתא */
-
-}
-
-/* עיצוב כותרות הטבלה */
-.customTable th {
-  font-weight: bold;
-  background-color: #f9f9f9;
-}
-
-.customTable td {
-  text-align: right;
-  font-size: 15px;
-}
-
-.evenRow {
-  background-color: #ffffff;
-}
-
-.oddRow {
-  background-color: #f7f7f7;
-}
-
-.iconImage {
-  width: 20px;
-  height: 20px;
-  margin-left: 8px;
-  filter: brightness(0) saturate(100%) invert(14%) sepia(93%) saturate(2017%) hue-rotate(212deg) brightness(95%) contrast(94%);
-}
-
 .tablesize {
+  height: 100%;
+  width: 100%;
+  padding: 30px 20px 10px 20px;
   direction: rtl;
-  padding: 20px;
+  overflow-x: hidden !important;
+}
+
+.bigtable {
+  text-align: center !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  height: 79px !important;
+  display: flex;
+}
+.boxError {
+  color: red;
+  margin-bottom: 16px;
 }
 
 .titleRow {
-  margin-bottom: 15px;
+  font-size: 50px !important;
   font-weight: bold;
+}
+
+.buttonActive {
+  border-radius: 20px;
+  background-color: #DAF8E6 !important;
+  color: #1A8245 !important;
+  width: 97px;
+  height: 39px;
+}
+
+.buttonInactive {
+  border-radius: 20px;
+  background-color: #E5E7EB !important;
+  color: #374151 !important;
+  width: 97px;
+  height: 39px;
+}
+
+.deleteIcon, .editIcon {
+  max-height: 80%;
+  max-width: 80%;
+  display: block;
+  margin: auto;
 }
 
 .boxStyle {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
   gap: 10px;
   direction: rtl;
-}
-/* .usersTable th {
-  font-weight: bold;
-  font-family:"Rubik",sans-serif;
-  text-align: center;
-  padding: 8px 10px;
-  font-size: 0.8rem;
-  background-color: #ffffff; 
-  color: #000000; 
-    height: 32px !important;
-  padding: 4px 8px !important;
-  font-size: 12px !important;
-  line-height: 1.1 !important;
-} */
-/* כללי */
-.tablesize {
-  direction: rtl;
-  padding: 20px;
+  padding: 8px 16px;
 }
 
-/* כותרת עמוד */
+.flexCenter {
+  display: flex;
+  align-items: center;
+}
+
 .titleUsers {
   font-family: "Rubik", sans-serif;
   font-weight: 700;
@@ -169,59 +70,60 @@
   text-align: right;
 }
 
-/* טבלת משתמשים */
+.usersTable {
+  border-collapse: collapse;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden !important;
+}
+
 .customTable {
   border-collapse: collapse;
   width: 100%;
+  table-layout: fixed;
   direction: rtl;
   font-family: 'Rubik', sans-serif;
 }
-.MuiTableRow-root {
-  height: 32px !important;
-  min-height: 32px !important;
-  max-height: 32px !important;
-}
 
-.MuiTableCell-root {
-  height: 32px !important;
-  padding: 4px 6px !important;
-  line-height: 1.2 !important;
-  font-size: 13px !important;
-  vertical-align: middle !important;
-}
-
-/* גובה שורות בטבלה */
-.customTable .MuiTableRow-root {
-  height: 32px !important;
-  min-height: 32px !important;
-  max-height: 32px !important;
-}
-
-/* תאים בטבלה */
+/* גובה אחיד לכל השורות והכותרת */
 .customTable th,
 .customTable td,
 .customTable .MuiTableCell-root {
-  text-align: right;
-  font-size: 13px !important;
-  height: 32px !important;
-  padding: 4px 6px !important;
+  height: 48px !important;
+  max-height: 48px !important;
+  padding: 0 16px !important;
+  font-size: 14px !important;
   line-height: 1.2 !important;
   vertical-align: middle !important;
+  box-sizing: border-box;
 }
 
-/* סגנון תא מותאם אישית */
-.customTableCell {
-  padding: 4px 6px !important;
+/* איקונים וכפתורים – למנוע מהם להרים את השורה */
+.buttonActive, .buttonInactive {
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 12px !important;
+  min-height: unset !important;
+  font-size: 13px !important;
+  margin: 0 !important;
 }
 
-/* עיצוב כותרת טבלה */
+.iconImage {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
+}
+
+.customTable tbody td:first-child {
+  padding-right: 25px !important; /* מוסיף רווח בין הטקסט לגבול ימין */
+}
+
 .customTable th {
   background-color: #f2f2f2;
   font-weight: bold;
   color: #000000;
 }
 
-/* שורות מתחלפות */
 .customTable .evenRow {
   background-color: #ffffff;
 }
@@ -230,54 +132,8 @@
   background-color: #f9f9f9;
 }
 
-/* עיצוב כפתורים */
-.buttonActive,
-.buttonInactive {
-  font-size: 12px !important;
-  padding: 2px 10px !important;
-  height: 26px !important;
-  line-height: 1.2 !important;
-  border-radius: 16px !important;
-  box-shadow: none !important;
-  min-height: 26px !important;
-}
 
-.buttonActive {
-  background-color: #DAF8E6 !important;
-  color: #1A8245 !important;
-}
 
-.buttonInactive {
-  background-color: #E5E7EB !important;
-  color: #374151 !important;
-}
-
-/* אייקונים */
-.iconImage {
-  width: 16px !important;
-  height: 16px !important;
-  margin-left: 6px !important;
-  display: inline-block;
-  filter: brightness(0) saturate(100%) invert(14%) sepia(93%) saturate(2017%) hue-rotate(212deg) brightness(95%) contrast(94%);
-}
-
-/* מרכז אייקונים בתא */
-.flexCenter {
-  display: flex;
-  align-items: center;
-}
-
-/* תיבת פאגינציה */
-.boxStyle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  direction: rtl;
-  margin-top: 10px;
-  padding: 8px 16px;
-}
-
-/* פופ-אפ */
 .popUpBox {
   position: absolute;
   top: 50%;
@@ -288,15 +144,36 @@
   border-radius: 12px;
   width: 400px;
 }
-.tableContainer {
-  max-height: 70vh;
-  overflow-y: auto;
-  overflow-x: auto;
-  direction: rtl;
-  border-radius: 12px;
-  background-color: #fff;
+
+.tableWrapper {
+  width: 100%;
+  overflow: hidden !important;
 }
 
-.customTable {
-  min-width: 1200px;
+.tableContainer {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden !important;
+  direction: rtl;
+  position: relative;
 }
+
+/* עיצוב פס גלילה בצד ימין  */
+.tableContainer {
+  scrollbar-width: thin; /* ל‑Firefox */
+  direction: ltr !important; /* שומר על RTL */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Chrome/Edge */
+.tableContainer::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tableContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+

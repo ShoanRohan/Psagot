@@ -246,7 +246,7 @@ namespace DL
                 var recordCourse =await _context.Courses.Where(t => t.CoordinatorId == id).ToListAsync();
                 if( recordMeeting.Any() || recordTopic.Any() || recordCourse.Any())
                 {
-                    return (false, "User in use-she is a coordinatior or a teacher");
+                    return (false, "המשתמש בשימוש ואי אפשר למחוק אותו ");
                 }
                 var user = await _context.Users.FindAsync(id);
                 if (user == null)

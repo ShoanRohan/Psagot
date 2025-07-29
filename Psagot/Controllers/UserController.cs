@@ -154,11 +154,11 @@ namespace Psagot.Controllers
             if (!deleted)
             {
                 if (errorMessage == "User not found")
-                    return NotFound(errorMessage); // 🔁 404 במקום 400
+                    return NotFound(errorMessage); 
                 return BadRequest(errorMessage);
             }
 
-            return NoContent(); // 204
+            return NoContent();
         }
 
 

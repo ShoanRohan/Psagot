@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import {Modal, Box, Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormHelperText, Butto} from '@mui/material';
-import Button from '@mui/material/Button';
+import {Modal, Box, Typography, Grid, TextField, FormControl, InputLabel, Select, MenuItem, FormHelperText, Button} from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsersByPage, updateUserAction } from '../features/user/userAction';
 import { setSelectUser } from '../features/user/userSlice';
@@ -102,7 +101,7 @@ const userToSend = {
  console.log(selectUser.password);
 // רק אם שונה הסיסמה, הוסף:
 if (selectedUser.password?.trim()) {
-  userToSend.password = selectedUser.password;
+  userToSend.password = selectUser.password;
 }
   dispatch(setSelectUser(null)) 
   try {
@@ -139,10 +138,10 @@ console.log(selectedUser)
                 <TextField label="טלפון" name="phone" value={selectedUser.phone} onChange={handleFieldChange}
                   error={!!errors.phone} helperText={errors.phone} fullWidth />
               </Grid>
-              <Grid item xs={12} sm={4}>
+              {/* <Grid item xs={12} sm={4}>
                 <TextField label="סיסמה" name="password" type="password" value={selectedUser.password}
                   onChange={handleFieldChange} error={!!errors.password} helperText={errors.password} fullWidth />
-              </Grid>
+              </Grid> */}
               <Grid item xs={12} sm={4}>
                 <FormControl fullWidth error={!!errors.userTypeId}>
                   <InputLabel>הרשאה</InputLabel>
@@ -154,7 +153,6 @@ console.log(selectedUser)
 
   ))}
 </Select>
-
                   <FormHelperText>{errors.userTypeId}</FormHelperText>
                 </FormControl>
               </Grid>
