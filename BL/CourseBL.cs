@@ -37,6 +37,13 @@ namespace BL
             return (_mapper.Map<IEnumerable<CourseDTO>>(courses), null);
         }
 
+        public async Task<(IEnumerable<StatusCourseDTO> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            var (statusCourses, errorMessage) = await _courseDL.GetStatusCourses();
+            if (statusCourses == null) return (null, errorMessage);
+
+            return (_mapper.Map<IEnumerable<StatusCourseDTO>>(statusCourses), null);
+        }
         public async Task<(CourseDTO Course, string ErrorMessage)> AddCourse(CourseDTO courseDTO)
         {
             var course = _mapper.Map<Course>(courseDTO);
@@ -45,6 +52,12 @@ namespace BL
             if (addedCourse == null) return (null, errorMessage);
 
             return (_mapper.Map<CourseDTO>(addedCourse), null);
+        }
+        public async Task<bool> DeleteCourse(int id)
+        {
+            int u = _mapper.Map<int>(id);
+            bool isRemove = await _courseDL.DeleteCourse(u);
+            return isRemove;
         }
         public async Task<(CourseDTO Course, string ErrorMessage)> UpdateCourse(CourseDTO courseDTO)
         {
@@ -55,5 +68,7 @@ namespace BL
 
             return (_mapper.Map<CourseDTO>(updatedCourse), null);
         }
+
+
     }
 }

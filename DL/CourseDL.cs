@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DL
 {
-    public class CourseDL:ICourseDL
+    public class CourseDL : ICourseDL
     {
         private readonly PsagotDbContext _context;
 
@@ -44,6 +44,19 @@ namespace DL
             }
         }
 
+        public async Task<(IEnumerable<StatusCourse> Courses, string ErrorMessage)> GetStatusCourses()
+        {
+            try
+            {
+                var statusCourses = await _context.Set<StatusCourse>().ToListAsync();
+                return (statusCourses, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
         public async Task<(Course Course, string ErrorMessage)> AddCourse(Course course)
         {
             try
@@ -57,7 +70,21 @@ namespace DL
                 return (null, ex.Message);
             }
         }
-
+        public async Task<bool> DeleteCourse(int id)
+        {
+            try
+            {
+                Course currentCourse = await _context.Courses.SingleOrDefaultAsync(item => item.CourseId == id);
+                if (currentCourse != null)
+                {
+                    throw new ArgumentException($"{id} is not found");
+                }
+                _context.Courses.Remove(currentCourse);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         public async Task<(Course Course, string ErrorMessage)> UpdateCourse(Course course)
         {
             try
@@ -71,5 +98,7 @@ namespace DL
                 return (null, ex.Message);
             }
         }
+
+
     }
 }

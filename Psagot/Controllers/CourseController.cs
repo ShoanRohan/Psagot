@@ -2,6 +2,7 @@ using BL;
 using Entities.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace Psagot.Controllers
@@ -41,6 +42,17 @@ namespace Psagot.Controllers
 
             return Ok(addedCourse);
         }
+        // DELETE api/<CourseController>/5
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<bool>> DeleteCourse( int id)
+        {
+            try
+            {
+                bool isDelete = await _courseBL.DeleteCourse(id);
+                return isDelete;
+            }
+            catch (Exception ex) { return StatusCode(500, ex.Message); }
+        }
         [HttpPut("UpdateCourse")]
         public async Task<IActionResult> UpdateCourse([FromBody] CourseDTO courseDTO)
         {
@@ -48,7 +60,18 @@ namespace Psagot.Controllers
             if (updatedCourse == null) return BadRequest(errorMessage);
 
             return Ok(updatedCourse);
+
         }
+
+        [HttpGet("status-courses")]
+        public async Task<ActionResult<IEnumerable<StatusCourseDTO>>> GetStatusCourses()
+        {
+            var (statuses, errorMessage) = await _courseBL.GetStatusCourses();
+            if (statuses == null) return BadRequest(errorMessage);
+
+            return Ok(statuses);
+        }
+
 
     }
 }

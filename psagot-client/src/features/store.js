@@ -8,8 +8,8 @@ import meetingReducer from './meeting/meetingSlice';
 import daysForCourseReducer from './daysForCourse/daysForCourseSlice';
 import topicReducer from './topic/topicSlice';
 import courseReducer from './course/courseSlice';
-import CoursesGrid from '../components/CoursesGrid';
-import CoursesPage from '../pages/CoursesPage';
+
+
 
 const store = configureStore({
   reducer: {
@@ -25,6 +25,4 @@ const store = configureStore({
   },
 });
 
-export default store;
-
-
+export default store;
