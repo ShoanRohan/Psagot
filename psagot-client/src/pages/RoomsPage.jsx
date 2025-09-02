@@ -6,11 +6,13 @@ import RoomSchedule from '../components/RoomsScheduleGrid';
 import { Box, Button, Typography, IconButton, Tooltip } from '@mui/material';
 import ExcelIcon from '../assets/icons/excelIcon.svg';
 import RoomsScheduleGrid from '../components/RoomsScheduleGrid';
+import { useNavigate } from 'react-router-dom';
 import CoursesPage from './CoursesPage';
 import RoomsGrid from '../components/RoomsGrid';
 
 const RoomsPage = () => {
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const viewMode = useSelector((state) => state.room.viewMode);
 
   const toggleView = () => {
@@ -18,7 +20,7 @@ const RoomsPage = () => {
   };
 
   const handleAddRoom = () => {
-    alert("הוספת חדר - פעולה לא מוגדרת עדיין");
+   navigate('/edit');
   };
 
   const handleExportToExcel = () => {

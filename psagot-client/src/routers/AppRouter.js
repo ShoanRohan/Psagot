@@ -24,6 +24,7 @@ const AppRouter = () => {
                 {/* <Route path='rooms'  element= {<RoomsPage/>}/> */}
                  <Route path='rooms'  element= {<RoomsScheduleSearch/>}/>
                  <Route path='calendar'  element= {<MeetingSchedule/>}/>
+                <Route path='edit'  element= {<RoomEdit/>}/>
             </Route>
 
             <Route path='' element={<LoginPage />}>

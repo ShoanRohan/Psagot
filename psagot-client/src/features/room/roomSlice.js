@@ -25,7 +25,16 @@ const roomSlice = createSlice({
     name: 'room',
     initialState,
     reducers: {
-        setRoom: (state, action) => {   
+        
+        setRoom: (state, action) => {
+            
+        },
+          setSelectedRoom: (state, action) => {
+           state.selectedRoom=action.payload; 
+        },
+
+        setDisplayDate: (state, action) => {
+            state.displayDate = action.payload;
         },
         setRoomSchedule: (state, action) => {
             state.roomSchedule = action.payload; 
@@ -117,6 +126,6 @@ const roomSlice = createSlice({
     },
 });
 
-export const { setRoom, setRoomSchedule, setPageNumber, setPageSize, setViewMode, setDisplayDate } = roomSlice.actions;
+export const { setRoom, setRoomSchedule, setPageNumber, setPageSize, setViewMode, setDisplayDate,setSelectedRoom } = roomSlice.actions;
 export default roomSlice.reducer;
 

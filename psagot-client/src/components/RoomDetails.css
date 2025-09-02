@@ -1,0 +1,62 @@
+
+
+css
+/* רקע כללי של כל העמוד - תכלת בהיר מאוד */
+.page-container {
+  background-color: #D8BFD8; /* צבע סגול בהיר */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* הקופסה המרכזית שמכילה את כל הטופס */
+.room-details-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end; /* מיישר הכל לימין */
+  width: 90%;
+  border-radius: 8px; /* פינות מעוגלות קלות */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* מסגרת לבנה עם הצללה עדינה */
+  padding: 30px;
+}
+
+/* כותרת ראשית */
+.room-details-title {
+  text-align: right;
+  font-size: 16px; /* גודל קטן יותר */
+  font-weight: bold;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+/* תיבות טקסט */
+.room-details-form {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 0.5cm; /* רווח של חצי סנטימטר */
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* עיצוב כללי של השדות */
+.text-field {
+  width: 4cm;
+  direction: rtl;
+  text-align: right;
+}
+
+/* עיצוב הטקסט שבתוך השדות */
+.text-input {
+  color: #666 !important; /* גוון בהיר יותר לטקסט */
+  font-size: 14px !important; /* קטן יותר בשני גדלים */
+  text-align: right;
+}
+
+/* קו תחתון אחיד */
+.text-field .MuiInput-underline:before {
+  border-bottom: 1px solid #ccc !important;
+}
